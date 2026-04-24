@@ -9,7 +9,8 @@ User: `andlukyane`. Deadline 2026-08-31. 16 teams.
 **Metric**: total moves across all puzzles, lower = better.
 **Baselines**:
 - Raw sample_submission.csv: 500,572
-- Post-processed sample (same-face run reduction, 8.54% free): **457,810** (our real floor)
+- Post-processed sample (same-face run reduction, 8.54% free): 457,810
+- + BFS-d5 window replacement (9.24% more off sample): **415,521** (current floor, 2026-04-24)
 - Top leaderboard: 79,971 (Kuznetsov), 81,946 (DrozdovDan), 93,606 (Rokicki). Rest: ~413–500K.
 
 ---
@@ -19,7 +20,10 @@ User: `andlukyane`. Deadline 2026-08-31. 16 teams.
 | ID   | Date       | What changed                                 | MSE   | Stratified score  | Leaderboard     | Notes |
 |------|------------|----------------------------------------------|-------|-------------------|-----------------|-------|
 | m01  | 2026-04-24 | First port: ResMLP [1024,256]×1, k_max=40, 200 ep | 9.76  | 19/20 easy solved | —               | Smoke only; hard puzzles OOD |
-| m02  | 2026-04-24 | Widen k_max=40→80, 2000 ep, same arch        | 66.16 | 2/51 solved (only bucket 0-99) | full solve in progress (beam 32k) | Model is heuristic-noise-bound on medium/hard |
+| m02  | 2026-04-24 | Widen k_max=40→80, 2000 ep, same arch        | 66.16 | 2/51 then 0/20 at beam 32k+NISS | — | Heuristic-noise-bound; killed full solves |
+| pp0  | 2026-04-24 | pp_bfs5_fallback.csv — no model              | —     | —                 | **415,521 (rank #8/16)** | Baseline; pure post-processing of sample (same-face + BFS-d5 window replacement) |
+| m03  | running    | [2048,512]×2 k_max=80 4000 ep (Kaggle P100)  | —     | —                 | pending         | Canonical big-arch baseline |
+| m04  | running    | Bellman-from-scratch (Kaggle P100)           | —     | —                 | pending         | Pearcatcher recipe: discount 0.999, 120 target refreshes, no RW pretraining |
 
 ---
 
@@ -63,9 +67,26 @@ User: `andlukyane`. Deadline 2026-08-31. 16 teams.
 
 ---
 
+## BFS-d5 window replacement (2026-04-24)
+
+- Built Megaminx BFS-d5 table: 1,376,945 states, 352 MB on disk, 16 s to build
+  (cayley.bfs_table on a 4090 Laptop, canonical pruning on). Layer counts
+  24/408/6208/90144/1280160 match the public Megaminx growth function exactly.
+- Applied `reduce_factor_via_bfs_table` (sliding-window replacement, max_window=6) to
+  pp_fallback: -42,289 moves (9.24%) → new floor 415,521 at `data/pp_bfs5_fallback.csv`.
+- Cost: ~30 min wall (1.77 s per puzzle, CPU-bound).
+- Note: window replacement hits the first improvement per pass and restarts; the 6 largest
+  savings all came from late-pid (scramble-heavy) puzzles. Easy puzzles (pid <~400) gain
+  almost nothing — their paths are already near-optimal after same-face reduction.
+
+---
+
 ## Decision log
 
 - **2026-04-24**: started project by porting shared `cayley.*` modules via duck-typing (Megaminx class mirrors PictureCube). No library fork needed.
-- **2026-04-24**: confirmed test.csv is ordered by scramble depth (sum 1..1000 ≈ 500,500). Stratified 10/bucket replaces first-N as smoke-test default to cover full difficulty range.
-- **2026-04-24**: adopted m0N_<slug> naming for configs, models, submissions; EXPERIMENTS.md as canonical ledger; `git init` + private GitHub repo.
-- **2026-04-24**: chose NOT to submit 457,802 (matches pp_fallback floor) — wastes a daily Kaggle submission slot with no leaderboard signal.
+- **2026-04-24**: confirmed test.csv is ordered by scramble walk length (sum 1..1000 ≈ 500,500). Stratified 10/bucket replaces first-N as smoke-test default to cover full difficulty range.
+- **2026-04-24**: adopted m0N_<slug> naming for configs, models, submissions; EXPERIMENTS.md as canonical ledger; `git init` + private GitHub repo at https://github.com/Erlemar/cayley-solvers.
+- **2026-04-24**: chose NOT to submit 457,802 (matches pp_fallback floor) — wastes a daily Kaggle submission slot with no leaderboard signal. Submitted 415,521 (pp_bfs5_fallback) instead after +BFS-d5 window replacement → rank #8/16.
+- **2026-04-24**: multi-agent research + literature synthesis. Anchored priorities on DeepCubeA / CayleyPy paper + our IHES wins, not public-kernel votes (top-voted kernels are educational, not LB-coupled).
+- **2026-04-24**: policy — don't submit public community-merged results (carried over from IHES).
+- **2026-04-24**: innovations-first strategy: verify IHES-proven techniques (NISS, int8, adaptive beam, BFS-d5 post-proc, Bellman) on Megaminx before leaning on canonical big-arch baseline.

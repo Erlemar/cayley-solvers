@@ -8,7 +8,7 @@ the EXPERIMENTS.md row. Based on a synthesis of:
 - Public Kaggle Megaminx kernels (data points, not ground truth — top votes reflect clarity
   not leaderboard rank; Kuznetsov/DrozdovDan/Rokicki haven't shared code)
 
-**Current best (submitted)**: none yet. Local floor (not submitted, matches pp_fallback): 457,810.
+**Current best (submitted)**: none yet. Local floor: **415,521** (pp + BFS-d5 on raw sample, 2026-04-24).
 **Target (Rokicki, #3 LB)**: 93,606. **Target (Kuznetsov, #1)**: 79,971.
 
 ---

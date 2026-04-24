@@ -108,7 +108,9 @@ def main() -> int:
                     help="K puzzles per 100-pid bucket (covers full difficulty range)")
     ap.add_argument("--strat-seed", type=int, default=0)
     ap.add_argument("--bf16", action="store_true")
-    ap.add_argument("--fallback", type=Path, default=PROJECT / "data" / "pp_fallback.csv")
+    ap.add_argument("--fallback", type=Path, default=PROJECT / "data" / "pp_bfs5_fallback.csv",
+                    help="default: pp_bfs5_fallback.csv (415,521 floor; same-face + BFS-d5 "
+                         "applied to the raw sample)")
     ap.add_argument("--chunk-size", type=int, default=None)
     ap.add_argument("--fp32-state", action="store_true",
                     help="disable int8 state encoding (debugging only; int8 is the default)")
@@ -190,9 +192,10 @@ def main() -> int:
             if solved_pass >= 0:
                 pass_solves[solved_pass] += 1
 
-        fb_path = full_post_process(
-            fallback[pid], puzzle=puzzle, bfs_table=bfs_table, max_window=args.bfs_max_window,
-        )
+        # Fallback CSV is expected to already be post-processed (pp_bfs5_fallback.csv or
+        # similar). Only run the cheap same-face + cancel passes here; skip the expensive
+        # BFS window replacement to avoid redundant work on 900+-move paths for every pid.
+        fb_path = full_post_process(fallback[pid])
         candidates: list[tuple[list[str], str]] = []
         if model_path is not None:
             candidates.append((model_path, "solved_by_model"))

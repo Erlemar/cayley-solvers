@@ -1,0 +1,13 @@
+orig total: 457,810
+  pid 99: 100/1001 done, running total 457,406 (3s)
+  pid 199: 200/1001 done, running total 456,162 (18s)
+  pid 299: 300/1001 done, running total 454,088 (54s)
+  pid 399: 400/1001 done, running total 451,100 (122s)
+  pid 499: 500/1001 done, running total 447,278 (228s)
+  pid 599: 600/1001 done, running total 442,601 (406s)
+  pid 699: 700/1001 done, running total 437,302 (650s)
+  pid 799: 800/1001 done, running total 430,890 (945s)
+  pid 899: 900/1001 done, running total 423,773 (1310s)
+  pid 999: 1000/1001 done, running total 415,604 (1772s)
+new total: 415,521  saved 42,289 (9.24%)
+wrote megaminx\data\pp_bfs5_fallback.csv

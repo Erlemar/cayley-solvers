@@ -1,0 +1,4 @@
+stratified: 31 pids across 11 buckets (seed=0)
+loaded BFS table bfs_table_d5.pkl: 1,376,945 states, max_depth=5 (1.9s)
+beams=[32768]  max_steps=[80]  niss=True  state_dtype=torch.int8  num_attempts=1
+  pid= 632 attempts=20/31 total_moves=166,138 (model:0 fb:633 passes:0) 933.1s (0.02 p/s)
