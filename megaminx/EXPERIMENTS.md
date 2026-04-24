@@ -103,3 +103,4 @@ User: `andlukyane`. Deadline 2026-08-31. 16 teams.
 - **2026-04-24**: multi-agent research + literature synthesis. Anchored priorities on DeepCubeA / CayleyPy paper + our IHES wins, not public-kernel votes (top-voted kernels are educational, not LB-coupled).
 - **2026-04-24**: policy — don't submit public community-merged results (carried over from IHES).
 - **2026-04-24**: innovations-first strategy: verify IHES-proven techniques (NISS, int8, adaptive beam, BFS-d5 post-proc, Bellman) on Megaminx before leaning on canonical big-arch baseline.
+- **2026-04-24** (user feedback): Kaggle m03 ran 7h+ without visible progress (Kaggle only exposes stdout on completion). Left running; user decided to not interrupt. Added backlog items T1 (generous early stopping) + T2 (warm-restart scheduler) so future long runs stop themselves when plateaued.

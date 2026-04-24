@@ -107,6 +107,35 @@ canonical baselines; submit only when we can beat pp_fallback by meaningful marg
 19. [ ] **A6 — Pairwise / ranking loss**. Beam only cares about neighbor ordering, not
     absolute values. Triplet, listwise, BPR losses. IHES-identified, untested.
 
+## Training infrastructure (added 2026-04-24)
+
+T1. [ ] **Generous early stopping.** Observed on m02 (plateau at MSE 66 from ~ep 500)
+   and feared on Kaggle m03 (7h wall with no visible progress). Design:
+   - Track rolling-mean loss over last N epochs (e.g. N=200)
+   - If rolling_mean doesn't improve by `min_delta` (e.g. 0.1 MSE) for `patience` epochs
+     (e.g. 500), stop. `patience` ≫ N so we're genuinely past convergence, not bouncing.
+   - Save a separate `best_epoch_*.pt` when rolling_mean sets a new minimum — our
+     "final" checkpoint may not be the actual best due to cosine LR decay.
+   - Expose via `TrainConfig.early_stop_patience`, `early_stop_min_delta`,
+     `early_stop_window` (0 = disabled, default).
+
+T2. [ ] **Better scheduler for long runs.**
+   - Current: `CosineAnnealingLR` with fixed `T_max=n_epochs`. Fine for known-length runs
+     but drops LR to ~0 at the end, precluding warm-restart continuations.
+   - Options:
+     - `CosineAnnealingWarmRestarts` (T_0=500, T_mult=2) — cyclic cosine, resets LR at
+       each cycle. Good for very long runs where you want occasional re-exploration.
+     - `ReduceLROnPlateau(patience=200, factor=0.5)` — drops LR when loss stops improving.
+       Pairs well with early stopping.
+   - Add a `scheduler` field to `TrainConfig` (currently hardcoded cosine). Default `cosine`
+     for backwards compat.
+
+T3. [ ] **Optimizer variants for long runs.**
+   - AdamW is already fine; Lion / Sophia might help on very-long runs but not worth
+     experimenting with before infrastructure T1+T2 is in.
+   - Gradient accumulation — effective larger batch without VRAM cost. Useful if we
+     ever want batch 65k+ on a 16 GB card.
+
 ## LOW priority / defer
 
 20. [ ] **A7 — Transformer (kodurd recipe)**. CayleyPy-RL paper: MLPs beat transformers

@@ -1,0 +1,26 @@
+# m08: same big arch as m03/m07 BUT k_max=100 (wider training-depth range).
+# Seed 20 for ensemble diversity. Runs on GCP L4 (24 GB VRAM).
+# L4 supports compile + bf16 (sm_89 — modern). ETA ~1h.
+model:
+  state_size: 120
+  num_classes: 120
+  hidden_dims: [2048, 512]
+  num_res_blocks: 2
+  encoding: embedding
+  embed_dim: 16
+
+training:
+  n_epochs: 4000
+  samples_per_epoch: 1_000_000
+  batch_size: 16384
+  k_max: 100
+  lr: 2.0e-3
+  weight_decay: 0.0
+  checkpoint_every_epochs: 200
+  n_back: 1
+  loss: mse
+  amp: true
+  compile_model: true
+  fused_optimizer: true
+
+seed: 20

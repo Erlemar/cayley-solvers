@@ -1,0 +1,23 @@
+stratified: 31 pids across 11 buckets (seed=0)
+loaded BFS table bfs_bytes_d6.pkl: 19,352,405 states, max_depth=6 (7.0s)
+beams=[32768]  max_steps=[80]  niss=True  state_dtype=torch.int8  num_attempts=1
+  pid= 632 attempts=20/31 total_moves=165,834 (model:0 fb:633 passes:0) 909.9s (0.02 p/s)
+  pid=1000 attempts=31/31 total_moves=414,678 (model:0 fb:1001 passes:0) 1392.2s (0.02 p/s)
+wrote megaminx\submissions\m07_niss_s3.csv
+  stats: {'solved_by_model': 0, 'fallback': 1001, 'total_moves': 414678}
+  pass_solves: {32768: 0}
+  verify: 1001/1001 valid, total 414,678
+
+  per-bucket (attempted only):
+    bucket    n  solved  model_avg   fb_avg  chosen_avg    saved
+     0-99     3   0/3            -     56.0        56.0     +0.0
+   100-199    3   0/3            -    102.3       102.3     +0.0
+   200-299    3   0/3            -    203.0       203.0     +0.0
+   300-399    3   0/3            -    299.3       299.3     +0.0
+   400-499    3   0/3            -    354.0       354.0     +0.0
+   500-599    3   0/3            -    445.3       445.3     +0.0
+   600-699    3   0/3            -    526.7       526.7     +0.0
+   700-799    3   0/3            -    642.0       642.0     +0.0
+   800-899    3   0/3            -    686.0       686.0     +0.0
+   900-999    3   0/3            -    786.0       786.0     +0.0
+  1000-1099    1   0/1            -    840.0       840.0     +0.0

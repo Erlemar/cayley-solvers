@@ -1,0 +1,26 @@
+# m07: local replica of m03's recipe, DIFFERENT seed (for ensemble diversity).
+# Compile ON here (4090 + Python 3.14 triton-windows works); Kaggle m03 uses compile=false for P100.
+# ETA on 4090 Laptop: ~1-2h for 4000 epochs (6M-param model, bf16 + compile).
+model:
+  state_size: 120
+  num_classes: 120
+  hidden_dims: [2048, 512]
+  num_res_blocks: 2
+  encoding: embedding
+  embed_dim: 16
+
+training:
+  n_epochs: 4000
+  samples_per_epoch: 1_000_000
+  batch_size: 16384
+  k_max: 80
+  lr: 2.0e-3
+  weight_decay: 0.0
+  checkpoint_every_epochs: 200
+  n_back: 1
+  loss: mse
+  amp: true
+  compile_model: true
+  fused_optimizer: true
+
+seed: 10
