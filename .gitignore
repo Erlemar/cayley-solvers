@@ -35,6 +35,7 @@ data/kociemba_walks.pkl
 data/pdb_picture_cube.pkl
 data/community_subs/
 megaminx/data/bfs_table_*.pkl
+megaminx/data/bfs_bytes_*.pkl
 
 # Scratch
 /tmp/
