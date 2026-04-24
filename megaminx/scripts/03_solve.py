@@ -36,6 +36,8 @@ from cayley.khoruzhii_search import KhoruzhiiSearchConfig, KhoruzhiiSolver
 from cayley.search import load_model_checkpoint
 from cayley.verify import load_submission, load_test_states, verify_path, verify_submission
 from cayley.bfs_table import BfsTable
+from megaminx.bfs_bytes import BfsBytesTable
+from megaminx.mitm_solver import MitmKhoruzhiiSolver
 from megaminx.post_process import full_post_process
 from megaminx.puzzle import Megaminx
 
@@ -115,9 +117,14 @@ def main() -> int:
     ap.add_argument("--fp32-state", action="store_true",
                     help="disable int8 state encoding (debugging only; int8 is the default)")
     ap.add_argument("--bfs-table", type=Path, default=None,
-                    help="path to bfs_table_d*.pkl; enables window-replacement post-processing")
+                    help="path to bfs_table_d*.pkl OR bfs_bytes_d*.pkl; enables window-"
+                         "replacement post-processing")
     ap.add_argument("--bfs-max-window", type=int, default=None,
                     help="override max_window for BFS window replacement (default: d+1)")
+    ap.add_argument("--mitm", action="store_true",
+                    help="enable inline MITM in beam search — beam terminates when any "
+                         "state hits the BFS shell (requires --bfs-table pointing at a "
+                         "bytes-keyed BfsBytesTable). Appends the known-optimal tail.")
     args = ap.parse_args()
 
     beams = _parse_int_list(args.beams)
@@ -155,14 +162,28 @@ def main() -> int:
         base.inference_chunk_size = args.chunk_size
 
     state_dtype = torch.int32 if args.fp32_state else torch.int8
-    solver = KhoruzhiiSolver(puzzle, model, device=args.device, state_dtype=state_dtype)
 
-    bfs_table: BfsTable | None = None
+    bfs_table = None
     if args.bfs_table is not None:
         t_load = time.time()
-        bfs_table = BfsTable.load(args.bfs_table)
+        if "bytes" in args.bfs_table.name:
+            bfs_table = BfsBytesTable.load(args.bfs_table)
+        else:
+            bfs_table = BfsTable.load(args.bfs_table)
         print(f"loaded BFS table {args.bfs_table.name}: {len(bfs_table.table):,} states, "
               f"max_depth={bfs_table.max_depth} ({time.time() - t_load:.1f}s)")
+
+    if args.mitm:
+        if not isinstance(bfs_table, BfsBytesTable):
+            ap.error("--mitm requires --bfs-table pointing to a bfs_bytes_d*.pkl "
+                     "(BfsBytesTable, not BfsTable)")
+        solver = MitmKhoruzhiiSolver(
+            puzzle, model, mitm_table=bfs_table, device=args.device,
+            state_dtype=state_dtype,
+        )
+        print(f"using MITM solver (terminates on shell of depth {bfs_table.max_depth})")
+    else:
+        solver = KhoruzhiiSolver(puzzle, model, device=args.device, state_dtype=state_dtype)
 
     print(f"beams={beams}  max_steps={max_steps_list}  niss={args.niss}  "
           f"state_dtype={state_dtype}  num_attempts={args.num_attempts}")

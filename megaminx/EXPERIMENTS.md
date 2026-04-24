@@ -23,8 +23,10 @@ User: `andlukyane`. Deadline 2026-08-31. 16 teams.
 | m01  | 2026-04-24 | First port: ResMLP [1024,256]×1, k_max=40, 200 ep | 9.76  | 19/20 easy solved | —               | Smoke only; hard puzzles OOD |
 | m02  | 2026-04-24 | Widen k_max=40→80, 2000 ep, same arch        | 66.16 | 2/51 @ beam16k; 0/31 @ beam32k+NISS+BFS-d5 | — | Heuristic-noise-bound; stratified 3/bucket with full innovation stack saves 0 moves → confirms model quality is the binding constraint, not search |
 | pp0  | 2026-04-24 | pp_bfs5_fallback.csv — no model              | —     | —                 | **415,521 (rank #8/16)** | Baseline; pure post-processing of sample (same-face + BFS-d5 window replacement) |
-| m03  | running    | [2048,512]×2 k_max=80 4000 ep (Kaggle P100)  | —     | —                 | pending         | Canonical big-arch baseline |
+| m03  | 2026-04-24 | [2048,512]×2 k_max=80 4000 ep (Kaggle P100)  | 63.74 | —                 | pending         | 8.5h wall (P100 @ 7.6s/ep vs my estimate 0.25s/ep; big underestimate) |
 | m04  | running    | Bellman-from-scratch (Kaggle P100)           | —     | —                 | pending         | Pearcatcher recipe: discount 0.999, 120 target refreshes, no RW pretraining |
+| m07  | 2026-04-24 | [2048,512]×2 k_max=80 4000 ep seed=10 (4090) | 64.22 | 0/31 @ beam 32k   | —               | 80 min on laptop vs 8.5h on P100. Canonical replica — MSE matches m03 within noise. |
+| m08  | 2026-04-24 | [2048,512]×2 k_max=100 seed=20 (GCP L4)      | 139.05| pending           | pending         | Wider training horizon; RMSE 11.8 (vs m07's 8.0) — wider k_max inflates absolute MSE |
 
 ---
 
@@ -104,3 +106,4 @@ User: `andlukyane`. Deadline 2026-08-31. 16 teams.
 - **2026-04-24**: policy — don't submit public community-merged results (carried over from IHES).
 - **2026-04-24**: innovations-first strategy: verify IHES-proven techniques (NISS, int8, adaptive beam, BFS-d5 post-proc, Bellman) on Megaminx before leaning on canonical big-arch baseline.
 - **2026-04-24** (user feedback): Kaggle m03 ran 7h+ without visible progress (Kaggle only exposes stdout on completion). Left running; user decided to not interrupt. Added backlog items T1 (generous early stopping) + T2 (warm-restart scheduler) so future long runs stop themselves when plateaued.
+- **2026-04-24**: m03 completed at 8.5h (P100 at 7.6 s/epoch — 30× slower than my estimate of 0.25 s/epoch). Final MSE 63.74, essentially tied with our local m07 (64.22). Kaggle quota hit (30h/week) — m05/m06 push blocked; pivot to training them locally on 4090.
