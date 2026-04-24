@@ -10,7 +10,8 @@ User: `andlukyane`. Deadline 2026-08-31. 16 teams.
 **Baselines**:
 - Raw sample_submission.csv: 500,572
 - Post-processed sample (same-face run reduction, 8.54% free): 457,810
-- + BFS-d5 window replacement (9.24% more off sample): **415,521** (current floor, 2026-04-24)
+- + BFS-d5 window replacement (9.24% more): 415,521
+- + BFS-d6 window replacement (0.20% more): **414,678** (current floor, 2026-04-24)
 - Top leaderboard: 79,971 (Kuznetsov), 81,946 (DrozdovDan), 93,606 (Rokicki). Rest: ~413–500K.
 
 ---
@@ -20,7 +21,7 @@ User: `andlukyane`. Deadline 2026-08-31. 16 teams.
 | ID   | Date       | What changed                                 | MSE   | Stratified score  | Leaderboard     | Notes |
 |------|------------|----------------------------------------------|-------|-------------------|-----------------|-------|
 | m01  | 2026-04-24 | First port: ResMLP [1024,256]×1, k_max=40, 200 ep | 9.76  | 19/20 easy solved | —               | Smoke only; hard puzzles OOD |
-| m02  | 2026-04-24 | Widen k_max=40→80, 2000 ep, same arch        | 66.16 | 2/51 then 0/20 at beam 32k+NISS | — | Heuristic-noise-bound; killed full solves |
+| m02  | 2026-04-24 | Widen k_max=40→80, 2000 ep, same arch        | 66.16 | 2/51 @ beam16k; 0/31 @ beam32k+NISS+BFS-d5 | — | Heuristic-noise-bound; stratified 3/bucket with full innovation stack saves 0 moves → confirms model quality is the binding constraint, not search |
 | pp0  | 2026-04-24 | pp_bfs5_fallback.csv — no model              | —     | —                 | **415,521 (rank #8/16)** | Baseline; pure post-processing of sample (same-face + BFS-d5 window replacement) |
 | m03  | running    | [2048,512]×2 k_max=80 4000 ep (Kaggle P100)  | —     | —                 | pending         | Canonical big-arch baseline |
 | m04  | running    | Bellman-from-scratch (Kaggle P100)           | —     | —                 | pending         | Pearcatcher recipe: discount 0.999, 120 target refreshes, no RW pretraining |
@@ -66,6 +67,18 @@ User: `andlukyane`. Deadline 2026-08-31. 16 teams.
 - On raw sample_submission.csv: -42,762 moves (8.54%) with all 1001 still solving → `data/pp_fallback.csv` is our new fallback floor (457,810).
 
 ---
+
+## BFS-d6 window replacement (2026-04-24)
+
+- Extended the BFS table to depth 6. Tuple-keyed dict wouldn't fit in 16 GB; introduced
+  `megaminx.bfs_bytes.BfsBytesTable` with bytes-keyed storage (120 bytes per state vs
+  ~3.6 KB for tuple-of-int). Built 19,352,405 states in 6.5 min (2.55 GB pickle).
+- Applied to pp_bfs5_fallback: -843 moves (0.20%), new floor 414,678.
+- Per-puzzle time: 0.19 s (vs 1.77 s for d5 the first time). Total 184 s for 1001 puzzles.
+- Did NOT submit — rank stays at #8 (414,678 > #7's 414,305 by 373 moves). Reserving
+  today's submission slots for m03 + innovation stack.
+- Post-processing is now saturated at this d-level pair. Further gains require a better
+  base path (i.e., a model) or ReduceFactor DAG (non-greedy combinatorial shortcutting).
 
 ## BFS-d5 window replacement (2026-04-24)
 

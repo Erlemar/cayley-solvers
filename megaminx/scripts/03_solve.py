@@ -108,9 +108,9 @@ def main() -> int:
                     help="K puzzles per 100-pid bucket (covers full difficulty range)")
     ap.add_argument("--strat-seed", type=int, default=0)
     ap.add_argument("--bf16", action="store_true")
-    ap.add_argument("--fallback", type=Path, default=PROJECT / "data" / "pp_bfs5_fallback.csv",
-                    help="default: pp_bfs5_fallback.csv (415,521 floor; same-face + BFS-d5 "
-                         "applied to the raw sample)")
+    ap.add_argument("--fallback", type=Path, default=PROJECT / "data" / "pp_bfs6_fallback.csv",
+                    help="default: pp_bfs6_fallback.csv (414,678 floor; same-face + BFS-d6 "
+                         "on raw sample). Previous: pp_bfs5_fallback.csv (415,521).")
     ap.add_argument("--chunk-size", type=int, default=None)
     ap.add_argument("--fp32-state", action="store_true",
                     help="disable int8 state encoding (debugging only; int8 is the default)")
