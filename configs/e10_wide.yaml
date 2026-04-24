@@ -1,0 +1,26 @@
+# E10: wider shallow model — [2048, 1024] x 1 block (~6.6M params) vs E6's [1024, 256]×1 (1.6M).
+# Symmetry augmentation enabled (matches E9 recipe). Same epoch budget as E9.
+model:
+  state_size: 72
+  num_classes: 72
+  hidden_dims: [2048, 1024]
+  num_res_blocks: 1
+  encoding: embedding
+  embed_dim: 16
+
+training:
+  n_epochs: 4000
+  samples_per_epoch: 1_000_000
+  batch_size: 10000
+  k_max: 26
+  lr: 1.56e-3
+  weight_decay: 0.0
+  checkpoint_every_epochs: 250
+  n_back: 1
+  loss: mse
+  amp: true
+  compile_model: true
+  fused_optimizer: true
+  augment_symmetry: true
+
+seed: 10

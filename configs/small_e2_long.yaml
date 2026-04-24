@@ -1,0 +1,26 @@
+# E2: same arch as E1 but 2000 epochs. Tests whether smaller architectures benefit
+# more from longer training (gradient signals flow better in shallower nets).
+# ETA ~50 min on 4090.
+model:
+  state_size: 72
+  num_classes: 72
+  hidden_dims: [1024, 256]
+  num_res_blocks: 1
+  encoding: embedding
+  embed_dim: 16
+
+training:
+  n_epochs: 2000
+  samples_per_epoch: 1_000_000
+  batch_size: 16384
+  k_max: 30
+  lr: 2.0e-3
+  weight_decay: 0.0
+  checkpoint_every_epochs: 100
+  n_back: 1
+  loss: mse
+  amp: true
+  compile_model: true
+  fused_optimizer: true
+
+seed: 0

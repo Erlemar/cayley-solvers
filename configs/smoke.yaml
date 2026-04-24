@@ -1,0 +1,17 @@
+# Tiny smoke-test config — verifies the CLI wiring, not solving power.
+model:
+  state_size: 72
+  num_classes: 72
+  hidden_dims: [256, 256]
+  num_res_blocks: 2
+
+training:
+  n_epochs: 3
+  samples_per_epoch: 50_000
+  batch_size: 2048
+  k_max: 10
+  lr: 1.0e-3
+  weight_decay: 0.0
+  checkpoint_every_epochs: 3
+
+seed: 0

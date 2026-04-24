@@ -1,0 +1,25 @@
+# E5: E3 architecture (small, K_max=26, batch 10k) with 8000 epochs — matches khoruzhii's
+# training regime exactly. Expected ~56 min on 4090 with fast recipe.
+model:
+  state_size: 72
+  num_classes: 72
+  hidden_dims: [1024, 256]
+  num_res_blocks: 1
+  encoding: embedding
+  embed_dim: 16
+
+training:
+  n_epochs: 8000
+  samples_per_epoch: 1_000_000
+  batch_size: 10000
+  k_max: 26
+  lr: 1.56e-3
+  weight_decay: 0.0
+  checkpoint_every_epochs: 500
+  n_back: 1
+  loss: mse
+  amp: true
+  compile_model: true
+  fused_optimizer: true
+
+seed: 0

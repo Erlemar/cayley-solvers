@@ -1,0 +1,71 @@
+# Experiment log — Megaminx
+
+Kaggle: [CayleyPy Megaminx](https://www.kaggle.com/competitions/cayley-py-megaminx).
+User: `andlukyane`. Deadline 2026-08-31. 16 teams.
+
+**Hardware (default)**: RTX 4090 Laptop (16 GB VRAM, 80 W thermal cap), CUDA 12.8, Windows 11, Python 3.14.
+**Framework**: PyTorch 2.11.0+cu128, cayleypy 0.1.0.
+**Dataset**: 1001 scrambled Megaminx puzzles ordered by scramble depth (pid 0 = 1-move scramble, pid 1000 = 1000-move). 120-element permutation state. 24 generators.
+**Metric**: total moves across all puzzles, lower = better.
+**Baselines**:
+- Raw sample_submission.csv: 500,572
+- Post-processed sample (same-face run reduction, 8.54% free): **457,810** (our real floor)
+- Top leaderboard: 79,971 (Kuznetsov), 81,946 (DrozdovDan), 93,606 (Rokicki). Rest: ~413–500K.
+
+---
+
+## Summary table
+
+| ID   | Date       | What changed                                 | MSE   | Stratified score  | Leaderboard     | Notes |
+|------|------------|----------------------------------------------|-------|-------------------|-----------------|-------|
+| m01  | 2026-04-24 | First port: ResMLP [1024,256]×1, k_max=40, 200 ep | 9.76  | 19/20 easy solved | —               | Smoke only; hard puzzles OOD |
+| m02  | 2026-04-24 | Widen k_max=40→80, 2000 ep, same arch        | 66.16 | 2/51 solved (only bucket 0-99) | full solve in progress (beam 32k) | Model is heuristic-noise-bound on medium/hard |
+
+---
+
+## m01 — first port (fast recipe, k_max=40)
+
+- **Config**: `configs/m01_fast_k40.yaml`
+- **Model**: `cayley.model.ResMLPDistance`, encoding=embedding, embed_dim=16, hidden=[1024, 256], 1 ResBlock. 2,366,849 params.
+- **Recipe**: MSE, Adam lr 2e-3 + cosine decay, batch 16384, 1M samples/epoch, non-backtracking walks (n_back=1), k_max=40, 200 epochs, bf16 + torch.compile + fused AdamW.
+- **Checkpoint**: `models/m01_fast_k40/epoch_0199.pt`.
+- **Runtime**: 100 s (0.5 s/epoch after compile + 20 s first-epoch compile).
+- **Loss**: 139 → 9.76 by ep 199. RMSE ≈ 3.1 on target range [1, 40] — comparable to IHES small_e3 tier.
+- **Solve 1 (smoke, beam 32k, pid 0-19, ma=2)**: 19/20 by model, total 500,554 (–18 vs sample). Submission: `submissions/m01_b32_l20.csv`.
+- **Solve 2 (stratified 10/bucket, beam 32k, ma=2)**: 2/101 by model, 40 min wall time. Submission: `submissions/m01_b32_s10.csv` → 500,564 total. Per-bucket: bucket 0 had 3/10 solves averaging 27.3 moves; all other buckets 0/10.
+- **Analysis**:
+  - Model is competent only inside its training distribution (distance ≤ 40). Any puzzle with scramble depth > 40 (≈bucket 1 onward) is out-of-distribution — beam search drifts.
+  - Easy puzzles solved nearly optimally where model engages.
+  - Beam 32k at max_steps=80 ma=2 costs ~2s/easy, ~150s/hard — most time goes to unsolvable-by-model hard cases that exhaust all steps.
+
+## m02 — widen training depth (k_max=80, 2000 epochs)
+
+- **Config**: `configs/m02_k80_long.yaml`
+- **Model**: same arch as m01 (2.37M params).
+- **Recipe**: same as m01 except `k_max=80`, `n_epochs=2000`, checkpoint every 100 ep.
+- **Checkpoint**: `models/m02_k80_long/epoch_1999.pt` (dir name still `k80_long/` until current full solve finishes; rename later).
+- **Runtime**: ~20 min (0.6 s/epoch after compile).
+- **Loss**: 859 → 66.16 by ep 1999. RMSE ≈ 8.1 on target range [1, 80]. Relatively worse variance-explained than m01 — wider depth range is genuinely harder.
+- **Solve 1 (stratified 5/bucket, beam 16k, ma=1)**: 2/51 by model (only bucket 0-99). Total 457,802 (essentially = pp_fallback floor 457,810 minus 8 moves). Submission: `submissions/m02_b16_s5.csv`. Wall time 225 s.
+- **Solve 2 (full 1001, beam 32k, ma=2)**: **IN PROGRESS** — started 2026-04-24 10:22. Output will be `submissions/full_k80_b32.csv` (will rename to `m02_b32_a2.csv`).
+- **Analysis**:
+  - Wider k_max alone did not fix the medium-hard regime: going from 2/101 (m01 at beam 32k) to 2/51 (m02 at beam 16k) is consistent with "beam size is the binding constraint, not training depth". Model heuristic noise (RMSE 8) is larger than the per-step distance delta (≈1 out of 24 neighbors is a good move, 23 are sideways or away).
+  - Bucket 0 model-averages (m01: 27.3, m02: 15.0) suggest the k_max=80 model is MORE accurate where it solves — it's just unable to escape beam drift on deep puzzles.
+  - Implication: next lever is (i) bigger model for less heuristic noise, AND/OR (ii) much wider beam (65k+), AND/OR (iii) Q-function heads to score 24 neighbors in one pass (more discriminative).
+
+---
+
+## Same-face post-processing (applies to all submissions)
+
+- Every Megaminx face has rotation order 5: X^5 = identity, X^4 = -X, X^3 = -X·-X.
+- `megaminx.post_process.reduce_same_face_runs` + `cancel_adjacent_inverses` run to fixpoint.
+- On raw sample_submission.csv: -42,762 moves (8.54%) with all 1001 still solving → `data/pp_fallback.csv` is our new fallback floor (457,810).
+
+---
+
+## Decision log
+
+- **2026-04-24**: started project by porting shared `cayley.*` modules via duck-typing (Megaminx class mirrors PictureCube). No library fork needed.
+- **2026-04-24**: confirmed test.csv is ordered by scramble depth (sum 1..1000 ≈ 500,500). Stratified 10/bucket replaces first-N as smoke-test default to cover full difficulty range.
+- **2026-04-24**: adopted m0N_<slug> naming for configs, models, submissions; EXPERIMENTS.md as canonical ledger; `git init` + private GitHub repo.
+- **2026-04-24**: chose NOT to submit 457,802 (matches pp_fallback floor) — wastes a daily Kaggle submission slot with no leaderboard signal.

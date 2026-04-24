@@ -1,0 +1,24 @@
+# Small ResMLP config — Phase 1 baseline matching the CayleyPy paper recipe.
+# Deliberately minimal; scale in Phase 2.
+
+model:
+  state_size: 72          # picture cube has 72 facelet positions
+  num_classes: 72         # and 72 possible values per position
+  hidden_dims: [700, 643] # paper recipe for 3x3x3
+  num_res_blocks: 4
+
+training:
+  n_epochs: 100           # Phase 1 target; Phase 2 scales to 500-2000
+  samples_per_epoch: 1_000_000
+  batch_size: 4096
+  k_max: 30               # max random walk depth — God's number for 3x3x3 is 20 + margin
+  lr: 1.0e-3
+  weight_decay: 0.0
+
+search:
+  beam_width: 262144      # 2^18 — Phase 1 starting point
+  beam_mode: advanced     # non-backtracking beam
+  history_depth: 2
+  max_steps: 100
+
+seed: 0

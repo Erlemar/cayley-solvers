@@ -1,0 +1,22 @@
+# v3: embed architecture + n_back=40 only. Keeps MSE, keeps [700,643] x 4.
+# Purpose: isolate whether n_back=40 alone is causing v2's regression.
+model:
+  state_size: 72
+  num_classes: 72
+  hidden_dims: [700, 643]
+  num_res_blocks: 4
+  encoding: embedding
+  embed_dim: 16
+
+training:
+  n_epochs: 100
+  samples_per_epoch: 1_000_000
+  batch_size: 4096
+  k_max: 30
+  lr: 1.0e-3
+  weight_decay: 0.0
+  checkpoint_every_epochs: 50
+  n_back: 40
+  loss: mse
+
+seed: 0

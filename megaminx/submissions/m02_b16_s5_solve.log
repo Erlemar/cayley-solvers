@@ -1,0 +1,21 @@
+stratified: 51 pids across 11 buckets (seed=0)
+  pid= 396 attempts=20/51 total_moves=71,879 (2 by model, 395 fallback) 83.6s (0.24 p/s)
+  pid= 781 attempts=40/51 total_moves=279,488 (2 by model, 780 fallback) 174.8s (0.23 p/s)
+  pid=1000 attempts=51/51 total_moves=457,802 (2 by model, 999 fallback) 225.0s (0.23 p/s)
+wrote megaminx\submissions\strat_k80.csv
+  stats: {'solved_by_model': 2, 'fallback': 999, 'total_moves': 457802}
+  verify: 1001/1001 valid, total 457,802
+
+  per-bucket (attempted only):
+    bucket    n  solved  model_avg   fb_avg  chosen_avg    saved
+     0-99     5   2/5         15.0     42.4        40.8     +1.6
+   100-199    5   0/5            -    139.0       139.0     +0.0
+   200-299    5   0/5            -    225.0       225.0     +0.0
+   300-399    5   0/5            -    318.6       318.6     +0.0
+   400-499    5   0/5            -    421.4       421.4     +0.0
+   500-599    5   0/5            -    500.2       500.2     +0.0
+   600-699    5   0/5            -    599.4       599.4     +0.0
+   700-799    5   0/5            -    691.8       691.8     +0.0
+   800-899    5   0/5            -    785.0       785.0     +0.0
+   900-999    5   0/5            -    850.6       850.6     +0.0
+  1000-1099    1   0/1            -    925.0       925.0     +0.0

@@ -1,0 +1,22 @@
+# Big config — pushes the 16GB 4090 Laptop.
+# Embedding encoder (1152-dim input) + much wider/deeper trunk.
+# [2048, 1024] hidden + 8 residual blocks at 1024. ~25-30M params.
+# Larger batch 16384 for faster convergence.
+model:
+  state_size: 72
+  num_classes: 72
+  hidden_dims: [2048, 1024]
+  num_res_blocks: 8
+  encoding: embedding
+  embed_dim: 32
+
+training:
+  n_epochs: 300
+  samples_per_epoch: 2_000_000
+  batch_size: 16384
+  k_max: 30
+  lr: 1.0e-3
+  weight_decay: 0.0
+  checkpoint_every_epochs: 25
+
+seed: 0

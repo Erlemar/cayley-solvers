@@ -1,0 +1,40 @@
+# Python
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+build/
+dist/
+.ipynb_checkpoints/
+.pytest_cache/
+
+# Editor / OS
+.idea/
+.vscode/
+*.swp
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Claude local state (Kaggle/GCP tokens)
+.claude/settings.local.json
+
+# Downloaded Kaggle zips
+*.zip
+
+# Model checkpoints — large, reproducible from configs+logs.
+# Exclude the .pt/.pth/.ckpt specifically; keep directories + logs + model_config.json.
+**/models/**/*.pt
+**/models/**/*.pth
+**/models/**/*.ckpt
+
+# Large precomputed tables / binary caches — rebuild from scripts.
+data/bfs_table_*.pkl
+data/kociemba_walks.pkl
+data/pdb_picture_cube.pkl
+data/community_subs/
+megaminx/data/bfs_table_*.pkl
+
+# Scratch
+/tmp/

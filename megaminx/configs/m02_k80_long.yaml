@@ -1,0 +1,25 @@
+# Address undertrained long-distance regime: k_max=80 covers full puzzle depth range.
+# 2000 epochs at 0.5s each = ~17 min. Checkpoints every 100 ep for mid-run evaluation.
+model:
+  state_size: 120
+  num_classes: 120
+  hidden_dims: [1024, 256]
+  num_res_blocks: 1
+  encoding: embedding
+  embed_dim: 16
+
+training:
+  n_epochs: 2000
+  samples_per_epoch: 1_000_000
+  batch_size: 16384
+  k_max: 80
+  lr: 2.0e-3
+  weight_decay: 0.0
+  checkpoint_every_epochs: 100
+  n_back: 1
+  loss: mse
+  amp: true
+  compile_model: true
+  fused_optimizer: true
+
+seed: 0

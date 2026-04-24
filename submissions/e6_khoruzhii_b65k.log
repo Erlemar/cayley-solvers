@@ -1,0 +1,14 @@
+  pid=  99 total=2217 (605.1s)
+  pid= 199 total=4755 (1334.7s)
+  pid= 299 total=7255 (2043.2s)
+  pid= 399 total=9755 (2735.1s)
+  pid= 499 total=12275 (3430.3s)
+  pid= 599 total=14781 (4121.0s)
+  pid= 699 total=17285 (4813.5s)
+  pid= 799 total=19815 (5511.9s)
+  pid= 899 total=22329 (6206.4s)
+  pid= 999 total=24857 (6902.5s)
+  pid=1002 total=24932 (6923.4s)
+wrote submissions\e6_khoruzhii_b65k.csv
+  stats: {'solved_by_model': 998, 'fallback': 5, 'from_extra': 0, 'total_moves': 24932}
+  verify: 1003/1003 valid, total 24932

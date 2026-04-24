@@ -1,0 +1,8 @@
+  depth 1: +18 new; total=19 (0.0s)
+  depth 2: +261 new; total=280 (0.0s)
+  depth 3: +3,732 new; total=4,012 (0.0s)
+  depth 4: +52,620 new; total=56,632 (0.3s)
+  depth 5: +733,956 new; total=790,588 (7.8s)
+  depth 6: +10,142,306 new; total=10,932,894 (793.9s)
+total: 10,932,894 states at depth <= 6 (802.4s)
+saved: data\bfs_table_d6.pkl (1769.7 MB)

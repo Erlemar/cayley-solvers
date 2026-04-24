@@ -1,0 +1,14 @@
+  pid=  99 total=2389 (548.3s)
+  pid= 199 total=5187 (1211.4s)
+  pid= 299 total=7999 (1891.2s)
+  pid= 399 total=10821 (2551.5s)
+  pid= 499 total=13611 (3183.5s)
+  pid= 599 total=16459 (3834.7s)
+  pid= 699 total=19241 (4460.0s)
+  pid= 799 total=22051 (5138.1s)
+  pid= 899 total=24859 (5792.3s)
+  pid= 999 total=27675 (6445.6s)
+  pid=1002 total=27760 (6466.3s)
+wrote submissions\fast_b8k_mitm6.csv
+  stats: {'solved_by_model': 947, 'fallback': 56, 'from_extra': 0, 'total_moves': 27760}
+  verify: 1003/1003 valid, total 27760

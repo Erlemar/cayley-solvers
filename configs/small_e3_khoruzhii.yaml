@@ -1,0 +1,27 @@
+# E3: match khoruzhii's recipe more closely. batch=10k (theirs), K_max=26 (theirs),
+# 4000 epochs (between our 2000 and their 8192 — fits our compute budget).
+# lr scaled for smaller batch (lr = base × sqrt(batch/16384) = 2e-3 × sqrt(10000/16384) = 1.56e-3).
+# ETA ~1.5h on 4090.
+model:
+  state_size: 72
+  num_classes: 72
+  hidden_dims: [1024, 256]
+  num_res_blocks: 1
+  encoding: embedding
+  embed_dim: 16
+
+training:
+  n_epochs: 4000
+  samples_per_epoch: 1_000_000
+  batch_size: 10000
+  k_max: 26
+  lr: 1.56e-3
+  weight_decay: 0.0
+  checkpoint_every_epochs: 200
+  n_back: 1
+  loss: mse
+  amp: true
+  compile_model: true
+  fused_optimizer: true
+
+seed: 0

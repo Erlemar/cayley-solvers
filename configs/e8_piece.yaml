@@ -1,0 +1,28 @@
+# E8: piece-decomposition encoder — 52 piece features (corner/edge/center id + ori)
+# replacing the 72-facelet one-hot/embedding input. Smaller input (832 dim vs 1152)
+# with a strong structural prior.
+#
+# No 1/k curriculum (learned from E7 regression). Same 4000-epoch budget as E3/E6.
+model:
+  state_size: 72
+  num_classes: 72
+  hidden_dims: [1024, 256]
+  num_res_blocks: 1
+  encoding: piece
+  embed_dim: 16
+
+training:
+  n_epochs: 4000
+  samples_per_epoch: 1_000_000
+  batch_size: 10000
+  k_max: 26
+  lr: 1.56e-3
+  weight_decay: 0.0
+  checkpoint_every_epochs: 250
+  n_back: 1
+  loss: mse
+  amp: true
+  compile_model: true
+  fused_optimizer: true
+
+seed: 8

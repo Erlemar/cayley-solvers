@@ -1,0 +1,14 @@
+  pid=  99 total=2563 (526.3s)
+  pid= 199 total=5579 (1134.3s)
+  pid= 299 total=8553 (1756.4s)
+  pid= 399 total=11609 (2342.3s)
+  pid= 499 total=14589 (2985.1s)
+  pid= 599 total=17643 (3613.3s)
+  pid= 699 total=20667 (4243.3s)
+  pid= 799 total=23741 (4882.5s)
+  pid= 899 total=26835 (5523.7s)
+  pid= 999 total=29859 (6102.7s)
+  pid=1002 total=29958 (6120.9s)
+wrote submissions\s1_b4k.csv
+  stats: {'solved_by_model': 810, 'fallback': 193, 'from_extra': 0, 'total_moves': 29958}
+  verify: 1003/1003 valid, total 29958

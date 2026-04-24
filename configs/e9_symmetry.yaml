@@ -1,0 +1,28 @@
+# E9: E5 recipe + 24x rotational symmetry augmentation. Each training sample gets a
+# random whole-cube rotation (of 24 total) applied before the model sees it; the label
+# stays the same (rotated states have the same distance to solved). This gives 24x
+# effective coverage of the state space at zero compute cost.
+model:
+  state_size: 72
+  num_classes: 72
+  hidden_dims: [1024, 256]
+  num_res_blocks: 1
+  encoding: embedding
+  embed_dim: 16
+
+training:
+  n_epochs: 4000
+  samples_per_epoch: 1_000_000
+  batch_size: 10000
+  k_max: 26
+  lr: 1.56e-3
+  weight_decay: 0.0
+  checkpoint_every_epochs: 250
+  n_back: 1
+  loss: mse
+  amp: true
+  compile_model: true
+  fused_optimizer: true
+  augment_symmetry: true
+
+seed: 9

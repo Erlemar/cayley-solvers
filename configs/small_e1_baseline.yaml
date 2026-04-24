@@ -1,0 +1,25 @@
+# E1: khoruzhii architecture baseline. Quick sanity (~12 min) on their config with our
+# fast recipe. Goal: confirm simpler architecture converges, set reference loss.
+model:
+  state_size: 72
+  num_classes: 72
+  hidden_dims: [1024, 256]
+  num_res_blocks: 1
+  encoding: embedding
+  embed_dim: 16
+
+training:
+  n_epochs: 500
+  samples_per_epoch: 1_000_000
+  batch_size: 16384
+  k_max: 30
+  lr: 2.0e-3
+  weight_decay: 0.0
+  checkpoint_every_epochs: 50
+  n_back: 1
+  loss: mse
+  amp: true
+  compile_model: true
+  fused_optimizer: true
+
+seed: 0

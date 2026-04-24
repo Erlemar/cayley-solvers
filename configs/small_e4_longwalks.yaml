@@ -1,0 +1,27 @@
+# E4: same small arch, longer walks (k_max=45), more epochs. Tests if walks up to the
+# conjectured diameter of picture-cube (~45) expose the model to harder states.
+# samples_per_epoch unchanged; n_walks = samples/k_max so each walk emits k_max samples.
+# ETA ~1h on 4090.
+model:
+  state_size: 72
+  num_classes: 72
+  hidden_dims: [1024, 256]
+  num_res_blocks: 1
+  encoding: embedding
+  embed_dim: 16
+
+training:
+  n_epochs: 2000
+  samples_per_epoch: 1_000_000
+  batch_size: 16384
+  k_max: 45
+  lr: 2.0e-3
+  weight_decay: 0.0
+  checkpoint_every_epochs: 100
+  n_back: 1
+  loss: mse
+  amp: true
+  compile_model: true
+  fused_optimizer: true
+
+seed: 0

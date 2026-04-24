@@ -1,0 +1,8 @@
+target count: 40
+  10/40 pid=147 orig=27 new=27 improved=6 saved=12 (307.7s)
+  20/40 pid=402 orig=28 new=26 improved=12 saved=26 (569.0s)
+  30/40 pid=675 orig=27 new=25 improved=17 saved=36 (805.2s)
+  40/40 pid=991 orig=27 new=27 improved=24 saved=50 (1047.7s)
+wrote submissions\wide_b131k_tail.csv
+  stats: {'improved': 24, 'same_or_worse': 15, 'failed_solve': 1, 'saved_moves': 50}
+  verify: 1003/1003 valid, total 24018

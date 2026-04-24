@@ -1,0 +1,29 @@
+# First-pass Megaminx training config. Mirrors IHES small_e3 (our best arch) with:
+#   - state_size 72 -> 120, num_classes 72 -> 120
+#   - k_max 26 -> 40 (Megaminx effective diameter is ~45-50)
+#   - batch 16384 (fast recipe)
+#   - bf16 + compile + fused AdamW
+# ETA on RTX 4090 Laptop: ~6-10 s/epoch => 200 epochs in ~30-45 min.
+model:
+  state_size: 120
+  num_classes: 120
+  hidden_dims: [1024, 256]
+  num_res_blocks: 1
+  encoding: embedding
+  embed_dim: 16
+
+training:
+  n_epochs: 200
+  samples_per_epoch: 1_000_000
+  batch_size: 16384
+  k_max: 40
+  lr: 2.0e-3
+  weight_decay: 0.0
+  checkpoint_every_epochs: 25
+  n_back: 1
+  loss: mse
+  amp: true
+  compile_model: true
+  fused_optimizer: true
+
+seed: 0

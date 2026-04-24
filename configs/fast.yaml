@@ -1,0 +1,29 @@
+# Fast config — same [700, 643] x 4 embedding model as `embed.yaml` but with:
+#   - bf16 autocast (1.5-2x faster matmul on Ada GPUs)
+#   - batch 16384 (4x bigger, reduces kernel launch overhead)
+#   - torch.compile (fuses ResBlock + LayerNorm + ReLU)
+#   - fused AdamW
+# Expected 3-5x speedup per epoch. Good default for future training runs.
+model:
+  state_size: 72
+  num_classes: 72
+  hidden_dims: [700, 643]
+  num_res_blocks: 4
+  encoding: embedding
+  embed_dim: 16
+
+training:
+  n_epochs: 500
+  samples_per_epoch: 1_000_000
+  batch_size: 16384
+  k_max: 30
+  lr: 2.0e-3          # slightly higher to compensate for larger batch (lr ∝ sqrt(batch))
+  weight_decay: 0.0
+  checkpoint_every_epochs: 25
+  n_back: 1
+  loss: mse
+  amp: true
+  compile_model: true
+  fused_optimizer: true
+
+seed: 0

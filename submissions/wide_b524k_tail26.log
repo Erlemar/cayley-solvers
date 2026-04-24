@@ -1,0 +1,15 @@
+target count: 108
+  10/108 pid=128 orig=26 new=24 improved=8 saved=16 (824.6s)
+  20/108 pid=210 orig=26 new=24 improved=16 saved=36 (1637.0s)
+  30/108 pid=316 orig=26 new=26 improved=22 saved=48 (2364.0s)
+  40/108 pid=398 orig=26 new=26 improved=29 saved=66 (3078.1s)
+  50/108 pid=487 orig=27 new=25 improved=37 saved=82 (3803.8s)
+  60/108 pid=598 orig=26 new=24 improved=42 saved=92 (4545.2s)
+  70/108 pid=720 orig=26 new=24 improved=52 saved=112 (5250.2s)
+  80/108 pid=778 orig=26 new=24 improved=59 saved=126 (5967.3s)
+  90/108 pid=884 orig=26 new=26 improved=63 saved=134 (6707.2s)
+  100/108 pid=944 orig=28 new=24 improved=67 saved=146 (7433.3s)
+  108/108 pid=998 orig=26 new=24 improved=74 saved=160 (7997.6s)
+wrote submissions\wide_b524k_tail26.csv
+  stats: {'improved': 74, 'same_or_worse': 33, 'failed_solve': 1, 'saved_moves': 160}
+  verify: 1003/1003 valid, total 23672

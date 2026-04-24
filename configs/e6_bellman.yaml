@@ -1,0 +1,39 @@
+# E6: Bellman refinement on the E5 checkpoint.
+#
+# Warm-starts from the best walk-depth-trained small model. Trains for a moderate number
+# of refinement epochs with self-bootstrapped targets. Target network copies from the
+# trainable model every 10 epochs.
+#
+# Per-epoch cost: roughly 3-5× baseline (due to target-net forward on 18 children per state).
+# Budget estimate: 500 epochs × ~2s = ~17 min on 4090. Tunable via n_epochs.
+
+model:
+  state_size: 72
+  num_classes: 72
+  hidden_dims: [1024, 256]
+  num_res_blocks: 1
+  encoding: embedding
+  embed_dim: 16
+
+training:
+  n_epochs: 500
+  samples_per_epoch: 1_000_000
+  batch_size: 10000
+  k_max: 26
+  lr: 5.0e-4                  # half the E3 LR — we're refining, not searching
+  weight_decay: 0.0
+  checkpoint_every_epochs: 50
+  n_back: 1
+  loss: mse                   # L1 also worth testing on a second run
+  amp: true
+  compile_model: true
+  fused_optimizer: true
+
+bellman:
+  warmstart_path: models/small_e5/epoch_7999.pt
+  target_update_every_epochs: 10
+  target_net_chunk: 8192
+  clip_upper: true
+  clip_lower: true
+
+seed: 0

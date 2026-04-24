@@ -1,0 +1,4 @@
+sweep on 30 puzzles, max_steps=60
+  beam  solved   total    avg  time_s
+  2048   10/30     312   31.2  298.3
+  4096   13/30     426   32.8 3178.4

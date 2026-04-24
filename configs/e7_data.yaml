@@ -1,0 +1,31 @@
+# E7: E5 recipe + data-side bundle (BFS-d5 exact labels + Kociemba-walk labels + 1/k curriculum).
+# Expected: ~4000 epochs to converge given the richer data; each epoch roughly same wall time
+# as E5 (1M samples total, just drawn from 3 sources).
+model:
+  state_size: 72
+  num_classes: 72
+  hidden_dims: [1024, 256]
+  num_res_blocks: 1
+  encoding: embedding
+  embed_dim: 16
+
+training:
+  n_epochs: 4000
+  samples_per_epoch: 1_000_000
+  batch_size: 10000
+  k_max: 26
+  lr: 1.56e-3
+  weight_decay: 0.0
+  checkpoint_every_epochs: 250
+  n_back: 1
+  loss: mse
+  curriculum: true                  # 1/k weighting (B7)
+  amp: true
+  compile_model: true
+  fused_optimizer: true
+  bfs_table_path: data/bfs_table_d5.pkl           # B4: exact labels for near-solved states
+  bfs_mix_fraction: 0.20
+  kociemba_walks_path: data/kociemba_walks.pkl    # B6: realistic test-distribution states
+  kociemba_mix_fraction: 0.10
+
+seed: 7

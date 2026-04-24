@@ -1,0 +1,32 @@
+# big_v1: stacks all the proven-or-plausible improvements.
+#   - Big model: [2048, 1024] x 8 residual blocks, embed_dim=32 (~30M params)
+#   - 2000 epochs (4x baseline) with cosine LR
+#   - Depth-weighted curriculum (DeepCubeA recipe)
+#   - bf16 + torch.compile + batch 16384 + fused AdamW (validated 3x speedup)
+#   - Still MSE loss + n_back=1 (both verified safe; L1 and n_back=40 regressed)
+#
+# Budget estimate: ~50M params × (1.5s/epoch scaled for 7x params ≈ 5s/epoch) × 2000 ep ≈ 3h.
+model:
+  state_size: 72
+  num_classes: 72
+  hidden_dims: [2048, 1024]
+  num_res_blocks: 8
+  encoding: embedding
+  embed_dim: 32
+
+training:
+  n_epochs: 2000
+  samples_per_epoch: 1_000_000
+  batch_size: 16384
+  k_max: 30
+  lr: 2.0e-3
+  weight_decay: 0.0
+  checkpoint_every_epochs: 100
+  n_back: 1
+  loss: mse
+  curriculum: true
+  amp: true
+  compile_model: true
+  fused_optimizer: true
+
+seed: 0
