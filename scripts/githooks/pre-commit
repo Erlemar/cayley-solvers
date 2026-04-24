@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+# Refuse to commit any staged file larger than MAX_SIZE_MB megabytes.
+# GitHub rejects pushes with files > 100 MB, so this catches the problem before you
+# have to amend the commit and rewrite history. Set MAX_SIZE_MB via env var to override.
+#
+# Install locally with:  git config core.hooksPath scripts/githooks
+# (or copy this file to .git/hooks/pre-commit and `chmod +x`)
+
+set -euo pipefail
+
+MAX_SIZE_MB="${MAX_SIZE_MB:-100}"
+max_bytes=$(( MAX_SIZE_MB * 1024 * 1024 ))
+
+# List staged files, find ones over the limit.
+over=""
+while IFS= read -r f; do
+    [ -z "$f" ] && continue
+    [ -f "$f" ] || continue
+    size=$(wc -c < "$f" | tr -d ' ')
+    if [ "$size" -gt "$max_bytes" ]; then
+        mb=$(awk "BEGIN { printf \"%.1f\", $size / 1048576 }")
+        over+=$'\n'"  $f (${mb} MB)"
+    fi
+done < <(git diff --cached --name-only --diff-filter=ACM)
+
+if [ -n "$over" ]; then
+    cat >&2 <<EOF
+ERROR: pre-commit refuses files larger than ${MAX_SIZE_MB} MB:$over
+
+Fix options:
+  - Add the path to .gitignore (preferred for generated artifacts)
+  - Use Git LFS for large binaries that MUST be versioned
+  - If this is truly intended (not recommended), bypass with --no-verify
+
+GitHub's pre-receive hook rejects files >100 MB. Amending after a rejected push is
+painful; catching here is cheaper.
+EOF
+    exit 1
+fi
