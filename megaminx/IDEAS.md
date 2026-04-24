@@ -109,6 +109,17 @@ canonical baselines; submit only when we can beat pp_fallback by meaningful marg
 
 ## Training infrastructure (added 2026-04-24)
 
+T0. [x] **Muon optimizer** (torch.optim.Muon, PyTorch 2.9+; Keller Jordan et al., Dec 2024).
+   Newton-Schulz orthogonalizes momentum on 2D hidden matrices; AdamW on embeddings +
+   biases + LN + head. Rationale: our MSE plateau at ~64 regardless of arch size may be
+   optimizer-conditioning-limited. Implementation (`src/cayley/optimizers.py`,
+   `TrainConfig.optimizer`): DONE 2026-04-24. Next: run **m09 sanity test** — same arch
+   as m07, 1000 ep with Muon@lr=2e-2 + AdamW-aux@lr=2e-3; compare MSE vs m07's
+   checkpoint at ep 999. If dips clearly below m07, run full 4000 ep (`m10_muon_4k`).
+   If tracks m07, skip — bottleneck isn't the optimizer.
+
+
+
 T1. [ ] **Generous early stopping.** Observed on m02 (plateau at MSE 66 from ~ep 500)
    and feared on Kaggle m03 (7h wall with no visible progress). Design:
    - Track rolling-mean loss over last N epochs (e.g. N=200)

@@ -21,6 +21,7 @@ from torch.optim.lr_scheduler import CosineAnnealingLR
 
 from cayley.data import generate_walks_torch, load_kociemba_walks, sample_from_bfs_table
 from cayley.model import ResMLPDistance
+from cayley.optimizers import build_optimizer_and_scheduler
 from cayley.puzzle import PictureCube
 
 
@@ -49,6 +50,13 @@ class TrainConfig:
     kociemba_walks_path: str = ""   # path to kociemba_walks.pkl; empty = disabled
     kociemba_mix_fraction: float = 0.0  # share of each epoch's samples from Kociemba walks
     augment_symmetry: bool = False  # apply a random rotational symmetry per sample per epoch
+    # --- optimizer selection ---
+    optimizer: str = "adam"         # 'adam' / 'adamw' / 'muon' (Muon needs torch 2.9+ locally)
+    muon_lr: float = 2e-2           # Muon typically wants ~10x the AdamW lr
+    muon_momentum: float = 0.95
+    muon_weight_decay: float = 0.01
+    muon_ns_steps: int = 5
+    muon_adjust_lr_fn: str = ""     # empty = None; other values passed as-is to torch.optim.Muon
 
 
 @dataclass
@@ -208,19 +216,27 @@ def train(
     ckpt_dir.mkdir(parents=True, exist_ok=True)
     model.to(cfg.device)
 
-    # AdamW when weight_decay > 0, plain Adam otherwise. `fused=True` runs the update as a
-    # single kernel launch (modest speedup).
-    optim_cls = torch.optim.AdamW if cfg.weight_decay > 0 else Adam
-    optim_kwargs = dict(lr=cfg.lr, weight_decay=cfg.weight_decay)
-    if cfg.fused_optimizer and cfg.device == "cuda":
-        optim_kwargs["fused"] = True
-    optimizer = optim_cls(model.parameters(), **optim_kwargs)
+    # Build optimizer(s) + scheduler(s) via the helper (handles Adam/AdamW/Muon+AdamW split).
+    optimizer, scheduler = build_optimizer_and_scheduler(
+        model,
+        n_epochs=cfg.n_epochs,
+        optimizer_name=cfg.optimizer,
+        lr=cfg.lr,
+        weight_decay=cfg.weight_decay,
+        fused=cfg.fused_optimizer and cfg.device == "cuda",
+        muon_lr=cfg.muon_lr,
+        muon_momentum=cfg.muon_momentum,
+        muon_weight_decay=cfg.muon_weight_decay,
+        muon_ns_steps=cfg.muon_ns_steps,
+        muon_adjust_lr_fn=(cfg.muon_adjust_lr_fn or None),
+    )
 
     # torch.compile wraps the forward in an optimized graph. First epoch pays compile cost;
     # subsequent epochs run faster. Skip if the user opted out or we're on CPU.
+    # Note: Muon's Newton-Schulz loop sometimes trips compile; if you observe issues,
+    # set compile_model=false.
     if cfg.compile_model and cfg.device == "cuda":
         model = torch.compile(model, dynamic=False)
-    scheduler = CosineAnnealingLR(optimizer, T_max=cfg.n_epochs)
 
     batch_gen = torch.Generator(device=cfg.device)
     batch_gen.manual_seed(cfg.seed)

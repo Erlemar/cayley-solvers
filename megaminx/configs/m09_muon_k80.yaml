@@ -1,0 +1,37 @@
+# m09: same arch as m07 but trained with Muon (Newton-Schulz orthogonalized momentum)
+# on hidden 2D Linear weights; AdamW on embeddings + biases + LN + head.
+#
+# 1000 epochs as a sanity-signal vs m07's first 1000 epochs at matched configuration
+# (we saved m07 checkpoints every 200 ep, so we can compare m07 ep 0999 vs m09 ep 0999).
+# If Muon breaks below m07's curve, do a full 4000-ep run. Otherwise skip.
+#
+# Muon LR default is 2e-2 (10x our AdamW 2e-3) per the recipe guide. AdamW LR stays
+# at 2e-3 for the aux group.
+model:
+  state_size: 120
+  num_classes: 120
+  hidden_dims: [2048, 512]
+  num_res_blocks: 2
+  encoding: embedding
+  embed_dim: 16
+
+training:
+  n_epochs: 1000
+  samples_per_epoch: 1_000_000
+  batch_size: 16384
+  k_max: 80
+  lr: 2.0e-3                 # AdamW lr for aux group (embeddings, biases, LN, head)
+  weight_decay: 0.0
+  checkpoint_every_epochs: 100
+  n_back: 1
+  loss: mse
+  amp: true
+  compile_model: false       # Muon's NS loop may interact poorly with compile; test first
+  fused_optimizer: true
+  optimizer: muon
+  muon_lr: 2.0e-2            # 10x the AdamW lr; sweep 5e-3..5e-2 if results are bad
+  muon_momentum: 0.95
+  muon_weight_decay: 0.01
+  muon_ns_steps: 5
+
+seed: 30
