@@ -106,6 +106,15 @@ def main() -> int:
                     help="also solve invert_state; keep shorter")
     ap.add_argument("--device", default="cuda" if torch.cuda.is_available() else "cpu")
     ap.add_argument("--limit", type=int, default=None)
+    ap.add_argument("--pid-from", type=int, default=None,
+                    help="solve pids >= this (inclusive). Pair with --pid-to for batching.")
+    ap.add_argument("--pid-to", type=int, default=None,
+                    help="solve pids < this (exclusive). With --pid-from, restricts to "
+                         "a pid range; useful for batching a big run across machines or "
+                         "for incremental resume after a crash.")
+    ap.add_argument("--resume", action="store_true",
+                    help="if --out already exists, skip pids already present and append; "
+                         "makes mid-batch crashes cheap to recover from.")
     ap.add_argument("--stratified", type=int, default=None,
                     help="K puzzles per 100-pid bucket (covers full difficulty range)")
     ap.add_argument("--strat-seed", type=int, default=0)
@@ -148,10 +157,25 @@ def main() -> int:
         solve_ids = picked
         print(f"stratified: {len(solve_ids)} pids across {len(buckets)} buckets "
               f"(seed={args.strat_seed})")
+    elif args.pid_from is not None or args.pid_to is not None:
+        lo = args.pid_from if args.pid_from is not None else 0
+        hi = args.pid_to if args.pid_to is not None else max(all_ids) + 1
+        solve_ids = [p for p in all_ids if lo <= p < hi]
+        print(f"pid range: [{lo}, {hi}) -> {len(solve_ids)} pids")
     elif args.limit is not None:
         solve_ids = all_ids[: args.limit]
     else:
         solve_ids = all_ids
+
+    # Resume mode: if --out exists, load already-solved pids and skip them.
+    already_done: dict[int, list[str]] = {}
+    if args.resume and args.out.exists():
+        already_done = load_submission(args.out)
+        skip_attempted = [p for p in solve_ids if p in already_done]
+        solve_ids = [p for p in solve_ids if p not in already_done]
+        print(f"resume: {len(already_done)} rows in existing {args.out.name}, "
+              f"skipping {len(skip_attempted)} already-attempted pids; "
+              f"{len(solve_ids)} remaining")
 
     fallback = load_submission(args.fallback)
 
@@ -188,72 +212,103 @@ def main() -> int:
     print(f"beams={beams}  max_steps={max_steps_list}  niss={args.niss}  "
           f"state_dtype={state_dtype}  num_attempts={args.num_attempts}")
 
-    rows: list[tuple[int, str]] = []
+    # Decide output layout. In "batch mode" (--pid-from / --pid-to / --resume appending)
+    # we write ONLY the attempted pids, no fallback-fill — the caller merges batches.
+    # In normal mode, every pid gets a row (model solution or fallback).
+    batch_mode = (args.pid_from is not None or args.pid_to is not None)
+
     stats = {"solved_by_model": 0, "fallback": 0, "total_moves": 0}
     pass_solves = [0] * len(beams)
-    # Per-puzzle record: (pid, source, model_len_or_None, fallback_len, chosen_len, pass_idx)
     per_puzzle: list[tuple[int, str, int | None, int, int, int]] = []
     t0 = time.time()
     solve_ids_set = set(solve_ids)
     n_attempted = 0
 
-    for pid in all_ids:
+    # Open CSV once, write header if new, flush each row immediately. Append mode if
+    # resuming; write mode otherwise.
+    args.out.parent.mkdir(parents=True, exist_ok=True)
+    out_exists_nonempty = args.out.exists() and args.out.stat().st_size > 0
+    open_mode = "a" if (args.resume and out_exists_nonempty) else "w"
+    out_f = open(args.out, open_mode, newline="")
+    writer = csv.writer(out_f)
+    if open_mode == "w":
+        writer.writerow(["initial_state_id", "path"])
+        out_f.flush()
+
+    # In non-batch mode (full / limit / stratified), we want every pid in the output —
+    # fallback-fill for pids we don't attempt (and for already-done rows on resume).
+    # In batch mode we omit fallback-fill entirely.
+    if not batch_mode:
+        # Write fallback rows for skipped-on-resume pids first (they're already in the
+        # existing file if resuming; we only need to write the ones not in solve_ids).
+        for pid in all_ids:
+            if pid in already_done or pid in solve_ids_set:
+                continue
+            fb_path = full_post_process(fallback[pid])
+            stats["fallback"] += 1
+            stats["total_moves"] += len(fb_path)
+            writer.writerow([pid, ".".join(fb_path)])
+        out_f.flush()
+
+    iter_ids = solve_ids  # only attempt these; the rest already recorded above
+    for pid in iter_ids:
         state = states[pid]
         model_path: list[str] | None = None
         solved_pass = -1
 
-        if pid in solve_ids_set:
-            n_attempted += 1
-            if torch.cuda.is_available():
-                torch.cuda.empty_cache()
-            model_path, solved_pass = _solve_escalating(
-                puzzle, solver, state, beams, max_steps_list,
-                args.num_attempts, args.niss, bfs_table, args.bfs_max_window,
-            )
-            if solved_pass >= 0:
-                pass_solves[solved_pass] += 1
+        n_attempted += 1
+        if torch.cuda.is_available():
+            torch.cuda.empty_cache()
+        model_path, solved_pass = _solve_escalating(
+            puzzle, solver, state, beams, max_steps_list,
+            args.num_attempts, args.niss, bfs_table, args.bfs_max_window,
+        )
+        if solved_pass >= 0:
+            pass_solves[solved_pass] += 1
 
-        # Fallback CSV is expected to already be post-processed (pp_bfs5_fallback.csv or
-        # similar). Only run the cheap same-face + cancel passes here; skip the expensive
-        # BFS window replacement to avoid redundant work on 900+-move paths for every pid.
         fb_path = full_post_process(fallback[pid])
         candidates: list[tuple[list[str], str]] = []
         if model_path is not None:
             candidates.append((model_path, "solved_by_model"))
-        candidates.append((fb_path, "fallback"))
-        best_path, best_source = min(candidates, key=lambda x: len(x[0]))
-        stats[best_source] += 1
-        stats["total_moves"] += len(best_path)
-        rows.append((pid, ".".join(best_path)))
+        if not batch_mode:
+            # In batch mode we don't mix fallback in — the downstream merger does it.
+            candidates.append((fb_path, "fallback"))
+        if candidates:
+            best_path, best_source = min(candidates, key=lambda x: len(x[0]))
+        else:
+            # batch_mode + model didn't solve: emit no row for this pid (caller merges fallback).
+            best_path, best_source = None, None
+        if best_path is not None:
+            stats[best_source] += 1
+            stats["total_moves"] += len(best_path)
+            writer.writerow([pid, ".".join(best_path)])
+            out_f.flush()
         per_puzzle.append((
-            pid, best_source,
+            pid, best_source or "none",
             len(model_path) if model_path is not None else None,
-            len(fb_path), len(best_path), solved_pass,
+            len(fb_path), len(best_path) if best_path is not None else -1, solved_pass,
         ))
 
-        if pid in solve_ids_set and (n_attempted % 20 == 0 or pid == solve_ids[-1]):
+        if n_attempted % 20 == 0 or pid == iter_ids[-1]:
             elapsed = time.time() - t0
             rate = n_attempted / elapsed if elapsed > 0 else 0
             pass_str = "/".join(str(n) for n in pass_solves)
-            print(f"  pid={pid:4d} attempts={n_attempted}/{len(solve_ids)} "
+            print(f"  pid={pid:4d} attempts={n_attempted}/{len(iter_ids)} "
                   f"total_moves={stats['total_moves']:,} "
                   f"(model:{stats['solved_by_model']} fb:{stats['fallback']} "
                   f"passes:{pass_str}) {elapsed:.1f}s ({rate:.2f} p/s)", flush=True)
 
-    args.out.parent.mkdir(parents=True, exist_ok=True)
-    with open(args.out, "w", newline="") as f:
-        writer = csv.writer(f)
-        writer.writerow(["initial_state_id", "path"])
-        for pid, p in rows:
-            writer.writerow([pid, p])
+    out_f.close()
 
-    report = verify_submission(puzzle, PROJECT / "data" / "test.csv", args.out)
     print(f"wrote {args.out}")
     print(f"  stats: {stats}")
     print(f"  pass_solves: {dict(zip(beams, pass_solves))}")
-    print(f"  verify: {report.n_valid}/{report.n_total} valid, total {report.total_moves:,}")
+    if not batch_mode:
+        # Only verify in full-submission mode — batch output is partial by design.
+        report = verify_submission(puzzle, PROJECT / "data" / "test.csv", args.out)
+        print(f"  verify: {report.n_valid}/{report.n_total} valid, total {report.total_moves:,}")
 
-    if args.stratified is not None or args.limit is not None:
+    if args.stratified is not None or args.limit is not None or batch_mode:
         buckets: dict[int, list[tuple[int | None, int, int]]] = {}
         for pid, src, mlen, fblen, clen, _ in per_puzzle:
             if pid in solve_ids_set:
