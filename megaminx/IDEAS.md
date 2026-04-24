@@ -1,50 +1,156 @@
 # Megaminx experiment backlog
 
-Ideas ranked by **expected payoff per hour of work**. Check off as done and point to the
-EXPERIMENTS.md entry.
+Ideas ranked by **expected payoff per hour of work**. Check off as done and point to
+the EXPERIMENTS.md row. Based on a synthesis of:
+- Our IHES experiments (EXPERIMENTS.md in project root, NEW_IDEAS_SYNTHESIS*.md, PROGRESS.md)
+- Literature: DeepCubeA (2019), CayleyPy paper 2502.13266 (Feb 2025), CayleyPy-RL 2502.18663,
+  EfficientCube TMLR 2023, Q* search 2102.04518
+- Public Kaggle Megaminx kernels (data points, not ground truth — top votes reflect clarity
+  not leaderboard rank; Kuznetsov/DrozdovDan/Rokicki haven't shared code)
 
-**Current best (submitted)**: none yet. Local best (not submitted, matches pp_fallback): 457,802.
-**Target (Rokicki, #3)**: 93,606. **Target (leader Kuznetsov)**: 79,971.
+**Current best (submitted)**: none yet. Local floor (not submitted, matches pp_fallback): 457,810.
+**Target (Rokicki, #3 LB)**: 93,606. **Target (Kuznetsov, #1)**: 79,971.
 
 ---
 
-## HIGHEST priority untried
+## Strategic frame
 
-1. [ ] **Bigger model (hidden [2048, 512], 2 res blocks) at k_max=80** (`m03`). Goal: halve heuristic noise so beam search doesn't drift on medium scrambles. Run on Kaggle (P100) in parallel with local solves; expected ~1–2h for 4000 ep. **EV: unlock buckets 1-5 in next solve** (currently 0/10 solved). First leaderboard submission likely lands here.
+**Root-cause diagnosis** (from IHES NEW_IDEAS_SYNTHESIS.md, re-derived for Megaminx):
+- Heuristic ranking errors dominate (≥50% of gap). Tighten the heuristic first.
+- Beam pruning of correct paths (~30%). Bigger beam, int8, Q-function all help.
+- Non-backtracking constraints (~15%). NISS / six-axis ensemble add cheap diversity.
+- Post-processing ceiling (~5%). Already at same-face + adjacent-inverse.
 
-2. [ ] **Q-function head** (`m04`). Train output_dim=24, loss = MSE of Q(s,a) vs V_teacher(apply(s,a)) distilled from m02 or m03. Beam expansion does ONE forward per parent instead of 24. 10–20× faster per step, and more discriminative because the 24 outputs share a common embedding. IHES project already has this code (`scripts/06_train_qfunction.py`). **EV: similar solve rate at much bigger beam within same time budget.**
+**Guiding principle**: start with our innovations (IHES-verified wins), then evaluate
+canonical baselines; submit only when we can beat pp_fallback by meaningful margin
+(not 8 moves).
 
-3. [ ] **Wider beam run** (131k or 262k) on existing m02 checkpoint, targeting unsolved medium-hard puzzles from m02's full solve. Re-runs only the hard-end (pid ≥ 200) so cost is bounded. Needs the GCP L4 VM (24 GB VRAM) because 4090 Laptop 16 GB OOMs at beam 262k with state_size=120. **EV: few hundred to few thousand moves saved without retraining.**
+---
 
-4. [ ] **NISS (inverse-scramble search)**. Apply `invert_state` to the scrambled puzzle, solve the inverse, then `invert_path` the output. Directional anisotropy: if forward solve runs out of beam, inverse side may find shortcut. IHES saw -432 moves from NISS-on-ensemble. `megaminx.Megaminx` already has `invert_state` / `invert_path`. **EV: ~1–3% move reduction, trivial to implement.**
+## HIGHEST priority (tier 1 — execute first)
 
-5. [ ] **Multi-seed ensemble** of m03. Train 3–5 big models with different seeds on Kaggle in parallel, solve each, keep the min per puzzle. IHES saw 3–5% gain per ensemble step. **EV: high, but gated by m03 succeeding first.**
+1. [ ] **C1 — int8 state encoding** in khoruzhii beam search. 0 hours (already in code,
+   just pass `state_dtype=torch.int8`). Unlocks beam 500K+ on 16 GB. IHES: -186 moves. **m02 + int8 re-solve first.**
 
-## MEDIUM priority untried
+2. [ ] **C2 — Adaptive beam per puzzle**. First pass beam 16k max_steps 60 (easy);
+   retry unsolved at beam 65k max_steps 150. Code-only, 1 hour. Saves ~5× GPU time on
+   easy puzzles, gives hard puzzles the budget they need. Unlocks full solves in ~1h
+   instead of 8h.
 
-6. [ ] **Adaptive beam per puzzle**. First pass beam 16k max_steps 60 (catches easy); for unsolved, retry beam 65k max_steps 150. Saves GPU time on easy puzzles while giving hard puzzles the compute they need. Pure code change, no retraining.
+3. [ ] **C7 — NISS (inverse-scramble search)**. Solve σ⁻¹, invert the path back.
+   `Megaminx` already has `invert_state`/`invert_path`. 1 hour of code. IHES: -432
+   moves in ensemble; directional anisotropy means the forward/inverse solves are
+   genuinely different paths.
 
-7. [ ] **BFS-d5 post-processing table for Megaminx** (≈8M states, ~500 MB). Shortcut window replacement like IHES's bfs_table_d5.pkl. d4 (331k states) as cheap first step to gauge whether window shortcuts exist at all in Megaminx paths. **EV: unknown for Megaminx — IHES gained 30-80 moves/submission; order-5 face structure may leave less to cancel.**
+4. [ ] **A1 — Bigger arch m03 [2048,512]×2 k_max=80** (canonical recipe, not because it
+   has a known LB but because DeepCubeA/CayleyPy papers use similar). **Running on Kaggle
+   now as m03.** Expected -200 to -800 moves vs m02. First real data point for "how far
+   does canonical ML take us."
 
-8. [ ] **Icosahedral symmetry augmentation**. Dodecahedron has 60 rotational symmetries. Augment training data by random rotation. Requires deriving the 60 whole-puzzle rotations acting on the 120-sticker state — non-trivial. IHES version (24-symmetry) was proposed but not done. **EV: 5–10% loss floor reduction, but high implementation cost.**
+5. [ ] **E3 + C3 — Build BFS-d5 Megaminx table** (~1.3M states, ~150MB). Use for both
+   (a) MITM target set — every beam-search state that lands in d≤5 shell gets the
+   optimal tail for free; (b) window post-processing (IHES: 30-80 moves/submission).
+   3 hours to build + integrate. Extend to d6 (18M, ~2GB) if memory allows. **d7
+   (250M, ~30GB) infeasible on 16GB laptop; punt unless we move to GCP.**
 
-9. [ ] **Longer k_max (120 or uniform over 1..150)** on m03 arch. The full test set has scrambles up to 1000 moves — current k_max=80 still OOD for bucket 8+. Trade: wider range = harder to fit, noisier predictions at short range too.
+## HIGH priority (tier 2 — after tier 1 data lands)
 
-10. [ ] **Bellman refinement** of m03 checkpoint. `y = 1 + min_a V(apply(s,a))`. IHES saw -42 moves from this step alone.
+6. [ ] **A3 — Bellman auxiliary loss** (m05) — warm-start from m03, add `y_bellman =
+   1 + min_a V(apply(s,a))` as secondary target. IHES E6: -42 moves standalone. 2h code
+   + Kaggle retrain.
 
-## LOW priority / uncertain
+7. [ ] **A2 — Bellman-from-scratch** (m04) — pearcatcher's recipe: no RW pretraining,
+   `bfs_for_boundary=0`, discount 0.999, softmin, 1000 iterations. Untested claim in
+   our stack; worth one run to test "is RW target necessary?". Kaggle parallel to m03.
 
-11. [ ] **Weighted A* (`f = w·g + h`)** in khoruzhii searcher. Currently pure h-greedy. Adding depth cost might help on drifty paths.
+8. [ ] **A4 — Q-function head** (m06). Distill m03 into a 24-output head predicting
+   V(apply(s, a)) for each generator. One forward per beam step instead of 24. IHES:
+   8× inference speedup → wider effective beam in same wall time. 2h code + Kaggle
+   retrain.
 
-12. [ ] **Community submissions** for Megaminx (e.g., `alexandervc/cayleypy-submissions` if it has megaminx). Min-merge would give a strong floor but per IHES policy (user 2026-04-20) we don't submit community-merged results until our own work beats them — so this is internal-only signal.
+9. [ ] **D1 — Multi-seed ensemble of m03**. 3 seeds in parallel on Kaggle, min-merge
+   across solves. IHES: 3–5% per added model up to 3–5 seeds. Depends on m03 working.
 
-13. [ ] **Transformer model**. Chat-reported beat MLP on IHES, but weeks of work and uncertain payoff on a different geometry.
+10. [ ] **B3 — Negated-beam far-from-center data augmentation** (kieserel's trick).
+    Run beam search with a NEGATED predictor to harvest high-distance states, feed
+    them back as training examples. Addresses the hard-tail gap random walks don't
+    cover. Estimated 3 hours code.
 
-14. [ ] **Kociemba-equivalent two-phase solver for Megaminx**. Doesn't exist off the shelf. Would be massive effort (weeks to months); deprioritized until ML approaches plateau far from leader.
+## MEDIUM priority (tier 3)
+
+11. [ ] **C4 — CayleyPy `beam_mode="iterated"` with `history_depth=10`**. One
+    alexandervc kernel uses this; cheap to try. 1h.
+
+12. [ ] **C5 — Distance-adaptive beam width** (N5): wide beam early, narrow late.
+    Saves compute without losing optimality. 2h.
+
+13. [ ] **C10 — GCP L4 (24 GB) for beam 2^18–2^20**. Tail re-solve on unsolved
+    hardest puzzles. $1–2 of compute per run.
+
+14. [ ] **E6 — ReduceFactor DAG shortening** (N4 in IHES synthesis). Build solution
+    DAG, Dijkstra over windows for globally-optimal combined shortcuts. 1 day code.
+
+15. [ ] **B1 — Icosahedral symmetry augmentation (60×)**. Derive the 60 rotational
+    symmetries of the dodecahedron acting on the 120-state. Augments training 60×.
+    IHES's 24× version added +24 moves in ensemble; Megaminx's 60 might scale.
+    4–8h derivation + training.
+
+16. [ ] **E7 — Arbitrary-position insertion finder**. Try inserting correction
+    subsequences at every position, not just the end. Cheap-ish IHES idea, untested.
+
+17. [ ] **E8 — Move deletion + BFS repair**. Delete each move, use BFS-d5 to repair if
+    cost <1. Needs BFS table.
+
+18. [ ] **A5 — CEA loss** (cross-entropy admissibility) — penalize overestimating true
+    distance. Pushes heuristic toward admissible. IHES-identified, untested. 4h.
+
+19. [ ] **A6 — Pairwise / ranking loss**. Beam only cares about neighbor ordering, not
+    absolute values. Triplet, listwise, BPR losses. IHES-identified, untested.
+
+## LOW priority / defer
+
+20. [ ] **A7 — Transformer (kodurd recipe)**. CayleyPy-RL paper: MLPs beat transformers
+    on permutation Cayley graphs with n>15 without hand features. kodurd's recipe is
+    plausibly good for diversification but not a free win. One experiment only if
+    tier 2 plateaus.
+
+21. [ ] **A8 — Piece decomposition features** for dodecahedron. IHES E8 regressed on
+    cube; untested with Bellman. Risky; high porting cost (~6h derivation).
+
+22. [ ] **C6 — Q\* search algorithm** with the A4 Q-model. 129× faster expansions on
+    small domains in the paper; unclear how it transfers to Megaminx. 2h after A4.
+
+23. [ ] **C9 — Six-axis ensemble** (60 whole-puzzle rotations). Blocked on B1 symmetry
+    derivation.
+
+24. [ ] **B4 — Exact-label (BFS-sourced) training data mixin**. 20% of each epoch from
+    BFS-d5 with true labels. Eliminates RW label noise in near-goal regime.
+
+## Avoid (confirmed regressions or weak evidence)
+
+- `n_back > 8` — IHES MSE 14.4 → 15.84 at n_back=40. Stick with n_back=1 (maybe
+  sweep {2, 4, 8} cheaply in tier 3 if bored).
+- `k_max >> 120` — IHES: k_max=45 vs 30 zero gain on 3×3 (diameter ~26). Megaminx
+  diameter is larger but still ≲ 60; k_max=80 already covers the training-depth range.
+- `1/k` curriculum weighting — IHES E7 regressed (-102 moves).
+- Large sequential MLPs without residuals — IHES B2: `[5000,1000]` and `[2048,1024]×8`
+  both worse than `[1024,256]×1`. Residual blocks matter more than raw width.
+- 3+ step window shortcuts — IHES 2026-04-21: 0 gain over 2-step.
+- Commutator library (depth-4/6 perm enumeration) — IHES 0 gain; real beam paths
+  don't hit the commutator subset.
+- Transformer as primary heuristic — CayleyPy-RL paper evidence.
+- Diffusion / policy-gradient without tree search — no benchmarks above DeepCubeA.
+- MuZero / deep RL — weeks of effort for uncertain gain.
+- Public submissions min-merge — user policy: don't submit community-merged.
+- Hybrid classical Megaminx solvers — no Kociemba-analog exists; best classical avg
+  is ~89-95 moves (speedsolving forum) vs leader 80. ML already strictly better.
 
 ## DONE
 
-- [x] **Port puzzle class, training loop, beam search** (m01, 2026-04-24). State/generator loader via duck-typed Megaminx class; shared cayley.* modules accept it unchanged.
-- [x] **Same-face run reduction post-processing** (2026-04-24). X^5→id, X^4→-X, X^3→-X·-X. Sample post-processed 500,572 → 457,810 (-8.54%). See EXPERIMENTS.md.
-- [x] **Stratified sampling (k per 100-bucket) for smoke tests** (2026-04-24). Avoids overfitting evaluation to easy prefix.
-
+- [x] **Port puzzle class, training loop, beam search** (m01, 2026-04-24). Duck-typed
+  `Megaminx` class; shared `cayley.*` modules accept it unchanged.
+- [x] **Same-face order-5 run reduction + adjacent inverse cancellation** (2026-04-24).
+  Sample post-processed: 500,572 → 457,810 (-8.54%). See `megaminx/post_process.py`.
+- [x] **Stratified sampling (k per 100-bucket) for smoke tests** (2026-04-24).
+- [x] **m01** (fast k_max=40 200ep) — model works on easy puzzles, MSE 9.76.
+- [x] **m02** (k_max=80 2000ep, same arch) — MSE 66; heuristic too noisy on medium/hard.

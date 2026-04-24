@@ -1,0 +1,26 @@
+# m03: bigger arch at k_max=80. Goal: halve heuristic noise so beam search doesn't drift
+# through the middle of the distance range. Targeted at Kaggle P100 (~2-3 s/epoch).
+# 4000 ep @ 2.5 s/ep = ~2.8h.
+model:
+  state_size: 120
+  num_classes: 120
+  hidden_dims: [2048, 512]
+  num_res_blocks: 2
+  encoding: embedding
+  embed_dim: 16
+
+training:
+  n_epochs: 4000
+  samples_per_epoch: 1_000_000
+  batch_size: 16384
+  k_max: 80
+  lr: 2.0e-3
+  weight_decay: 0.0
+  checkpoint_every_epochs: 200
+  n_back: 1
+  loss: mse
+  amp: true
+  compile_model: false    # Kaggle P100 (sm_60) breaks torch.compile; eager is fine
+  fused_optimizer: true
+
+seed: 0

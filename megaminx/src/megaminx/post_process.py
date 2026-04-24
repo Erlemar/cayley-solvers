@@ -60,12 +60,25 @@ def cancel_adjacent_inverses(path: Sequence[str]) -> list[str]:
     return out
 
 
-def full_post_process(path: Sequence[str]) -> list[str]:
-    """Apply all Megaminx post-passes to a fixpoint."""
+def full_post_process(
+    path: Sequence[str],
+    puzzle=None,
+    bfs_table=None,
+    max_window: int | None = None,
+) -> list[str]:
+    """Apply all Megaminx post-passes to a fixpoint.
+
+    If `puzzle` and `bfs_table` are provided, also runs BFS-table window replacement
+    (`cayley.post_process.reduce_factor_via_bfs_table`) between passes. Otherwise only
+    same-face reduction + adjacent-inverse cancellation.
+    """
     prev: list[str] = list(path)
     while True:
         cur = reduce_same_face_runs(prev)
         cur = cancel_adjacent_inverses(cur)
+        if puzzle is not None and bfs_table is not None:
+            from cayley.post_process import reduce_factor_via_bfs_table
+            cur = reduce_factor_via_bfs_table(cur, puzzle, bfs_table, max_window=max_window)
         if cur == prev:
             return cur
         prev = cur
