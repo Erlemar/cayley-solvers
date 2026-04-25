@@ -197,17 +197,30 @@ def main() -> int:
         print(f"loaded BFS table {args.bfs_table.name}: {len(bfs_table.table):,} states, "
               f"max_depth={bfs_table.max_depth} ({time.time() - t_load:.1f}s)")
 
+    # Auto-detect Q-function model from output_dim. KhoruzhiiSolver supports both V
+    # (output_dim=1, scalar distance) and Q (output_dim=n_gen, neighbor scores).
+    base = getattr(model, "_orig_mod", model)
+    detected_q = getattr(base, "output_dim", 1) > 1
+    if detected_q:
+        print(f"auto-detected Q-function model (output_dim={base.output_dim}); "
+              f"beam search will use Q-path (one fwd per parent)")
+
     if args.mitm:
         if not isinstance(bfs_table, BfsBytesTable):
             ap.error("--mitm requires --bfs-table pointing to a bfs_bytes_d*.pkl "
                      "(BfsBytesTable, not BfsTable)")
+        if detected_q:
+            ap.error("--mitm + Q-function not yet wired through MitmKhoruzhiiSolver")
         solver = MitmKhoruzhiiSolver(
             puzzle, model, mitm_table=bfs_table, device=args.device,
             state_dtype=state_dtype,
         )
         print(f"using MITM solver (terminates on shell of depth {bfs_table.max_depth})")
     else:
-        solver = KhoruzhiiSolver(puzzle, model, device=args.device, state_dtype=state_dtype)
+        solver = KhoruzhiiSolver(
+            puzzle, model, device=args.device, state_dtype=state_dtype,
+            use_q_function=detected_q,
+        )
 
     print(f"beams={beams}  max_steps={max_steps_list}  niss={args.niss}  "
           f"state_dtype={state_dtype}  num_attempts={args.num_attempts}")
