@@ -192,5 +192,6 @@ T3. [ ] **Optimizer variants for long runs.**
 - [x] **Same-face order-5 run reduction + adjacent inverse cancellation** (2026-04-24).
   Sample post-processed: 500,572 → 457,810 (-8.54%). See `megaminx/post_process.py`.
 - [x] **Stratified sampling (k per 100-bucket) for smoke tests** (2026-04-24).
+- [x] **Stratified eval default = 5/bucket (51 puzzles)** (2026-04-25). Earlier drift to 2/bucket (21) was noisy at the high-solve-rate end (m04 vs m07 differed by 3 solves out of 21 — within noise). 5/bucket gives ±3 noise floor on 51, statistically solid for ranking close models.
 - [x] **m01** (fast k_max=40 200ep) — model works on easy puzzles, MSE 9.76.
 - [x] **m02** (k_max=80 2000ep, same arch) — MSE 66; heuristic too noisy on medium/hard.
