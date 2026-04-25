@@ -16,6 +16,44 @@ User: `andlukyane`. Deadline 2026-08-31. 16 teams.
 
 ---
 
+## Acceptance gate (do not skip)
+
+A new heuristic / configuration counts as "an improvement worth trusting" only if **all** of the following hold against our current best (m05 NISS-off):
+
+1. **Solve count**: ≥ +3 puzzles on stratified-5/bucket NISS-off at the same `--strat-seed=0` (51-puzzle sample)
+2. **Path quality**: mean `model_avg` ≤ 0.95× current best's mean `model_avg` (i.e., shorter paths on average)
+3. **No bucket regression**: no bucket drops more than 1 solve vs current best on the same sample
+
+If only one of (1) or (2) is met, that's a TIE (or noise) — investigate further before committing. Re-validate on a second seed (e.g., `--strat-seed=1`) before accepting close calls.
+
+**Why these gates**: training MSE is a noisy proxy (m12 had the lowest MSE in our sweep but only solved 9/21). Validation-tool top-1 is a filter, not a ranker (m04 had top-1 0.995, m07 had 0.990, but m07 solved more puzzles). Stratified solve at fixed seed IS the trustworthy metric.
+
+**Why fixed seed=0**: comparable across runs without sampling noise. Different seeds for confirmation only.
+
+**Why "≥ +3 on 51"**: ~6% improvement is well outside the ±2 noise floor of stratified-5.
+
+---
+
+## Phase template (write this BEFORE running anything)
+
+When starting a new training family / experiment phase, append a block in this exact form:
+
+```
+### Phase Q: <slug> — <one-line goal>
+Hypothesis:    <what we expect and why>
+Acceptance:    <criterion in metric-and-numbers form, refines the gate above>
+Steps:         1. train <id_a> with <config>
+               2. validate-tool on <ckpt list>
+               3. stratified-5 on best ckpt
+               4. accept/reject vs current best
+Compare to:    <current best run id>
+Output ids:    m<NN>_<slug>, m<NN+1>_<slug>, ...
+```
+
+The chain processes Steps 1..4 linearly; if a step fails its own micro-acceptance, the chain halts and we re-plan rather than push more compute through a broken hypothesis.
+
+---
+
 ## Summary table
 
 | ID   | Date       | What changed                                 | MSE   | Stratified score  | Leaderboard     | Notes |
@@ -113,3 +151,29 @@ User: `andlukyane`. Deadline 2026-08-31. 16 teams.
 - **2026-04-24** (user feedback): Kaggle m03 ran 7h+ without visible progress (Kaggle only exposes stdout on completion). Left running; user decided to not interrupt. Added backlog items T1 (generous early stopping) + T2 (warm-restart scheduler) so future long runs stop themselves when plateaued.
 - **2026-04-24**: m03 completed at 8.5h (P100 at 7.6 s/epoch — 30× slower than my estimate of 0.25 s/epoch). Final MSE 63.74, essentially tied with our local m07 (64.22). Kaggle quota hit (30h/week) — m05/m06 push blocked; pivot to training them locally on 4090.
 - **2026-04-25** (user feedback): standardize stratified eval at 5/bucket (51 puzzles), not 2/bucket. 2/bucket was noisy at the high-solve-rate end — m04 (15/21) vs m07 (18/21) differed by less than the sample's expected variance. 5/bucket gives ±3 noise floor on 51 puzzles.
+- **2026-04-25** (user feedback, post Kaggle-thread research): adopt the
+  ledmaster/ml-mania-2026 pattern of explicit acceptance gates + phase checklists
+  (see top of file). Quote that drove this: *"Agentic systems are very good at
+  exploiting weaknesses in the objective you give them"* — our m12 trap
+  (lowest training MSE → worst solve rate) was exactly that.
+
+---
+
+## Journal (chronological log of attempts; rejected runs included)
+
+Format: `YYYY-MM-DD HH:MM — id (status) — observation / why kept or rejected`.
+Append-only; do not edit past entries. Keeps cross-session memory honest.
+
+- **2026-04-24** — m01 (smoke) — first port works, 19/20 easy puzzles solved at beam 32k, MSE 9.76. Confirmed Megaminx class duck-types `cayley.*` modules.
+- **2026-04-24** — m02 (REJECTED for solving, KEPT for diagnostic) — wider k_max=80 + 2000 ep produced MSE 66 but 0/31 stratified solves. Heuristic-noise-bound at small arch.
+- **2026-04-24** — pp0 (SUBMITTED 415,521, rank #8) — pure post-processing baseline. Validated end-to-end pipeline.
+- **2026-04-24** — m03 (KEPT, used for solve) — Kaggle canonical [2048,512]×2 4000ep. MSE 63.74 in 8.5h. Replicated locally as m07.
+- **2026-04-24** — m07 (KEPT, current Phase 1 model) — local m03 replica with seed=10. MSE 64.22 in 80 min on 4090. **Used for GCP Phase 1 full solve.**
+- **2026-04-24** — m07 + NISS stratified-2 (SUBMITTED 407,563, rank #4) — first real ML submission. NISS-on doubled wall but solved 21/21.
+- **2026-04-25** — m08 (NOT YET TESTED) — k_max=100 variant, MSE 139, validation top-1 0.989 (≈ m07).
+- **2026-04-25** — m04 Bellman-from-scratch (REJECTED for solving) — 15/21 stratified, less than m07's 18/21 despite top-1 0.995. Pearcatcher recipe doesn't dominate walk-depth + AdamW for our task.
+- **2026-04-25** — m09–m12 Muon LR sweep (REJECTED) — all converged to similar MSE ~64-67 plateau. m12 ep99 had lowest training MSE (59) but worst stratified solve rate (9/21). m12 ep999 had top-1 0.998 (best) but ALSO solved only 9/21 — top-1 is not a reliable ranker. Muon doesn't beat AdamW for this problem at this arch.
+- **2026-04-25** — m06 Q-distill from m07 (REJECTED) — 10× faster inference confirmed (551s vs 5683s for 51 puzzles) but solve rate dropped to 20/51. Distillation lost ordering.
+- **2026-04-25** — partial GCP submission (SUBMITTED 357,007, rank #4) — interim merge of 440 GCP-Phase-1-solved + pp_bfs6_fallback. -50K vs prior submission.
+- **2026-04-25** — m05 Bellman warm-start from m07 (ACCEPTED, NEW BEST) — stratified-5 50/51 solves, mean model_avg 89.4. Beats m07's 43/51 + 105.4 by 7 solves AND 15% shorter. **Acceptance gate passed cleanly.** New current-best heuristic. Used for GCP Phase 2.
+- **2026-04-25** — m13 (1000ep Bellman) + m14 (Q-distill from m05) (RUNNING) — testing whether more Bellman epochs and a better-teacher Q-distill respectively beat m05.

@@ -174,6 +174,43 @@ T3. [ ] **Optimizer variants for long runs.**
 24. [ ] **B4 — Exact-label (BFS-sourced) training data mixin**. 20% of each epoch from
     BFS-d5 with true labels. Eliminates RW label noise in near-goal regime.
 
+## Pending — non-priority
+
+P1. [ ] **Multi-round pseudo-labeling / Noisy-Student-style refinement.** BirdCLEF 2025
+   1st place got +0.058 LB from 4 rounds of self-distillation with PowerTransform
+   sharpening. For us: train round-1 model → predict on random-walk states → sharpen
+   predictions (γ=2 power) → use as targets for round-2 model → repeat 3-4× with
+   StochasticDepth regularization. Direct distance-regression analog of their method.
+   Requires committing real GPU time on speculative gain; defer until we've exhausted
+   simpler levers (m05/m13/m14 first). Estimate ~3-5h per round on 4090.
+
+## Rejected (with reasons — do not retry without new justification)
+
+This list mirrors the JOURNAL in `EXPERIMENTS.md`. Quick reference:
+
+- **m04 — Bellman-from-scratch** (Pearcatcher recipe, no RW pretraining). 15/21
+  stratified-2 NISS-off vs m07's 18/21. Self-consistent Bellman target with no
+  walk-depth grounding produces good d≤6 ordering (top-1 0.995) but doesn't
+  generalize as a beam-search heuristic at our scale. **Walk-depth + AdamW remains
+  the better foundation; Bellman as REFINEMENT (m05) wins, Bellman from scratch loses.**
+
+- **m09–m12 — Muon LR sweep** at lr ∈ {0.005, 0.01, 0.02, 0.05}. All plateau at
+  MSE ~64-67. m12 (lr=0.05) had the LOWEST training MSE in the sweep (59) but
+  WORST stratified solve rate (9/21) — both at ep 99 (noise minimum) and ep 999
+  (final). Muon converges 4× faster than AdamW but doesn't beat the AdamW plateau
+  on this problem at this arch. **Don't tune Muon without changing arch first.**
+
+- **m06 — Q-distillation from m07.** 10× faster inference confirmed (10.8 s/puzzle
+  vs 111 s for V-head at beam 131k), but solve rate dropped to 20/51 — distillation
+  lost ordering quality. **Q-distill from a noisy V-teacher inherits & amplifies
+  noise.** Possibly retry with m05 as the (better) teacher → that's m14, currently
+  training.
+
+- **Validation-tool top-1 accuracy as ranker** (not just filter). m12 ep999 had
+  top-1 0.998 but solved only 9/21. m04 had top-1 0.995 (higher than m07's 0.990)
+  but solved fewer puzzles. **Top-1 separates "broken" from "OK" but doesn't rank
+  good models. Stratified-5 solve count is the only trustworthy comparison.**
+
 ## Avoid (confirmed regressions or weak evidence)
 
 - `n_back > 8` — IHES MSE 14.4 → 15.84 at n_back=40. Stick with n_back=1 (maybe
