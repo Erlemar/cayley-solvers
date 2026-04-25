@@ -1,0 +1,39 @@
+# m05: Bellman refinement warm-started from m07's final checkpoint.
+# Mirrors IHES E6 recipe: 500 epochs, target net refreshed every 10 epochs,
+# LR 5e-4 (lower for refinement than initial training's 2e-3).
+#
+# Hypothesis: m07's good neighbor-ordering (top-1 0.990 on validation) PLUS
+# Bellman's self-consistency could yield a tighter heuristic that solves more.
+# Different from m04 (Bellman from scratch) — that didn't beat m07 because it
+# had to learn ordering from scratch via Bellman alone.
+
+model:
+  state_size: 120
+  num_classes: 120
+  hidden_dims: [2048, 512]
+  num_res_blocks: 2
+  encoding: embedding
+  embed_dim: 16
+
+training:
+  n_epochs: 500
+  samples_per_epoch: 500_000
+  batch_size: 8192
+  k_max: 80
+  lr: 5.0e-4
+  weight_decay: 0.0
+  checkpoint_every_epochs: 50
+  n_back: 1
+  loss: mse
+  amp: true
+  compile_model: true
+  fused_optimizer: true
+
+bellman:
+  warmstart_path: "megaminx/models/m07_big_k80/epoch_3999.pt"
+  target_update_every_epochs: 10
+  target_net_chunk: 4096
+  clip_upper: true
+  clip_lower: true
+
+seed: 50
