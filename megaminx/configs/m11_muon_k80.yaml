@@ -1,0 +1,29 @@
+# m11: Muon LR sweep variant (muon_lr=0.005 vs m09's 0.02)
+model:
+  state_size: 120
+  num_classes: 120
+  hidden_dims: [2048, 512]
+  num_res_blocks: 2
+  encoding: embedding
+  embed_dim: 16
+
+training:
+  n_epochs: 1000
+  samples_per_epoch: 1_000_000
+  batch_size: 16384
+  k_max: 80
+  lr: 2.0e-3
+  weight_decay: 0.0
+  checkpoint_every_epochs: 100
+  n_back: 1
+  loss: mse
+  amp: true
+  compile_model: false
+  fused_optimizer: true
+  optimizer: muon
+  muon_lr: 0.005
+  muon_momentum: 0.95
+  muon_weight_decay: 0.01
+  muon_ns_steps: 5
+
+seed: 311

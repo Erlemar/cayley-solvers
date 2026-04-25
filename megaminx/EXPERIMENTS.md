@@ -27,6 +27,11 @@ User: `andlukyane`. Deadline 2026-08-31. 16 teams.
 | m04  | running    | Bellman-from-scratch (Kaggle P100)           | —     | —                 | pending         | Pearcatcher recipe: discount 0.999, 120 target refreshes, no RW pretraining |
 | m07  | 2026-04-24 | [2048,512]×2 k_max=80 4000 ep seed=10 (4090) | 64.22 | 0/31 @ beam 32k   | —               | 80 min on laptop vs 8.5h on P100. Canonical replica — MSE matches m03 within noise. |
 | m08  | 2026-04-24 | [2048,512]×2 k_max=100 seed=20 (GCP L4)      | 139.05| pending           | pending         | Wider training horizon; RMSE 11.8 (vs m07's 8.0) — wider k_max inflates absolute MSE |
+| m04  | 2026-04-25 | Bellman-from-scratch (Kaggle P100, 9.4h)     | 0.097*| 15/21 NISS-off    | —               | *Bellman target MSE, not comparable to walk-depth MSE. Mean predicted distance 15.5. Solve rate slightly below m07 NISS-off (18/21). |
+| m09  | 2026-04-24 | [2048,512]×2 k_max=80 Muon lr=2e-2 1000 ep   | 65.47 | —                 | —               | Muon converges 4× faster than AdamW (m07) but plateau is similar |
+| m10  | 2026-04-25 | Muon lr=1e-2 (LR sweep)                      | 64.92 | —                 | —               | LR sweep variant |
+| m11  | 2026-04-25 | Muon lr=5e-3 (LR sweep)                      | 65.23 | —                 | —               | LR sweep variant |
+| m12  | 2026-04-25 | Muon lr=5e-2 (LR sweep)                      | 66.81 | 9/21 NISS-off     | —               | Best ckpt (ep 99) had MSE 59.06 — *lowest of any model* — but stratified eval shows only 9/21 solves (worse than m07's 18/21). Lower MSE != better ordering. Walk-depth MSE is a noisy proxy for solve rate. |
 
 ---
 

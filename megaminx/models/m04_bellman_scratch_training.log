@@ -1,0 +1,134 @@
+$ /usr/bin/python3 -m pip install -q torch==2.4.1 torchvision==0.19.1 cayleypy pyyaml
+dataset mounted at /kaggle/input/datasets/artgor/cayley-megaminx-snapshot
+torch=2.4.1+cu121 cuda=True device=Tesla P100-PCIE-16GB
+model params: 6,045,569
+N_UPDATES=120 epochs_per_update=10 batch=8192 samples/epoch=500,000 k_max=40 discount=0.999
+update   0/120 | final_epoch_loss 0.0029 | mean_tgt 1.00 max_tgt 1.05 | 279.4s
+update   1/120 | final_epoch_loss 0.0000 | mean_tgt 1.95 max_tgt 2.03 | 279.1s
+update   2/120 | final_epoch_loss 0.0003 | mean_tgt 2.88 max_tgt 3.01 | 279.1s
+update   3/120 | final_epoch_loss 0.0005 | mean_tgt 3.78 max_tgt 3.99 | 279.1s
+update   4/120 | final_epoch_loss 0.0012 | mean_tgt 4.65 max_tgt 4.97 | 279.3s
+update   5/120 | final_epoch_loss 0.0018 | mean_tgt 5.49 max_tgt 5.95 | 279.1s
+update   6/120 | final_epoch_loss 0.0023 | mean_tgt 6.26 max_tgt 6.93 | 279.4s
+update   7/120 | final_epoch_loss 0.0032 | mean_tgt 7.02 max_tgt 7.91 | 279.5s
+update   8/120 | final_epoch_loss 0.0043 | mean_tgt 7.73 max_tgt 8.90 | 279.7s
+update   9/120 | final_epoch_loss 0.0054 | mean_tgt 8.42 max_tgt 9.88 | 279.4s
+update  10/120 | final_epoch_loss 0.0068 | mean_tgt 9.03 max_tgt 10.85 | 279.6s
+update  11/120 | final_epoch_loss 0.0088 | mean_tgt 9.61 max_tgt 11.84 | 279.2s
+update  12/120 | final_epoch_loss 0.0112 | mean_tgt 10.14 max_tgt 12.80 | 279.8s
+update  13/120 | final_epoch_loss 0.0131 | mean_tgt 10.61 max_tgt 13.79 | 279.8s
+update  14/120 | final_epoch_loss 0.0155 | mean_tgt 11.11 max_tgt 14.76 | 279.4s
+update  15/120 | final_epoch_loss 0.0190 | mean_tgt 11.49 max_tgt 15.72 | 279.2s
+update  16/120 | final_epoch_loss 0.0223 | mean_tgt 11.87 max_tgt 16.67 | 279.8s
+update  17/120 | final_epoch_loss 0.0253 | mean_tgt 12.10 max_tgt 17.57 | 279.8s
+update  18/120 | final_epoch_loss 0.0294 | mean_tgt 12.43 max_tgt 18.42 | 279.4s
+update  19/120 | final_epoch_loss 0.0339 | mean_tgt 12.75 max_tgt 19.26 | 279.2s
+  saved update_0019.pt
+update  20/120 | final_epoch_loss 0.0378 | mean_tgt 12.90 max_tgt 20.02 | 279.8s
+update  21/120 | final_epoch_loss 0.0414 | mean_tgt 13.28 max_tgt 20.78 | 279.7s
+update  22/120 | final_epoch_loss 0.0471 | mean_tgt 13.49 max_tgt 21.36 | 279.3s
+update  23/120 | final_epoch_loss 0.0536 | mean_tgt 13.64 max_tgt 22.13 | 279.1s
+update  24/120 | final_epoch_loss 0.0584 | mean_tgt 13.87 max_tgt 22.67 | 279.7s
+update  25/120 | final_epoch_loss 0.0615 | mean_tgt 13.99 max_tgt 23.18 | 279.8s
+update  26/120 | final_epoch_loss 0.0677 | mean_tgt 14.00 max_tgt 23.84 | 279.3s
+update  27/120 | final_epoch_loss 0.0702 | mean_tgt 14.20 max_tgt 23.99 | 279.2s
+update  28/120 | final_epoch_loss 0.0730 | mean_tgt 14.16 max_tgt 24.09 | 279.8s
+update  29/120 | final_epoch_loss 0.0752 | mean_tgt 14.37 max_tgt 24.83 | 279.7s
+update  30/120 | final_epoch_loss 0.0780 | mean_tgt 14.28 max_tgt 25.43 | 279.2s
+update  31/120 | final_epoch_loss 0.0796 | mean_tgt 14.33 max_tgt 25.63 | 279.1s
+update  32/120 | final_epoch_loss 0.0826 | mean_tgt 14.40 max_tgt 26.18 | 279.8s
+update  33/120 | final_epoch_loss 0.0848 | mean_tgt 14.34 max_tgt 26.20 | 279.8s
+update  34/120 | final_epoch_loss 0.0862 | mean_tgt 14.47 max_tgt 26.68 | 279.3s
+update  35/120 | final_epoch_loss 0.0854 | mean_tgt 14.51 max_tgt 26.46 | 279.1s
+update  36/120 | final_epoch_loss 0.0864 | mean_tgt 14.60 max_tgt 27.06 | 279.7s
+update  37/120 | final_epoch_loss 0.0888 | mean_tgt 14.56 max_tgt 27.53 | 279.7s
+update  38/120 | final_epoch_loss 0.0863 | mean_tgt 14.70 max_tgt 26.76 | 279.3s
+update  39/120 | final_epoch_loss 0.0882 | mean_tgt 14.59 max_tgt 27.03 | 279.1s
+  saved update_0039.pt
+update  40/120 | final_epoch_loss 0.0880 | mean_tgt 14.70 max_tgt 26.70 | 279.7s
+update  41/120 | final_epoch_loss 0.0907 | mean_tgt 14.82 max_tgt 27.40 | 279.8s
+update  42/120 | final_epoch_loss 0.0877 | mean_tgt 14.85 max_tgt 26.95 | 279.3s
+update  43/120 | final_epoch_loss 0.0910 | mean_tgt 14.87 max_tgt 27.90 | 279.1s
+update  44/120 | final_epoch_loss 0.0952 | mean_tgt 14.78 max_tgt 27.50 | 279.8s
+update  45/120 | final_epoch_loss 0.1016 | mean_tgt 15.01 max_tgt 27.70 | 279.7s
+update  46/120 | final_epoch_loss 0.0949 | mean_tgt 14.89 max_tgt 27.69 | 279.2s
+update  47/120 | final_epoch_loss 0.0942 | mean_tgt 15.08 max_tgt 27.60 | 279.1s
+update  48/120 | final_epoch_loss 0.1079 | mean_tgt 14.98 max_tgt 27.34 | 279.7s
+update  49/120 | final_epoch_loss 0.0916 | mean_tgt 14.92 max_tgt 27.93 | 279.7s
+update  50/120 | final_epoch_loss 0.0987 | mean_tgt 14.86 max_tgt 28.29 | 279.3s
+update  51/120 | final_epoch_loss 0.0923 | mean_tgt 14.80 max_tgt 27.37 | 279.1s
+update  52/120 | final_epoch_loss 0.0893 | mean_tgt 14.63 max_tgt 27.55 | 279.7s
+update  53/120 | final_epoch_loss 0.0956 | mean_tgt 14.59 max_tgt 27.41 | 279.6s
+update  54/120 | final_epoch_loss 0.0908 | mean_tgt 14.74 max_tgt 27.86 | 279.2s
+update  55/120 | final_epoch_loss 0.0902 | mean_tgt 14.64 max_tgt 27.32 | 279.0s
+update  56/120 | final_epoch_loss 0.0855 | mean_tgt 14.74 max_tgt 27.47 | 279.7s
+update  57/120 | final_epoch_loss 0.0902 | mean_tgt 14.62 max_tgt 28.68 | 279.6s
+update  58/120 | final_epoch_loss 0.0895 | mean_tgt 14.63 max_tgt 27.33 | 279.2s
+update  59/120 | final_epoch_loss 0.0891 | mean_tgt 14.83 max_tgt 27.59 | 279.0s
+  saved update_0059.pt
+update  60/120 | final_epoch_loss 0.0874 | mean_tgt 14.63 max_tgt 27.63 | 279.6s
+update  61/120 | final_epoch_loss 0.0890 | mean_tgt 14.73 max_tgt 27.95 | 279.6s
+update  62/120 | final_epoch_loss 0.0870 | mean_tgt 14.75 max_tgt 27.70 | 279.2s
+update  63/120 | final_epoch_loss 0.0896 | mean_tgt 14.71 max_tgt 27.09 | 279.0s
+update  64/120 | final_epoch_loss 0.0884 | mean_tgt 14.65 max_tgt 27.01 | 279.6s
+update  65/120 | final_epoch_loss 0.0859 | mean_tgt 14.68 max_tgt 27.77 | 279.6s
+update  66/120 | final_epoch_loss 0.0848 | mean_tgt 14.67 max_tgt 27.31 | 279.1s
+update  67/120 | final_epoch_loss 0.0841 | mean_tgt 14.64 max_tgt 27.45 | 278.9s
+update  68/120 | final_epoch_loss 0.0854 | mean_tgt 14.75 max_tgt 27.49 | 279.6s
+update  69/120 | final_epoch_loss 0.0847 | mean_tgt 14.86 max_tgt 27.88 | 279.5s
+update  70/120 | final_epoch_loss 0.0867 | mean_tgt 14.71 max_tgt 27.12 | 279.1s
+update  71/120 | final_epoch_loss 0.0841 | mean_tgt 14.88 max_tgt 27.99 | 278.9s
+update  72/120 | final_epoch_loss 0.0852 | mean_tgt 14.85 max_tgt 27.93 | 279.5s
+update  73/120 | final_epoch_loss 0.0885 | mean_tgt 14.89 max_tgt 27.84 | 279.6s
+update  74/120 | final_epoch_loss 0.0835 | mean_tgt 14.82 max_tgt 27.28 | 279.1s
+update  75/120 | final_epoch_loss 0.0842 | mean_tgt 14.68 max_tgt 27.22 | 279.0s
+update  76/120 | final_epoch_loss 0.0870 | mean_tgt 14.88 max_tgt 27.49 | 279.6s
+update  77/120 | final_epoch_loss 0.0853 | mean_tgt 15.05 max_tgt 28.31 | 279.6s
+update  78/120 | final_epoch_loss 0.0872 | mean_tgt 15.07 max_tgt 27.23 | 279.2s
+update  79/120 | final_epoch_loss 0.0856 | mean_tgt 15.03 max_tgt 28.01 | 279.0s
+  saved update_0079.pt
+update  80/120 | final_epoch_loss 0.0855 | mean_tgt 15.14 max_tgt 28.40 | 279.6s
+update  81/120 | final_epoch_loss 0.0913 | mean_tgt 15.09 max_tgt 28.35 | 279.6s
+update  82/120 | final_epoch_loss 0.0890 | mean_tgt 15.14 max_tgt 28.00 | 279.2s
+update  83/120 | final_epoch_loss 0.0942 | mean_tgt 15.30 max_tgt 28.76 | 279.1s
+update  84/120 | final_epoch_loss 0.0886 | mean_tgt 15.16 max_tgt 28.08 | 279.6s
+update  85/120 | final_epoch_loss 0.0978 | mean_tgt 15.11 max_tgt 27.96 | 279.6s
+update  86/120 | final_epoch_loss 0.0923 | mean_tgt 15.05 max_tgt 28.30 | 279.1s
+update  87/120 | final_epoch_loss 0.0949 | mean_tgt 14.99 max_tgt 28.00 | 279.0s
+update  88/120 | final_epoch_loss 0.0887 | mean_tgt 14.96 max_tgt 28.73 | 279.6s
+update  89/120 | final_epoch_loss 0.0896 | mean_tgt 14.94 max_tgt 27.61 | 279.5s
+update  90/120 | final_epoch_loss 0.0883 | mean_tgt 14.95 max_tgt 28.05 | 279.2s
+update  91/120 | final_epoch_loss 0.0904 | mean_tgt 14.87 max_tgt 28.03 | 279.1s
+update  92/120 | final_epoch_loss 0.0857 | mean_tgt 14.91 max_tgt 28.67 | 279.7s
+update  93/120 | final_epoch_loss 0.0868 | mean_tgt 14.90 max_tgt 27.72 | 279.6s
+update  94/120 | final_epoch_loss 0.0898 | mean_tgt 15.04 max_tgt 28.82 | 279.1s
+update  95/120 | final_epoch_loss 0.0905 | mean_tgt 15.19 max_tgt 28.36 | 279.0s
+update  96/120 | final_epoch_loss 0.0902 | mean_tgt 15.20 max_tgt 28.51 | 279.6s
+update  97/120 | final_epoch_loss 0.0918 | mean_tgt 15.18 max_tgt 28.54 | 279.6s
+update  98/120 | final_epoch_loss 0.0909 | mean_tgt 15.30 max_tgt 28.26 | 279.2s
+update  99/120 | final_epoch_loss 0.0919 | mean_tgt 15.33 max_tgt 28.34 | 279.1s
+  saved update_0099.pt
+update 100/120 | final_epoch_loss 0.0912 | mean_tgt 15.50 max_tgt 28.42 | 279.8s
+update 101/120 | final_epoch_loss 0.0958 | mean_tgt 15.36 max_tgt 27.98 | 279.7s
+update 102/120 | final_epoch_loss 0.0933 | mean_tgt 15.52 max_tgt 28.56 | 279.2s
+update 103/120 | final_epoch_loss 0.0933 | mean_tgt 15.44 max_tgt 28.20 | 279.0s
+update 104/120 | final_epoch_loss 0.0945 | mean_tgt 15.49 max_tgt 29.16 | 279.7s
+update 105/120 | final_epoch_loss 0.0956 | mean_tgt 15.49 max_tgt 29.61 | 279.6s
+update 106/120 | final_epoch_loss 0.0984 | mean_tgt 15.48 max_tgt 29.28 | 279.2s
+update 107/120 | final_epoch_loss 0.0969 | mean_tgt 15.50 max_tgt 29.39 | 279.1s
+update 108/120 | final_epoch_loss 0.0957 | mean_tgt 15.57 max_tgt 29.42 | 279.8s
+update 109/120 | final_epoch_loss 0.0974 | mean_tgt 15.48 max_tgt 29.23 | 279.7s
+update 110/120 | final_epoch_loss 0.0955 | mean_tgt 15.51 max_tgt 29.42 | 279.3s
+update 111/120 | final_epoch_loss 0.0984 | mean_tgt 15.49 max_tgt 29.37 | 279.2s
+update 112/120 | final_epoch_loss 0.1000 | mean_tgt 15.58 max_tgt 29.97 | 279.9s
+update 113/120 | final_epoch_loss 0.0990 | mean_tgt 15.61 max_tgt 28.81 | 279.8s
+update 114/120 | final_epoch_loss 0.0973 | mean_tgt 15.52 max_tgt 29.77 | 279.3s
+update 115/120 | final_epoch_loss 0.0982 | mean_tgt 15.50 max_tgt 29.15 | 279.1s
+update 116/120 | final_epoch_loss 0.0979 | mean_tgt 15.60 max_tgt 29.08 | 279.8s
+update 117/120 | final_epoch_loss 0.1001 | mean_tgt 15.52 max_tgt 29.62 | 279.6s
+update 118/120 | final_epoch_loss 0.0977 | mean_tgt 15.77 max_tgt 29.09 | 279.3s
+update 119/120 | final_epoch_loss 0.0974 | mean_tgt 15.56 max_tgt 29.14 | 279.1s
+  saved update_0119.pt
+
+total wall: 33826.4s
+checkpoints in /kaggle/working/m04_bellman_scratch
