@@ -1,0 +1,35 @@
+# m06: Q-function distillation from m07's V-head into a 24-output Q-head.
+# Teacher: m07/epoch_3999.pt (V-head, output_dim=1).
+# Student: same arch but output_dim=24 — predicts V(apply(s, a)) for each of 24 generators.
+# Training: for each state s, compute teacher V on all 24 children; MSE against those.
+#
+# Body initialized from teacher (everything except head); head trained from random init.
+# Beam search call cost: 1 student forward per parent vs 24 teacher forwards. ~10x speedup.
+
+model:
+  state_size: 120
+  num_classes: 120
+  hidden_dims: [2048, 512]
+  num_res_blocks: 2
+  encoding: embedding
+  embed_dim: 16
+  output_dim: 24    # Q head — one score per generator
+
+training:
+  n_epochs: 200
+  samples_per_epoch: 500_000
+  batch_size: 8192
+  k_max: 80
+  lr: 1.0e-3
+  weight_decay: 0.0
+  checkpoint_every_epochs: 25
+  n_back: 1
+  loss: mse
+  amp: true
+  compile_model: true
+  fused_optimizer: true
+
+distill:
+  teacher_path: "megaminx/models/m07_big_k80/epoch_3999.pt"
+
+seed: 60
