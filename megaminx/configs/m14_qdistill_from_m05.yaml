@@ -1,0 +1,32 @@
+# m14: Q-function distillation but with m05 as teacher (instead of m07 like m06 used).
+# m05 has higher solve rate (50/51 vs m07's 43/51 stratified-5), so its V predictions
+# are higher quality. Distilling those should yield a Q-head that's both fast (10x
+# beam-step speedup) AND retains solve quality (unlike m06 which lost ordering).
+
+model:
+  state_size: 120
+  num_classes: 120
+  hidden_dims: [2048, 512]
+  num_res_blocks: 2
+  encoding: embedding
+  embed_dim: 16
+  output_dim: 24
+
+training:
+  n_epochs: 200
+  samples_per_epoch: 500_000
+  batch_size: 8192
+  k_max: 80
+  lr: 1.0e-3
+  weight_decay: 0.0
+  checkpoint_every_epochs: 25
+  n_back: 1
+  loss: mse
+  amp: true
+  compile_model: true
+  fused_optimizer: true
+
+distill:
+  teacher_path: "megaminx/models/m05_bellman_warm/epoch_0499.pt"
+
+seed: 140
