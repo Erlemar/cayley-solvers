@@ -94,6 +94,14 @@ canonical baselines; submit only when we can beat pp_fallback by meaningful marg
     symmetries of the dodecahedron acting on the 120-state. Augments training 60×.
     IHES's 24× version added +24 moves in ensemble; Megaminx's 60 might scale.
     4–8h derivation + training.
+    - 2026-04-25 attempt: BFS-over-stickers approach FAILED (found 0/60). Bug:
+      single-step BFS propagation only reaches the orbit of starting sticker;
+      face-centers (untouched by any generator) are in separate orbits, so
+      P=identity can't be reached for the trivial face-map. Need multi-orbit
+      handling — likely via group-theoretic construction (compute the 12 face
+      permutations of icosahedral group I, then derive sticker action) or use
+      cayleypy's built-in symmetry routines if available. Code is in
+      Kaggle artgor/megaminx-symmetries v1.
 
 16. [ ] **E7 — Arbitrary-position insertion finder**. Try inserting correction
     subsequences at every position, not just the end. Cheap-ish IHES idea, untested.
