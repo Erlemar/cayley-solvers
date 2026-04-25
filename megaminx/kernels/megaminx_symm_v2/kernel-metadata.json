@@ -1,0 +1,14 @@
+{
+  "id": "artgor/megaminx-symmetries-v2",
+  "title": "megaminx-symmetries-v2",
+  "code_file": "run.py",
+  "language": "python",
+  "kernel_type": "script",
+  "is_private": true,
+  "enable_gpu": false,
+  "enable_tpu": false,
+  "enable_internet": true,
+  "dataset_sources": ["artgor/cayley-megaminx-snapshot"],
+  "competition_sources": [],
+  "kernel_sources": []
+}

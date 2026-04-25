@@ -1,0 +1,14 @@
+{
+  "id": "artgor/megaminx-m18-transformer",
+  "title": "megaminx-m18-transformer",
+  "code_file": "run.py",
+  "language": "python",
+  "kernel_type": "script",
+  "is_private": true,
+  "enable_gpu": true,
+  "enable_tpu": false,
+  "enable_internet": true,
+  "dataset_sources": ["artgor/cayley-megaminx-snapshot"],
+  "competition_sources": [],
+  "kernel_sources": []
+}
