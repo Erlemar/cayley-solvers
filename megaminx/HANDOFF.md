@@ -1,0 +1,540 @@
+# Megaminx — handoff doc for the next Claude session
+
+**Read this first.** Everything you need to pick up productively, in one file.
+For deep history: `EXPERIMENTS.md` (ledger), `IDEAS.md` (backlog), `speed_optimizations.md`,
+`multitask_training_ideas.md`, `tensorrt_gcp_plan.md`. For active work: `to_do_shortlist.md`.
+
+---
+
+## 1. Competition + score
+
+- **Comp**: [CayleyPy Megaminx](https://www.kaggle.com/competitions/cayley-py-megaminx). Deadline **2026-08-31**, 16 teams, kudos prize.
+- **State**: 120-element permutation, 24 generators (12 faces × {CW, CCW}), each face order-5. Optimal solver doesn't exist for full diameter — ML+search is the only viable approach.
+- **Metric**: total moves across 1001 test puzzles, lower = better.
+- **Test ordering**: `test.csv` is sorted by *random-walk LENGTH*, NOT by true scramble depth. pid 0 has a 72-move walk; pid 1000 has a 925-move walk. Bucket by `pid // 100` for difficulty stratification.
+- **Kaggle account**: slug **`artgor`** (display name "Andrew Lukyanenko"), team displayed as "andlukyane". KAGGLE_API_TOKEN: `KGAT_630ac26efca89d28c5b2d496b238b71c`. All `kaggle kernels push` use `id: artgor/...`.
+
+## 2. Score progression (latest first)
+
+| date | source | score | notes |
+|---|---|---|---|
+| 2026-05-18 | min-merge of our 75,961 base + new community v4 CSV (75,355 standalone; v3 78,196 → v4 75,355 strictly dominates v3); 290 v4 wins beat our base, 71 base wins kept (`merge_v14_plus_min_count_v4.csv`). POLICY EXCEPTION (user-authorized) | **75,200** | current submitted best |
+| 2026-05-18 | min-merge of AZ v4 prod-1001 (79,606 standalone, 134h GCP L4) + our 77,877 + 76,251 community-best → 114 unique AZ v4 wins in mid buckets 4-7, -290 moves (`merge_v13_az_v4_plus_community.csv`). POLICY EXCEPTION (user-authorized) | 75,961 | superseded |
+| 2026-05-12 | min-merge of 76,304 community-best + m_dd_v0_50ep_prod_1001 (84,132 standalone, 33.9h GCP L4) → 20 unique wins, 53 moves saved (`merge_v11_community_plus_m_dd_v0.csv`). POLICY EXCEPTION (user-authorized) | 76,251 | superseded |
+| 2026-05-09 | min-merge of 78,029 (us) + 2 colleague CSVs (79,911 + 77,152) → 76,304, `merge_v9_with_77152.csv`. POLICY EXCEPTION (user-authorized) | 76,304 | superseded |
+| 2026-05-09 | rescue: m_curr_v3 + m_pi_v2 top-200 (-18 from 78,047 → 78,029), `merge_v7_curr_v3_pi_v2_rescue.csv` | 78,029 | superseded |
+| 2026-05-08 | session: -250 from 78,408 via path relink + m_pi_v0/v1 rescues + m_fr_v0/v2 (frontier replay + BFS-d6 boundary), `merge_v4_with_m_fr_v2.csv` | 78,158 | superseded |
+| 2026-05-05 | community-pushed shareable-kernel runs (alexandervc + fedmug forks of `cayleypy-megaminx-beam-shareable`, B=1M with K=8 long-tail) merged with 79,522 base (`merge_v19b_plus_community.csv`); 324 community wins across all buckets | 78,408 | superseded |
+| 2026-05-03 | TPU v19b partial (B=1M K=4 chunk=32768 pids 500-1000, 405 pids covered before 9h kill) merged with 79,946 base (`merge_tpu_v19b.csv`); 141 wins in buckets 5-8 | 79,522 | superseded |
+| 2026-05-03 | TPU v19a-fix + GCP T1.6 v2 top-200 SA min-merge (`merge_tpu_v19a_plus_t16v2.csv`); 75/1001 pids replaced from rescue | 79,946 | superseded |
+| 2026-05-03 | TPU v19a-fix partial (B=1M K=4 chunk=32768, 80% pairs done, pids 0-405 covered) merged with 80,602 base (`merge_tpu_v19a_fix.csv`) | 80,212 | superseded |
+| 2026-05-02 | TPU v17 FULL (v17 partial + v17b completing pids 819-1000) merged with 80,739 base (`merge_tpu_v17_full.csv`) | 80,602 | superseded |
+| 2026-05-02 | TPU v17 partial (K=8 beam=262k, 82% pairs done before 9h kill) merged with 81,357 base (`merge_tpu_v17.csv`) | 80,739 | superseded — broke 80K |
+| 2026-05-02 | merge_tpuv16_t22_t16: TPU v16 ∪ T2.2 tail-resolve full-1001 ∪ T1.6 SA top-100 (`merge_tpuv16_t22_t16.csv`) | 81,357 | superseded |
+| 2026-05-02 | merge_t22_t16_v1: T2.2 + T1.6 vs older 82,481 base (missed TPU v16 wins) | 81,516 | superseded by re-merge |
+| 2026-05-01 | TPU v16 full-1001 (xmp.spawn + qshort + sym K=4 + beam 131k) merged with prior best (`merged_tpu_v16.csv`) | 82,225 | superseded |
+| 2026-04-30 | merge_plus_sym8_top20: + K=8 sym + qshort + beam 524k on top 20 long-tail (`merge_plus_sym8_top20.csv`) | 82,481 | superseded |
+| 2026-04-30 | merge_plus_sym4_top80: + K=4 sym + qshort + beam 524k rescue on top 80 long-tail of merge (`merge_plus_sym4_top80.csv`) | 82,646 | superseded |
+| 2026-04-30 | merge of phase_b_plus198 + GCP m05+qshort+524k+TRT full-1001 | 83,362 | superseded |
+| 2026-04-29 | phase_b_plus198: + sym-ensemble K=2 + qshort+524k rescue on top 50 (`phase_b_plus198.csv`) | 85,812 | superseded |
+| 2026-04-29 | phase_b_plus148: + qshort+524k rescue on top 148 long-path pids (`phase_b_plus148.csv`) | 86,329 | superseded |
+| 2026-04-27 | Phase B (m05 fresh on local 4090, beam 131k, all 1001) + beam-stack rescue of pid 490+920 | 88,195 (rank #3 at the time) | superseded |
+| 2026-04-26 | Phase 1 (m07 GCP) + Phase 2 (m05 retry) + min vs pp_bfs6 | 95,682 | superseded |
+| 2026-04-24 | m07+NISS strat-2 | 407,563 (#4) | first ML submission |
+| 2026-04-24 | pp_bfs5_fallback (no model) | 415,521 (#8) | post-proc baseline |
+
+**Top LB (snapshot 2026-04-27)**: #1 Kuznetsov 79,971; #2 DrozdovDan 81,946; #3 us 88,195; #4 Rokicki 93,606. **Goal: <70K. Stretch: ~60K.**
+
+To go from 86K → 70K is **−19% moves**. Heuristic gain, not a speed gain. Speed wins only count if they unlock larger beams.
+
+**Recipe ceiling discovered 2026-04-29**: every single-recipe Bellman variant
+trained at 6M params (m17, m22 K=2, m26/m26b 12-13M, m27 family with BFS-d6
+mixin, m28 Double Bellman, m29 n_back=4, m30 n_back=16, m31 rotation
+augmentation, SWA m05) lands within strat-5 mean 88-97. m29 (88.98) is the
+only sub-89 result; that gain is +1 solve / -0.42 mean. Recipe levers are
+exhausted at this arch scale. Score-race headroom is on the beam side now
+(sym-ensemble at inference, hard-tail rescue at bigger beams, multi-seed
+merges).
+
+## 3. Hardware fleet
+
+- **Local RTX 4090 Laptop** (16 GB, Windows 11, Python 3.14, torch 2.11+cu128). Primary for training + small solves.
+- **GCP `cayley-gpu`** (us-east1-b, L4 24 GB, sm_89, ~$0.70/hr running). PyTorch 2.9.1+cu129 system-wide. SSH playbook: `~/.claude/projects/.../memory/reference_gcp_cayley_vm.md`. Current IP changes on restart — fetch via `gcloud.cmd compute instances describe`.
+- **Kaggle** (P100 Tesla, sm_60). 30h/week GPU quota, CPU unlimited. Paths: see `reference_kaggle_pipeline.md` memory. **GPU quota currently exhausted** (m26+m26b ate it 2026-04-27); CPU still open for cheap evals.
+
+## 4. Layout (key paths)
+
+```
+cayley/
+├── src/cayley/                      shared lib (model, search, post_process, etc.)
+├── megaminx/
+│   ├── src/megaminx/                Megaminx puzzle, mitm_solver, bfs_bytes, post_process
+│   ├── scripts/                     03_solve.py (production), 02_train.py, 05_bellman_refine.py, ...
+│   ├── beam_lab/                    benchmarking sandbox: beam_search.py, beam_search_qshort.py,
+│   │                                run_benchmark.py, export_tensorrt.py
+│   ├── configs/                     m0N_<slug>.yaml per training run
+│   ├── models/m0N_<slug>/epoch_NNNN.pt + _training.log
+│   ├── data/                        puzzle_info.json, test.csv, pp_bfs6_fallback.csv,
+│   │                                bfs_bytes_d{5,6}.pkl (the .pkl files are gitignored)
+│   ├── submissions/                 mNN_<beam>_<strategy>.csv + _solve.log
+│   ├── EXPERIMENTS.md               canonical ledger (chronological journal)
+│   ├── IDEAS.md                     prioritized backlog
+│   ├── speed_optimizations.md       speed work tracker
+│   ├── multitask_training_ideas.md  multi-task / training ideas
+│   ├── tensorrt_gcp_plan.md         TRT execution plan
+│   └── to_do_shortlist.md           active to-do (remove items as done)
+└── .venv/Scripts/python.exe         ALWAYS use this (Windows venv). Never `python` / `python3`.
+```
+
+## 5. What works (currently DEPLOYED)
+
+| component | what / where | state |
+|---|---|---|
+| **m05** (V model, 6.0M params) | `models/m05_bellman_warm/epoch_0499.pt`. Bellman warmstart from m07, 500 ep, lr 5e-4. Final loss 0.094. Strat-5: 50/51 solves, mean 89.4. | production teacher |
+| **m23** (Q-shortlister, 12.4M params) | `models/m23_q_shortlister/epoch_0499.pt`. Q-head output_dim=24. Trained MSE+KL against m05. Recall=100% at α=2. | production student; 4.4× wall speedup at beam 131k |
+| **m23_v2 sym-aware** (12.4M params) | `models/m23_v2_sym_aware/epoch_0499.pt`. Same arch as m23 but trained with rotation augmentation (R*s*R_inv before teacher Q-target, prob 0.5). Recall: α=1 98.7%, α=2 100%. Strat-5 m05+m23_v2+sym4+qshort: 51/51 / mean 88.41. | use INSTEAD of m23 when paired with --sym-ensemble |
+| **--sym-ensemble** (`scripts/03_solve.py`) | K rotations from `data/rotations.npy` (360 elements, group A_5 x C_6). Per pid: K rotations including identity, transform state, full beam, translate path back via R_inv·g·R conjugation. Take min. **Strat-5 m05+sym4 (no qshort): 51/51 / mean 88.20** — best single result. | **first inference-side mechanism to break the m05 cluster ceiling.** K=4 is sweet spot (K=8 gives diminishing returns). |
+| **Beam-stack rescue** | `beam_lab/beam_search_stack.py` + `scripts/12_beam_stack_rescue.py`. | rescued pid 490 (407→126) + pid 920 (758→137) for the 88,195 submission. Helps catastrophic failures (NOT already-converged-suboptimal pids). |
+| **`--compile` (mode=reduce-overhead) + `pad_to_batch_size=True`** | `beam_lab/beam_search.py`. Inductor fusion + CUDAGraphs. | -27% wall, paths IDENTICAL. Always-on. |
+| **TensorRT FP16 engine on GCP** | `beam_lab/export_tensorrt.py`. fp16 sm_89-specific. | DEPLOYED. 12-puzzle L4 sweep: TRT@165k 1043 paths beats compile@131k 1049 by -6 at +1% wall (noise). Used in production for full-1001 GCP solves. |
+| **BFS-d6 window post-processing** | `megaminx/src/megaminx/post_process.py: full_post_process(...)`. | -0.2% on top of BFS-d5; SATURATED at d=6. d=7 needs 250M states (infeasible). |
+| **Macro-augmented beam (PROTOTYPE)** | `KhoruzhiiSolver(macros=[(perm, word_list), ...])` parameter. Action_cost tensor + cost-aware V adjustment. Path reconstruction expands macro actions to gen words. | Mechanism shipped, tested with 6/30 brute-force d=4 commutators on 5 hard pids: **net +9 to +41 moves (HURT).** Brute-force commutators don't pay; needs curated speedcubing macros. |
+| **`scripts/03_solve.py`** | Production solver. Flags: `--niss`, `--mitm`, `--qshort-student`, `--qshort-alpha`, `--qshort-internal-batch-size`, `--tensorrt-engine`, `--ensemble-seeds`, **`--sym-ensemble K`**, **`--sym-rotations PATH`**, **`--sym-seed`**, `--bfs-table`, `--stratified K`, `--strat-seed`, `--pids`, `--resume`. | THE entrypoint for any submittable solve. |
+
+## 6. What didn't work (DON'T RETRY without new info)
+
+| idea | result | why |
+|---|---|---|
+| More Bellman rounds (m17 r2 from m05) | REJECTED | Training loss flat from epoch 0; m05 already at fixed point. |
+| Bigger arch + Bellman (m26 12M, m26b 13M) | REJECTED 2026-04-28 | Both converge to same plateau as m05's 6M (loss ~0.094-0.10). m26_bell ep499 strat-5: 51/51 / mean 91.2 vs m05's 50/51 / 89.4 (+1 solve, +1.8 path = WORSE). **Capacity scaling at the Bellman signal is fully exhausted.** |
+| Walk-depth top1=0.998 → strat-5 win | REJECTED ("m12 trap") | High top1 in cheap-eval doesn't translate to beam quality. m12, m26_bell ep499 both had top1=0.998 with mediocre solves. |
+| Manual CUDA Graphs alone | REJECTED 2026-04-27 | -34% slower than `--compile` on 3-puzzle. Inductor's kernel fusion is the real win, not graph capture. |
+| beam_decay (geometric narrowing) | REJECTED 2026-04-27 | -33% wall on 3-puzzle but +2-3.5% paths; pid 492 +7 moves. Quality regression. |
+| stochastic beam (Gumbel-top-k) | NOT A SPEED LEVER | Same compute per step, just different which-states-survive. Adds randomness. Never tested at depth. |
+| Async pipeline (skip-syncs, deferred solved-check) | REJECTED 2026-04-27 | Skip-syncs: -0.7% (within noise). Deferred check: +0.7% wall AND +0.8% paths. The 96% model_s ceiling caps async wins at ~4%; in practice <1%. |
+| Adaptive beam escalation (16k→65k→131k early-exit) | REJECTED 2026-04-27 | -78% wall but +13% paths. Quality loss too large. |
+| `internal_batch_size > 16384` | REJECTED 2026-04-27 | Tied at 32k=65k on 4090/L4 (compute-bound). 16k is the right default. |
+| Multi-puzzle batched beams (K=4 lockstep) | REJECTED 2026-04-26 | 3.7× SLOWER on L4 (compute-bound). Might help on H100/A100. |
+| cayleypy `iterated` mode + `history_depth` | REJECTED 2026-04-27 | +124% wall AND +10 paths. Russian commenter explicitly warned "this slows down". m05's sharp Bellman doesn't need non-backtracking enforcement. |
+| MITM via cayleypy `simple` + `hashed_neighbourhood` | REJECTED 2026-04-27 | +17% wall vs ours, paths similar. m05 already navigates d≤6 shell as a side-effect. |
+| Distillation to smaller V model (m06 from m07) | REJECTED 2026-04-25 | 10× wall reduction confirmed but solve rate 20/51 (lost ordering). |
+| NISS on m05 | REJECTED 2026-04-26 | Doubled wall, no clear win. m05's sharper heuristic doesn't benefit from path-diversity that NISS provides. (`--niss` flag exists; not used in production.) |
+| `k_max > 80` in random walks | REJECTED 2026-04-24 | No improvement; effective Megaminx diameter < 80 for the training distribution. |
+| Transformer at n=120 (m18) | REJECTED 2026-04-26 | Did converge but 225s/epoch on Kaggle P100 → 12h limit hits before reaching MLP-equivalent. Not infeasible in principle, just slower-per-wall. |
+| Muon optimizer (m09-m12) | REJECTED 2026-04-25 | Plateau at MSE ~64-67, same as AdamW. Lowest training MSE (m12 ep99=59) had WORST solve rate (9/51) — `m12 trap`. |
+| `m21` learn-to-hit-shell (clamp(walk_depth-6, 0)) | REJECTED 2026-04-26 | Path-sum 1197 vs m05's 1053 (-14%). Shifted target without Bellman bootstrap loses sharpness. |
+| **m22 K=2 lookahead** | REJECTED 2026-04-28 | Strat-5 ~91 (cluster). K-step adds compute without breaking ceiling. |
+| **m27 50% BFS-d6 mixin in pretraining** | REJECTED 2026-04-28 | Strat-5 51/51 / 91.49. Mixin in pretraining doesn't break cluster. |
+| m27b 25% / m27c 10% BFS-d6 mixin | REJECTED 2026-04-28 | Lower mixin doesn't help either. |
+| **m28 Double Bellman** (van Hasselt 2010) | REJECTED 2026-04-28 | Bias decorrelation doesn't break cluster — strat-5 ~91. |
+| **SWA m05 ckpts 399/449/499** | REJECTED 2026-04-28 | Strat-5 mean 96.75 (REGRESSES). Late-cycle ckpts diverged enough that averaging blurs the heuristic. |
+| **m30 n_back=16** | REJECTED 2026-04-28 | 26% lower training loss but worse strat-5 (89.69). m12-trap; over-narrows walks. |
+| **m31 rotation augmentation in Bellman training** | REJECTED 2026-04-29 | Strat-5 50/51 / 95.76 (REGRESSES + lost 1 solve). At 6M params, augmentation across 360 orbit-equivalents dilutes signal. **Hypothesis falsified**: orbit coverage NOT the binding constraint on cluster. |
+| **m32 target_update_every=5** | REJECTED 2026-04-30 | Strat-5 51/51 / 94.65 (+5.25 mean over m05). Faster target refresh → over-fits to short-term gradient noise. m05's value of 10 is calibrated. |
+| **NISS+qshort (m05+m23+--niss)** | REJECTED 2026-04-30 | Strat-5 51/51 / 93.35 (REGRESSES vs sym4's 88.20). m23 was distilled on forward-state V; recall drops on inverted states. |
+| **m29+qshort+524k full-1001 pairing** | ABORTED 2026-04-30 (at pid=99) | m23 distilled from m05 NOT m29 — fb-wins on 58/100 early pids. **Don't pair m23 with non-m05 teacher** without re-training m23 against THAT teacher. |
+| **K=8 sym-ensemble vs K=4** (saturation test) | DIMINISHING RETURNS confirmed | K=4 saves 10/pid; K=8 saves 8.25/pid additional at 2x wall. K=4 is sweet spot. K=8 only useful for marginal final passes. |
+| **Commutator window-replacement post-processing** | REJECTED 2026-04-30 | Built 37K-entry library (depths 4-8). 29K perms NEW beyond BFS-d6. Tested W=7,8 on 82,481: **0 matches**. Beam paths' structured perms don't fall on commutator atoms. Same as IHES finding. |
+| **Macro-augmented beam with brute-force d=4 commutators** | REJECTED 2026-04-30 | Mechanism shipped (works), but 6-30 d=4 commutators as macros: net +9 to +41 moves on 5 hard pids. V isn't macro-aware; brute-force commutators dilute candidate pool. T1.1 needs curated speedcubing macros (multi-day scrape). |
+
+## 7. Critical gotchas (read these — see also `megaminx_gotchas.md` memory)
+
+1. **`run_benchmark.py` does NOT save move sequences** — only stats. Cost: 14h GCP burn for an unsubmittable result on 2026-04-28. **Always use `scripts/03_solve.py` for any potentially-submittable solve.**
+2. **`sed -i` on Windows MINGW silently truncates files to 0 bytes.** Use the `Edit` tool, or `sed 'pattern' f > f.new && mv f.new f`.
+3. **MSE plateaus at ~64 (k_max=80) regardless of arch capacity.** Don't retry "just scale up the model". Three confirmed plateaus: m02 (2.4M), m07 (6M), m26 (12M), m26b (13M).
+4. **The Bellman fixed point is data-bound, not arch-bound.** m05/m17/m26/m26b all converge to ~0.094-0.10. More params at the same target are a no-op.
+5. **`cheap-eval top1=0.998` is not a reliable proxy for solve rate.** Always strat-5 before declaring a model better.
+6. **`torch.compile` on beam search needs `pad_to_batch_size=True`** to prevent recompile thrash. Without padding: 5.8× slowdown (recompile loops). With padding (in `beam_lab/beam_search.py`): -27% wall.
+7. **Reuse one `CayleyGraph` per session** — fresh graphs have different random hash vectors and corrupt cross-call state tracking.
+8. **`--bfs-table return_all_hashes=True`** is NOT default in cayleypy 0.1; without it MITM silently degrades to plain beam.
+9. **Kaggle GPU quota is 30h/week** — easy to blow with one big training run. Plan budgets, use early-stopping.
+10. **Kaggle `kernels output` returns nothing while RUNNING** — only `status` is queryable. Use `_Tee` trick to write `/kaggle/working/run.log` so post-completion logs are recoverable.
+
+## 8. Where we ended (2026-05-18 — AZ v4 prod-1001 + 3-way merge)
+
+**Score: 75,200** (current submitted best as of 2026-05-18; min-merge of prior 75,961 base + new community v4 CSV (75,355 standalone) → 290 v4 wins beat our base + 71 base wins kept, -761 moves vs prior submitted best, file `merge_v14_plus_min_count_v4.csv`).
+
+**Prior: 75,961** (2026-05-18; AZ v4 prod-1001 (79,606 standalone, 134h GCP L4) min-merged with our 77,877 + 76,251 community-best yielded 114 unique AZ v4 wins concentrated in mid buckets 4-7, -290 moves vs prior).
+
+**Prior: 76,251** (2026-05-12; m_dd_v0 50ep prod-1001 (84,132 standalone) min-merge with 76,304 community-best, 20 wins / -53 moves).
+
+### THIS SESSION (2026-05-11 PM) — AZ v4 breakthrough
+
+User asked to try a "larger, better, longer-trained" AZ model. Two experiments + one breakthrough.
+
+**Experiment 1 (REJECTED): bigger V trunk (20.5M params)**
+- Pretrain (`m_big_pretrain`) at hidden=(4096,1024)+4rb=20.5M then Bellman-refine (`m_dd_v_big`) 200ep mirroring m_dd_v0 recipe
+- Final loss 0.0748 matched m_dd_v0's 0.0724 — but **all 4 benched checkpoints regressed**: best (ep49) 9/10 / 930 vs m_dd_v0 baseline 10/10 / 871, worst (ep99) 7/10 / 733
+- Conclusion: cluster ceiling at 6M extends beyond V-only too. Don't scale trunk under this recipe. Memory: `bigger_v_trunk_regression.md`. Artifacts kept (~640 MB) at `megaminx/models/m_dd_v_big/` and `m_big_pretrain/`.
+
+**Experiment 2 (BREAKTHROUGH): AZ v4 — 6M dual-head + augmented data + early stop**
+- Same 6M ResMLPGFlowNet arch as AZ v3. Recipe identical to v3 EXCEPT:
+  - Policy dataset: `az_dataset_76304.pt` (built fresh from `merge_v9_with_77152.csv` — the min-merged best-of-3 submission that produced 76,304) vs v3's single-source 78,029
+  - Trained 200ep planned, **stopped at epoch 24** based on bench trajectory
+- Same launch flags as v3: `--rw-batch-size 8192 --policy-batch-size 1024` (CAUTION: these are NOT the script's defaults — the script defaults to 4096/512 which collapses to memorization in ~25 ep)
+- **10-pid bench**: 10/10 solved, **874 / mean 87.4** — essentially ties m_dd_v0 V-only (871) and beats AZ v3 (943) by 69 moves
+- **Strat-5 bench (51 pids @ beam 65k, KhoruzhiiSolver, no qshort/sym/NISS)**: **51/51 solved, total 4,465, mean 87.5** — **FIRST 6M model to break sub-89 strat-5 STANDALONE in this project** (m05+sym4 inference trick was previously the only sub-89 result at 88.2)
+
+**Why v4 works where v3 didn't (corrected diagnosis)**:
+- Previously believed: 8% dual-head trunk-sharing tax (943 vs 871)
+- Real cause: **over-training**. The 76,304 merged dataset has more optimal-path consistency than v3's single-source 78,029 → policy CE converges *much* faster → past epoch ~25 the trunk specializes for policy memorization at the V head's expense
+- Trajectory shows v_loss climbs 0.096 → 0.481 between epoch 0 and 99 while top-1 acc hits 91%. Earlier stop captures policy signal (top-1 28.5%, well above 4.2% random) without sacrificing V calibration
+
+**Experiment 3 (DIAGNOSTIC): does AZ v4 V compose with the existing inference stack?**
+- Strat-5 with AZ v4 V + m23_v2 qshort + AZ v4 policy (λ=0.05) → 51/51 in CSV (47 by model), total **4,621, mean 90.6**. **WORSE than V-only by 156 moves.**
+- Strat-5 with AZ v4 V + m23 qshort, NO policy → 48 by model, total **4,705, mean 92.3**. **Worse still — qshort is the problem.**
+- AZ v4 V + m_pi_v2 policy + qshort: COULDN'T MEASURE locally (3 models on 17GB OOM at beam ≥32k); to be measured on GCP if (a) below underperforms
+- **Diagnosis**: m23_v2's top-k action ordering reflects m05's V landscape, NOT AZ v4's. Adding the AZ v4 policy at λ=0.05 partially clawed back qshort's damage but didn't fully recover
+
+**Inference decision for full-1001 GCP run**: **drop qshort**, keep sym-ensemble K=4 + NISS + multi-pass beam. Recipe (a):
+```
+03_solve.py --checkpoint megaminx/models/m_az_v4_v_only.pt \
+  --sym-ensemble 4 --beams 16384,65536 --max-steps 60,150 \
+  --niss --bf16 --resume --out megaminx/submissions/m_az_v4_prod_1001.csv
+```
+
+**Files created this session**:
+```
+megaminx/configs/m_big_pretrain.yaml, m_dd_v_big.yaml          (bigger-trunk experiments)
+megaminx/models/m_big_pretrain/, m_dd_v_big/                   (kept for diagnostic; safe to delete)
+megaminx/models/m_az_v4/epoch_0024.pt                          (the breakthrough)
+megaminx/models/m_az_v4_v_only.pt                              (extracted V head, ResMLPDistance output_dim=1)
+megaminx/models/m_az_v4_pi_only.pt                             (extracted π head, ResMLPDistance output_dim=24)
+megaminx/models/m_az_v4_smallbatch_bug/                        (training-config-bug run; useful as memorization data point)
+megaminx/data/az_dataset_76304.pt                              (76,304 augmented dataset)
+megaminx/submissions/m_az_v4_strat5.csv                        (the 51/51 / 4465 result; mean 87.5)
+megaminx/submissions/m_az_v4_strat5_pi05.csv                   (V+π+qshort regressed result)
+megaminx/submissions/m_az_v4_strat5_qshort_only.csv            (V+qshort regressed result)
+```
+
+**Memory files written**:
+- `~/.claude/.../memory/bigger_v_trunk_regression.md`
+- `~/.claude/.../memory/az_v4_breakthrough.md` ← READ THIS FIRST in next session
+
+**Auto-poll loop (2026-05-11)**: DID NOT fire. `.claude/scheduled_tasks.lock` was deleted when the session ended, so the wake-up never executed. m_dd_v0 finished at 84,132 (1001/1001 valid) overnight 2026-05-12; AZ v4 had to be launched manually the next session.
+
+**Update (2026-05-12)**: m_dd_v0 50ep prod-1001 run finished overnight (84,132 total, 1001/1001 valid). Min-merge with 76,304 community-best produced new submitted best **76,251** (-53 moves, 20 unique pid wins). AZ v4 V-only prod-1001 launched manually on cayley-gpu PID 28722 with recipe (a) below. Output: `megaminx/submissions/m_az_v4_prod_1001.csv`. Watcher b8k7jjwi0 polls every 15 min and notifies on terminal state.
+
+**Update (2026-05-18)**: AZ v4 prod-1001 finished after ~134h wall on GCP L4 (5.6 days). Standalone 79,606 (946/1001 model-solved, 55 fallback; pass-1 16k→43 solves, pass-2 65k→958 solves). 3-way min-merge AZ v4 + our 77,877 (`merge_v10_our_plus_m_dd_v0.csv`) + community 76,251 → new submitted best **75,961** (-290 moves, file `merge_v13_az_v4_plus_community.csv`). AZ v4 unique-win attribution: 114 pids (concentrated in difficulty buckets 4-7, the regime m_dd_v0 was weak on). 6M cluster ceiling cracked — see `az_v4_breakthrough.md` memory.
+
+**Update (2026-05-18, later)**: New community CSV arrived (`_incoming_min_count_v4.csv`, 75,355 standalone — strictly dominates the prior v3 78,196: 562/1001 pids shorter, 0 longer). Min-merge with our 75,961 → submitted best **75,200** (-761 moves, file `merge_v14_plus_min_count_v4.csv`). 290 v4 pids beat our base, 71 base pids beat v4 (so v4 alone is not the new floor — our merge_v13 still contributes). Community-merge policy exception again.
+
+### Previous session's work (2026-05-10 → 2026-05-11 AM)
+
+User asked for SOTA-quality pursuit of: admissibility-aware loss, trajectory balance (arXiv:2603.01786), AlphaZero-style training, dataset distillation. Plus prior PDB+IDA*.
+
+**Outcomes summary:**
+
+| Model / experiment | Result | Status |
+|---|---|---|
+| PDB+IDA* (corner K=5 PDBs, max-of-4) | +4 moves on 20-pid bench (neutral) | INFRA built, not useful for beam |
+| m_adm_v0 (admissibility loss only, 50ep) | V undershoot 77→15%; V(V0) unchanged | learned-from |
+| **m_dd_v0 50ep (V0/d=1 anchor + λ_pdb=5)** | V(V0): 1.99→0.009; **20-pid: -26 vs baseline** | **ACCEPTED — canonical baseline** |
+| m_dd_v0_full (184ep, killed) | smoothed loss 0.0688 → overfit; bench regressed | REJECTED (lesson: long training drifts) |
+| m_tb_v0 (raw TB, length-30 walks) | 0/10 solved | training-distribution mismatch |
+| **m_tb_v1 (warm-start trunk + walks 5-100)** | 10/10 solved; total 1016 (+16% vs m_dd_v0) | dual-head works with proper data |
+| m_az_v0/v1/v2 (synthetic / paths / +siblings) | 0/10 solved each | training-distribution mismatch |
+| **m_az_v3 (Bellman value + policy CE hybrid)** | 10/10 solved; total 943 (+8% vs m_dd_v0); **top-1 acc 50.7%** | dual-head + Bellman value works |
+
+### Key learnings (binding insights for next session)
+
+1. **The V(V0)≈2 bug was real and fixable.** Anchor mixin (32 V0 + 24×4 d=1 children with exact targets per batch) drops V(V0) from 1.99 to 0.009. This took 25+ recipe variants to diagnose but is now a fixed `BellmanConfig.n_anchor_v0` + `n_anchor_d1` field.
+2. **Long training without per-bench validation drifts.** m_dd_v0_full trained to 184ep with `min_delta=1e-4` smoothed-loss early stopping. Final loss was lower (0.0688 vs 50ep's 0.0724) but beam quality REGRESSED severely (fallback rate jumped). Lesson: validate via small bench every ~50 epochs during long runs.
+3. **The value head needs broad off-path coverage.** Training only on solver paths (even with sibling expansion from a teacher V) fails in beam — beam expands 23 off-path children per candidate. Random walks naturally span the manifold; solver paths cover a narrow tube.
+4. **Dual-head architecture trades ~8-16% value quality for policy availability.** m_tb_v1: +16% moves. m_az_v3: +8% moves. But m_az_v3 has a 50.7% top-1 policy head — comparable to m_pi_v2's Q-shortlister but with shared trunk.
+5. **PDB+IDA* doesn't improve beam.** V_neural already saturates above PDB's max-depth (14) for far states; near-solved is already optimal via BFS-d6. Max-combine integration is a wash. Infrastructure reusable for other uses.
+6. **Single-pass beam (no escalation, no NISS) is broken for hard pids.** First GCP eval (m_dd_v0_full + `--beams 65536 --max-steps 120`) had ~0% solve rate for pids 60-99. Production recipe `--beams 16384,65536 --max-steps 60,150 --niss` recovers to ~78% solve at pid 280. THE production recipe stays the default — single-pass is for smoke only.
+
+### GCP eval (incomplete as of session end)
+
+**Running on `cayley-gpu`, PID 11761.** Model: `m_dd_v0 50ep`. Recipe: `--beams 16384,65536 --max-steps 60,150 --niss --bf16 --resume`. Output: `/home/and-l/cayley/megaminx/submissions/m_dd_v0_50ep_prod_1001.csv`. Log: `/home/and-l/cayley/megaminx/models/m_dd_v0_50ep_prod_eval.log`.
+
+**Last checkpoint: pid 299/1001, model:237 fb:63, total 21,924 moves, 32661s wall (~9h elapsed).** Rate: ~130s/pid with NISS+escalation. ETA: ~25 more hours = next session likely catches it mid-run or done.
+
+**Action for next session**: 
+1. `ssh -i /c/Users/and-l/.ssh/google_compute_engine and-l@<IP> 'tail -20 ~/cayley/megaminx/models/m_dd_v0_50ep_prod_eval.log'` to check progress. IP via `gcloud.cmd compute instances describe cayley-gpu --zone=us-east1-b --format='value(networkInterfaces[0].accessConfigs[0].natIP)'`.
+2. If eval finished: `scp` the CSV back, verify, compare to 76,304, submit if better.
+3. If still running: let it finish or kill at next milestone and use partial CSV (resume mode wrote per-pid as it went).
+
+### Deliverables (new files this session)
+
+```
+src/cayley/bellman.py           — added lambda_pdb, n_anchor_v0, n_anchor_d1, early_stop_* fields
+src/cayley/gflow_model.py       — NEW: ResMLPGFlowNet (dual head + log_Z) + TB loss helper
+src/cayley/khoruzhii_search.py  — added pdb_combine_mode parameter ("replace_in_set"|"max")
+src/megaminx/{corner_coord,edge_coord,pdb_corner,pdb_edge,pdb_heuristic}.py — PDB infra
+megaminx/configs/m_adm_v0.yaml, m_dd_v0.yaml, m_dd_v0_full.yaml
+megaminx/scripts/
+    58_corner_pdb_beam.py       — PDB-augmented beam runner
+    60_train_admissible.py      — admissibility-aware + anchor mixin trainer (m_adm, m_dd)
+    62_train_tb.py              — raw TB trainer (REJECTED)
+    63_train_alphazero.py       — synthetic-walk AZ trainer (REJECTED)
+    65_bench_dual_head.py       — bench adapter for ResMLPGFlowNet checkpoints
+    66_train_tb_proper.py       — TB v1 (warm-start + variable walks) — WORKS
+    67_build_az_dataset.py      — build (state, action, remaining) tuples from CSV
+    68_train_az_v1.py           — AZ on path-only data (REJECTED)
+    69_build_az_dataset_v2.py   — add 23 siblings/state with V_teacher labels
+    70_train_az_v2.py           — AZ on path + siblings (REJECTED)
+    71_train_az_v3.py           — AZ Bellman+policy hybrid — WORKS
+megaminx/data/
+    corner_tables.pkl, edge_tables.pkl        — perm/ori tables for PDB
+    pdb_corner_K5{,_p1,_p2,_p3}.pkl           — 4 disjoint K=5 corner PDBs (1.8 GB)
+    az_dataset_78029.pt, az_dataset_v2.pt     — AZ training datasets
+megaminx/models/
+    m_adm_v0/, m_dd_v0/{epoch_0049.pt}, m_dd_v0_full/best.pt  — V models
+    m_tb_v0/, m_tb_v1_proper/{epoch_0499.pt}                  — TB models
+    m_az_v0/, m_az_v1/, m_az_v2/, m_az_v3/{epoch_0099.pt}     — AZ models
+```
+
+### Next-session priorities
+
+**Read `~/.claude/.../memory/az_v4_breakthrough.md` first** for the recipe + inference details.
+
+1. **MONITOR AZ V4 PROD-1001 RUN** (launched manually 2026-05-12, PID 28722 on cayley-gpu):
+   - Recipe: `--sym-ensemble 4 --beams 16384,65536 --max-steps 60,150 --niss --bf16 --resume`
+   - Output CSV: `~/cayley/megaminx/submissions/m_az_v4_prod_1001.csv`
+   - Eval log: `~/cayley/megaminx/models/m_az_v4_prod_eval.log`
+   - Status check: `gcloud compute ssh cayley-gpu --zone=us-east1-b 'pgrep -af 03_solve.py; wc -l ~/cayley/megaminx/submissions/m_az_v4_prod_1001.csv'`
+   - Watcher b8k7jjwi0 should fire on terminal state — if not, check the output file.
+   - The 2026-05-11 auto-launch via ScheduleWakeup did NOT fire (`.claude/scheduled_tasks.lock` was deleted at session end).
+
+2. **When AZ v4 CSV is done**: scp back, verify, compare to current best (76,251 / our private 77,877), submit if win. Naive projection from strat-5 delta (-1.9 moves/pid at 51 pids → roughly -1900 moves at 1001), but tail behavior is the unknown — sym-ensemble 4 should help long-tail but also 4× the V forward cost.
+
+3. **Open follow-ups for AZ v4** (only if (1) doesn't burn the time):
+   - Distill a NEW qshort from AZ v4 forward states (m23-v3 style). m23_v2 misalignment with AZ v4 V is the binding issue preventing the production stack from composing cleanly. Probably ~30 min training.
+   - Try other early-stop points (ep 20, 28, 32) — could find an even better checkpoint cheaply (just bench, training already done in `m_az_v4_smallbatch_bug/` or re-train ≤30 ep at correct batch).
+   - Measure m_pi_v2 + AZ v4 V on GCP (needs > 17GB to load 3 models at beam 65k) — diagnostic skipped locally due to OOM.
+
+4. **Don't pursue**:
+   - Bigger V trunks under the m_dd_v0 recipe — confirmed regression today (see `bigger_v_trunk_regression.md`).
+   - Long training without per-bench validation — m_dd_v0_full + m_dd_v_big both burn loss while regressing bench.
+   - More PDB / AZ-without-Bellman / TB variants — AZ v3 superseded by AZ v4; TB v1 is worse than V-only.
+
+---
+
+## OLD State (2026-05-09 session — for reference)
+
+**Score: 76,304** (current submitted best; min-merge with two colleague CSVs as user-authorized policy exception. Our own contribution stack still produces 78,029 — see superseded row). Production stack (our work):
+
+```
+m_curr_v3 V teacher (curriculum k=35 warmup → mix-K {50,70,80,100} body, then Bellman + 25% frontier + 10% BFS-d6 anchor; loss 0.0721, lowest ever)
+  + m23_v2 Q-shortlister (sym-aware)
+  + m_pi_v2 policy head (solved-path CE, warmstart from m_curr_v0 body), λ=0.05
+  + --sym-ensemble K=4 (360 rotations, A_5 x C_6 group)
+  + beam 524k for hard-tail rescue, 131k for top-200 rescue, 65k for strat-5
+  + TRT FP16 engine on GCP (sm_89-specific) for full-1001
+```
+
+Daily score progression in this session:
+88,195 → 86,329 → 85,812 → 83,362 → 82,646 → 82,481 → 82,225 (-5,970 net).
+
+### What we learned (binding constraints)
+
+1. **Cluster ceiling at 6M params: confirmed thoroughly.** Every single-recipe
+   training-side variant (m05, m17, m22 K=2, m26 12M, m27 family, m28
+   Double Bellman, m29 n_back=4, m30 n_back=16, m31 rot-aug, m32
+   target_update=5, SWA) lands within strat-5 mean **88-97**. m29 (88.98) is
+   the only sub-89 training-side. **Recipe levers exhausted at this arch.**
+2. **Sym-ensemble at INFERENCE is the unlock**: m05+sym4 → 88.20 (no
+   training change), m05+sym4+qshort+m23_v2 → 88.41 at 6× faster wall.
+   First mechanism to break the cluster meaningfully.
+3. **m23_v2 is sym-aware** (rotation-augmented during distillation). Pair it
+   with --sym-ensemble; pair m23 (original) with non-rotated solves.
+4. **K=4 is the sym-ensemble sweet spot.** K=8 saves ~80% as much per pid
+   at 2× wall (diminishing returns).
+
+## 9. Active queue for next session
+
+The top of the list reflects the highest-EV moves NOT YET TRIED. Items
+explicitly saved-for-last (per discipline) are flagged.
+
+### Highest EV (multi-day mega-bet, saved for last)
+
+- **A5 — Full-1001 sym-ensemble + qshort + 524k + TRT on GCP.** Run the
+  proven m05+m23_v2+sym-ensemble K=2 or K=4 stack across all 1001 pids on
+  GCP. Cost: K=2 ≈ 20-30h GCP, K=4 ≈ 40-60h. Expected: -1500 to -3500 moves
+  vs current 82,481 (extrapolating from strat-5 win × 1001/51). The stack
+  is fully validated; this is just compute.
+- **Multi-seed beam ensemble at full-1001.** Run m05+sym4 at 3 different
+  RNG seeds (different hash_vec → different beam trajectories), merge
+  per-pid min. Orthogonal to sym-ensemble's diversity. Cost ~3× a single
+  full-1001. Already proven on hard-tail (-1,866 in earlier work).
+
+### Building toward T1.1 properly (multi-day)
+
+- **T1.1 — Curated speedcubing macros.** Mechanism is shipped
+  (`KhoruzhiiSolver(macros=...)` with cost-aware V adjustment). Brute-force
+  d=4 commutators don't help. Need: scrape ~100 named macros from
+  speedsolving.com / cubingdb.com / jPerm, map to our notation, validate.
+  Effort: 3-5 days per tier doc. Expected: -10K to -20K alone (per
+  tier doc: "the lever that crosses 70K alone" if it pays).
+
+### Other "reasonable" items (low/medium ROI given cluster ceiling)
+
+- **A4 — More aggressive beam-stack rescue.** Currently triggered only on 2
+  catastrophic failures. Sweep all model failures from the merged
+  full-1001, run beam-stack on each. ~2.5h. Expected -100 to -300.
+- **B9 — Beam-frontier replay (DAgger-style).** Log frontier states from
+  real `03_solve.py` runs, mix into Bellman epochs at ~25%. Fixes the
+  *distribution* (RW vs beam) not the target. ~80 lines impl. Untried.
+- **B10 — m24 V + π multi-task.** `11_train_policy_head.py` exists.
+  Beam scoring `V(child) + λ·(-log π(a|parent))`. Expected +3% on hard.
+- **B11 — cayleypy nbt/bfs walks A/B.** Tighter walk-distance labels than
+  ours, paired with Bellman. Caveat: m21 (tightened target without
+  Bellman) regressed.
+- **B7 — Per-depth target shrinkage diagnostic.** ~15 lines. Tells us
+  whether bias is the binding mechanism. Run before any further bias
+  mitigation.
+- **B8 — BFS-d6 as Dirichlet boundary IN the Bellman target.** Replace
+  `1 + min_a V_target` with EXACT distance when state is in d≤6 shell.
+  Different mechanism than m27's pretraining mixin. ~20 lines.
+
+### Long-list (multi-week research)
+
+- **T1.2 multi-agent ensemble** (CayleyPy paper recipe — diverse agents +
+  selector). 1+ week.
+- **Transformer at scale** — m18 converges but 9× slower per-wall.
+  Local 4090 viable but slow.
+- **A* / IDA*** — admissible lower bound + best-first. Big code, uncertain
+  timeline win.
+- **Macro-Q shortlisting** — Q-head scores 2-6 move macros mined from
+  solved paths.
+- **Listwise rank loss training** (T2.3) — calibrate V on relative
+  ordering, the actual signal beam uses.
+- **PDB (Pattern Databases)** — Korf-style on Megaminx subsets.
+- **Bidirectional with learned front-to-front scoring** — research project.
+
+## 10. Active gotchas + recipes (read these first)
+
+See also `~/.claude/projects/.../memory/megaminx_gotchas.md` for full list.
+Highest-impact ones in order of recency:
+
+- **m23 student MUST match m05 teacher** (not m29, etc.). Pairing m23 with
+  another teacher tanks recall and produces longer paths. Train a new Q-
+  shortlister against the new teacher first.
+- **m23_v2 (sym-aware) is the right student** when using `--sym-ensemble`.
+- **`run_benchmark.py` does NOT save move sequences.** Use 03_solve.py.
+- **`sed -i` on Windows MINGW silently truncates files.** Use Edit tool.
+- **Windows `tasklist /FI` in Bash gets path-mangled.** Use PowerShell
+  `Get-Process` instead.
+- **Beam max-steps must exceed the longest expected path.** ≥150 for
+  production solves; 60-80 only viable as the first pass of multi-pass
+  escalation.
+- **Monitor cadence**: filter to milestone epochs (every 25), not every line.
+- **`torch.compile` on beam needs `pad_to_batch_size=True`** (5.8x
+  slowdown otherwise).
+- **Reuse one `CayleyGraph` per session** — fresh graphs have different
+  hash vectors.
+- **Sym-ensemble K=4 is sweet spot.** K=8 only worth it for hardest pids.
+- **Macro-augmented beam REQUIRES curated macros**, not brute-force
+  commutators. The mechanism is shipped but useless without good macros.
+
+## 11. Useful project conventions
+
+- **Submissions go to `submissions/<name>.csv`**. Always run `verify_submission` before `kaggle submit` — a typo in a generator name silently produces a no-improvement score.
+- **Training configs in `configs/<name>.yaml`**. Outputs to `models/<name>/epoch_NNNN.pt` + `models/<name>_training.log`.
+- **Stratified eval is `--stratified 5 --strat-seed 0`** (51 puzzles). Never `--stratified 3` (too noisy).
+- **Acceptance gate for any new heuristic**: ≥+3 strat-5 solves AND mean model_avg ≤ 0.95× current best, no bucket regresses by more than 1.
+- **Don't submit community-merged results** (per user policy). Continue until our own models beat community on at least some puzzles.
+- **Never use `sample_fallback.csv` as fallback** — it's sample-quality (500K+ moves). Always `data/pp_bfs6_fallback.csv` (414,678 floor).
+- **Discipline rule (CLAUDE.md #9)**: before adding a NEW experiment, check `to_do_shortlist.md` first. Don't propose ideas already there or already tried/rejected.
+
+## 12. Quick-start commands
+
+```bash
+# Local 4090, single solve at beam 131k:
+.venv/Scripts/python.exe megaminx/scripts/03_solve.py \
+    --checkpoint megaminx/models/m05_bellman_warm/epoch_0499.pt \
+    --out megaminx/submissions/m05_b131k.csv \
+    --beams 131072 --max-steps 150 --num-attempts 1 --bf16
+
+# Local 4090, qshort + beam 524k, FULL submission format:
+.venv/Scripts/python.exe megaminx/scripts/03_solve.py \
+    --checkpoint megaminx/models/m05_bellman_warm/epoch_0499.pt \
+    --qshort-student megaminx/models/m23_q_shortlister/epoch_0499.pt \
+    --qshort-alpha 2 \
+    --out megaminx/submissions/qshort_524k.csv \
+    --beams 524288 --max-steps 150 --bf16
+
+# CURRENT BEST RESCUE STACK: sym-ensemble K=4 + m23_v2 + qshort + beam 524k
+# (rescue top long-tail pids of current submission; ~6h on local 4090 for 80 pids)
+.venv/Scripts/python.exe megaminx/scripts/03_solve.py \
+    --checkpoint megaminx/models/m05_bellman_warm/epoch_0499.pt \
+    --qshort-student megaminx/models/m23_v2_sym_aware/epoch_0499.pt \
+    --qshort-alpha 2 \
+    --out megaminx/submissions/sym4_rescue.csv \
+    --pids <comma-separated long-pids from current submission> \
+    --beams 524288 --max-steps 150 --bf16 \
+    --sym-ensemble 4
+
+# Merge a rescue CSV into a base submission (per-pid take min):
+.venv/Scripts/python.exe megaminx/scripts/16_merge_rescue.py \
+    --base megaminx/submissions/<base>.csv \
+    --rescue megaminx/submissions/<rescue>.csv \
+    --out megaminx/submissions/<merged>.csv
+
+# Stratified-5 eval (51 puzzles, the canonical metric):
+.venv/Scripts/python.exe megaminx/scripts/03_solve.py \
+    --checkpoint <ckpt> --out <out.csv> --beams 65536 --max-steps 150 \
+    --stratified 5 --strat-seed 0 --bf16
+
+# Stratified-5 eval WITH sym-ensemble (the new gold standard for V models):
+.venv/Scripts/python.exe megaminx/scripts/03_solve.py \
+    --checkpoint <ckpt> --out <out.csv> --beams 65536 --max-steps 150 \
+    --stratified 5 --strat-seed 0 --bf16 \
+    --qshort-student megaminx/models/m23_v2_sym_aware/epoch_0499.pt \
+    --qshort-alpha 2 --sym-ensemble 4
+
+# Cheap-eval (BFS-true MSE, top-1/3, walk MSE) on multiple ckpts:
+.venv/Scripts/python.exe megaminx/scripts/validate_model.py \
+    --checkpoints <ckpt1> <ckpt2> ... --bf16
+
+# GCP TRT export (on the L4 VM):
+ssh and-l@<IP> 'cd ~/cayley && python3 megaminx/beam_lab/export_tensorrt.py \
+    --checkpoint megaminx/models/m05_bellman_warm/epoch_0499.pt \
+    --batch-size 16384 --precision bf16 \
+    --output megaminx/models/m05_trt_bf16_b16384_sm89.ts'
+
+# Kaggle submit:
+export KAGGLE_API_TOKEN=KGAT_630ac26efca89d28c5b2d496b238b71c
+.venv/Scripts/kaggle.exe competitions submit -c cayley-py-megaminx \
+    -f submissions/<file> -m "<short description>"
+```
+
+## 13. Fast next-step recommendation (if you don't know where to start)
+
+The recipe-ceiling track is exhausted. Today's session validated sym-ensemble
+at inference as the cluster-breaker. The clearest highest-EV next moves:
+
+**OPTION 1 (~30h, low risk, biggest expected score impact)** — Full-1001
+sym-ensemble on GCP. Mechanism is fully validated at strat-5; this is just
+scaling to all 1001. Run on GCP L4 with:
+
+```
+ssh and-l@<IP> 'cd ~/cayley && nohup python3 megaminx/scripts/03_solve.py \
+    --checkpoint megaminx/models/m05_bellman_warm/epoch_0499.pt \
+    --qshort-student megaminx/models/m23_v2_sym_aware/epoch_0499.pt \
+    --qshort-alpha 2 \
+    --tensorrt-engine megaminx/models/m05_trt_fp16_b16384_sm89.ts \
+    --out megaminx/submissions/full_1001_sym4_v2_trt.csv \
+    --beams 524288 --max-steps 150 --bf16 \
+    --sym-ensemble 4 \
+    > megaminx/submissions/full_1001_sym4_v2_trt.log 2>&1 &'
+```
+
+Then merge with current `submissions/merge_plus_sym8_top20.csv` (82,481).
+Expected: -1500 to -3000 vs 82,481. The mega-bet that most likely cracks 80K.
+
+**OPTION 2 (~3-5 days, biggest theoretical gain if it works)** — T1.1 curated
+speedcubing macros. Mechanism shipped; fill in the macros via web scrape.
+See `tier1-tier2-tier3-merged.md` T1.1. Per tier doc: "−10K to −20K" if
+plays out; could cross 70K alone. Higher uncertainty though.
+
+**OPTION 3 (continued tail-rescue, ~6-12h each)** — Iterate the
+hard-tail rescue cycle: identify top long-pids of current submission, run
+sym4 + qshort + 524k on them, merge. Per A2.2 today: -716 moves on 80 pids
+in ~6h. Diminishing per pass but additive; 2-3 more passes plausibly worth
+a few hundred moves each.
+
+**The 70K target requires sym-ensemble at scale OR macros, not more recipe
+tweaking.** TRT helps by funding bigger beams; sym-ensemble multiplies that.

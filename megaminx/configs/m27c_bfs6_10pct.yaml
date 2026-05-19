@@ -1,0 +1,35 @@
+# m27c: 10% BFS-d6 mixin (vs m27's 50%, m27b's 25%).
+# Lightest BFS-d6 anchor — most of the signal stays Bellman-bootstrap.
+
+model:
+  state_size: 120
+  num_classes: 120
+  hidden_dims: [2048, 512]
+  num_res_blocks: 2
+  encoding: embedding
+  embed_dim: 16
+
+training:
+  n_epochs: 300
+  samples_per_epoch: 500_000
+  batch_size: 8192
+  k_max: 80
+  lr: 5.0e-4
+  weight_decay: 0.0
+  checkpoint_every_epochs: 25
+  n_back: 1
+  loss: mse
+  amp: true
+  compile_model: true
+  fused_optimizer: true
+
+bellman:
+  warmstart_path: "megaminx/models/m05_bellman_warm/epoch_0499.pt"
+  target_update_every_epochs: 10
+  target_net_chunk: 4096
+  clip_upper: true
+  clip_lower: true
+  bfs_d6_path: "megaminx/data/bfs_d6_train.pt"
+  bfs_d6_fraction: 0.10
+
+seed: 53

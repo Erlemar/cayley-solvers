@@ -1,0 +1,33 @@
+# m45 pretrain — LARGE 49.6M-param V model, walk-depth labels.
+# Stage 1 of m45 pipeline. Tests "is there capacity headroom past our 13M ceiling?"
+#
+# Hypothesis: cluster ceiling is information-bound (every recipe to date,
+# 6M-13M params, plateaus at 88-99 mean). If 49.6M ALSO lands at cluster, the
+# theory is bulletproof across 50x param range. If 49.6M breaks through,
+# THAT was the missing capacity — pivot fully to scaling.
+#
+# Wall (4090 / GCP L4): ~10-12h pretrain + ~2h Bellman = ~14h total.
+
+model:
+  state_size: 120
+  num_classes: 120
+  hidden_dims: [6144, 2048]
+  num_res_blocks: 3
+  encoding: embedding
+  embed_dim: 16
+
+training:
+  n_epochs: 4000
+  samples_per_epoch: 1_000_000
+  batch_size: 8192          # smaller batch — model is large, memory-bound
+  k_max: 80
+  lr: 1.5e-3
+  weight_decay: 0.0
+  checkpoint_every_epochs: 500
+  n_back: 1
+  loss: mse
+  amp: true
+  compile_model: true
+  fused_optimizer: true
+
+seed: 45

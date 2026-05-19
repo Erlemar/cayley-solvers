@@ -1,0 +1,16 @@
+{
+  "id": "artgor/cayleypy-megaminx-beam-m-curr-v3-jax-tpu-v5e-8",
+  "title": "cayleypy megaminx beam m_curr_v3 (JAX, TPU v5e-8)",
+  "code_file": "cayleypy-megaminx-beam-m-curr-v3-jax.ipynb",
+  "language": "python",
+  "kernel_type": "notebook",
+  "is_private": true,
+  "enable_gpu": false,
+  "enable_tpu": true,
+  "enable_internet": true,
+  "dataset_sources": [
+    "artgor/megaminx-tpu-artifacts"
+  ],
+  "competition_sources": [],
+  "kernel_sources": []
+}

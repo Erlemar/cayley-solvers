@@ -1,0 +1,30 @@
+# m_big_pretrain: from-scratch V pretrain at bigger arch (~20.5M params).
+# Used as warm-start for m_dd_v_big bellman refine. The bigger trunk targets
+# the 8% V-quality gap AZ v3 (dual-head, 6M trunk) had vs m_dd_v0 (V-only, 6M).
+# Pure-V cluster ceiling was confirmed at 6M, but never tested at dual-head
+# capacities — this run probes whether a bigger trunk gives the dual-head
+# value head room to recover the 6M V baseline.
+
+model:
+  state_size: 120
+  num_classes: 120
+  hidden_dims: [4096, 1024]
+  num_res_blocks: 4
+  encoding: embedding
+  embed_dim: 16
+
+training:
+  n_epochs: 50
+  samples_per_epoch: 500_000
+  batch_size: 8192
+  k_max: 80
+  lr: 5.0e-4
+  weight_decay: 0.0
+  checkpoint_every_epochs: 25
+  n_back: 1
+  loss: mse
+  amp: true
+  compile_model: true
+  fused_optimizer: true
+
+seed: 47

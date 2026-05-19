@@ -1,0 +1,32 @@
+# m45 Bellman warmstart from m45 pretrain.
+
+model:
+  state_size: 120
+  num_classes: 120
+  hidden_dims: [6144, 2048]
+  num_res_blocks: 3
+  encoding: embedding
+  embed_dim: 16
+
+training:
+  n_epochs: 500
+  samples_per_epoch: 500_000
+  batch_size: 4096          # smaller batch for Bellman (target_net forward also needs memory)
+  k_max: 80
+  lr: 3.0e-4
+  weight_decay: 0.0
+  checkpoint_every_epochs: 50
+  n_back: 1
+  loss: mse
+  amp: true
+  compile_model: true
+  fused_optimizer: true
+
+bellman:
+  warmstart_path: "megaminx/models/m45/pretrain/epoch_3999.pt"
+  target_update_every_epochs: 10
+  target_net_chunk: 2048    # smaller chunk; large model means memory-bound forward
+  clip_upper: true
+  clip_lower: true
+
+seed: 45

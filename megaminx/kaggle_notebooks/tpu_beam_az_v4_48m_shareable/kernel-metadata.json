@@ -1,0 +1,16 @@
+{
+  "id": "artgor/cayleypy-megaminx-48m-shareable",
+  "title": "Cayleypy Megaminx 48M Shareable",
+  "code_file": "cayleypy-megaminx-beam-az-v4-48m-shareable-jax.ipynb",
+  "language": "python",
+  "kernel_type": "notebook",
+  "is_private": false,
+  "enable_gpu": false,
+  "enable_tpu": false,
+  "enable_internet": true,
+  "dataset_sources": [
+    "artgor/megaminx-tpu-artifacts"
+  ],
+  "competition_sources": [],
+  "kernel_sources": []
+}

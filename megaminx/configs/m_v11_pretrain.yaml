@@ -1,0 +1,33 @@
+# m_v11_pretrain — Stage 1a of the v5 scale-up.
+# From-scratch random-walk V pretrain at ~11M params.
+#
+# Successor to m_big_pretrain (20.5M, regressed per Rule 14). Smaller
+# trunk (3072,768)+3rb keeps capacity in the sweet spot between m_dd_v0
+# (6M, cluster ceiling) and m_big_pretrain (20.5M, regressed).
+#
+# Output is used as warmstart for m_v11_bellman (Stage 1b).
+# 50 ep, 5e-4 cosine — same as m_big_pretrain template.
+
+model:
+  state_size: 120
+  num_classes: 120
+  hidden_dims: [3072, 768]
+  num_res_blocks: 3
+  encoding: embedding
+  embed_dim: 16
+
+training:
+  n_epochs: 50
+  samples_per_epoch: 500_000
+  batch_size: 8192
+  k_max: 80
+  lr: 5.0e-4
+  weight_decay: 0.0
+  checkpoint_every_epochs: 25
+  n_back: 1
+  loss: mse
+  amp: true
+  compile_model: true
+  fused_optimizer: true
+
+seed: 80

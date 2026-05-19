@@ -1,0 +1,37 @@
+# m26 Bellman warmstart from Kaggle's m26_walkdepth (12.35M params).
+# Mirrors m05_bellman_warm.yaml recipe (500 ep, lr 5e-4, target refresh every
+# 10 ep) but with m26's deeper architecture: hidden=[2048,1024], 3 ResBlocks.
+#
+# Goal: test whether bigger arch + Bellman beats current m05 (50/51 strat-5,
+# mean 89.4). Acceptance gate: ≥+3 strat-5 solves AND mean ≤ 0.95×.
+
+model:
+  state_size: 120
+  num_classes: 120
+  hidden_dims: [2048, 1024]
+  num_res_blocks: 3
+  encoding: embedding
+  embed_dim: 16
+
+training:
+  n_epochs: 500
+  samples_per_epoch: 500_000
+  batch_size: 8192
+  k_max: 80
+  lr: 5.0e-4
+  weight_decay: 0.0
+  checkpoint_every_epochs: 50
+  n_back: 1
+  loss: mse
+  amp: true
+  compile_model: true
+  fused_optimizer: true
+
+bellman:
+  warmstart_path: "megaminx/models/m26_walkdepth/epoch_2499.pt"
+  target_update_every_epochs: 10
+  target_net_chunk: 4096
+  clip_upper: true
+  clip_lower: true
+
+seed: 50

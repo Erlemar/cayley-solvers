@@ -1,0 +1,39 @@
+# m30: m05 Bellman recipe with n_back=16 (Item 7 step 2 - aggressive coverage).
+#
+# m29 with n_back=4 just delivered the FIRST training variant to beat m05
+# (mean 88.98 vs m05's 89.4, +1 solve). Trying n_back=16 to see if more
+# aggressive ban gives further improvement, or if it tips into the IHES
+# n_back=40 regression territory.
+#
+# Same arch + recipe; only n_back changes.
+
+model:
+  state_size: 120
+  num_classes: 120
+  hidden_dims: [2048, 512]
+  num_res_blocks: 2
+  encoding: embedding
+  embed_dim: 16
+
+training:
+  n_epochs: 300
+  samples_per_epoch: 500_000
+  batch_size: 8192
+  k_max: 80
+  lr: 5.0e-4
+  weight_decay: 0.0
+  checkpoint_every_epochs: 25
+  n_back: 16
+  loss: mse
+  amp: true
+  compile_model: true
+  fused_optimizer: true
+
+bellman:
+  warmstart_path: "megaminx/models/m05_bellman_warm/epoch_0499.pt"
+  target_update_every_epochs: 10
+  target_net_chunk: 4096
+  clip_upper: true
+  clip_lower: true
+
+seed: 81

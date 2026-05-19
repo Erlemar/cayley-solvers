@@ -1,6 +1,0 @@
-  pid=  19 attempts=20/1001 total_moves=236 (20 by model, 0 fallback) 24.3s (0.82 p/s)
-  pid=  39 attempts=40/1001 total_moves=724 (38 by model, 2 fallback) 88.2s (0.45 p/s)
-  pid=  59 attempts=60/1001 total_moves=1,599 (42 by model, 18 fallback) 464.7s (0.13 p/s)
-  pid=  79 attempts=80/1001 total_moves=2,901 (42 by model, 38 fallback) 1056.7s (0.08 p/s)
-  pid=  99 attempts=100/1001 total_moves=4,516 (42 by model, 58 fallback) 1662.3s (0.06 p/s)
-  pid= 119 attempts=120/1001 total_moves=6,497 (42 by model, 78 fallback) 2308.1s (0.05 p/s)

@@ -1,0 +1,30 @@
+# m44 pretrain — TINY 1.12M-param V model, walk-depth labels.
+# Stage 1 of m44 pipeline; followed by m44_bellman.yaml warmstarting from this.
+#
+# Hypothesis: 6M may already be at capacity for label noise; a 1M model would
+# regress sharply if so. If 1M ALSO lands at cluster (88-99 mean), the
+# information-bound theory holds across the full param scale we've tested.
+
+model:
+  state_size: 120
+  num_classes: 120
+  hidden_dims: [512, 128]
+  num_res_blocks: 2
+  encoding: embedding
+  embed_dim: 16
+
+training:
+  n_epochs: 4000
+  samples_per_epoch: 1_000_000
+  batch_size: 16384
+  k_max: 80
+  lr: 2.0e-3
+  weight_decay: 0.0
+  checkpoint_every_epochs: 500
+  n_back: 1
+  loss: mse
+  amp: true
+  compile_model: true
+  fused_optimizer: true
+
+seed: 44

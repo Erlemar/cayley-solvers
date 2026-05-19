@@ -91,6 +91,8 @@ class KhoruzhiiSolver:
         state_dtype: torch.dtype = torch.int8,
         use_q_function: bool = False,
         pdb_lookup=None,
+        pdb_combine_mode: str = "replace_in_set",
+        macros: list[tuple[list[int] | tuple[int, ...], list[str]]] | None = None,
     ):
         self.puzzle = puzzle
         self.model = model.to(device).eval()
@@ -104,27 +106,74 @@ class KhoruzhiiSolver:
             raise ValueError(f"state_dtype must be an integer type; got {state_dtype!r}")
         self.state_dtype = state_dtype
         self.use_q_function = use_q_function
-        if use_q_function:
-            base = getattr(model, "_orig_mod", model)
-            expected = len(puzzle.move_names)
-            got = getattr(base, "output_dim", 1)
-            if got != expected:
-                raise ValueError(
-                    f"use_q_function=True requires model.output_dim={expected} (n_gen), got {got}"
-                )
         # Optional admissible re-scorer: pdb_lookup(states) → (B,) float lower bound.
-        # Final value = max(neural_value, pdb_value). Safe (still ≤ true distance).
+        # combine_mode controls how it merges with neural V:
+        #   "replace_in_set": PDB returns sentinel (>=1e5) for out-of-set; replaces V for in-set.
+        #   "max": value = max(V_neural, PDB) — for full-coverage PDBs that never sentinel.
+        if pdb_combine_mode not in ("replace_in_set", "max"):
+            raise ValueError(f"pdb_combine_mode must be 'replace_in_set' or 'max', got {pdb_combine_mode!r}")
         self.pdb_lookup = pdb_lookup
+        self.pdb_combine_mode = pdb_combine_mode
 
         # Generator permutations as a (n_gen, state_size) int64 tensor — gather indices.
         n_gen = len(puzzle.move_names)
         self.n_gen = n_gen
         self.state_size = len(puzzle.solved_state)
+        # Validate Q-head output_dim now that we know n_gen + n_macros. The Q-head can be
+        # either a vanilla shortlister (output_dim = n_gen) when no macros are passed, or
+        # a Macro-Q shortlister (output_dim = n_gen + n_macros) when macros are passed.
+        # We finish the check after counting macros below.
+        n_macros_arg = len(macros) if macros else 0
         self.all_moves = torch.zeros((n_gen, self.state_size), dtype=torch.int64, device=device)
         for i, name in enumerate(puzzle.move_names):
             self.all_moves[i] = torch.tensor(puzzle.generators[name], dtype=torch.int64)
         self.move_names = puzzle.move_names
         self.V0 = torch.tensor(puzzle.solved_state, dtype=state_dtype, device=device)
+
+        # Macro extension: each macro is (perm, word) where perm is the macro's net
+        # permutation (length state_size) and word is the list of generator names it
+        # expands to. Each macro becomes an additional action — at each beam step,
+        # the parent state is extended by (24 + n_macros) children. Path reconstruction
+        # expands macro actions to their words (so output is in real moves, not action
+        # steps). Macros are a no-op when use_q_function=True (Q-head has fixed
+        # output_dim=n_gen and doesn't know about macros).
+        #
+        # Cost-aware scoring: each action has a real-move cost (1 for a gen, len(word)
+        # for a macro). When the beam compares candidates at a single step, candidates
+        # reached via a macro of cost L would otherwise look "free" (V dropped, but L
+        # real moves were spent). We add (cost - 1) to the predicted V so a macro must
+        # deliver more V-drop than its extra cost to be selected. This is an
+        # admissible-style cost adjustment for the greedy beam.
+        if macros:
+            for perm, word in macros:
+                assert len(perm) == self.state_size, "macro perm size mismatch"
+                for nm in word:
+                    assert nm in puzzle.generators, f"macro word has unknown name {nm}"
+            self.n_macros = len(macros)
+            macro_perms = torch.tensor(
+                [list(p) for p, _ in macros], dtype=torch.int64, device=device
+            )
+            self.all_moves = torch.cat([self.all_moves, macro_perms], dim=0)
+            self.macro_words = [list(w) for _, w in macros]
+            # action_cost[i] = real-move cost of action i. gens cost 1, macros cost len(word).
+            costs = [1] * self.n_gen + [len(w) for _, w in macros]
+            self.action_cost = torch.tensor(costs, dtype=torch.float16, device=device)
+        else:
+            self.n_macros = 0
+            self.macro_words = []
+            self.action_cost = None
+        self.n_actions = self.n_gen + self.n_macros
+
+        # Q-head validation — see initial setup; deferred until n_actions is known.
+        if use_q_function:
+            base = getattr(model, "_orig_mod", model)
+            expected = self.n_actions  # n_gen for vanilla shortlister, n_gen+n_macros for macro-Q
+            got = getattr(base, "output_dim", 1)
+            if got != expected:
+                raise ValueError(
+                    f"use_q_function=True requires model.output_dim={expected} "
+                    f"({self.n_gen} primitives + {self.n_macros} macros), got {got}"
+                )
 
         gen = torch.Generator(device=device)
         gen.manual_seed(random_seed)
@@ -133,17 +182,17 @@ class KhoruzhiiSolver:
         )
 
     def _get_neighbors(self, states: torch.Tensor) -> torch.Tensor:
-        """(B, S) → (B*n_gen, S), with neighbors[i*n_gen+g] = apply(states[i], g)."""
+        """(B, S) → (B*n_actions, S). Action 0..n_gen-1 is a generator; action
+        n_gen..n_actions-1 is a macro applied as a single permutation."""
         B = states.size(0)
         bs = self.internal_batch_size
-        out = torch.empty((B, self.n_gen, self.state_size), dtype=states.dtype, device=self.device)
+        out = torch.empty((B, self.n_actions, self.state_size), dtype=states.dtype, device=self.device)
         for i in range(0, B, bs):
             chunk = states[i : i + bs]
-            # expand: (chunk, 1, S) × (1, n_gen, S) → gather along S
             out[i : i + bs] = torch.gather(
-                chunk.unsqueeze(1).expand(chunk.size(0), self.n_gen, self.state_size),
+                chunk.unsqueeze(1).expand(chunk.size(0), self.n_actions, self.state_size),
                 2,
-                self.all_moves.unsqueeze(0).expand(chunk.size(0), self.n_gen, self.state_size),
+                self.all_moves.unsqueeze(0).expand(chunk.size(0), self.n_actions, self.state_size),
             )
         return out
 
@@ -182,17 +231,16 @@ class KhoruzhiiSolver:
         n = states.size(0)
         bs = self.internal_batch_size
 
-        # For each state and each generator, remember the (parent_idx, gen_idx).
-        # idx0 = parent index repeated n_gen times. moves = 0..n_gen-1 repeated for each parent.
-        idx0 = torch.arange(n, device=self.device).repeat_interleave(self.n_gen)
-        moves = torch.arange(self.n_gen, device=self.device).repeat(n)
+        # For each state and each action (generator or macro), remember (parent_idx, action_idx).
+        idx0 = torch.arange(n, device=self.device).repeat_interleave(self.n_actions)
+        moves = torch.arange(self.n_actions, device=self.device).repeat(n)
 
         # Compute + hash neighbors in batches.
         neighbors_hashed = torch.empty(moves.size(0), dtype=torch.int64, device=self.device)
         for i in range(0, n, bs):
             chunk_states = states[i : i + bs]
             chunk_neighbors = self._get_neighbors(chunk_states).flatten(end_dim=1)
-            neighbors_hashed[i * self.n_gen : (i + chunk_states.size(0)) * self.n_gen] = _state_hash(
+            neighbors_hashed[i * self.n_actions : (i + chunk_states.size(0)) * self.n_actions] = _state_hash(
                 chunk_neighbors, self.hash_vec, bs
             )
 
@@ -205,13 +253,22 @@ class KhoruzhiiSolver:
             return empty_s, empty_v, empty_i, empty_i
 
         if self.use_q_function:
-            # One forward per parent yields (n, n_gen) predicted neighbor values. Flattened
-            # as [p0*n_gen + m, p1*n_gen + m, ...] which matches idx0*n_gen+moves ordering.
-            q_all = _q_predict(self.model, states, bs, self.n_gen)  # (n, n_gen) fp16
+            # One forward per parent yields (n, n_actions) predicted neighbor values.
+            # Flattened as [p0*n_actions + a, p1*n_actions + a, ...] matches the
+            # idx0*n_actions+moves ordering set up above. n_actions = n_gen for vanilla
+            # m23, or n_gen + n_macros for the m24 Macro-Q shortlister.
+            q_all = _q_predict(self.model, states, bs, self.n_actions)  # (n, n_actions) fp16
             q_flat = q_all.view(-1)
             value = q_flat[idx1]
-            # Top-B by ascending value, then materialize only those states.
-            idx2 = torch.argsort(value)[:B]
+            # Cost-aware adjustment: macros cost > 1 real move, so a macro candidate must
+            # deliver more V-drop than its extra cost to win. Same rule the V-path uses.
+            if self.action_cost is not None:
+                chosen_actions = moves[idx1]
+                cost_penalty = self.action_cost[chosen_actions] - 1.0  # 0 for gens, >0 for macros
+                score = value + cost_penalty
+            else:
+                score = value
+            idx2 = torch.argsort(score)[:B]
             chosen_idx1 = idx1[idx2]
             next_states = self._apply_move(states[idx0[chosen_idx1]], moves[chosen_idx1])
             return next_states, value[idx2], moves[chosen_idx1], idx0[chosen_idx1]
@@ -220,10 +277,26 @@ class KhoruzhiiSolver:
         value = _model_predict(self.model, candidate_states, bs)
         if self.pdb_lookup is not None:
             pdb_val = self.pdb_lookup(candidate_states).to(torch.float16)
-            value = torch.maximum(value, pdb_val)
+            if self.pdb_combine_mode == "replace_in_set":
+                # PDB returns sentinel (>=1e5) for out-of-set. Replace V on in-set.
+                in_pdb_set = pdb_val < 1e5
+                value = torch.where(in_pdb_set, pdb_val, value)
+            else:  # "max"
+                # Full-coverage PDB. value = max(V, PDB) — admissible floor.
+                value = torch.maximum(value, pdb_val)
 
-        # Top-B by ascending value.
-        idx2 = torch.argsort(value)[:B]
+        # Cost-aware adjustment: penalize candidates reached via expensive actions
+        # (i.e., macros costing > 1 real move) so a macro must deliver V-drop greater
+        # than its extra cost. Score = V + (action_cost - 1).
+        if self.action_cost is not None:
+            chosen_actions = moves[idx1]
+            cost_penalty = self.action_cost[chosen_actions] - 1.0  # 0 for gens, >0 for macros
+            score = value + cost_penalty
+        else:
+            score = value
+
+        # Top-B by ascending score.
+        idx2 = torch.argsort(score)[:B]
         chosen_idx1 = idx1[idx2]
         next_states = candidate_states[idx2]
         return next_states, value[idx2], moves[chosen_idx1], idx0[chosen_idx1]
@@ -237,13 +310,21 @@ class KhoruzhiiSolver:
         return bool(torch.isin(recent, earlier).all().item())
 
     def solve(
-        self, initial_state, cfg: KhoruzhiiSearchConfig
+        self, initial_state, cfg: KhoruzhiiSearchConfig,
+        goal_check_fn=None,
     ) -> tuple[bool, int, list[str]]:
-        """Try to solve one puzzle. Returns (found, path_length, path_names)."""
+        """Try to solve one puzzle. Returns (found, path_length, path_names).
+
+        goal_check_fn: optional callable (states tensor) -> bool tensor of shape (B,).
+            Default is `lambda s: (s == self.V0).all(dim=1)` (full-puzzle solve).
+            Use a custom predicate (e.g., F2L-correct check) for staged solving.
+        """
+        if goal_check_fn is None:
+            goal_check_fn = lambda s: (s == self.V0).all(dim=1)
         B = cfg.beam_width
         num_steps = cfg.num_steps
         state = torch.tensor(list(initial_state), dtype=self.state_dtype, device=self.device)
-        if torch.equal(state, self.V0):
+        if goal_check_fn(state.unsqueeze(0))[0].item():
             return True, 0, []
 
         states_bad_hashed = torch.empty(0, dtype=torch.int64, device=self.device)
@@ -272,7 +353,7 @@ class KhoruzhiiSolver:
                 tree_move[j, :leaves] = moves.cpu()
                 tree_idx[j, :leaves] = idx.cpu()
 
-                if (states == self.V0).all(dim=1).any():
+                if goal_check_fn(states).any():
                     reached = j
                     break
                 if j > 3 and self._check_stagnation(states_hash_log):
@@ -293,7 +374,7 @@ class KhoruzhiiSolver:
         tree_idx = tree_idx[: final_j + 1].flip((0,))
         tree_move = tree_move[: final_j + 1].flip((0,))
 
-        v0_pos = torch.nonzero((final_states == self.V0).all(dim=1), as_tuple=True)[0].item()
+        v0_pos = torch.nonzero(goal_check_fn(final_states), as_tuple=True)[0][0].item()
         path = [tree_idx[0, v0_pos].item()]
         for k in range(1, final_j + 1):
             path.append(tree_idx[k, path[-1]].item())
@@ -303,5 +384,10 @@ class KhoruzhiiSolver:
             for k in range(final_j + 1)
         ]
         moves_seq_cpu.reverse()  # we built it from end to start
-        names = [self.move_names[m] for m in moves_seq_cpu]
+        names: list[str] = []
+        for m in moves_seq_cpu:
+            if m < self.n_gen:
+                names.append(self.move_names[m])
+            else:
+                names.extend(self.macro_words[m - self.n_gen])
         return True, len(names), names

@@ -1,0 +1,43 @@
+# m42_v2_curr — Distributional V on top of m_curr_v0 (curriculum body).
+#
+# Same recipe as original m42 except warmstart from m_curr_v0/best_ema.pt
+# (the curriculum-trained body that produces our best strat-5) instead of
+# m05. Gives distributional Bellman a much better starting V.
+#
+# Hypothesis: predicting a distribution over plausible distances allows
+# the beam to select states by lower quantile (risk-aware), avoiding
+# "uncertain-far" states. With curriculum body's stronger V calibration,
+# distributional gains should compound.
+
+model:
+  state_size: 120
+  num_classes: 120
+  hidden_dims: [2048, 512]
+  num_res_blocks: 2
+  encoding: embedding
+  embed_dim: 16
+
+training:
+  n_epochs: 500
+  samples_per_epoch: 500_000
+  batch_size: 8192
+  k_max: 80
+  lr: 5.0e-4
+  weight_decay: 0.0
+  checkpoint_every_epochs: 50
+  n_back: 1
+  amp: true
+  fused_optimizer: true
+
+bellman:
+  warmstart_path: "megaminx/models/m_curr_v0/best_ema.pt"
+  target_update_every_epochs: 10
+  target_net_chunk: 4096
+  clip_upper: true
+  clip_lower: true
+
+distributional:
+  n_quantiles: 32
+  kappa: 1.0
+
+seed: 42

@@ -1,0 +1,37 @@
+# m39a Bellman warmstart from m39a pretrain.
+# Same recipe as m05: 500 ep, lr 5e-4, target refresh every 10 ep.
+
+model:
+  state_size: 120
+  num_classes: 120
+  hidden_dims: [4096, 512]
+  num_res_blocks: 2
+  encoding: embedding
+  embed_dim: 16
+
+training:
+  n_epochs: 500
+  samples_per_epoch: 500_000
+  batch_size: 8192
+  k_max: 80
+  lr: 5.0e-4
+  weight_decay: 0.0
+  checkpoint_every_epochs: 50
+  n_back: 1
+  loss: mse
+  amp: true
+  compile_model: true
+  fused_optimizer: true
+
+bellman:
+  warmstart_path: "megaminx/models/m39a/pretrain/epoch_3999.pt"
+  target_update_every_epochs: 10
+  target_net_chunk: 4096
+  clip_upper: true
+  clip_lower: true
+  softmin_temperature: 0.0
+  target_polyak_tau: 0.0
+  bfs_d6_path: ""
+  bfs_d6_fraction: 0.0
+
+seed: 39

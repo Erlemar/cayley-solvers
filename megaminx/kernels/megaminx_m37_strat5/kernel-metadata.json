@@ -1,0 +1,14 @@
+{
+  "id": "artgor/megaminx-m37-strat5-eval",
+  "title": "megaminx-m37-strat5-eval",
+  "code_file": "run.py",
+  "language": "python",
+  "kernel_type": "script",
+  "is_private": true,
+  "enable_gpu": true,
+  "enable_tpu": false,
+  "enable_internet": true,
+  "dataset_sources": ["artgor/cayley-megaminx-snapshot", "artgor/megaminx-m37-extras"],
+  "competition_sources": [],
+  "kernel_sources": []
+}

@@ -1,9 +1,0 @@
-building BFS (bytes-keyed) to depth 6
-  depth 1: +24 new; total=25 (0.0s)
-  depth 2: +408 new; total=433 (0.0s)
-  depth 3: +6,208 new; total=6,641 (0.0s)
-  depth 4: +90,144 new; total=96,785 (0.2s)
-  depth 5: +1,280,160 new; total=1,376,945 (4.3s)
-  depth 6: +17,975,460 new; total=19,352,405 (390.9s)
-states: 19,352,405
-wrote megaminx\data\bfs_bytes_d6.pkl (2553.4 MB on disk)

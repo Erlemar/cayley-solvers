@@ -17,25 +17,90 @@ dist/
 Thumbs.db
 desktop.ini
 
-# Claude local state (Kaggle/GCP tokens)
+# Claude local state (Kaggle/GCP tokens, runtime locks)
 .claude/settings.local.json
+.claude/scheduled_tasks.lock
+.claude/projects/
 
-# Downloaded Kaggle zips
+# Credentials (defense in depth — never commit)
+kaggle.json
+.kaggle/
+*.pem
+*.key
+id_rsa
+id_rsa.*
+.env
+.env.*
+credentials*.json
+service_account*.json
+
+# Archives — large, regeneratable
 *.zip
+*.tar
+*.tar.gz
+*.tgz
+*.7z
+*.rar
 
-# Model checkpoints — large, reproducible from configs+logs.
-# Exclude the .pt/.pth/.ckpt specifically; keep directories + logs + model_config.json.
-**/models/**/*.pt
-**/models/**/*.pth
-**/models/**/*.ckpt
+# Model weights / serialized tensors — large, reproducible from configs+logs
+*.pt
+*.pth
+*.ckpt
+*.safetensors
+*.bin
+*.onnx
+*.trt
+*.engine
 
-# Large precomputed tables / binary caches — rebuild from scripts.
-data/bfs_table_*.pkl
-data/kociemba_walks.pkl
-data/pdb_picture_cube.pkl
+# Numpy + pickle binary caches — rebuild from scripts
+*.npy
+*.npz
+*.pkl
+*.pickle
+
+# Papers / PDFs — large reference material, not project source
+*.pdf
+
+# Logs — runtime output, not source
+*.log
+
+# CSVs — submission outputs, bench results, dataset exports (not source)
+*.csv
+submissions/
+megaminx/submissions/
+megaminx/results/
+megaminx/beam_lab/results/
+megaminx/kaggle_notebooks/**/_kernel_output*/
+megaminx/kaggle_notebooks/**/_kernel_input*/
+
+# Model / artifact directories
+models/
+megaminx/models/
+megaminx/kernels_out/
+megaminx/beam_lab/data/
+megaminx/beam_lab/models/
+megaminx/paper/
+megaminx/kernel_data/
+kaggle_share/
+
+# Dataset staging dirs (used for Kaggle Datasets pushes)
+.dataset_stage_*/
+az_recipe_workdir/
+
+# Data dir: drop heavy artifacts but keep small reference JSONs / fallback table
+data/*.pkl
+data/*.pt
+data/*.npy
+data/*.npz
 data/community_subs/
-megaminx/data/bfs_table_*.pkl
-megaminx/data/bfs_bytes_*.pkl
+data/sample_fallback.csv
+data/sample_submission.csv
+data/test.csv
+data/bfs_table_d6_build.log
+# megaminx data is entirely binary/intermediate
+megaminx/data/
 
-# Scratch
+# Misc scratch
 /tmp/
+nohup.out
+*.swp

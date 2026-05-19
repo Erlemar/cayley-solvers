@@ -1,0 +1,71 @@
+# m_gt_v0_bellman — Phase 3: Bellman refine with GT trunk.
+# Mirrors m_v11_bellman.yaml but with the GraphTransformerV class and
+# laptop-4090-compatible batch sizes.
+#
+# Batch is 4096 (vs m_v11's 8192) — 16GB VRAM on the laptop 4090 is the
+# constraint, plus the GT model uses more memory than ResMLP at this size
+# (121-token attention bias matrix per head).
+#
+# Stage 2 (AZ-style fine-tune) is a separate, later launch — not in this run.
+# Acceptance gate (per Rule 12): every 25 ep run 61_eval_v_at_solved.py +
+# 10-pid bench. Compare to m_dd_v0 50ep (10/10, ~871 total) and AZ v4
+# (10/10, ~874 total) baselines.
+
+model:
+  model_class: GraphTransformerV
+  state_size: 120
+  num_classes: 120
+  # Matches m_gt_v0_pretrain.yaml so the warmstart loads cleanly.
+  # This is v0 capacity (~1.4M params); a follow-up run with d=256/4L/8h
+  # would require a separate pretrain.
+  d_model: 192
+  n_layers: 3
+  n_heads: 4
+  ffn_dim: 768
+  dropout: 0.0
+  use_relation_bias: true
+  use_dist_bias: true
+  activation: gelu
+  output_dim: 1
+  inference_chunk_size: 4096
+
+training:
+  # Full-scope run on local laptop 4090. Diagnostic measurement: each batch
+  # ~2.4s (target-net forward + main fwd+bwd in eager bf16). At
+  # samples_per_epoch=80K and batch=2048, ~67 batches per epoch (after
+  # subtracting BFS-d6/anchor/frontier slots) ≈ 2.5 min per epoch.
+  # 200 ep ≈ 8-9 h wall — the plan's GT-v1 epoch count, at a sample budget
+  # that fits the laptop's eager-bf16 throughput.
+  # lr=3e-4 (back to the original plan recipe) — lr=5e-4 was destabilizing
+  # in the v0 scoped run (first-epoch loss spike to 33.8 vs 21.3 at 3e-4).
+  # compile_model disabled — first-batch compile hung on the custom GraphTransformerLayer
+  # with sdpa(attn_mask=...), likely a torch 2.x compile compatibility issue.
+  n_epochs: 200
+  samples_per_epoch: 80_000
+  batch_size: 2048
+  k_max: 80
+  lr: 3.0e-4
+  weight_decay: 0.0
+  checkpoint_every_epochs: 25
+  n_back: 1
+  loss: mse
+  amp: true
+  compile_model: false
+  fused_optimizer: true
+
+bellman:
+  warmstart_path: "megaminx/models/m_gt_v0_pretrain/epoch_0049.pt"
+  target_update_every_epochs: 10
+  target_net_chunk: 8192
+  clip_upper: true
+  clip_lower: true
+  frontier_path: "megaminx/data/frontier_states.pt"
+  frontier_fraction: 0.25
+  frontier_walk_depth_cap: 200.0
+  bfs_d6_path: "megaminx/data/bfs_d6_train.pt"
+  bfs_d6_fraction: 0.10
+  lambda_pdb: 0.0
+  n_anchor_v0: 32
+  n_anchor_d1: 4
+
+seed: 7210

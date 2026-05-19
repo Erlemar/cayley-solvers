@@ -162,3 +162,25 @@ class ResMLPDistance(nn.Module):
 
     def num_parameters(self) -> int:
         return sum(p.numel() for p in self.parameters())
+
+    def get_model_config(self) -> dict:
+        """Serialization dict used by the polymorphic checkpoint loader.
+
+        Returns a dict that can be passed back to ResMLPDistance(**cfg) to
+        reconstruct an equivalent model. Used by `cayley.training.train` and
+        `cayley.bellman.train_bellman` for checkpoint serialization.
+        """
+        return {
+            "model_class": "ResMLPDistance",
+            "state_size": self.state_size,
+            "num_classes": self.num_classes,
+            "hidden_dims": [
+                layer.out_features for layer in self.input_stack
+                if isinstance(layer, torch.nn.Linear)
+            ],
+            "num_res_blocks": len(self.res_blocks),
+            "encoding": self.encoding,
+            "embed_dim": self.embed_dim,
+            "output_dim": self.output_dim,
+            "inference_chunk_size": self.inference_chunk_size,
+        }

@@ -1,0 +1,16 @@
+{
+  "id": "artgor/cayleypy-megaminx-az-recipe-end-to-end",
+  "title": "cayleypy megaminx az recipe end to end",
+  "code_file": "cayleypy-megaminx-az-recipe.ipynb",
+  "language": "python",
+  "kernel_type": "notebook",
+  "is_private": true,
+  "enable_gpu": true,
+  "enable_tpu": false,
+  "enable_internet": true,
+  "dataset_sources": [
+    "artgor/megaminx-az-recipe-artifacts"
+  ],
+  "competition_sources": [],
+  "kernel_sources": []
+}

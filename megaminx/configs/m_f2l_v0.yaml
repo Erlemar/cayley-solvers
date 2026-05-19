@@ -1,0 +1,42 @@
+# m_f2l_v0 = V_F2L: predicts moves to nearest F2L-correct state.
+#
+# Bellman training with F2L boundary instead of V0 boundary. Warmstart from
+# m_curr_v0 (curriculum body — its V_full predictions are upper bounds on V_F2L,
+# which Bellman iterations will pull down).
+#
+# Architecture identical to m_curr_v3.
+
+model:
+  state_size: 120
+  num_classes: 120
+  hidden_dims: [2048, 512]
+  num_res_blocks: 2
+  encoding: embedding
+  embed_dim: 16
+
+training:
+  n_epochs: 500
+  samples_per_epoch: 500_000
+  batch_size: 8192
+  k_max: 80
+  lr: 5.0e-4
+  weight_decay: 0.0
+  checkpoint_every_epochs: 50
+  n_back: 1
+  loss: mse
+  amp: true
+  compile_model: true
+  fused_optimizer: true
+
+bellman:
+  warmstart_path: "megaminx/models/m_curr_v0/best_ema.pt"
+  target_update_every_epochs: 10
+  target_net_chunk: 4096
+  clip_upper: true
+  clip_lower: true
+  # 35 F2L sticker positions (top-half pieces only). See megaminx.decomposition.
+  f2l_positions: [0, 1, 2, 3, 4, 5, 6, 7, 8, 18, 19, 20, 21, 22, 23,
+                   60, 61, 62, 63, 64, 65, 70, 71, 72, 73, 74, 75, 76, 77,
+                   78, 79, 84, 85, 104, 105]
+
+seed: 54

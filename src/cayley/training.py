@@ -278,14 +278,19 @@ def train(
             on_epoch_end(stats)
         if (epoch + 1) % cfg.checkpoint_every_epochs == 0 or epoch == cfg.n_epochs - 1:
             path = ckpt_dir / f"epoch_{epoch:04d}.pt"
-            model_cfg = {
-                "state_size": model.state_size,
-                "num_classes": model.num_classes,
-                "hidden_dims": [layer.out_features for layer in model.input_stack if isinstance(layer, torch.nn.Linear)],
-                "num_res_blocks": len(model.res_blocks),
-                "encoding": model.encoding,
-                "embed_dim": model.embed_dim,
-            }
+            base = getattr(model, "_orig_mod", model)
+            if hasattr(base, "get_model_config"):
+                model_cfg = base.get_model_config()
+            else:
+                # Legacy path for older ResMLPDistance checkpoints without the hook.
+                model_cfg = {
+                    "state_size": base.state_size,
+                    "num_classes": base.num_classes,
+                    "hidden_dims": [layer.out_features for layer in base.input_stack if isinstance(layer, torch.nn.Linear)],
+                    "num_res_blocks": len(base.res_blocks),
+                    "encoding": base.encoding,
+                    "embed_dim": base.embed_dim,
+                }
             torch.save(
                 {
                     "epoch": epoch,

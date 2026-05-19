@@ -1,0 +1,47 @@
+# m27: Bellman warmstart from m05 + BFS-d6 exact target mixin (Option B).
+#
+# Hypothesis: m05/m17/m26/m26b all converge to the same Bellman fixed point
+# (~0.094-0.10) because the bootstrap has no anchor — the target net's
+# predictions can drift uniformly without any external truth signal.
+# Mixing BFS-d6 EXACT distances (no noise, no bootstrap circularity) into 50%
+# of each batch gives the model a hard ground-truth boundary; the rest of the
+# distance field is pulled inward via the standard Bellman bootstrap.
+#
+# Acceptance gate vs m05 (50/51 strat-5, mean 89.4): >=+3 solves AND <=0.95x.
+#
+# Same arch as m05 (6M params) — we already established arch capacity isn't
+# the bottleneck. This change is purely on the training signal.
+
+model:
+  state_size: 120
+  num_classes: 120
+  hidden_dims: [2048, 512]
+  num_res_blocks: 2
+  encoding: embedding
+  embed_dim: 16
+
+training:
+  n_epochs: 300
+  samples_per_epoch: 500_000
+  batch_size: 8192
+  k_max: 80
+  lr: 5.0e-4
+  weight_decay: 0.0
+  checkpoint_every_epochs: 25
+  n_back: 1
+  loss: mse
+  amp: true
+  compile_model: true
+  fused_optimizer: true
+
+bellman:
+  warmstart_path: "megaminx/models/m05_bellman_warm/epoch_0499.pt"
+  target_update_every_epochs: 10
+  target_net_chunk: 4096
+  clip_upper: true
+  clip_lower: true
+  # Option B mixin: 50% of each batch is BFS-d6 with exact distance targets.
+  bfs_d6_path: "megaminx/data/bfs_d6_train.pt"
+  bfs_d6_fraction: 0.5
+
+seed: 51

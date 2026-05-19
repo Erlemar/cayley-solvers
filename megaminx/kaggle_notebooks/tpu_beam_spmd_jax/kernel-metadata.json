@@ -1,0 +1,16 @@
+{
+  "id": "artgor/cayleypy-megaminx-beam-spmd-jax",
+  "title": "cayleypy megaminx beam SPMD JAX",
+  "code_file": "cayleypy-tpu-beam-spmd-jax.ipynb",
+  "language": "python",
+  "kernel_type": "notebook",
+  "is_private": true,
+  "enable_gpu": false,
+  "enable_tpu": true,
+  "enable_internet": true,
+  "dataset_sources": [
+    "artgor/megaminx-tpu-artifacts"
+  ],
+  "competition_sources": [],
+  "kernel_sources": []
+}

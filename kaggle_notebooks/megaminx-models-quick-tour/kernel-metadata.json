@@ -1,0 +1,22 @@
+{
+  "id": "artgor/megaminx-models-quick-tour",
+  "title": "Megaminx Models Quick Tour",
+  "code_file": "notebook.ipynb",
+  "language": "python",
+  "kernel_type": "notebook",
+  "is_private": false,
+  "enable_gpu": false,
+  "enable_tpu": false,
+  "enable_internet": false,
+  "keywords": ["beginner", "tutorial", "reinforcement learning", "puzzles"],
+  "dataset_sources": [],
+  "kernel_sources": [],
+  "competition_sources": ["cayley-py-megaminx"],
+  "model_sources": [
+    "artgor/cayleypy-megaminx-solvers/PyTorch/m05/1",
+    "artgor/cayleypy-megaminx-solvers/PyTorch/m-curr-v3/1",
+    "artgor/cayleypy-megaminx-solvers/PyTorch/m-dd-v0/1",
+    "artgor/cayleypy-megaminx-solvers/PyTorch/m-az-v4/1",
+    "artgor/cayleypy-megaminx-solvers/PyTorch/m23-v2/1"
+  ]
+}

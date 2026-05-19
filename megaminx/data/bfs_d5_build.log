@@ -1,9 +1,0 @@
-puzzle: 24 moves, state_size 120
-building BFS to depth 5 (canonical=on)
-  depth 1: +24 new; total=25 (0.0s)
-  depth 2: +408 new; total=433 (0.0s)
-  depth 3: +6,208 new; total=6,641 (0.0s)
-  depth 4: +90,144 new; total=96,785 (0.5s)
-  depth 5: +1,280,160 new; total=1,376,945 (15.7s)
-total unique states: 1,376,945
-wrote megaminx\data\bfs_table_d5.pkl (352.3 MB on disk)

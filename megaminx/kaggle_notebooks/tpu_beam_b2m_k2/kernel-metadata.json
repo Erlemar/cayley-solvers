@@ -1,0 +1,16 @@
+{
+  "id": "artgor/cayleypy-megaminx-beam-shareable",
+  "title": "cayleypy megaminx beam shareable",
+  "code_file": "cayleypy-tpu-beam-b2m-k2.ipynb",
+  "language": "python",
+  "kernel_type": "notebook",
+  "is_private": false,
+  "enable_gpu": false,
+  "enable_tpu": true,
+  "enable_internet": true,
+  "dataset_sources": [
+    "artgor/megaminx-tpu-artifacts"
+  ],
+  "competition_sources": [],
+  "kernel_sources": []
+}

@@ -1,0 +1,17 @@
+{
+  "id": "artgor/cayleypy-megaminx-beam-az-v4-multickpt-shareable",
+  "title": "cayleypy megaminx beam az v4 multickpt shareable",
+  "code_file": "cayleypy-tpu-beam-az-v4-multickpt.ipynb",
+  "language": "python",
+  "kernel_type": "notebook",
+  "is_private": true,
+  "enable_gpu": false,
+  "enable_tpu": true,
+  "enable_internet": true,
+  "dataset_sources": [
+    "artgor/megaminx-tpu-artifacts",
+    "artgor/megaminx-az-v4-multi-ckpt"
+  ],
+  "competition_sources": [],
+  "kernel_sources": []
+}

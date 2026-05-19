@@ -1,0 +1,59 @@
+# m_fr_v0 — Frontier-replay Bellman (Idea 3 v0).
+#
+# Same recipe as m05_bellman_warm + 25% frontier-state mixin. Frontier states
+# come from `data/frontier_states.pt` (built by 42_log_frontier_states.py from
+# real beam-search runs of m05). Targets are computed via Bellman bootstrap
+# (`1 + min_a V_target(apply(s, a))`) — IDENTICAL to the random-walk path. The
+# lever is *state distribution*, not *label source*.
+#
+# Distinct from m43 (solver-trace mixin → 0/51 catastrophic): m43 used
+# realized-suffix-length as exact LABELS on solver-trace states, mixing two
+# label-source distributions. Here labels are uniform across the batch
+# (Bellman bootstrap on all), so the mismatch m43 hit cannot occur.
+#
+# Distinct from m17 (Bellman r2): same target source, but different state
+# distribution. m17 used the same RW distribution as m05; this one shifts 25%
+# of each batch to visited-frontier states.
+#
+# Distinct from m31 (rotation augmentation, regressed +6 mean): m31 widened
+# to orbit-equivalent states uniformly. Here we shift to states the SOLVER
+# actually visits, biased toward solved (the beam pulls toward solved by V).
+#
+# Honest expectation: ~30% probability gate passes. Bellman is at a local
+# fixed point on m05; retraining on frontier states with the same target
+# source might converge to the same fixed point. But this is the cleanest
+# isolated test of the state-distribution-shift hypothesis.
+
+model:
+  state_size: 120
+  num_classes: 120
+  hidden_dims: [2048, 512]
+  num_res_blocks: 2
+  encoding: embedding
+  embed_dim: 16
+
+training:
+  n_epochs: 500
+  samples_per_epoch: 500_000
+  batch_size: 8192
+  k_max: 80
+  lr: 5.0e-4
+  weight_decay: 0.0
+  checkpoint_every_epochs: 50
+  n_back: 1
+  loss: mse
+  amp: true
+  compile_model: true
+  fused_optimizer: true
+
+bellman:
+  warmstart_path: "megaminx/models/m07_big_k80/epoch_3999.pt"
+  target_update_every_epochs: 10
+  target_net_chunk: 4096
+  clip_upper: true
+  clip_lower: true
+  frontier_path: "megaminx/data/frontier_states.pt"
+  frontier_fraction: 0.25
+  frontier_walk_depth_cap: 200.0
+
+seed: 30

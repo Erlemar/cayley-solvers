@@ -1,0 +1,43 @@
+# m33: m05 Bellman recipe with lr=2e-4 (gentler refinement).
+#
+# Hypothesis: lr=5e-4 may be overshooting the optimum on a warmstart (m05 is
+# already near-converged). A gentler lr lets the gradient walk the model's
+# loss landscape more carefully — possibly tightening the fit and/or finding
+# a slightly different basin.
+#
+# Risk: gentler lr might just train slower without finding a different
+# solution. m17 (Bellman r2 from m05 at lr=5e-4) hit the cluster ceiling, so
+# this tests whether the issue was lr-related.
+#
+# Same arch + recipe + warmstart as m05; only lr changes.
+
+model:
+  state_size: 120
+  num_classes: 120
+  hidden_dims: [2048, 512]
+  num_res_blocks: 2
+  encoding: embedding
+  embed_dim: 16
+
+training:
+  n_epochs: 300
+  samples_per_epoch: 500_000
+  batch_size: 8192
+  k_max: 80
+  lr: 2.0e-4
+  weight_decay: 0.0
+  checkpoint_every_epochs: 25
+  n_back: 1
+  loss: mse
+  amp: true
+  compile_model: true
+  fused_optimizer: true
+
+bellman:
+  warmstart_path: "megaminx/models/m05_bellman_warm/epoch_0499.pt"
+  target_update_every_epochs: 10
+  target_net_chunk: 4096
+  clip_upper: true
+  clip_lower: true
+
+seed: 101

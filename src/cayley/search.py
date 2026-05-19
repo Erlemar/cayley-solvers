@@ -122,31 +122,70 @@ def search_cayleypy(
     return solver.solve(initial_state, cfg)
 
 
+def _strip_orig_mod(state_dict: dict) -> dict:
+    """torch.compile prefixes state_dict keys with '_orig_mod.'; strip that for
+    loading into a plain (uncompiled) model."""
+    if any(k.startswith("_orig_mod.") for k in state_dict):
+        return {k.removeprefix("_orig_mod."): v for k, v in state_dict.items()}
+    return state_dict
+
+
+def _load_graph_transformer(mcfg: dict, state_dict: dict, device: str, dtype: torch.dtype):
+    """Load a GraphTransformerV / GraphTransformerVPi checkpoint."""
+    # Resolve graph features. Layout: this file lives in src/cayley/; megaminx
+    # data/graph_features.pt lives at <repo>/megaminx/data/.
+    project_root = Path(__file__).resolve().parents[2]
+    gf_path = project_root / "megaminx" / "data" / "graph_features.pt"
+    if not gf_path.exists():
+        raise FileNotFoundError(
+            f"graph_features.pt not found at {gf_path}; run "
+            f"`megaminx/scripts/72_build_graph_features.py` first."
+        )
+    graph_features = torch.load(gf_path, map_location="cpu", weights_only=False)
+    from megaminx.graph_transformer import build_graph_transformer_from_config
+
+    model = build_graph_transformer_from_config(mcfg, graph_features)
+    model.load_state_dict(state_dict)
+    return model
+
+
 def load_model_checkpoint(
     path: str | Path,
     device: str = "cpu",
     dtype: torch.dtype = torch.float32,
     compile_inference: bool = False,
-) -> ResMLPDistance:
+) -> torch.nn.Module:
+    """Load any checkpoint produced by the YAML-driven training pipeline.
+
+    Dispatches on `model_config["model_class"]`:
+      - "GraphTransformerV"   -> megaminx.graph_transformer.GraphTransformerV
+      - "GraphTransformerVPi" -> megaminx.graph_transformer.GraphTransformerVPi
+      - default (incl. "ResMLPDistance", "ResMLPVPi") -> cayley.model.ResMLPDistance
+    """
     ckpt = torch.load(path, map_location=device, weights_only=False)
     mcfg = ckpt.get("model_config") or {}
     if not mcfg:
         raise ValueError(f"checkpoint {path} has no 'model_config'; was it saved by an older version?")
-    model = ResMLPDistance(
-        state_size=int(mcfg["state_size"]),
-        num_classes=int(mcfg["num_classes"]),
-        hidden_dims=tuple(mcfg["hidden_dims"]),
-        num_res_blocks=int(mcfg["num_res_blocks"]),
-        encoding=mcfg.get("encoding", "onehot"),
-        embed_dim=int(mcfg.get("embed_dim", 16)),
-        output_dim=int(mcfg.get("output_dim", 1)),
-    )
-    # torch.compile wraps the model and prefixes state_dict keys with "_orig_mod." —
-    # strip that so the plain (uncompiled) model can load.
-    state_dict = ckpt["state_dict"]
-    if any(k.startswith("_orig_mod.") for k in state_dict):
-        state_dict = {k.removeprefix("_orig_mod."): v for k, v in state_dict.items()}
-    model.load_state_dict(state_dict)
+    model_class = mcfg.get("model_class", "ResMLPDistance")
+    state_dict = _strip_orig_mod(ckpt["state_dict"])
+
+    if model_class in ("GraphTransformerV", "GraphTransformerVPi"):
+        model = _load_graph_transformer(mcfg, state_dict, device, dtype)
+    else:
+        model = ResMLPDistance(
+            state_size=int(mcfg["state_size"]),
+            num_classes=int(mcfg["num_classes"]),
+            hidden_dims=tuple(mcfg["hidden_dims"]),
+            num_res_blocks=int(mcfg["num_res_blocks"]),
+            encoding=mcfg.get("encoding", "onehot"),
+            embed_dim=int(mcfg.get("embed_dim", 16)),
+            output_dim=int(mcfg.get("output_dim", 1)),
+        )
+        # Multi-head model (e.g. ResMLPVPi) has additional `pi_head.*` keys.
+        # When loading such a checkpoint as a vanilla V-model, drop those.
+        if model_class == "ResMLPVPi":
+            state_dict = {k: v for k, v in state_dict.items() if not k.startswith("pi_head.")}
+        model.load_state_dict(state_dict)
     model = model.to(device=device, dtype=dtype).eval()
     if compile_inference and device == "cuda":
         # dynamic=True so the compiled graph handles the variable batch sizes that beam

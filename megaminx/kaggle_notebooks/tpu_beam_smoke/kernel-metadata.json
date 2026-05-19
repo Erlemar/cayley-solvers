@@ -1,0 +1,16 @@
+{
+  "id": "artgor/cayleypy-tpu-beam-smoke",
+  "title": "cayleypy tpu beam smoke",
+  "code_file": "cayleypy-tpu-beam-smoke.ipynb",
+  "language": "python",
+  "kernel_type": "notebook",
+  "is_private": true,
+  "enable_gpu": false,
+  "enable_tpu": true,
+  "enable_internet": true,
+  "dataset_sources": [
+    "artgor/megaminx-tpu-artifacts"
+  ],
+  "competition_sources": [],
+  "kernel_sources": []
+}

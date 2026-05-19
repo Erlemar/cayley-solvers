@@ -1,0 +1,42 @@
+# m32: m05 Bellman recipe with target_update_every_epochs=5 (faster fixed-point chase).
+#
+# Hypothesis: stale target nets propagate stale value estimates. With
+# target_update_every=10, the model's V is up to 10 epochs behind. Refreshing
+# every 5 should chase the fixed point faster — possibly converging tighter
+# (lower final loss) or breaking out of the m05 cluster.
+#
+# Risk: too-frequent refresh ≈ no target net at all, which destabilizes Bellman
+# (the original DQN pathology — moving target). 5 is a middle ground.
+#
+# Same arch + recipe + warmstart as m05; only target refresh frequency changes.
+
+model:
+  state_size: 120
+  num_classes: 120
+  hidden_dims: [2048, 512]
+  num_res_blocks: 2
+  encoding: embedding
+  embed_dim: 16
+
+training:
+  n_epochs: 300
+  samples_per_epoch: 500_000
+  batch_size: 8192
+  k_max: 80
+  lr: 5.0e-4
+  weight_decay: 0.0
+  checkpoint_every_epochs: 25
+  n_back: 1
+  loss: mse
+  amp: true
+  compile_model: true
+  fused_optimizer: true
+
+bellman:
+  warmstart_path: "megaminx/models/m05_bellman_warm/epoch_0499.pt"
+  target_update_every_epochs: 5
+  target_net_chunk: 4096
+  clip_upper: true
+  clip_lower: true
+
+seed: 100

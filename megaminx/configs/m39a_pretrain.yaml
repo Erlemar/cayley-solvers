@@ -1,0 +1,31 @@
+# m39a: WIDER architecture experiment.
+# 4096 input layer (vs m05's 2048) with same depth + ResBlock width.
+# Tests "does extra width break the label-noise floor at MSE ~64?"
+# Honest expectation: NO, plateau is information-bound not capacity-bound.
+# But it completes the width-vs-depth-vs-baseline triangle.
+#
+# Wall: ~3h pretrain on local 4090.
+
+model:
+  state_size: 120
+  num_classes: 120
+  hidden_dims: [4096, 512]
+  num_res_blocks: 2
+  encoding: embedding
+  embed_dim: 16
+
+training:
+  n_epochs: 4000
+  samples_per_epoch: 1_000_000
+  batch_size: 16384
+  k_max: 80
+  lr: 2.0e-3
+  weight_decay: 0.0
+  checkpoint_every_epochs: 500
+  n_back: 1
+  loss: mse
+  amp: true
+  compile_model: true
+  fused_optimizer: true
+
+seed: 39

@@ -1,0 +1,9 @@
+# Minimum deps for beam_lab. Install with: pip install -r requirements.txt
+#
+# torch version: any 2.4+ should work; 2.4.1 is what the project uses on Kaggle P100,
+# 2.10+ has slightly faster fused kernels on Ampere/Ada (4090 / L4 / A100).
+#
+# CPU-only torch works but beam search is ~50x slower than GPU. Real benchmarks
+# need CUDA.
+torch>=2.4.0
+numpy>=1.24

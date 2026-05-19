@@ -1,0 +1,45 @@
+# m_dd_v_big: bigger m_dd_v0. Same Bellman + PDB-penalty + anchor + frontier +
+# BFS-d6 recipe, but at (4096,1024)+4rb (~20.5M params) and 200 epochs (vs 50).
+# Goal: a stronger V warm-start to use under AZ v4's dual-head fine-tune.
+#
+# Per CLAUDE.md rule 12: long V training needs per-N-epoch beam bench, not just
+# loss curves. checkpoint_every_epochs=25 keeps a rolling set of evaluable snapshots.
+
+model:
+  state_size: 120
+  num_classes: 120
+  hidden_dims: [4096, 1024]
+  num_res_blocks: 4
+  encoding: embedding
+  embed_dim: 16
+
+training:
+  n_epochs: 200
+  samples_per_epoch: 500_000
+  batch_size: 8192
+  k_max: 80
+  lr: 5.0e-4
+  weight_decay: 0.0
+  checkpoint_every_epochs: 25
+  n_back: 1
+  loss: mse
+  amp: true
+  compile_model: true
+  fused_optimizer: true
+
+bellman:
+  warmstart_path: "megaminx/models/m_big_pretrain/epoch_0049.pt"
+  target_update_every_epochs: 10
+  target_net_chunk: 4096
+  clip_upper: true
+  clip_lower: true
+  frontier_path: "megaminx/data/frontier_states.pt"
+  frontier_fraction: 0.25
+  frontier_walk_depth_cap: 200.0
+  bfs_d6_path: "megaminx/data/bfs_d6_train.pt"
+  bfs_d6_fraction: 0.10
+  lambda_pdb: 5.0
+  n_anchor_v0: 32
+  n_anchor_d1: 4
+
+seed: 47

@@ -1,0 +1,16 @@
+{
+  "id": "artgor/cayleypy-megaminx-beam-m-fr-v2",
+  "title": "cayleypy megaminx beam m_fr_v2",
+  "code_file": "cayleypy-tpu-beam-m-fr-v2.ipynb",
+  "language": "python",
+  "kernel_type": "notebook",
+  "is_private": true,
+  "enable_gpu": false,
+  "enable_tpu": true,
+  "enable_internet": true,
+  "dataset_sources": [
+    "artgor/megaminx-tpu-artifacts"
+  ],
+  "competition_sources": [],
+  "kernel_sources": []
+}

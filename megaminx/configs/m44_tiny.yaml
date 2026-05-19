@@ -1,0 +1,42 @@
+# m44 — TINY 1.12M-param V model (cluster-ceiling capacity probe).
+#
+# Tests "is the cluster ceiling a regularization/overcapacity issue?" If 1M
+# params lands at the SAME 88-99 mean as the 6M-13M cluster, the ceiling is
+# definitely information-bound (not capacity-bound, not arch-bound). If 1M
+# REGRESSES sharply, then 6M was already at capacity for this label noise.
+#
+# Honest expectation: lands in the cluster (87-92 mean). Adds the smallest
+# possible Bellman-trained data point to the architecture sweep.
+#
+# Wall: ~5s/epoch on 4090, ~40 min for 500 ep. Fastest experiment we can run.
+
+model:
+  state_size: 120
+  num_classes: 120
+  hidden_dims: [512, 128]
+  num_res_blocks: 2
+  encoding: embedding
+  embed_dim: 16
+
+training:
+  n_epochs: 500
+  samples_per_epoch: 500_000
+  batch_size: 16384         # smaller model can use bigger batch
+  k_max: 80
+  lr: 1.0e-3                # higher lr for smaller model
+  weight_decay: 0.0
+  checkpoint_every_epochs: 50
+  n_back: 1
+  loss: mse
+  amp: true
+  compile_model: true
+  fused_optimizer: true
+
+bellman:
+  warmstart_path: "megaminx/models/m07_big_k80/epoch_3999.pt"
+  target_update_every_epochs: 10
+  target_net_chunk: 4096
+  clip_upper: true
+  clip_lower: true
+
+seed: 44

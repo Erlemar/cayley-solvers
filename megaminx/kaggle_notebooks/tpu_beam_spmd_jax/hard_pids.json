@@ -1,0 +1,21 @@
+{
+  "_source": "megaminx/submissions/merge_v11_community_plus_m_dd_v0.csv (current best 76,251)",
+  "_analyzed_at": "2026-05-16",
+  "_distribution": {
+    "total_pids": 1001,
+    "total_moves": 76251,
+    "P50_path_len": 80,
+    "P90_path_len": 84,
+    "P95_path_len": 84,
+    "P99_path_len": 86,
+    "max_path_len": 88
+  },
+  "_notes": [
+    "Hardest pids cluster tightly at 85-88 moves; long tail is short.",
+    "If SPMD shared beam shaves ~4 moves on the top-200, expected savings ~800.",
+    "Recompute this list after each new submission — pids that were hard yesterday may not be hard tomorrow."
+  ],
+  "top_8_smoke": [265, 236, 267, 314, 546, 680, 328, 364],
+  "_top_8_note": "Don't use this list for the first smoke run; use pids 0-7 (the user's request) to baseline easy-pid behavior. Switch to this list once smoke validates plumbing.",
+  "hardtail_50_plen_ge_85": [265, 236, 267, 314, 546, 680, 328, 364, 519, 536, 638, 740, 806, 929, 987, 141, 191, 237, 279, 342, 350, 422, 466, 480, 533, 562, 596, 644, 654, 705, 743, 765, 791, 853, 858, 877, 895, 925, 939, 988, 992, 1000]
+}

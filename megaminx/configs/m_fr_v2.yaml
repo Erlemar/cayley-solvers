@@ -1,0 +1,53 @@
+# m_fr_v2 — Frontier replay + BFS-d6 boundary anchor (Idea 3 v1).
+#
+# Two complementary mixins on top of standard random-walk Bellman:
+#   - 25% frontier states (from data/frontier_states.pt) with Bellman-bootstrap
+#     target (state-distribution shift; same as m_fr_v0).
+#   - 10% BFS-d6 states with EXACT distance target (anchors V to ground truth
+#     in the d<=6 shell).
+#   - 65% random-walk states with Bellman-bootstrap target.
+#
+# Hypothesis: frontier mixin alone (m_fr_v0) gave -1.7 mean improvement.
+# BFS-d6 mixin alone (m27 family) clustered at 91.49. Combining both might
+# compose in a way neither alone managed: frontier covers visited-states
+# distribution; BFS-d6 anchors near-solved exact distance. Different
+# mechanisms, possibly additive.
+#
+# Distinct from m27 family: m27 used 10/25/50% BFS-d6 mixin without frontier.
+# Distinct from m_fr_v0: frontier alone, no BFS-d6 anchor.
+
+model:
+  state_size: 120
+  num_classes: 120
+  hidden_dims: [2048, 512]
+  num_res_blocks: 2
+  encoding: embedding
+  embed_dim: 16
+
+training:
+  n_epochs: 500
+  samples_per_epoch: 500_000
+  batch_size: 8192
+  k_max: 80
+  lr: 5.0e-4
+  weight_decay: 0.0
+  checkpoint_every_epochs: 50
+  n_back: 1
+  loss: mse
+  amp: true
+  compile_model: true
+  fused_optimizer: true
+
+bellman:
+  warmstart_path: "megaminx/models/m07_big_k80/epoch_3999.pt"
+  target_update_every_epochs: 10
+  target_net_chunk: 4096
+  clip_upper: true
+  clip_lower: true
+  frontier_path: "megaminx/data/frontier_states.pt"
+  frontier_fraction: 0.25
+  frontier_walk_depth_cap: 200.0
+  bfs_d6_path: "megaminx/data/bfs_d6_train.pt"
+  bfs_d6_fraction: 0.10
+
+seed: 32

@@ -1,0 +1,52 @@
+# m_v11_bellman — Stage 1b of the v5 scale-up.
+# Bellman + admissibility refine at ~11M params, warm from m_v11_pretrain.
+#
+# KEY DIVERGENCE FROM m_dd_v_big (CLAUDE.md Rule 14 fix):
+#   - lambda_pdb 0.0 (was 5.0) — no admissibility penalty. Per Rule 14's
+#     explicit advice "lower λ_pdb, lower lr, rotation augmentation, or
+#     no PDB penalty"; this picks the cleanest variant. V0 anchor mixin
+#     still pins V(V0)=0 directly, so the V(V0)≈2 bug doesn't return.
+#   - lr 2.0e-4 (was 5.0e-4) — slower learning at bigger capacity, per
+#     Rule 14's "substantively different recipe" guidance.
+#
+# Compare against AZ v4 baseline (51/51 strat-5, mean 87.5), not m05.
+# Per Rule 12: validate every 25 epochs with beam bench, not just loss.
+
+model:
+  state_size: 120
+  num_classes: 120
+  hidden_dims: [3072, 768]
+  num_res_blocks: 3
+  encoding: embedding
+  embed_dim: 16
+
+training:
+  n_epochs: 200
+  samples_per_epoch: 500_000
+  batch_size: 8192
+  k_max: 80
+  lr: 2.0e-4
+  weight_decay: 0.0
+  checkpoint_every_epochs: 25
+  n_back: 1
+  loss: mse
+  amp: true
+  compile_model: true
+  fused_optimizer: true
+
+bellman:
+  warmstart_path: "megaminx/models/m_v11_pretrain/epoch_0049.pt"
+  target_update_every_epochs: 10
+  target_net_chunk: 4096
+  clip_upper: true
+  clip_lower: true
+  frontier_path: "megaminx/data/frontier_states.pt"
+  frontier_fraction: 0.25
+  frontier_walk_depth_cap: 200.0
+  bfs_d6_path: "megaminx/data/bfs_d6_train.pt"
+  bfs_d6_fraction: 0.10
+  lambda_pdb: 0.0
+  n_anchor_v0: 32
+  n_anchor_d1: 4
+
+seed: 80

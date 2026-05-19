@@ -1,0 +1,51 @@
+# m43 — Standard m05 Bellman recipe + 25% solver-trace MIXIN (T1.4 isolated).
+#
+# Each batch: 75% random-walk Bellman targets + 25% solver-trace pairs (exact
+# remaining-distance labels from successful prior solves).
+#
+# Distinct from:
+#   - m37 (solver-trace PRIMARY, 100% — OOD catastrophe)
+#   - m22 family (BFS-d6 mixin, d<=6 only — doesn't anchor hard tail)
+#   - m05 (no exact-target anchor at all)
+#
+# Hypothesis: anchoring 25% of the loss to EXACT distances on solver-trace
+# pairs (which span d=1..98 across 128K pairs) gives the model a true-distance
+# floor that beam search can lean on. Could break the cluster ceiling if the
+# binding constraint is "noisy labels" rather than "wrong objective."
+#
+# Honest expectation: high prior of cluster (every other Bellman variant has
+# landed there), but the only clean isolated test of the mixin idea. If
+# cluster, it becomes ensemble fodder and rules out the family conclusively.
+
+model:
+  state_size: 120
+  num_classes: 120
+  hidden_dims: [2048, 512]
+  num_res_blocks: 2
+  encoding: embedding
+  embed_dim: 16
+
+training:
+  n_epochs: 500
+  samples_per_epoch: 500_000
+  batch_size: 8192
+  k_max: 80
+  lr: 5.0e-4
+  weight_decay: 0.0
+  checkpoint_every_epochs: 50
+  n_back: 1
+  loss: mse
+  amp: true
+  compile_model: true
+  fused_optimizer: true
+
+bellman:
+  warmstart_path: "megaminx/models/m07_big_k80/epoch_3999.pt"
+  target_update_every_epochs: 10
+  target_net_chunk: 4096
+  clip_upper: true
+  clip_lower: true
+  solver_trace_path: "megaminx/data/solver_trace_train.pt"
+  solver_trace_fraction: 0.25                 # 25% of each batch is solver-trace pairs
+
+seed: 43

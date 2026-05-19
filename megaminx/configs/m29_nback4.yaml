@@ -1,0 +1,41 @@
+# m29: m05 Bellman recipe with n_back=4 (Item 7 from shortlist).
+#
+# Hypothesis: random-walk state sampling at n_back=1 (just immediate-inverse ban)
+# may not cover the part of state space the beam actually visits. Higher n_back
+# bans the inverse of the last N actions, forcing walks to explore deeper. Tests
+# whether COVERAGE (not bias, not capacity, not signal type) is the binding
+# constraint on the m05 cluster ceiling.
+#
+# Same arch as m05 (6M, [2048,512]x2, 2 ResBlocks). Pure data-coverage knob.
+# Caveat: IHES n_back=40 alone regressed (m12-trap territory).
+
+model:
+  state_size: 120
+  num_classes: 120
+  hidden_dims: [2048, 512]
+  num_res_blocks: 2
+  encoding: embedding
+  embed_dim: 16
+
+training:
+  n_epochs: 300
+  samples_per_epoch: 500_000
+  batch_size: 8192
+  k_max: 80
+  lr: 5.0e-4
+  weight_decay: 0.0
+  checkpoint_every_epochs: 25
+  n_back: 4
+  loss: mse
+  amp: true
+  compile_model: true
+  fused_optimizer: true
+
+bellman:
+  warmstart_path: "megaminx/models/m05_bellman_warm/epoch_0499.pt"
+  target_update_every_epochs: 10
+  target_net_chunk: 4096
+  clip_upper: true
+  clip_lower: true
+
+seed: 80

@@ -1,0 +1,47 @@
+# m40: m05 Bellman recipe + L_upper one-sided overestimate penalty.
+#
+# Identical to m05_bellman_warm except `lambda_upper > 0`. Tests whether
+# penalizing pred > walk_depth (a provable upper bound on d(s)) helps the
+# model break the cluster ceiling. clip_upper=True already clips the TARGET
+# to walk_depth; lambda_upper additionally pressures the PREDICTION to
+# respect the bound.
+#
+# Hypothesis: information-theoretically free constraint may bias predictions
+# slightly downward, helping where overestimation is the failure mode.
+# Honest expectation: if it lands at ~50/51 / 89, the broader L_lip + L_anchor
+# + mu_d proposal won't save us either; abandon. If it breaks through, scale
+# up to the full bundle (m41).
+#
+# Acceptance gate: 50/51 / 89.4 m05 baseline. Pass = +3 solves AND mean <= 84.9.
+
+model:
+  state_size: 120
+  num_classes: 120
+  hidden_dims: [2048, 512]
+  num_res_blocks: 2
+  encoding: embedding
+  embed_dim: 16
+
+training:
+  n_epochs: 500
+  samples_per_epoch: 500_000
+  batch_size: 8192
+  k_max: 80
+  lr: 5.0e-4
+  weight_decay: 0.0
+  checkpoint_every_epochs: 50
+  n_back: 1
+  loss: mse
+  amp: true
+  compile_model: true
+  fused_optimizer: true
+
+bellman:
+  warmstart_path: "megaminx/models/m07_big_k80/epoch_3999.pt"
+  target_update_every_epochs: 10
+  target_net_chunk: 4096
+  clip_upper: true
+  clip_lower: true
+  lambda_upper: 0.1                # m40 primary; ablate at 0.5 / 0.01 if results positive
+
+seed: 40

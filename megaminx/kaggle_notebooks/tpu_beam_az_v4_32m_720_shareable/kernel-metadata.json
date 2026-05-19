@@ -1,0 +1,17 @@
+{
+  "id": "artgor/cayleypy-megaminx-32m-720-shareable",
+  "title": "Cayleypy Megaminx 32M 720 Shareable",
+  "code_file": "cayleypy-megaminx-beam-az-v4-32m-720-shareable-jax.ipynb",
+  "language": "python",
+  "kernel_type": "notebook",
+  "is_private": true,
+  "enable_gpu": false,
+  "enable_tpu": true,
+  "enable_internet": true,
+  "dataset_sources": [
+    "artgor/megaminx-tpu-artifacts",
+    "artgor/megaminx-rotations-720"
+  ],
+  "competition_sources": [],
+  "kernel_sources": []
+}

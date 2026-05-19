@@ -1,0 +1,35 @@
+# m26b Bellman warmstart from Kaggle's m26b_walkdepth_wider (13.27M params).
+# Companion to m26_bellman.yaml. Same recipe, different architecture:
+# m26b is "wider, same depth" (hidden=[3072,1024], 2 ResBlocks) vs
+# m26's "deeper, modest width" (hidden=[2048,1024], 3 ResBlocks).
+
+model:
+  state_size: 120
+  num_classes: 120
+  hidden_dims: [3072, 1024]
+  num_res_blocks: 2
+  encoding: embedding
+  embed_dim: 16
+
+training:
+  n_epochs: 500
+  samples_per_epoch: 500_000
+  batch_size: 8192
+  k_max: 80
+  lr: 5.0e-4
+  weight_decay: 0.0
+  checkpoint_every_epochs: 50
+  n_back: 1
+  loss: mse
+  amp: true
+  compile_model: true
+  fused_optimizer: true
+
+bellman:
+  warmstart_path: "megaminx/models/m26b_walkdepth_wider/epoch_2499.pt"
+  target_update_every_epochs: 10
+  target_net_chunk: 4096
+  clip_upper: true
+  clip_lower: true
+
+seed: 50

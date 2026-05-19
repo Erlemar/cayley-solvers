@@ -24,6 +24,24 @@ from cayley.training import TrainConfig, train
 from megaminx.puzzle import Megaminx
 
 
+def _build_model(model_cfg: dict):
+    """Dispatch on `model_class` field. Defaults to ResMLPDistance for backward compat."""
+    model_class = model_cfg.get("model_class", "ResMLPDistance")
+    if model_class in ("GraphTransformerV", "GraphTransformerVPi"):
+        from megaminx.graph_transformer import build_graph_transformer_from_config
+        gf = torch.load(PROJECT / "data" / "graph_features.pt", map_location="cpu",
+                        weights_only=False)
+        return build_graph_transformer_from_config(model_cfg, gf)
+    return ResMLPDistance(
+        state_size=model_cfg["state_size"],
+        num_classes=model_cfg["num_classes"],
+        hidden_dims=tuple(model_cfg["hidden_dims"]),
+        num_res_blocks=model_cfg["num_res_blocks"],
+        encoding=model_cfg.get("encoding", "onehot"),
+        embed_dim=model_cfg.get("embed_dim", 16),
+    )
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--config", required=True, type=Path)
@@ -42,15 +60,9 @@ def main() -> int:
     train_cfg_dict["seed"] = cfg.get("seed", 0)
 
     puzzle = Megaminx.load(PROJECT / "data" / "puzzle_info.json")
-    model = ResMLPDistance(
-        state_size=model_cfg["state_size"],
-        num_classes=model_cfg["num_classes"],
-        hidden_dims=tuple(model_cfg["hidden_dims"]),
-        num_res_blocks=model_cfg["num_res_blocks"],
-        encoding=model_cfg.get("encoding", "onehot"),
-        embed_dim=model_cfg.get("embed_dim", 16),
-    )
-    print(f"model params: {model.num_parameters():,}")
+    model = _build_model(model_cfg)
+    print(f"model params: {model.num_parameters():,}  "
+          f"class={model_cfg.get('model_class', 'ResMLPDistance')}")
     print(f"device: {args.device}")
     print(f"puzzle: state_size={len(puzzle.solved_state)} moves={len(puzzle.move_names)}")
     print(f"training: {train_cfg_dict}")

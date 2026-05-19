@@ -1,0 +1,16 @@
+{
+  "id": "artgor/cayleypy-megaminx-beam-az-v4-shareable-jax",
+  "title": "Cayleypy Megaminx Beam AZ v4 Shareable JAX",
+  "code_file": "cayleypy-megaminx-beam-az-v4-shareable-jax.ipynb",
+  "language": "python",
+  "kernel_type": "notebook",
+  "is_private": true,
+  "enable_gpu": false,
+  "enable_tpu": true,
+  "enable_internet": true,
+  "dataset_sources": [
+    "artgor/megaminx-tpu-artifacts"
+  ],
+  "competition_sources": [],
+  "kernel_sources": []
+}

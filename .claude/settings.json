@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(awk *)",
+      "Bash(awk '{print $2}')",
+      "Bash(jobs -p)",
+      "Bash(nvidia-smi *)",
+      "Bash(tar tzf *)",
+      "Bash(tasklist)",
+      "Bash(tasklist *)",
+      "Bash(tasklist | *)",
+      "PowerShell(Get-CimInstance *)",
+      "PowerShell(Get-Item *)",
+      "PowerShell(Get-Process *)"
+    ]
+  }
+}
