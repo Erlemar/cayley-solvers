@@ -242,6 +242,7 @@ class KhoruzhiiSolver:
         macros: list[tuple[list[int] | tuple[int, ...], list[str]]] | None = None,
         policy_model=None,
         lambda_policy: float = 0.0,
+        phs_cumulative: bool = False,
     ):
         self.puzzle = puzzle
         self.model = model.to(device).eval()
@@ -318,6 +319,22 @@ class KhoruzhiiSolver:
             self.policy_model = policy_model.to(device).eval()
             for p in self.policy_model.parameters():
                 p.requires_grad = False
+
+        # PHS cumulative scoring: instead of the memoryless local penalty above
+        # (score += lambda * (-log pi(a|parent)), one step only — the variant that
+        # regressed at lambda=0.05), accumulate -log pi along the whole path that
+        # produced each candidate: score(child) = V(child) + lambda * sum_{t<=d}
+        # (-log pi(a_t|s_t)). `_phs_cum` is a per-live-beam float32 vector carrying
+        # the running path policy-cost, reset per solve attempt and advanced inside
+        # each step. This changes which partial paths survive over depth, not just a
+        # single step. Requires a policy model (same plumbing as the local penalty).
+        self.phs_cumulative = bool(phs_cumulative)
+        self._phs_cum = None
+        if self.phs_cumulative and self.policy_model is None:
+            raise ValueError(
+                "phs_cumulative=True requires a policy_model and lambda_policy>0 "
+                "(the cumulative term is lambda * sum of -log pi along the path)."
+            )
 
         # Bind the conditional sync used by _do_greedy_step/solve (profile gated).
         self._sync_p = _sync if profile else _noop_sync
@@ -516,13 +533,21 @@ class KhoruzhiiSolver:
         # current parents (n forwards total), then index by (parent, action) for
         # each candidate. Macros are forbidden in policy mode (v0), so action
         # indices are guaranteed to be < n_gen.
+        cand_cum = None
         if self.policy_model is not None and self.lambda_policy > 0:
             self._sync_p(); t_pol = time.time()
             with torch.inference_mode():
                 pol_out = self.policy_model(states.long())  # (n, n_gen) logits
             log_pi = torch.log_softmax(pol_out.float(), dim=-1)  # (n, n_gen)
-            log_pi_per_cand = log_pi[parent_of_idx1, move_of_idx1].to(score.dtype)
-            score = score + self.lambda_policy * (-log_pi_per_cand)
+            neg_log_pi = (-log_pi[parent_of_idx1, move_of_idx1]).float()  # (numel(idx1),) >= 0
+            if self.phs_cumulative:
+                # Cumulative: parent's running path-cost (broadcast to its children)
+                # plus this step's -log pi. Makes the score path-dependent.
+                cand_cum = self._phs_cum[parent_of_idx1] + neg_log_pi  # float32
+                score = score + (self.lambda_policy * cand_cum).to(score.dtype)
+            else:
+                # Local (memoryless): only this step's -log pi.
+                score = score + (self.lambda_policy * neg_log_pi).to(score.dtype)
             self._sync_p(); prof.model_s += time.time() - t_pol
         self._sync_p(); t0 = time.time()
         # `largest=False` because we want lowest predicted distances. `sorted=False` —
@@ -544,6 +569,10 @@ class KhoruzhiiSolver:
         next_values = value[chosen_local]
         chosen_moves = move_of_idx1[chosen_local]
         chosen_parents = parent_of_idx1[chosen_local]
+        # Advance the cumulative path policy-cost to the surviving beam (aligned to
+        # next_states) so the next step adds onto each survivor's own path history.
+        if cand_cum is not None and self.phs_cumulative:
+            self._phs_cum = cand_cum[chosen_local]
         # Reuse already-computed neighbor hashes for the stagnation log (idea #6).
         chosen_hashes = neighbors_hashed[chosen_idx1]
         self._sync_p(); prof.topk_s += time.time() - t0
@@ -588,6 +617,9 @@ class KhoruzhiiSolver:
         for attempt in range(cfg.num_attempts):
             states = state.unsqueeze(0).clone()
             states_hashed = initial_hashed.clone()
+            # Root beam carries zero accumulated policy-cost (PHS cumulative mode).
+            if self.phs_cumulative:
+                self._phs_cum = torch.zeros(1, dtype=torch.float32, device=self.device)
             # Tree backpointers on GPU — int8 for moves (24 << 127), int32 for parent
             # indices (B can be > 2^15). Avoids one CUDA sync per step from .cpu() copies.
             tree_move = torch.full((num_steps, B), -1, dtype=torch.int8, device=self.device)

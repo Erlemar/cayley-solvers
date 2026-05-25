@@ -47,6 +47,65 @@ does it move us toward 70K, or just save GPU hours?)
 
 ---
 
+## §13 batch (2026-05-24) — strategy-doc selected ideas, IN FLIGHT
+
+From `megaminx_architecture_and_path_shortening_strategy.md` §13. Six ideas
+collapsed into 4 themes; two launched this session.
+
+- **[DONE — standalone TIE, but a min-merge DIVERSITY contributor] PHS cumulative**
+  (§13.1, lead). `--phs-cumulative` in `03_solve.py` + `self._phs_cum` accumulator
+  in `beam_lab/beam_search.py` + `beam_search_qshort.py` (6/6 tests). score =
+  V(child) + w_p·Σ(−log π) over the PATH. **Stage-1** (single-pass sweep): neutral
+  on easy pids, collapses at w≥0.2; safe w ≈ 0.03. **Stage-2 binding gate**
+  (production sym4+multipass+NISS, strat-51, w=0.03 vs w=0): standalone **−3 = tie**
+  (21 per-pid wins, 14 losses), BUT **per-pid min-merge = −61 over 51 pids** (wins
+  incl. pid 312 −8, 645 −6, 856/970/1000 −5). Doc §10.2: diversity contributor, not
+  a replacement. Inference-side → **cannot regress under min-merge.** Artifacts
+  `submissions/phs_stage2_w0.0.csv` / `w0.03.csv` (pulled local). **DONE — PHS works
+  but deployment value is small.** rand50 (buckets 1-8, seed 0, both arms,
+  `phs_rand50_w{0.0,0.03}.csv`): PHS **−67/50 STANDALONE** over its own w=0 arm
+  (−1.34/pid, growing with difficulty: 800-899 −4.6/pid) → the cumulative-policy idea
+  is a REAL improvement to the V+qshort+sym4+NISS config. **BUT** both single-config
+  arms are ~290 behind our merged best (merge_v12=4061 vs PHS=4347 on these pids); PHS
+  beats current-best on only **3/50 pids (−13)** — the merge already absorbs the
+  diversity. Rough extrapolation: ~−200 over the ~800 mid pids for ~1-2 days GCP =
+  marginal vs 70K. **Verdict: validated, not worth a multi-day deploy run.** Mechanism
+  + tests committed/reusable. (Hard tail 900-1000 is the only place PHS might add more
+  vs merge — untested, slow.)
+
+- **[DONE — REJECTED (tie), forensic win] Symmetry consistency loss** (§13.4).
+  `lambda_sym=0.1` isolated on m_dd_v0 (`configs/m_sym_v0.yaml`,
+  `models/m_sym_v0/epoch_0049.pt`): L_sym = MSE(V(s), V(RsR⁻¹)) on RW portion.
+  **Variance-SAFE** (per-depth std flat 2.65→2.64 over 50ep, saturation healthy
+  ~29.6) → **λ_sym EXONERATED** as the m_repr_v0 variance culprit (joins λ_rank;
+  ⇒ culprit is 20% solver-trace ± λ_sat). **But beam-NEUTRAL**: strat-51 sp
+  beam-65k model 51/51, model_avg ≈88.1 vs m_dd_v0 89.4 = TIE within ±2, fails
+  gate (≤84.9). Same as m_rank_v0. **Two training-side §13 ideas, two ties →
+  training-side at 6M is exhausted; value is inference-side.** Models safe to
+  delete. See [[repr-upgrade-bundle-rejected]].
+
+- **[v0 RUN — labels are benign, not mistakes] Frontier regret** (§13.2). Built +
+  ran `84_harvest_frontier_regret.py` (m_dd_v0 over merge_v12 verified paths):
+  98,930 triples, **56.9% of on-path steps "misrank"** (V prefers ≥1 sibling over
+  the on-path move; 72% far-from-solved, 8% near). **But these are alternative-
+  optima, NOT fixable mistakes** — beam trusts V's ranking yet solves 50/51, so a
+  57% true-misrank is impossible; the wide beam absorbs the (equally-good) sibling
+  V prefers. This **mechanistically explains the m_rank_v0 tie**: training on these
+  teaches arbitrary path-choice preference = no beam gain. Clean true-mistake signal
+  needs cross-path divergence (verified suffix_bad>suffix_good) or confirm-resolve,
+  and is likely sparse. **Three §13 training-side probes (rank, sym, frontier-regret-
+  v0) all point to the same wall: V's child-ordering is already near-optimal at 6M;
+  the disagreements are benign.** Dataset `data/frontier_regret_triples.pt` (noisy,
+  kept for reference). Strongly reinforces: value is inference-side.
+
+- **[QUEUED] Macro mining from own corpus** (§13.3). Mine path-diff macros from
+  our own verified corpus (in-distribution), deploy ONLY via Macro-Q
+  (`41_macro_qhead.py`). Highest effort, poor macro track record; the corpus
+  angle is the one untried variant. GATE: a mined macro must appear in a verified
+  SHORTER final path. Connects to D "Macro-Q shortlisting".
+
+---
+
 ## A. Highest-EV next moves (saved-for-last big bets)
 
 These are the score-race-defining items. The user's stated discipline:

@@ -240,10 +240,13 @@ class GraphTransformerV(nn.Module):
 
     def _attn_bias(self) -> torch.Tensor:
         # Compute over the static (S,S) inner block + zero-padded CLS row/col.
+        # The bias build is ~0.5 ms (4 emb lookups + add + permute + pad on a
+        # 120x120x4 tensor). Profiled vs a getattr-based eval-mode cache —
+        # cache was slower because the conditional + getattr cost outweighs
+        # the savings.
         H = self.n_heads
         S = self.state_size
         if self.relation_bias is None and self.dist_bias is None:
-            # No bias: return zeros of correct shape.
             return self.cls_token.new_zeros((H, S + 1, S + 1))
         rb = (
             self.relation_bias(self.relation_id)

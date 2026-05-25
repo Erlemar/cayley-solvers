@@ -1,4 +1,24 @@
-# m_v11 — bigger V trunk scale-up (Track B of the v5 experiment)
+# m_v11 — bigger V trunk scale-up (Track B of the v5 experiment) — **REJECTED**
+
+**Final verdict (2026-05-19)**: REJECTED. 11.8M trunk regresses vs AZ v4 6M on
+production-recipe head-to-head. Strat-51 stuck at 16/20 in 1h+ (vs AZ v4
+51/51 in ~75 min same recipe); pids 995-998 production recipe avg 96.25 vs
+AZ v4 67.5 = **+43% moves/pid worse**. The 10-pid bench (10/10 / 991)
+that looked promising during training was misleading — its pid set
+didn't include the hardest puzzles where m_v11's V breaks down.
+
+Confirms cluster ceiling at 6M is **information-bound, not capacity-bound**,
+across 10× param range (Rule 14 at 20.5M + this at 11.8M). Don't retry
+trunk scale-up without a fundamentally different signal source (not just
+recipe tweaks).
+
+Artifacts on GCP kept for forensic reference (~250 MB):
+`m_v11_pretrain/`, `m_v11_bellman/`, `m_v11_az/`, `m_v11_az_v_only.pt`.
+Safe to delete.
+
+Documented in: HANDOFF.md §8 update + EXPERIMENTS.md row + CLAUDE.md Rule 14 extension.
+
+---
 
 **Launched**: 2026-05-18 19:25 UTC on cayley-gpu (L4), tmux session `mv11`.
 

@@ -1,0 +1,55 @@
+# m_rank_v0 — child-rank-loss ISOLATION (doc §4.2), treatment arm.
+#
+# Question: does listwise child-rank CE help a WORKING V (m_dd_v0)?
+# Isolated from the rejected m_repr_v0 bundle: encoding=embedding (NO representation
+# channels), and the ONLY addition vs m_dd_v0's proven recipe is lambda_rank.
+# No lambda_sym, no lambda_sat, no solver_trace.
+#
+# Warmstart from m_dd_v0 (encoding=embedding ⇒ direct load, no bridge). Control arm
+# (m_rank_ctrl.yaml) is identical but lambda_rank=0 — measures pure re-fine-tune drift.
+#
+# Binding diagnostic (lesson from repr_upgrade_bundle_rejected): V VARIANCE at d≈20.
+# m_dd_v0 baseline d=20 std ≈ 1.73. If this run's d=20 std climbs toward ~5, lambda_rank
+# is a variance injector → reject. checkpoint_every 5 for fine-grained variance canary.
+
+model:
+  state_size: 120
+  num_classes: 120
+  hidden_dims: [2048, 512]
+  num_res_blocks: 2
+  encoding: embedding
+  embed_dim: 16
+
+training:
+  n_epochs: 50
+  samples_per_epoch: 500_000
+  batch_size: 8192
+  k_max: 80
+  lr: 5.0e-4
+  weight_decay: 0.0
+  checkpoint_every_epochs: 5
+  n_back: 1
+  loss: mse
+  amp: true
+  compile_model: true
+  fused_optimizer: true
+
+bellman:
+  warmstart_path: "megaminx/models/m_dd_v0/epoch_0049.pt"
+  target_update_every_epochs: 10
+  target_net_chunk: 4096
+  clip_upper: true
+  clip_lower: true
+  frontier_path: "megaminx/data/frontier_states.pt"
+  frontier_fraction: 0.25
+  frontier_walk_depth_cap: 200.0
+  bfs_d6_path: "megaminx/data/bfs_d6_train.pt"
+  bfs_d6_fraction: 0.10
+  lambda_pdb: 5.0
+  n_anchor_v0: 32
+  n_anchor_d1: 4
+  lambda_rank: 0.1                  # the ONLY addition vs m_dd_v0
+  rank_temperature: 1.0
+  per_depth_diagnostic: true
+
+seed: 42

@@ -188,6 +188,37 @@ class BellmanConfig:
     early_stop_min_delta: float = 1e-4
     early_stop_smooth_window: int = 5
 
+    # ---- Representation-upgrade bundle (m_repr_v0, doc §3.1 + §4.6 + Rule 23) ----
+    # Consistency loss (doc §4.6): L_sym = mean((V(s) - V(R s R^-1))^2). Sample one
+    # rotation per row from `rotations_path`; forward V on the conjugated state; MSE
+    # with V(s). Distinct from `rotation_aug_prob` (m31, REJECTED) which uses the
+    # rotated state as a new sample with its own walk-depth target. Consistency loss
+    # imposes invariance as a soft constraint — no signal dilution. Requires
+    # `rotations_path` to be set. Default 0.0 = inactive.
+    lambda_sym: float = 0.0
+
+    # Saturation soft penalty (Rule 23 lesson): L_sat = mean(relu(V(s) - sat_ceiling)^2).
+    # Pushes V predictions DOWN when they exceed the puzzle's known diameter. Working
+    # megaminx baselines saturate at V@d=80 ≈ 29; sat_ceiling = 30 gives 1.0 of
+    # headroom. Direct defense against the state_inv / GT V failure mode where extra
+    # capacity drifts V past true diameter. Default 0.0 = inactive.
+    lambda_sat: float = 0.0
+    sat_ceiling: float = 30.0
+
+    # Child-rank listwise CE (doc §4.2): trains relative ordering directly. For each
+    # RW state s, V on children is computed via LIVE model (with grad), target
+    # distribution = softmax(-target_child_V / rank_temperature), loss = listwise CE
+    # against -log_softmax(live_child_V). Cost: extra n_gen × forward on children per
+    # batch (~2× the existing Bellman child-forward cost). Default 0.0 = inactive.
+    lambda_rank: float = 0.0
+    rank_temperature: float = 1.0
+
+    # Per-depth diagnostic logging: per epoch, log mean(pred - target) bucketed by
+    # walk_depth (RW portion only) into bins [0,10), [10,20), [20,30), [30,40),
+    # [40,60), [60,80), [80,∞). Tracks V drift at high depths (Rule 23 canary).
+    # Default False.
+    per_depth_diagnostic: bool = False
+
 
 def _apply_all_generators(
     states: torch.Tensor, generators: torch.Tensor
@@ -418,20 +449,28 @@ def train_bellman(
     use_amp = cfg.amp and cfg.device == "cuda"
     autocast_ctx = torch.amp.autocast("cuda", dtype=torch.bfloat16) if use_amp else _NullCtx()
 
-    # ---- Symmetry rotation augmentation ----
+    # ---- Symmetry rotations: shared by rotation augmentation AND consistency loss ----
     rotations_dev = None
     rotations_inv_dev = None
     rot_gen = torch.Generator(device=cfg.device)
     rot_gen.manual_seed(cfg.seed + 54321)  # offset from batch_gen seed
-    if bcfg.rotations_path and bcfg.rotation_aug_prob > 0:
+    needs_rotations = (
+        (bcfg.rotations_path and bcfg.rotation_aug_prob > 0)
+        or (bcfg.rotations_path and bcfg.lambda_sym > 0)
+    )
+    if needs_rotations:
         import numpy as np
         rot_arr = np.load(bcfg.rotations_path)
         rotations_dev = torch.from_numpy(rot_arr).to(cfg.device)  # (N, S) int8
         # Precompute inverses: inv[i] = argsort(rot_arr[i])
         rot_inv_arr = np.argsort(rot_arr, axis=1).astype(np.int64)
         rotations_inv_dev = torch.from_numpy(rot_inv_arr).to(cfg.device)
-        print(f"[bellman] rotation augmentation: {rot_arr.shape[0]} rotations, "
-              f"prob={bcfg.rotation_aug_prob:.2f}", flush=True)
+        if bcfg.rotation_aug_prob > 0:
+            print(f"[bellman] rotation augmentation: {rot_arr.shape[0]} rotations, "
+                  f"prob={bcfg.rotation_aug_prob:.2f}", flush=True)
+        if bcfg.lambda_sym > 0:
+            print(f"[bellman] symmetry consistency loss: {rot_arr.shape[0]} rotations, "
+                  f"lambda_sym={bcfg.lambda_sym:.3f}", flush=True)
 
     # ---- Option B: BFS-d6 exact-target mixin ----
     # Pre-load the BFS-d6 dataset once if requested. Each epoch we sample fresh
@@ -556,6 +595,14 @@ def train_bellman(
         bfs6_cursor = 0
         st_cursor = 0
         fr_cursor = 0
+        # Per-depth diagnostic accumulators (RW portion only).
+        # Buckets: [0,10), [10,20), [20,30), [30,40), [40,60), [60,80), [80,∞).
+        PD_BINS = (10.0, 20.0, 30.0, 40.0, 60.0, 80.0, float("inf"))
+        PD_LABELS = ("[0,10)", "[10,20)", "[20,30)", "[30,40)", "[40,60)", "[60,80)", "[80+)")
+        pd_sum_diff = [0.0] * len(PD_BINS)
+        pd_sum_pred = [0.0] * len(PD_BINS)
+        pd_sum_pred_sq = [0.0] * len(PD_BINS)   # for per-bucket std (the binding beam canary)
+        pd_count = [0] * len(PD_BINS)
         for batch_idx in _iterate_batches(states, depths_f, rw_per_batch, batch_gen):
             bs_rw = states[batch_idx]
             bd_rw = depths_f[batch_idx]
@@ -662,6 +709,85 @@ def train_bellman(
                     undershoot = (h_pdb - pred_flat).clamp(min=0.0)
                     pdb_loss = (undershoot ** 2).mean()
                     loss = loss + bcfg.lambda_pdb * pdb_loss
+
+                # ---- Representation-upgrade bundle (m_repr_v0) ----
+                # Saturation soft penalty: pull V_pred down when exceeding sat_ceiling.
+                # Direct defense against Rule 23 / state_inv high-depth drift.
+                # Applied to all preds in the batch (global ceiling).
+                if bcfg.lambda_sat > 0:
+                    overshoot = (pred.float().flatten() - bcfg.sat_ceiling).clamp(min=0.0)
+                    sat_loss_v = (overshoot ** 2).mean()
+                    loss = loss + bcfg.lambda_sat * sat_loss_v
+
+                # Symmetry consistency loss: V(s) ≈ V(R s R^-1). Applied to RW
+                # portion only (anchor / bfs6 / st / frontier have exact targets).
+                if bcfg.lambda_sym > 0 and rotations_dev is not None:
+                    B_rw_now = bs_rw.size(0)
+                    rot_idx_sym = torch.randint(
+                        0, rotations_dev.size(0), (B_rw_now,),
+                        generator=rot_gen, device=cfg.device,
+                    )
+                    R_dyn = rotations_dev[rot_idx_sym].to(torch.long)    # (B_rw, S)
+                    R_inv_dyn = rotations_inv_dev[rot_idx_sym]           # (B_rw, S) int64
+                    bs_long_rw = bs_rw.to(torch.long)
+                    step1 = torch.gather(bs_long_rw, 1, R_inv_dyn)
+                    bs_rotated = torch.gather(R_dyn, 1, step1).to(bs_rw.dtype)
+                    pred_rot = model(bs_rotated).float()
+                    pred_rw_for_sym = pred[: bs_rw.size(0)].float()
+                    sym_loss_v = F.mse_loss(pred_rw_for_sym, pred_rot)
+                    loss = loss + bcfg.lambda_sym * sym_loss_v
+
+                # Child-rank listwise CE on RW portion.
+                if bcfg.lambda_rank > 0:
+                    B_rw_now = bs_rw.size(0)
+                    _, S_local = bs_rw.shape
+                    n_gen = generators.shape[0]
+                    children = _apply_all_generators(bs_rw, generators)  # (B_rw, n_gen, S)
+                    children_flat = children.view(-1, S_local)
+                    is_solved_child = (children_flat == solved_state).all(dim=-1)
+                    with torch.no_grad():
+                        target_child_v = torch.empty(
+                            B_rw_now * n_gen, dtype=torch.float32, device=cfg.device,
+                        )
+                        for i in range(0, B_rw_now * n_gen, bcfg.target_net_chunk):
+                            target_child_v[i : i + bcfg.target_net_chunk] = (
+                                target_model(children_flat[i : i + bcfg.target_net_chunk])
+                                .flatten().to(torch.float32)
+                            )
+                    target_child_v = torch.where(
+                        is_solved_child,
+                        torch.zeros_like(target_child_v),
+                        target_child_v,
+                    ).view(B_rw_now, n_gen)
+                    live_child_v = model(children_flat).flatten().to(torch.float32)
+                    live_child_v = torch.where(
+                        is_solved_child,
+                        torch.zeros_like(live_child_v),
+                        live_child_v,
+                    ).view(B_rw_now, n_gen)
+                    target_dist = F.softmax(-target_child_v / bcfg.rank_temperature, dim=1)
+                    log_q = F.log_softmax(-live_child_v, dim=1)
+                    rank_loss_v = -(target_dist * log_q).sum(dim=1).mean()
+                    loss = loss + bcfg.lambda_rank * rank_loss_v
+            # Per-depth diagnostic: accumulate pred-target diffs and absolute preds
+            # on RW portion, bucketed by walk depth.
+            if bcfg.per_depth_diagnostic:
+                with torch.no_grad():
+                    pred_rw_diag = pred[: bs_rw.size(0)].float().flatten()
+                    diff_rw = pred_rw_diag - target_rw.float()
+                    bd_cpu = bd_rw.float().detach().cpu()
+                    diff_cpu = diff_rw.detach().cpu()
+                    pred_cpu = pred_rw_diag.detach().cpu()
+                    lo = 0.0
+                    for b_idx, hi in enumerate(PD_BINS):
+                        mask = (bd_cpu >= lo) & (bd_cpu < hi)
+                        n_in = int(mask.sum().item())
+                        if n_in > 0:
+                            pd_sum_diff[b_idx] += float(diff_cpu[mask].sum().item())
+                            pd_sum_pred[b_idx] += float(pred_cpu[mask].sum().item())
+                            pd_sum_pred_sq[b_idx] += float((pred_cpu[mask] ** 2).sum().item())
+                            pd_count[b_idx] += n_in
+                        lo = hi
             optimizer.zero_grad(set_to_none=True)
             loss.backward()
             optimizer.step()
@@ -680,6 +806,21 @@ def train_bellman(
         result.final_loss = avg_loss
         if on_epoch_end is not None:
             on_epoch_end(stats)
+
+        # Per-depth diagnostic readout (Rule 23 canary).
+        if bcfg.per_depth_diagnostic:
+            parts = []
+            for b_idx, label in enumerate(PD_LABELS):
+                n = pd_count[b_idx]
+                if n > 0:
+                    mean_diff = pd_sum_diff[b_idx] / n
+                    mean_pred = pd_sum_pred[b_idx] / n
+                    var = max(0.0, pd_sum_pred_sq[b_idx] / n - mean_pred * mean_pred)
+                    std_pred = var ** 0.5
+                    parts.append(f"{label} V={mean_pred:+.2f} s={std_pred:.2f} d={mean_diff:+.3f} n={n}")
+                else:
+                    parts.append(f"{label} n=0")
+            print(f"[bellman]   per-depth: {'  '.join(parts)}", flush=True)
 
         # Refresh target net. Use the compiled module's original state dict.
         # In Double Bellman, alternate between updating A and B.

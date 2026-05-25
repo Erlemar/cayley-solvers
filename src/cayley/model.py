@@ -73,6 +73,13 @@ class ResMLPDistance(nn.Module):
         elif encoding == "embedding":
             in_dim = state_size * embed_dim
             self.embedding = nn.Embedding(num_classes, embed_dim)
+        elif encoding == "state_inv":
+            # Concatenate embeddings of state[i] (sticker in slot i) and
+            # inv_state[i] (slot containing sticker i). Exposes the bijection
+            # both directions. inv_state is computed on the fly via scatter.
+            in_dim = state_size * 2 * embed_dim
+            self.embedding = nn.Embedding(num_classes, embed_dim)
+            self.embedding_inv = nn.Embedding(num_classes, embed_dim)
         elif encoding == "piece":
             # F3: piece decomposition. 52 features in 6 groups, one embedding table each.
             # Total flattened input: 52 * embed_dim.
@@ -94,8 +101,67 @@ class ResMLPDistance(nn.Module):
                                       2 * N_CORNERS + 2 * N_EDGES,
                                       2 * N_CORNERS + 2 * N_EDGES + N_CENTERS,
                                       N_FEATURES)
+        elif encoding == "features":
+            # Megaminx-specific representation upgrade (doc §3.1).
+            #
+            # Per-slot fusion: x_i = sum of gated embeddings, ALL at embed_dim, so
+            # total in_dim = state_size * embed_dim = identical to encoding="embedding".
+            # First Linear shape is unchanged — capacity-preserving design (Rule 23 /
+            # state_inv lesson).
+            #
+            # Channels (all but e_sticker gated by learnable scalar α init=0):
+            #   1. e_sticker[state[i]]                       (baseline, α=1 fixed)
+            #   2. α_inv  * e_inv[inv_state[i]]              (the rejected channel, now gated)
+            #   3. α_face * e_face_static[face(i)]           (static, 12-class)
+            #   4. α_lpos * e_lpos[lpos(i)]                  (static, ~25-class)
+            #   5. α_home * e_face_dynamic[face(state[i])]   (dynamic, 12-class)
+            #   6. α_piece* e_piece[piece(state[i])]         (dynamic, 50-class)
+            #   7. α_ori  * e_ori[ori_class_per_slot(state)] (dynamic, 5-class)
+            #   8. α_scl  * W_scalar @ [is_solved, same_home_face]    (binary → 16-d)
+            #
+            # At init all α_*=0, so output is identical to encoding="embedding" up to
+            # init noise on the e_sticker weights (use load_state_dict to map a baseline
+            # checkpoint's `embedding.weight` → `e_sticker.weight` for warm start).
+            from megaminx.piece_features import (
+                N_FACES, N_LPOS, N_PIECES, N_ORI_CLASSES,
+                SLOT_TO_PIECE, SLOT_TO_FACE, SLOT_TO_LPOS,
+            )
+            in_dim = state_size * embed_dim
+            self.embedding = None  # baseline embedding role taken by e_sticker
+            # Embedding tables
+            self.e_sticker = nn.Embedding(num_classes, embed_dim)
+            self.e_inv = nn.Embedding(num_classes, embed_dim)
+            self.e_face_static = nn.Embedding(N_FACES, embed_dim)
+            self.e_lpos = nn.Embedding(N_LPOS, embed_dim)
+            self.e_face_dynamic = nn.Embedding(N_FACES, embed_dim)
+            self.e_piece = nn.Embedding(N_PIECES, embed_dim)
+            self.e_ori = nn.Embedding(N_ORI_CLASSES, embed_dim)
+            self.W_scalar = nn.Linear(2, embed_dim, bias=False)
+            # Gates (init=0 ⇒ at init the module is bitwise equivalent to encoding="embedding"
+            # with self.e_sticker as the embedding table).
+            self.alpha_inv = nn.Parameter(torch.zeros(()))
+            self.alpha_face_static = nn.Parameter(torch.zeros(()))
+            self.alpha_lpos = nn.Parameter(torch.zeros(()))
+            self.alpha_face_dynamic = nn.Parameter(torch.zeros(()))
+            self.alpha_piece = nn.Parameter(torch.zeros(()))
+            self.alpha_ori = nn.Parameter(torch.zeros(()))
+            self.alpha_scalar = nn.Parameter(torch.zeros(()))
+            # Static per-slot lookup tables (registered as buffers so they move with .to())
+            self.register_buffer(
+                "slot_to_piece", torch.from_numpy(SLOT_TO_PIECE).long()
+            )
+            self.register_buffer(
+                "slot_to_face", torch.from_numpy(SLOT_TO_FACE).long()
+            )
+            self.register_buffer(
+                "slot_to_lpos", torch.from_numpy(SLOT_TO_LPOS).long()
+            )
+            self._piece_extractor = None  # lazy init on first use (needs device)
         else:
-            raise ValueError(f"encoding must be 'onehot', 'embedding', or 'piece', got {encoding!r}")
+            raise ValueError(
+                f"encoding must be 'onehot', 'embedding', 'state_inv', 'piece', or "
+                f"'features', got {encoding!r}"
+            )
 
         layers: list[nn.Module] = []
         prev = in_dim
@@ -118,6 +184,15 @@ class ResMLPDistance(nn.Module):
         if self.encoding == "onehot":
             one_hot = F.one_hot(x.long(), num_classes=self.num_classes)
             return one_hot.to(target_dtype).flatten(start_dim=-2)
+        if self.encoding == "state_inv":
+            x_long = x.long()
+            inv = torch.empty_like(x_long)
+            arange = torch.arange(x_long.size(-1), device=x_long.device)
+            inv.scatter_(-1, x_long, arange.expand_as(x_long))
+            emb_state = self.embedding(x_long)
+            emb_inv = self.embedding_inv(inv)
+            both = torch.cat([emb_state, emb_inv], dim=-1)
+            return both.to(target_dtype).flatten(start_dim=-2)
         if self.encoding == "piece":
             # Lazy-init the extractor on the state tensor's device.
             if self._piece_extractor is None:
@@ -134,6 +209,48 @@ class ResMLPDistance(nn.Module):
                 self.center_ori_emb(feats[:, b4:b5]),
             ]
             return torch.cat(parts, dim=1).to(target_dtype).flatten(start_dim=-2)
+        if self.encoding == "features":
+            # Lazy-init megaminx piece extractor.
+            if self._piece_extractor is None:
+                from megaminx.piece_features import MegaminxFeatureExtractor
+                self._piece_extractor = MegaminxFeatureExtractor(device=x.device)
+
+            x_long = x.long()                                  # (B, S)
+            B, S = x_long.shape
+
+            # inv_state[j] = slot i such that x[i] = j  (computed via scatter).
+            # Use zeros (not empty) so non-permutation inputs don't index OOB during
+            # smoke tests; training/inference always pass valid permutations.
+            inv = torch.zeros_like(x_long)
+            arange = torch.arange(S, device=x_long.device)
+            inv.scatter_(-1, x_long, arange.expand_as(x_long))
+
+            # Baseline channel (always on, α=1).
+            feat = self.e_sticker(x_long)                      # (B, S, D)
+
+            # Dynamic gated channels.
+            feat = feat + self.alpha_inv * self.e_inv(inv)
+            sticker_home_face = self.slot_to_face[x_long]      # (B, S)
+            feat = feat + self.alpha_face_dynamic * self.e_face_dynamic(sticker_home_face)
+            feat = feat + self.alpha_piece * self.e_piece(self.slot_to_piece[x_long])
+            ori_class = self._piece_extractor.extract_per_slot_ori_class(x_long)  # (B, S)
+            feat = feat + self.alpha_ori * self.e_ori(ori_class)
+
+            # Static gated channels (broadcast over batch).
+            face_static = self.e_face_static(self.slot_to_face).unsqueeze(0)      # (1, S, D)
+            feat = feat + self.alpha_face_static * face_static
+            lpos_static = self.e_lpos(self.slot_to_lpos).unsqueeze(0)             # (1, S, D)
+            feat = feat + self.alpha_lpos * lpos_static
+
+            # Binary scalar features → 16-d via small linear.
+            slot_idx_broad = arange.unsqueeze(0).expand(B, -1)                    # (B, S)
+            is_solved = (x_long == slot_idx_broad).to(target_dtype)               # (B, S)
+            slot_face_broad = self.slot_to_face.unsqueeze(0).expand(B, -1)        # (B, S)
+            same_hf = (slot_face_broad == sticker_home_face).to(target_dtype)     # (B, S)
+            scalars = torch.stack([is_solved, same_hf], dim=-1)                   # (B, S, 2)
+            feat = feat + self.alpha_scalar * self.W_scalar(scalars.to(self.W_scalar.weight.dtype))
+
+            return feat.to(target_dtype).flatten(start_dim=-2)
         return self.embedding(x.long()).to(target_dtype).flatten(start_dim=-2)
 
     def _forward_single(self, x: torch.Tensor) -> torch.Tensor:

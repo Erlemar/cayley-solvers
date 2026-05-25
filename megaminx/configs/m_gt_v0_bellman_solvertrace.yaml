@@ -1,0 +1,66 @@
+# m_gt_v0_bellman_solvertrace — fix the high-depth V over-estimate.
+#
+# Hypothesis from the prior diagnostic: GT orig ep24 has good calibration at
+# d=0-4 AND monotonic V scaling at d=20-80, but V@d=80 = 47.6 vs true ~21
+# (megaminx diameter). Plus beam search fails despite this. The V landscape
+# is "shaped like walk depth" not "shaped like true distance" at high d.
+#
+# Fix: add solver_trace mixin at 20%. Solver traces are (state, exact
+# remaining-path-length) pairs from real 60-90-move solves. They provide
+# EXACT distance labels at d=10-80 — the exact regime where GT is
+# overshooting. The Bellman bootstrap signal alone is too weak to saturate
+# the GT's high-depth V; the exact labels should pin it.
+#
+# Warmstart from ep24, not fr50 (which collapsed high-depth resolution).
+# Keep the original frontier_fraction (0.25). Lower lr (1.5e-4) because
+# fine-tuning a near-converged model. Target update tightened to 5.
+
+model:
+  model_class: GraphTransformerV
+  state_size: 120
+  num_classes: 120
+  d_model: 192
+  n_layers: 3
+  n_heads: 4
+  ffn_dim: 768
+  dropout: 0.0
+  use_relation_bias: true
+  use_dist_bias: true
+  activation: gelu
+  output_dim: 1
+  inference_chunk_size: 4096
+
+training:
+  # 30 epochs at 80K samples on GCP L4: per-epoch wall ~150-200 s eager bf16
+  # (no thermal throttle on the dedicated GPU). Total ~2 h.
+  n_epochs: 30
+  samples_per_epoch: 80_000
+  batch_size: 2048
+  k_max: 120                # bumped from 80 — more high-depth samples
+  lr: 1.5e-4
+  weight_decay: 0.0
+  checkpoint_every_epochs: 10
+  n_back: 1
+  loss: mse
+  amp: true
+  compile_model: false      # SDPA + attn_mask + dynamic=False hangs (known)
+  fused_optimizer: true
+
+bellman:
+  warmstart_path: "megaminx/models/m_gt_v0_bellman/epoch_0024.pt"
+  target_update_every_epochs: 5
+  target_net_chunk: 8192
+  clip_upper: true
+  clip_lower: true
+  frontier_path: "megaminx/data/frontier_states.pt"
+  frontier_fraction: 0.25       # back to original (fr50 hurt depth resolution)
+  frontier_walk_depth_cap: 200.0
+  bfs_d6_path: "megaminx/data/bfs_d6_train.pt"
+  bfs_d6_fraction: 0.10
+  solver_trace_path: "megaminx/data/solver_trace_train.pt"
+  solver_trace_fraction: 0.20   # NEW: 20% mixin with exact d=10-80 labels
+  lambda_pdb: 0.0
+  n_anchor_v0: 32
+  n_anchor_d1: 4
+
+seed: 7260

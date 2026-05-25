@@ -1,0 +1,49 @@
+# m_rank_ctrl — child-rank-loss isolation, CONTROL arm.
+#
+# Identical to m_rank_v0.yaml EXCEPT lambda_rank=0.0. Re-fine-tunes m_dd_v0 with its
+# own recipe for 50ep. Measures pure re-fine-tune DRIFT so the treatment's deviation
+# can be attributed to lambda_rank rather than to "50 more epochs". Expected: ~no-op
+# (m_dd_v0 is a Bellman fixed point), d=20 std ≈ m_dd_v0's 1.73. Fast (~3-5 min, no
+# 24×-children forward).
+
+model:
+  state_size: 120
+  num_classes: 120
+  hidden_dims: [2048, 512]
+  num_res_blocks: 2
+  encoding: embedding
+  embed_dim: 16
+
+training:
+  n_epochs: 50
+  samples_per_epoch: 500_000
+  batch_size: 8192
+  k_max: 80
+  lr: 5.0e-4
+  weight_decay: 0.0
+  checkpoint_every_epochs: 25
+  n_back: 1
+  loss: mse
+  amp: true
+  compile_model: true
+  fused_optimizer: true
+
+bellman:
+  warmstart_path: "megaminx/models/m_dd_v0/epoch_0049.pt"
+  target_update_every_epochs: 10
+  target_net_chunk: 4096
+  clip_upper: true
+  clip_lower: true
+  frontier_path: "megaminx/data/frontier_states.pt"
+  frontier_fraction: 0.25
+  frontier_walk_depth_cap: 200.0
+  bfs_d6_path: "megaminx/data/bfs_d6_train.pt"
+  bfs_d6_fraction: 0.10
+  lambda_pdb: 5.0
+  n_anchor_v0: 32
+  n_anchor_d1: 4
+  lambda_rank: 0.0                  # control: no child-rank loss
+  rank_temperature: 1.0
+  per_depth_diagnostic: true
+
+seed: 42

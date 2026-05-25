@@ -1,0 +1,82 @@
+# m_repr_v0 — Stage 1b of representation-upgraded ResMLP (doc §3.1 + bundle).
+#
+# Mirrors m_dd_v0's Bellman recipe (PDB λ=5, V0+d=1 anchors, BFS-d6 10%) and adds
+# the m_repr_v0 bundle (Rule 23 lessons + doc §4.2 / §4.6):
+#   - λ_sym = 0.3   : symmetry consistency loss (NOT m31 rotation aug — different
+#                     mechanism, doc §4.6). Requires rotations_path.
+#   - λ_sat = 0.1   : saturation soft penalty above sat_ceiling = 30 (Rule 23
+#                     direct defense — pulls V@d=high DOWN if it drifts past
+#                     working-baseline diameter).
+#   - λ_rank = 0.1  : listwise CE on child V ordering (doc §4.2, "beam needs
+#                     relative ordering, not absolute V").
+#   - solver_trace mixin 20% : exact-distance anchors at high depths
+#                     (Rule 23 lesson from gt_v0_results — pulls V@d=80 down,
+#                     companion to λ_sat from a different direction).
+#   - per_depth_diagnostic   : log V−V_target histogram per walk-depth bucket
+#                              every epoch (Rule 23 canary).
+#
+# Acceptance gate (Rule 21 binding):
+#   ep25 canary: V@d=80 ≤ 31 (else kill + retry with λ_sat=0.3, sat_ceiling=28).
+#   ep50 final: V(V0)≤0.1, V@d=1≤1.1, V@d=80≤31.
+#   strat-51 production recipe: mean ≤ 84.9 OR ≥+3 solves vs m_dd_v0.
+
+model:
+  state_size: 120
+  num_classes: 120
+  hidden_dims: [2048, 512]
+  num_res_blocks: 2
+  encoding: features
+  embed_dim: 16
+
+training:
+  n_epochs: 50
+  samples_per_epoch: 500_000
+  batch_size: 8192
+  k_max: 80
+  lr: 5.0e-4
+  weight_decay: 0.0
+  checkpoint_every_epochs: 5
+  n_back: 1
+  loss: mse
+  amp: true
+  compile_model: true
+  fused_optimizer: true
+
+bellman:
+  # Warmstart from m_dd_v0 (already saturated, V@d=80≈29) via the bridge checkpoint
+  # (e_sticker ← embedding, trunk copied, α=0 ⇒ exact m_dd_v0 clone at init). This
+  # starts from the working V landscape so the 50-ep budget fine-tunes the new gated
+  # channels rather than re-deriving saturation from scratch. Cleaner test: "do the
+  # representation channels improve a WORKING V?"
+  warmstart_path: "megaminx/models/m_repr_v0/warmstart_from_mdd.pt"
+  target_update_every_epochs: 10
+  target_net_chunk: 4096
+  clip_upper: true
+  clip_lower: true
+
+  # m_dd_v0 recipe: PDB + frontier + BFS-d6 + V0/d=1 anchors.
+  frontier_path: "megaminx/data/frontier_states.pt"
+  frontier_fraction: 0.25
+  frontier_walk_depth_cap: 200.0
+  bfs_d6_path: "megaminx/data/bfs_d6_train.pt"
+  bfs_d6_fraction: 0.10
+  lambda_pdb: 5.0
+  n_anchor_v0: 32
+  n_anchor_d1: 4
+
+  # Bundle additions (m_repr_v0):
+  rotations_path: "megaminx/data/rotations.npy"
+  lambda_sym: 0.3                         # consistency loss
+
+  lambda_sat: 0.1                          # saturation soft penalty
+  sat_ceiling: 30.0                        # V@d=high target ceiling
+
+  lambda_rank: 0.1                         # listwise child-rank CE
+  rank_temperature: 1.0
+
+  solver_trace_path: "megaminx/data/solver_trace_train.pt"
+  solver_trace_fraction: 0.20              # high-depth true-distance anchor
+
+  per_depth_diagnostic: true               # Rule 23 canary logging
+
+seed: 42

@@ -1,0 +1,59 @@
+# m_gt_v0_bellman_fr50 — option (2) follow-up.
+# Hypothesis: the GT v0 ep24 ckpt has BFS-d6 calibration matching baselines
+# but fails to solve at production beam. The likely cause is the V landscape
+# is wrong for the state distribution beam search actually visits (d=20+
+# from random scrambles), not for the d=0-4 BFS-d6 region.
+#
+# Fix attempt: double the frontier_fraction (0.25 -> 0.5) so half of every
+# batch is on beam-frontier states (Bellman-bootstrap targets). This biases
+# learning toward beam-relevant state distributions.
+#
+# Warmstart: epoch_0049.pt (the in-progress ckpt of the original full-scope run).
+# Run 30 more epochs at the same lr/recipe. Total cumulative training is
+# ~79 Bellman epochs.
+
+model:
+  model_class: GraphTransformerV
+  state_size: 120
+  num_classes: 120
+  d_model: 192
+  n_layers: 3
+  n_heads: 4
+  ffn_dim: 768
+  dropout: 0.0
+  use_relation_bias: true
+  use_dist_bias: true
+  activation: gelu
+  output_dim: 1
+  inference_chunk_size: 4096
+
+training:
+  n_epochs: 30
+  samples_per_epoch: 80_000
+  batch_size: 2048
+  k_max: 80
+  lr: 1.5e-4   # halved vs original 3e-4 — we are fine-tuning, not warming up
+  weight_decay: 0.0
+  checkpoint_every_epochs: 10
+  n_back: 1
+  loss: mse
+  amp: true
+  compile_model: false
+  fused_optimizer: true
+
+bellman:
+  warmstart_path: "megaminx/models/m_gt_v0_bellman/epoch_0049.pt"
+  target_update_every_epochs: 5   # tighter than 10, the V is already near-converged
+  target_net_chunk: 8192
+  clip_upper: true
+  clip_lower: true
+  frontier_path: "megaminx/data/frontier_states.pt"
+  frontier_fraction: 0.5         # doubled
+  frontier_walk_depth_cap: 200.0
+  bfs_d6_path: "megaminx/data/bfs_d6_train.pt"
+  bfs_d6_fraction: 0.10
+  lambda_pdb: 0.0
+  n_anchor_v0: 32
+  n_anchor_d1: 4
+
+seed: 7250

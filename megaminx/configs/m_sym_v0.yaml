@@ -1,0 +1,64 @@
+# m_sym_v0 -- symmetry-consistency-loss ISOLATION (doc 4.6 / 13.4), treatment arm.
+#
+# Question: does the consistency loss V(s) approx V(R s R^-1) help a WORKING V
+# (m_dd_v0)? Isolated from the rejected m_repr_v0 bundle: encoding=embedding (NO
+# representation channels); the ONLY addition vs m_dd_v0's proven recipe is
+# lambda_sym + rotations_path. No lambda_rank, no lambda_sat, no solver_trace.
+#
+# Doubles as the forensic isolation of lambda_sym: it was part of the toxic
+# m_repr_v0 bundle but never independently tested (only lambda_rank was exonerated,
+# via m_rank_v0). CONTROL ARM is m_rank_ctrl (lambda_*=0, identical recipe = same
+# re-fine-tune drift; already confirmed a no-op) -- no need to re-run a control.
+#
+# Distinct from m31 (rotation AUGMENTATION, REJECTED 95.76): augmentation gives
+# rotated states the SAME target label (dilutes signal across 360 orbit-equivalents).
+# Consistency loss adds NO new target samples; it only ties V(s) and V(R s R^-1)
+# together. Applied to the random-walk portion only (anchors/bfs6/frontier have
+# exact targets).
+#
+# Binding diagnostic (repr_upgrade_bundle_rejected lesson): V VARIANCE at d approx 20.
+# m_dd_v0 baseline d=20 std approx 1.73. If this run's d=20 std climbs toward ~2.5+,
+# lambda_sym is a variance injector -> reject even if saturation-mean looks fine.
+# per_depth_diagnostic + checkpoint_every 5 give a fine-grained variance canary.
+
+model:
+  state_size: 120
+  num_classes: 120
+  hidden_dims: [2048, 512]
+  num_res_blocks: 2
+  encoding: embedding
+  embed_dim: 16
+
+training:
+  n_epochs: 50
+  samples_per_epoch: 500_000
+  batch_size: 8192
+  k_max: 80
+  lr: 5.0e-4
+  weight_decay: 0.0
+  checkpoint_every_epochs: 5
+  n_back: 1
+  loss: mse
+  amp: true
+  compile_model: true
+  fused_optimizer: true
+
+bellman:
+  warmstart_path: "megaminx/models/m_dd_v0/epoch_0049.pt"
+  target_update_every_epochs: 10
+  target_net_chunk: 4096
+  clip_upper: true
+  clip_lower: true
+  frontier_path: "megaminx/data/frontier_states.pt"
+  frontier_fraction: 0.25
+  frontier_walk_depth_cap: 200.0
+  bfs_d6_path: "megaminx/data/bfs_d6_train.pt"
+  bfs_d6_fraction: 0.10
+  lambda_pdb: 5.0
+  n_anchor_v0: 32
+  n_anchor_d1: 4
+  lambda_sym: 0.1                   # the ONLY addition vs m_dd_v0
+  rotations_path: "megaminx/data/rotations.npy"
+  per_depth_diagnostic: true
+
+seed: 42

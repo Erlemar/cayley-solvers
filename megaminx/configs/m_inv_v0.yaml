@@ -1,0 +1,48 @@
+# m_inv_v0 — Stage 1b of representation-upgraded ResMLP.
+# Bellman refine with full m_dd_v0 recipe, warmstart from m_inv_v0_pretrain.
+#
+# Mirror m_dd_v0's exact recipe (PDB λ=5, frontier 25%, BFS-d6 10%,
+# V0/d=1 anchors) for a clean head-to-head. The only difference from
+# m_dd_v0 is encoding=state_inv at the model level.
+#
+# Acceptance gate per CLAUDE.md Rule 21: strat-51 must beat m_dd_v0's
+# baseline. Bench at ep 25, 50 — don't trust just 10-pid bench.
+
+model:
+  state_size: 120
+  num_classes: 120
+  hidden_dims: [2048, 512]
+  num_res_blocks: 2
+  encoding: state_inv
+  embed_dim: 16
+
+training:
+  n_epochs: 50
+  samples_per_epoch: 500_000
+  batch_size: 8192
+  k_max: 80
+  lr: 5.0e-4
+  weight_decay: 0.0
+  checkpoint_every_epochs: 10
+  n_back: 1
+  loss: mse
+  amp: true
+  compile_model: true
+  fused_optimizer: true
+
+bellman:
+  warmstart_path: "megaminx/models/m_inv_v0_pretrain/epoch_0049.pt"
+  target_update_every_epochs: 10
+  target_net_chunk: 4096
+  clip_upper: true
+  clip_lower: true
+  frontier_path: "megaminx/data/frontier_states.pt"
+  frontier_fraction: 0.25
+  frontier_walk_depth_cap: 200.0
+  bfs_d6_path: "megaminx/data/bfs_d6_train.pt"
+  bfs_d6_fraction: 0.10
+  lambda_pdb: 5.0
+  n_anchor_v0: 32
+  n_anchor_d1: 4
+
+seed: 42

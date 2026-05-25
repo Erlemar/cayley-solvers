@@ -50,6 +50,7 @@ class QShortlisterSolver(KhoruzhiiSolver):
         macros: list[tuple[list[int] | tuple[int, ...], list[str]]] | None = None,
         policy_model=None,
         lambda_policy: float = 0.0,
+        phs_cumulative: bool = False,
     ):
         # Initialize parent with teacher as the "model" — most helpers use self.model.
         super().__init__(
@@ -60,6 +61,7 @@ class QShortlisterSolver(KhoruzhiiSolver):
             macros=macros,
             policy_model=policy_model,
             lambda_policy=lambda_policy,
+            phs_cumulative=phs_cumulative,
         )
         self.teacher = teacher
         self.student = student.to(device).eval()
@@ -151,13 +153,18 @@ class QShortlisterSolver(KhoruzhiiSolver):
             student_score = student_values
         # Compute log pi(a|parent) once per parent if policy is configured. Re-used
         # at teacher rerank step. log_pi_per_cand has the same shape as idx1.
-        log_pi_per_cand = None
+        policy_cost = None  # per-candidate additive cost, aligned to idx1 (float32)
         if self.policy_model is not None and self.lambda_policy > 0:
             with torch.inference_mode():
                 pol_out = self.policy_model(states.long())  # (n, n_gen)
             log_pi = torch.log_softmax(pol_out.float(), dim=-1)  # (n, n_gen)
-            log_pi_per_cand = log_pi[parent_of_idx1, move_of_idx1]  # (numel(idx1),) float
-            student_score = student_score + self.lambda_policy * (-log_pi_per_cand)
+            neg_log_pi = (-log_pi[parent_of_idx1, move_of_idx1]).float()  # (numel(idx1),) >= 0
+            if self.phs_cumulative:
+                # Cumulative path policy-cost: parent's running cost + this step's -log pi.
+                policy_cost = self._phs_cum[parent_of_idx1] + neg_log_pi
+            else:
+                policy_cost = neg_log_pi  # local (memoryless) penalty
+            student_score = student_score + self.lambda_policy * policy_cost.to(student_score.dtype)
         target_k = min(int(self.alpha * B), student_score.numel())
         if student_score.numel() <= target_k:
             shortlist_local = torch.arange(student_score.numel(), device=self.device)
@@ -190,12 +197,11 @@ class QShortlisterSolver(KhoruzhiiSolver):
             cost_penalty = self.action_cost[shortlist_moves].float() - 1.0
             teacher_score = teacher_value.float() + cost_penalty
         else:
-            teacher_score = teacher_value.float() if log_pi_per_cand is not None else teacher_value
-        # Policy adjustment: reuse log_pi_per_cand computed at the shortlist stage.
-        # Index by shortlist_local to align with the shortlist subset.
-        if log_pi_per_cand is not None:
-            log_pi_short = log_pi_per_cand[shortlist_local]  # (αB,)
-            teacher_score = teacher_score + self.lambda_policy * (-log_pi_short)
+            teacher_score = teacher_value.float() if policy_cost is not None else teacher_value
+        # Policy adjustment: reuse the per-candidate policy cost from the shortlist
+        # stage (cumulative or local), indexed to the shortlist subset.
+        if policy_cost is not None:
+            teacher_score = teacher_score + self.lambda_policy * policy_cost[shortlist_local].to(teacher_score.dtype)
         if teacher_score.numel() <= B:
             chosen_local = torch.arange(teacher_score.numel(), device=self.device)
         else:
@@ -204,6 +210,9 @@ class QShortlisterSolver(KhoruzhiiSolver):
         next_values = teacher_value[chosen_local]
         chosen_moves = shortlist_moves[chosen_local]
         chosen_parents = shortlist_parents[chosen_local]
+        # Advance the cumulative path policy-cost to the surviving beam (PHS mode).
+        if policy_cost is not None and self.phs_cumulative:
+            self._phs_cum = policy_cost[shortlist_local][chosen_local]
         chosen_hashes = neighbors_hashed[shortlist_idx1[chosen_local]]
         _sync(); prof.topk_s += (time.time() - t0) * 0.5  # other half of topk-time
 
@@ -230,6 +239,9 @@ class QShortlisterSolver(KhoruzhiiSolver):
         for attempt in range(cfg.num_attempts):
             states = state.unsqueeze(0).clone()
             states_hashed = _state_hash(states, self.hash_vec, self.internal_batch_size)
+            # Root beam carries zero accumulated policy-cost (PHS cumulative mode).
+            if self.phs_cumulative:
+                self._phs_cum = torch.zeros(1, dtype=torch.float32, device=self.device)
             tree_move = torch.full((num_steps, B), -1, dtype=torch.int8, device=self.device)
             tree_idx = torch.full((num_steps, B), -1, dtype=torch.int32, device=self.device)
             states_hash_log: deque[torch.Tensor] = deque(maxlen=4)

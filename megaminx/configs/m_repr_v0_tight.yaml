@@ -1,0 +1,55 @@
+# m_repr_v0_tight — Stage 1b retry if m_repr_v0 fails the Rule 23 canary at ep 19.
+#
+# Identical to m_repr_v0.yaml EXCEPT for the saturation guard, which is tightened:
+#   λ_sat:        0.1 → 0.3
+#   sat_ceiling: 30.0 → 28.0
+#
+# Per the user's canary-fail directive: tighten guard and retry.
+
+model:
+  state_size: 120
+  num_classes: 120
+  hidden_dims: [2048, 512]
+  num_res_blocks: 2
+  encoding: features
+  embed_dim: 16
+
+training:
+  n_epochs: 50
+  samples_per_epoch: 500_000
+  batch_size: 8192
+  k_max: 80
+  lr: 5.0e-4
+  weight_decay: 0.0
+  checkpoint_every_epochs: 10
+  n_back: 1
+  loss: mse
+  amp: true
+  compile_model: true
+  fused_optimizer: true
+
+bellman:
+  warmstart_path: "megaminx/models/m_repr_v0_pretrain/epoch_0049.pt"
+  target_update_every_epochs: 10
+  target_net_chunk: 4096
+  clip_upper: true
+  clip_lower: true
+  frontier_path: "megaminx/data/frontier_states.pt"
+  frontier_fraction: 0.25
+  frontier_walk_depth_cap: 200.0
+  bfs_d6_path: "megaminx/data/bfs_d6_train.pt"
+  bfs_d6_fraction: 0.10
+  lambda_pdb: 5.0
+  n_anchor_v0: 32
+  n_anchor_d1: 4
+  rotations_path: "megaminx/data/rotations.npy"
+  lambda_sym: 0.3
+  lambda_sat: 0.3                          # tightened from 0.1
+  sat_ceiling: 28.0                        # tightened from 30.0
+  lambda_rank: 0.1
+  rank_temperature: 1.0
+  solver_trace_path: "megaminx/data/solver_trace_train.pt"
+  solver_trace_fraction: 0.20
+  per_depth_diagnostic: true
+
+seed: 42

@@ -210,6 +210,14 @@ def main() -> int:
     ap.add_argument("--lambda-policy", type=float, default=0.0,
                     help="weight on the policy penalty term (default 0.0 = policy off). "
                          "Sweep on strat-5 over {0.05, 0.1, 0.2, 0.5}.")
+    ap.add_argument("--phs-cumulative", action="store_true",
+                    help="PHS cumulative scoring: instead of the memoryless local "
+                         "penalty (lambda * -log pi for one step), accumulate -log pi "
+                         "along the whole path: score(child) = V(child) + lambda * "
+                         "sum_t(-log pi(a_t|s_t)). Changes which partial paths survive "
+                         "over depth. Requires --policy-model + --lambda-policy>0 + "
+                         "--qshort-student (same beam_lab path as the local penalty). "
+                         "Sweep --lambda-policy over {0.01,0.03,0.05,0.1,0.2}.")
     ap.add_argument("--tensorrt-engine", type=Path, default=None,
                     help="path to a pre-built TensorRT engine (.ts) for the teacher "
                          "model. Replaces the eager teacher with the engine; engine is "
@@ -417,7 +425,11 @@ def main() -> int:
             ap.error(f"--policy-model output_dim={pol_dim} != n_gen={n_gen_check}; "
                      f"policy must output one logit per primitive generator.")
         print(f"loaded policy model from {args.policy_model.name}: "
-              f"output_dim={pol_dim}, lambda={args.lambda_policy}")
+              f"output_dim={pol_dim}, lambda={args.lambda_policy}, "
+              f"phs_cumulative={args.phs_cumulative}")
+    if args.phs_cumulative and (policy_model_obj is None or args.lambda_policy <= 0):
+        ap.error("--phs-cumulative requires --policy-model and --lambda-policy>0 "
+                 "(the cumulative term is lambda * sum of -log pi along the path).")
 
     # Optional macro library — extends action set for the V-path / qshort path.
     # m24 (Macro-Q shortlister) needs n_actions = n_gen + n_macros to match.
@@ -479,6 +491,7 @@ def main() -> int:
                 macros=macros_for_solver,
                 policy_model=policy_model_obj,
                 lambda_policy=args.lambda_policy,
+                phs_cumulative=args.phs_cumulative,
             )
             return _QShortAdapter(inner, args.qshort_internal_batch_size)
         else:

@@ -136,6 +136,7 @@ cayley/
 | **K=8 sym-ensemble vs K=4** (saturation test) | DIMINISHING RETURNS confirmed | K=4 saves 10/pid; K=8 saves 8.25/pid additional at 2x wall. K=4 is sweet spot. K=8 only useful for marginal final passes. |
 | **Commutator window-replacement post-processing** | REJECTED 2026-04-30 | Built 37K-entry library (depths 4-8). 29K perms NEW beyond BFS-d6. Tested W=7,8 on 82,481: **0 matches**. Beam paths' structured perms don't fall on commutator atoms. Same as IHES finding. |
 | **Macro-augmented beam with brute-force d=4 commutators** | REJECTED 2026-04-30 | Mechanism shipped (works), but 6-30 d=4 commutators as macros: net +9 to +41 moves on 5 hard pids. V isn't macro-aware; brute-force commutators dilute candidate pool. T1.1 needs curated speedcubing macros (multi-day scrape). |
+| **m_v11 (11.8M two-stage)** | REJECTED 2026-05-19 | Trunk (3072,768)+3rb scale-up; two-stage pipeline (50ep pretrain → 200ep Bellman λ_pdb=0 lr 2e-4 → 25ep AZ fine-tune on 75,200 dataset). V-cal looked great end-to-end (V(V0)=0.012, V(d=1)=1.00 at final ckpt). 10-pid bench gave **10/10 / 991** (vs Stage 1b 9/10 / 910) — looked like a win. BUT strat-51 stuck at 16/20 model solves for 1h+ (vs AZ v4 51/51 in ~75 min same recipe). 995-998 production-recipe head-to-head: m_v11 **+43% moves/pid worse than AZ v4** (96.25 vs 67.5 avg). **Definitive**: bigger trunks regress on this puzzle regardless of recipe — extends Rule 14 (20.5M) down to 11.8M. Information-bound ceiling at 6M holds. Don't retry trunk scale-ups without a fundamentally different signal source. |
 
 ## 7. Critical gotchas (read these — see also `megaminx_gotchas.md` memory)
 
@@ -150,7 +151,187 @@ cayley/
 9. **Kaggle GPU quota is 30h/week** — easy to blow with one big training run. Plan budgets, use early-stopping.
 10. **Kaggle `kernels output` returns nothing while RUNNING** — only `status` is queryable. Use `_Tee` trick to write `/kaggle/working/run.log` so post-completion logs are recoverable.
 
-## 8. Where we ended (2026-05-18 — AZ v4 prod-1001 + 3-way merge)
+## 8. Where we ended (2026-05-25 — §13 batch concluded: PHS validated-but-marginal; rank/sym/frontier-regret neutral)
+
+**Submitted score: 75,200** (unchanged). **Standalone best: 77,086** (unchanged this session).
+
+### THIS SESSION (2026-05-24/25) — strategy-doc §13 batch (6 ideas → 4 themes)
+
+Developed all 6 ideas from `megaminx_architecture_and_path_shortening_strategy.md` §13 into
+concrete specs in the doc, then implemented the lead ones. No submission change. Full ledger
+in EXPERIMENTS.md; memories [[phs-cumulative-validated-marginal]] + [[repr-upgrade-bundle-rejected]].
+
+- **PHS cumulative path scoring (§13.1) — VALIDATED, deploy-MARGINAL** (the one §13 idea that
+  works). `--phs-cumulative` in `03_solve.py` + `self._phs_cum` accumulator in
+  `beam_lab/beam_search.py` + `beam_search_qshort.py` (6/6 tests, `tests/test_phs_cumulative.py`).
+  score = V(child) + w_p·Σ(−log π) over the PATH (vs the regressed memoryless local penalty,
+  AZ v4 V+π λ=0.05 → −156). rand50 (buckets 1-8): **−67/50 STANDALONE** over its own w=0 arm,
+  difficulty-monotonic (800-899 −4.6/pid). BUT vs the merged best (merge_v12) only **−13/50
+  (3 wins)** — redundant with existing diversity; ~−200 extrapolated for ~1-2 days GCP = not
+  worth a deploy run. Safe w≈0.03; collapses at w≥0.2. CAVEAT: AZ v4 π is OOD on 3/4 sym
+  rotations (not rot-aug).
+- **Symmetry consistency loss (§13.4) — TIE, λ_sym exonerated.** `m_sym_v0` (λ_sym=0.1 on
+  m_dd_v0, `configs/m_sym_v0.yaml`): variance-SAFE (d20 std flat 2.65→2.64), beam-neutral
+  (model_avg ≈88.1 ≈ m_dd_v0 89.4). λ_sym is NOT the m_repr_v0 variance culprit (joins λ_rank
+  ⇒ narrows to 20% solver-trace ± λ_sat).
+- **Frontier-regret (§13.2) — labels benign, explains the rank/sym ties.** Harvest
+  (`scripts/84_harvest_frontier_regret.py`): V "misranks" 56.9% of verified-path steps, but
+  these are benign alternative-optima (beam trusts V, solves 50/51 → can't be real mistakes).
+  Dataset `data/frontier_regret_triples.pt` (noisy, kept). Macro-mining (§13.3) NOT started.
+
+**Takeaway:** V's child-ordering is already near-optimal at 6M; its disagreements with verified
+paths are benign alt-optima. **The road to <70K is pure-inference (sym-ensemble scaling,
+multi-seed, rescue, merges), not more V/scoring training.** GCP VM stopped.
+
+### Bridge compression (2026-05-22/24) — shipped end-to-end, ceiling found
+
+Full story in [[bridge-compression-findings]] memory. Quick read:
+- **Mechanism shipped:** Phase 1 (V-trajectory + Hamming + mixed grain + iterate +
+  Hamming-similar + macro cache + harvest) in `81_bridge_compression.py`. Phase 2
+  (sym + NISS + qshort; qshort dropped for off-distribution regression) via
+  `bridge_solver.py`. TPU port: `82_generate_residuals_for_tpu.py` →
+  kernel `artgor/cayleypy-megaminx-bridge-residuals-b1m-shareable` (B=1M, K_SYM=4,
+  NISS=on) → `83_splice_tpu_residuals.py`.
+- **Works on loose paths.** Our 77,214 → 77,086 (−128 across 112 distinct top-long
+  pids, 76 wins / ~2200 attempts).
+- **Fails on tightest community paths.** TPU on 4-pid composite of best per-pid
+  community paths (997=73, 998=71, 999=72, 1000=70 from JAX 720-sym kernel) at
+  B=1M + sym4 + NISS = **0 wins / 15 attempts.** V saturation past d≈30 makes
+  the predicted-save score noise on deep residuals — V is the ceiling, not beam.
+- **Pid 1000 specifically:** tried beam 65k local, 256k GCP, 131k local + sym4
+  + NISS, 65k from community 71, 1M TPU + sym4 + NISS from JAX 70-move — every
+  single attempt: 0 wins. Pid 1000 is genuinely at the V's bridging ceiling.
+- **Don't pursue further** without a fundamentally different mechanism (bridge
+  model `D(s,t)` per §3.5, or qshort retrained on residual-distribution states).
+
+### THIS SESSION (2026-05-24) — representation-upgraded ResMLP + loss bundle + child-rank isolation
+
+### THIS SESSION (2026-05-24) — representation-upgraded ResMLP + loss bundle + child-rank isolation
+
+User asked to pursue doc §3.1 "Representation-upgraded ResMLP" with complementary bundle
+ideas, then (after the bundle failed) isolate the child-rank loss. **Both rejected; no
+deployable model.** Full story in [[repr-upgrade-bundle-rejected]] memory + EXPERIMENTS.md.
+
+**m_repr_v0 (capacity-preserving repr upgrade + aggressive bundle): REJECTED.**
+- Built `encoding="features"` (`src/cayley/model.py`): per-slot SUM-pooled fusion of
+  gated channels (inv_state/face/lpos/piece/ori/scalar), all α init=0 ⇒ bitwise-identical
+  to `encoding="embedding"` at init; in_dim stays 1920 (NO capacity inflation — the fix
+  vs the rejected state_inv concat). +`megaminx/src/megaminx/piece_features.py` (NEW),
+  bundle knobs in `bellman.py` (λ_sym consistency, λ_sat saturation, λ_rank child-rank,
+  per_depth_diagnostic), `megaminx/scripts/v_canary.py` (NEW).
+- Warmstart from m_dd_v0 via bridge ckpt (features@α=0 ≡ embedding) — fixes the
+  saturate-from-scratch problem (a fresh-RW-pretrain warmstart can't saturate in 50ep;
+  m_dd_v0 only did because it warmstarted from already-saturated m_curr_v3).
+- **Finding 1: repr channels INERT** — all α→0, forcing α=0 changes nothing. Working V
+  already learns the bijection implicitly. doc §3.1 now **0/2** (state_inv + features).
+- **Finding 2: bundle TOXIC** — tripled mid-depth V variance (d=20 std 1.7→5.3). Mean
+  stayed saturated (V@d=80=30, canary GREEN) so it LOOKED fine, but per-state V scatter
+  killed beam ranking → strat-51 single-pass 2/20 (Rule 21 stall). Catastrophic.
+
+**THE LESSON: saturation-MEAN canary is necessary but NOT sufficient. V VARIANCE at
+d≈20 is the binding beam-quality proxy** (m_dd_v0 ≈1.7; >~2.5 ⇒ expect beam trouble).
+`v_canary.py` prints std — weight it. Generalizes Rule 21 with a cheap pre-strat-51 check.
+
+**m_rank_v0 (child-rank CE isolated, λ_rank=0.1): NEUTRAL → effectively rejected.**
+- Isolated the one bundle term with independent appeal (doc §4.2) on m_dd_v0 (embedding,
+  no repr channels, no other bundle terms). Control arm (λ_rank=0) confirmed re-fine-tune
+  is a no-op. Variance-SAFE (V identical to m_dd_v0). Child-choice differs ~7% of states.
+- **Strat-51 sp beam-65k: 51/51 by model, mean 89.9 vs m_dd_v0 89.4 = TIE (within ±2).**
+- Child-rank EXONERATED as the m_repr_v0 variance culprit (→ it's sym/sat/solver-trace,
+  prime suspect solver-trace). But no beam headroom on a working V (6M ceiling). Don't pursue.
+
+**Code state:** all new code is clean + tested + inert-by-default (bundle knobs default
+off, `encoding="features"` opt-in) — existing recipes unaffected. GCP VM STOPPED.
+Rejected checkpoints (~400MB: m_repr_v0, m_repr_v0_pretrain, m_rank_v0, m_rank_ctrl +
+GCP copy) safe to delete. Eval CSVs in submissions/ are not submittable improvements.
+
+**Next-session priorities (untested high-EV doc ideas, per the §9 queue + the strategy doc):**
+1. Bridge model `D(s,t)` (§3.5) — lift shipped bridge-compression beyond −69; attacks why
+   cross-relink failed (V saturates wrong on high-Hamming residuals).
+2. Multi-teacher union qshort (§2.4) — composes with AZ v4 + sym4 production stack.
+3. Suffix specialist (§2.9) — narrow dist, good labels, low risk.
+(Optional forensic: isolate which of sym/sat/solver-trace caused the m_repr_v0 variance.)
+
+---
+
+## 8b. Prior session (2026-05-22/23 — bridge compression + state_inv rejected)
+
+**Submitted score: 75,200** (unchanged — see prior section for community-merge details).
+**Standalone best: 77,145** (was 77,214; saved -69 via bridge compression on top-50 longest pids).
+
+### THIS SESSION (2026-05-22/23) — bridge compression infra + V-trajectory + cross-relink dead end + state_inv rejected
+
+User asked to pursue two ideas from `megaminx_architecture_and_path_shortening_strategy.md`:
+neural bridge compression (doc §2.1) and representation-upgraded ResMLP with inv_state (doc §3.1).
+
+**state_inv encoding REJECTED** (see [[inv-state-encoding-rejected]] memory):
+- Shipped `encoding="state_inv"` in `src/cayley/model.py` — concatenates embeddings of
+  state[i] and inv_state[i] (slot containing sticker i, computed via scatter).
+- m_inv_v0 = 9.98M params (vs 6M baseline). Two-stage train per Rule 18: 50ep RW pretrain
+  → 50ep Bellman refine with the m_dd_v0 recipe.
+- **Near-solved calibration excellent**: V(V0)=0.020, V@d=1=1.01, undershoot 396/8000
+  (better than all baselines).
+- **High-depth V doesn't saturate** — V@d=80=38 vs working baselines saturating ~29.
+  Same Rule 23 failure pattern as GraphTransformer V.
+- **Strat-51 single-pass beam 65k: mean 109 vs m_dd_v0 baseline 89.4 = +22% worse**.
+- **Rule 23 extends to ResMLP family at 10M params, not just GT.** The extra capacity
+  from the inv_state channel gets used to encode walk-depth past the true diameter
+  instead of saturating. Capacity beyond the cluster ceiling actively hurts.
+
+**Bridge compression SHIPPED + working modestly**:
+- Math: residual `X = inv(S_j)[S_i]` produces a state that, when solved, gives a bridge
+  B with `apply_path(S_i, B) = S_j`. Verified via `tests/test_megaminx_bridge.py` (5/5).
+- Driver: `megaminx/scripts/81_bridge_compression.py`. Loads AZ v4 V eager bf16 +
+  KhoruzhiiSolver in-process, iterates windows on top-N longest pids.
+- **V-trajectory window selection** (the binding upgrade over uniform stride): rank
+  positions by predicted-save `window_len - V(residual)`. Doubles win rate (1.3% → 2.2%
+  on 75,200 base; 4.2% on 77,214 base).
+- Results:
+  - On 75,200 community base: 75,200 → 75,162 (−38 moves, top-50). Not submittable per
+    no-community-merge policy. Artifact: `bridge_top50_vtraj.csv`.
+  - On 77,214 standalone (our work): 77,214 → 77,145 (−69 moves, 41 wins / 987 attempts,
+    4.2% rate). Submittable. Artifact: `bridge_our_top50.csv`.
+- Win pattern: window 60 highest avg saving (1.92 moves/win), pid 104 single biggest win
+  (-6 via window-40 bridge from 40 → 34). Front-of-path detours are common.
+- Currently running: top 100 on 77,145 base (~5h ETA).
+
+**Cross-solution relinking ATTEMPTED, NEGATIVE RESULT**:
+- Script: `megaminx/scripts/82_cross_relinking.py`. For each pid with multiple paths
+  across CSVs (916 pids have ≥3 paths), try `A[:i] + bridge + B[j:]`.
+- Smoke on top 10 long pids with 5 OWN CSVs: **0 wins / 80 actual solves**.
+- Root cause: V saturates at ~30 for deep states. Cross-path mid-states are typically
+  Hamming 35-66 apart (deep residuals). V-score predicts ~30 for everything, producing
+  false positives. Solver max-steps cap is reached without finding a bridge.
+- Math is also unfavorable for short paths: with len(best)=87, i=20, Hamming=35:
+  `saved = 87 - 20 - 35 - len(B[j:]) - 1`. Often negative.
+- **Verdict: relinking on own-only-data isn't productive for the 80+-move long pids.**
+  Could work for medium-length pids where multiple paths might converge more, but
+  unverified.
+
+### Files created this session
+
+```
+src/cayley/model.py                                    encoding="state_inv" added
+megaminx/configs/m_inv_v0_pretrain.yaml, m_inv_v0.yaml two-stage state_inv configs
+megaminx/models/m_inv_v0_pretrain/epoch_0049.pt        REJECTED (kept ~140 MB)
+megaminx/models/m_inv_v0/epoch_0049.pt                 REJECTED (kept ~140 MB)
+megaminx/src/megaminx/bridge.py                        residual math helpers
+tests/test_megaminx_bridge.py                          5/5 unit tests
+megaminx/scripts/81_bridge_compression.py              bridge driver (stride + v_trajectory)
+megaminx/scripts/82_cross_relinking.py                 cross-relinking driver
+megaminx/submissions/bridge_top50_vtraj.csv            75,162 (community-tainted)
+megaminx/submissions/bridge_our_top50.csv              77,145 (new standalone best)
+~/.claude/.../memory/inv_state_encoding_rejected.md    documented negative result
+```
+
+### Open at end of session
+
+- Bridge top-100 on 77,145 base is running in background (~5h ETA). Expected ~30-50 more
+  moves saved.
+
+---
+
+## OLD State (2026-05-18 — AZ v4 prod-1001 + 3-way merge)
 
 **Score: 75,200** (current submitted best as of 2026-05-18; min-merge of prior 75,961 base + new community v4 CSV (75,355 standalone) → 290 v4 wins beat our base + 71 base wins kept, -761 moves vs prior submitted best, file `merge_v14_plus_min_count_v4.csv`).
 
@@ -218,6 +399,16 @@ megaminx/submissions/m_az_v4_strat5_qshort_only.csv            (V+qshort regress
 **Update (2026-05-18)**: AZ v4 prod-1001 finished after ~134h wall on GCP L4 (5.6 days). Standalone 79,606 (946/1001 model-solved, 55 fallback; pass-1 16k→43 solves, pass-2 65k→958 solves). 3-way min-merge AZ v4 + our 77,877 (`merge_v10_our_plus_m_dd_v0.csv`) + community 76,251 → new submitted best **75,961** (-290 moves, file `merge_v13_az_v4_plus_community.csv`). AZ v4 unique-win attribution: 114 pids (concentrated in difficulty buckets 4-7, the regime m_dd_v0 was weak on). 6M cluster ceiling cracked — see `az_v4_breakthrough.md` memory.
 
 **Update (2026-05-18, later)**: New community CSV arrived (`_incoming_min_count_v4.csv`, 75,355 standalone — strictly dominates the prior v3 78,196: 562/1001 pids shorter, 0 longer). Min-merge with our 75,961 → submitted best **75,200** (-761 moves, file `merge_v14_plus_min_count_v4.csv`). 290 v4 pids beat our base, 71 base pids beat v4 (so v4 alone is not the new floor — our merge_v13 still contributes). Community-merge policy exception again.
+
+**Update (2026-05-19/20 session — m_v11 retired, qshort distilled, TPU kernel mixed)**: Three threads.
+
+1. **m_v11 11.8M trunk (Track B from earlier plan): REJECTED.** Two-stage train (50ep random-walk pretrain + 200ep Bellman λ_pdb=0 lr 2e-4 + 25ep AZ-style fine-tune on `az_dataset_75200.pt`). Stage 1b finished clean (V(V0)=0.012, V(d=1)=1.00) and 10-pid bench showed 10/10 vs Stage 1b 9/10 — looked promising. **But**: strat-51 stuck at 16/20 model solves in 1h+ (vs AZ v4's 51/51 in ~75min). Pids 995-998 head-to-head with production recipe: m_v11 96.25 avg vs AZ v4 67.5 avg = **+43% moves/pid worse**. Bigger trunks regress on this puzzle regardless of recipe — extends Rule 14 down to 11.8M. The 10-pid bench was misleading because its pid set didn't include the hardest puzzles where the V approximation actually matters. Don't retry trunk scale-ups without a fundamentally new signal source. See EXPERIMENTS.md row.
+
+2. **`m23_v3_az_v4_sym` Q-shortlister distilled from AZ v4 V: KEPT.** Same arch as m23_v2 (12.4M, hidden=(2048,1024)+3rb), distilled with rotation augmentation prob=0.5. Final MSE 0.355, KL 0.088 (matches m23_v2's quality on its own training distribution). Crucially, **GLOBAL recall at α=2 = 100%** vs AZ v4 V (verified via `09_eval_q_recall.py`). Unlocks `AZ v4 V + qshort + sym-ensemble` production stack (which the previous Rule 15 mismatch prevented). Strat-51 result: AZ v4 V + m23_v3 + sym4 = 4340 / mean 85.1 vs AZ v4 V-only baseline 4465 / mean 87.5 = **-125 moves (-2.8%)**. PASS the acceptance gate. Saved at `models/m23_v3_az_v4_sym/epoch_0199.pt`.
+
+3. **TPU shareable qshort kernel built but mixed result.** New private kernel `artgor/cayleypy-megaminx-48m-720-qshort-shareable` (clone of 48M_720 V-only + qshort prefilter in JAX SPMD body). Initial v1 had a correctness bug — implemented per-parent top-α (62% recall vs V) instead of GLOBAL top-αB (99.6% recall, matches PyTorch `QShortlisterSolver` line 161). v2 fixes this. **pid 0 result on TPU at B=48M sym K=8 SYM_POSITIONS=range(0,4)**: 60 moves vs v_only's ~55 = +5 moves qshort-tax. Quality decrease deemed too high for general use on easy pids. **Not worth deploying broadly**; the TPU kernel sits ready if a future use case (long-tail-only rescue) emerges. Wall savings vs v_only also smaller than theoretical (1.5× actual vs 6-12× theoretical) — V eval isn't the bottleneck at B=48M; chunk_n expansion + all_to_all dominate.
+
+**Net session outcome**: No submission change (still 75,200). New production-stack artifact (`m23_v3_az_v4_sym/epoch_0199.pt`) ready for a GCP-side full-1001 run with AZ v4 V + qshort + sym4 + NISS multi-pass — projected ~77K standalone, ~74.5-75K after min-merge with 75,200. **NOT launched yet** — user paused at this decision point. The TPU 48M qshort kernel is functional but not recommended for new runs given the per-pid quality tax. m_v11 artifacts (`m_v11_pretrain/`, `m_v11_bellman/`, `m_v11_az/`, `m_v11_az_v_only.pt`, `az_dataset_75200.pt`) kept on GCP for forensic reference; safe to delete to free ~250 MB.
 
 ### Previous session's work (2026-05-10 → 2026-05-11 AM)
 

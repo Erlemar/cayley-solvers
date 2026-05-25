@@ -1,0 +1,45 @@
+# m_repr_v0_pretrain — Stage 1a of representation-upgraded ResMLP (doc §3.1).
+#
+# Capacity-preserving fusion encoding (sum-pooled at embed_dim=16). At init all
+# α gates are 0 → bitwise equivalent to encoding="embedding". Gates learn whether
+# to engage each channel:
+#   e_sticker (baseline, α=1)
+#   + α_inv  · e_inv[inv_state[i]]           (rejected channel, now gated)
+#   + α_face_static · e_face_static[face(i)]
+#   + α_lpos · e_lpos[lpos(i)]
+#   + α_face_dynamic · e_face[face(state[i])]
+#   + α_piece · e_piece[piece(state[i])]
+#   + α_ori · e_ori[ori_class(state)[i]]
+#   + α_scalar · W_scalar @ [slot_is_solved, same_home_face]
+#
+# Total in_dim = 120 × 16 = 1920 (identical to m_dd_v0 baseline). First Linear
+# unchanged at (1920, 2048). +3,623 extra params (0.06%). Stays well under the
+# Rule 23 / state_inv capacity-inflation trap (which doubled in_dim to 3840).
+#
+# Per Rule 18: input-shape change can't warmstart from m_dd_v0 (the input_stack[0]
+# tensor shape is same, but the embedding-layer is different). Pretrain from
+# scratch first, then Bellman warm from this checkpoint.
+
+model:
+  state_size: 120
+  num_classes: 120
+  hidden_dims: [2048, 512]
+  num_res_blocks: 2
+  encoding: features
+  embed_dim: 16
+
+training:
+  n_epochs: 50
+  samples_per_epoch: 500_000
+  batch_size: 8192
+  k_max: 80
+  lr: 5.0e-4
+  weight_decay: 0.0
+  checkpoint_every_epochs: 25
+  n_back: 1
+  loss: mse
+  amp: true
+  compile_model: true
+  fused_optimizer: true
+
+seed: 42

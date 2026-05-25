@@ -198,6 +198,111 @@ for what was tried and what worked. **Read `IDEAS.md`** for the prioritized untr
     during m_v11 launch planning — the AZ-style fine-tune is then Stage 3
     warm from (b)'s best beam-bench checkpoint, with shape-matched warmstart.
 
+19. **Don't trust `git check-ignore` to audit ignore rules against an existing
+    tree.** It silently passes (empty output, exit 0) on files that are
+    *already tracked*, even when those files match the current `.gitignore` —
+    because `check-ignore` reports what *would* be ignored if untracked, and
+    tracked files override ignore rules. To find drift (committed files that
+    should now be ignored), use:
+    `git ls-files | grep -E '\.(csv|pt|pkl|log|...)$'`. Then
+    `xargs -d '\n' git rm --cached --quiet` to untrack. Confirmed 2026-05-19
+    during the private-repo cleanup — ~2 confused tool calls before realizing
+    `check-ignore` wasn't the right audit tool.
+
+20. **`gh` CLI lives at `C:\Program Files\GitHub CLI\gh.exe`** and is
+    authenticated as `Erlemar` via Windows keyring (token scopes: `repo`,
+    `workflow`, `gist`, `read:org`). On a fresh shell call by full path;
+    on persistent shells PATH picks it up after the first new session post-
+    install. No `GITHUB_TOKEN` env-var plumbing is needed — gh reads from the
+    keyring transparently. The cayley project has two private remotes under
+    Erlemar: `cayley-solvers` (origin, full history) and `cayley` (new as of
+    2026-05-19); choose one as canonical before doing serious work on both.
+
+21. **(Megaminx)** **10-pid bench is NOT a sufficient acceptance gate for a new V
+    model.** A V model that passes V calibration (V(V0)≈0, V(d=1)≈1) AND a
+    hard-spread 10-pid bench (e.g., 0,100,200,300,500,600,700,800,900,950 at
+    beam 65k --no-pdb --bf16) can STILL fail strat-51 catastrophically.
+    Confirmed 2026-05-19: m_v11 11.8M Stage 2 ep11 had V(V0)=0.012, V(d=1)=1.00,
+    10-pid bench 10/10 / 991 — but strat-51 stuck at 16/20 in 1h+, and pids
+    995-998 with the production recipe were +43% moves/pid worse than AZ v4.
+    The 10-pid bench's spread doesn't probe the failure modes the V hits on
+    the hardest puzzles. **Binding gate**: strat-51 (`--stratified 5
+    --strat-seed 0`) with PRODUCTION recipe (`--sym-ensemble 4 --beams
+    16384,65536 --max-steps 60,150 --niss --bf16`) — NOT the single-pass
+    beam 65k that `/megaminx-eval-v` uses by default. If strat-51 takes >2h or
+    gets stuck on any single pid, that IS the failure signal — kill and
+    don't promote to full-1001. Cost of skipping: ~6h of GCP monitoring
+    + ~3.5h debugging during m_v11 launch.
+
+22. **(Megaminx)** **`torch.compile(model, dynamic=False)` hangs indefinitely on
+    custom SDPA-with-additive-attn_mask transformers** (GraphTransformer-style).
+    Confirmed 2026-05-19 during the GT bellman launch: the first batch's compile
+    spun CPU for 5+ minutes with no error, no progress, no traceback. GPU memory
+    didn't grow. Killing the process and restarting with `compile_model: false`
+    in the YAML let training proceed at full eager-bf16 speed (~150 s/epoch on
+    L4 for d=192/3L/4h). For inference, `torch.compile(model, dynamic=True)`
+    DOES work on the same architecture (no hang) but only gives ~1.5× speedup at
+    small batches and is neutral at large batches — not worth the 57-second
+    compile cost. **Rule**: don't set `compile_model: true` for any trainer that
+    uses a custom transformer layer with SDPA `attn_mask`. For ResMLP families
+    compile is still safe (and used by all canonical recipes). Companion to
+    Rule 2 (which covers inference-side compile-without-padding for ResMLPs).
+
+23. **(Megaminx)** **V@d=high should saturate at the puzzle diameter, not keep
+    growing.** Confirmed 2026-05-19/20 (graph-transformer V experiment).
+    Working ResMLP V models saturate near megaminx's true diameter (~21-30) for
+    states past d=40 on random walks. The GraphTransformer V, despite matching
+    BFS-d6 calibration, kept growing past d=40 (V@d=80=42) — and FAILED beam
+    search at b=65536 in every configuration tested (direct, V-distilled into
+    a same-arch 6M ResMLP, AZ-style aux loss with λ=0.5). Saturation IS the
+    load-bearing property: it's what lets beam navigate around walk-depth
+    diversity at the same true distance. **Quick check for a new V model**:
+    if `V@d=80 - V@d=40 > 10` on RW-generated states, the V landscape is
+    drifting (predicting walk-depth, not true distance). Beam will fail
+    even if BFS-d6 calibration looks good. See `gt_v_no_saturation.md`
+    memory for the full story and the one variant (GT-Q distillation) that
+    hasn't been falsified.
+
+24. **All Python `print`/logging output must be ASCII-only, and every `open()`
+    must pass `encoding="utf-8"`** — the Windows console + default file codec is
+    cp932. Confirmed 2026-05-24: a diagnostic log line containing `V̄`/`Δ̄`
+    (combining accents) crashed a training run mid-epoch with
+    `UnicodeEncodeError: 'cp932' codec can't encode`; separately, reading an
+    em-dash-containing YAML config with a bare `open(path)` raised
+    `UnicodeDecodeError: 'cp932' codec can't decode`. The repo's scripts already
+    pass `encoding="utf-8"` on reads — match that everywhere, and for ad-hoc
+    `python -c` set `PYTHONUTF8=1` (or just keep output ASCII). Sibling of rules
+    7d (Kaggle CLI cp932) and 10 (argparse `%`). Don't use Unicode glyphs
+    (em-dash, ±, arrows, accented chars) in any string that gets printed.
+
+25. **(Megaminx)** **Bridge compression is V-saturation-bound, not beam-bound.**
+    The mechanism (`scripts/81_bridge_compression.py`, `scripts/82_generate_residuals_for_tpu.py`,
+    `kaggle_notebooks/tpu_beam_bridge_residuals_b1m_shareable/`, `scripts/83_splice_tpu_residuals.py`)
+    is shipped + tested end-to-end. Works on loose paths (our 77,214 → 77,086,
+    ~3-4% win rate, ~1 move/pid on top-50 long), but **fails on community
+    min-merged paths past d≈30** because V saturates at ~25-30 → the
+    predicted-save score collapses to false-positives on deep residuals. Confirmed
+    2026-05-22/24: pid 1000 returned 0 wins at every config tested (local beam 65k,
+    GCP L4 beam 256k, local beam 131k + sym4 + NISS, TPU B=1M + sym4 + NISS from
+    a 70-move base). Phase 2 qshort regressed on residuals (off-distribution for
+    m23_v3's training set) — drop qshort in any bridge configuration. **Rule**:
+    don't run bridge on already-min-merged community paths or hardest pids; reserve
+    it for OUR-pipeline paths with len ≥ 80 OR for cheap fallback-rescue passes.
+    Full story: [[bridge-compression-findings]] memory.
+
+26. **(Megaminx)** **Before claiming a bridge / rescue / post-processing win,
+    compare against the n-way per-pid min over ALL available CSVs.** Confirmed
+    2026-05-24: bridge on community 75,200 reported "+17 moves saved" (75,200 →
+    75,183), but the newer community csv `min_count_per_id_before (8) (1).csv`
+    (75,266) already had shorter paths for 5 of the 6 "winning" pids. After
+    `min(75200, 75266, bridge)` the incremental contribution from bridge was
+    actually **only 1 pid (−6) = pid 991**. The 17-vs-1 misattribution was caught
+    only when the user flagged it. **Rule**: when reporting an improvement on
+    base B, also compute the per-pid min over every other CSV that covers the
+    same pids (community submissions, prior our-CSVs) and compare against THAT
+    floor. Otherwise you're claiming credit for moves the community already
+    contributed.
+
 ## Conventions
 
 - All submissions go in `submissions/`. Always verify with `verify_submission` before
