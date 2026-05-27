@@ -149,6 +149,43 @@ def _load_graph_transformer(mcfg: dict, state_dict: dict, device: str, dtype: to
     return model
 
 
+def _load_bipartite(mcfg: dict, state_dict: dict, device: str, dtype: torch.dtype):
+    """Load a BipartiteGraphTransformerQ checkpoint (doc 3.2)."""
+    project_root = Path(__file__).resolve().parents[2]
+    feats_path = project_root / "megaminx" / "data" / "bipartite_features.pt"
+    if not feats_path.exists():
+        raise FileNotFoundError(
+            f"bipartite_features.pt not found at {feats_path}; run "
+            f"`megaminx/scripts/74_build_bipartite_features.py` first."
+        )
+    feats = torch.load(feats_path, map_location="cpu", weights_only=False)
+    from megaminx.graph_transformer_bipartite import build_bipartite_from_config
+
+    model = build_bipartite_from_config(mcfg, feats)
+    model.load_state_dict(state_dict)
+    return model
+
+
+def _load_feats_v(mcfg: dict, state_dict: dict, builder_name: str):
+    """Load a DodecaCNNV (doc 3.8) / PerceiverV (doc 3.9) checkpoint -- both reuse
+    bipartite_features.pt for their static token/slot tables."""
+    project_root = Path(__file__).resolve().parents[2]
+    feats_path = project_root / "megaminx" / "data" / "bipartite_features.pt"
+    if not feats_path.exists():
+        raise FileNotFoundError(
+            f"bipartite_features.pt not found at {feats_path}; run "
+            f"`megaminx/scripts/74_build_bipartite_features.py` first."
+        )
+    feats = torch.load(feats_path, map_location="cpu", weights_only=False)
+    if builder_name == "dodeca":
+        from megaminx.dodeca_cnn import build_dodeca_from_config as build
+    else:
+        from megaminx.perceiver_v import build_perceiver_from_config as build
+    model = build(mcfg, feats)
+    model.load_state_dict(state_dict)
+    return model
+
+
 def load_model_checkpoint(
     path: str | Path,
     device: str = "cpu",
@@ -171,6 +208,12 @@ def load_model_checkpoint(
 
     if model_class in ("GraphTransformerV", "GraphTransformerVPi"):
         model = _load_graph_transformer(mcfg, state_dict, device, dtype)
+    elif model_class == "BipartiteGraphTransformerQ":
+        model = _load_bipartite(mcfg, state_dict, device, dtype)
+    elif model_class == "DodecaCNNV":
+        model = _load_feats_v(mcfg, state_dict, "dodeca")
+    elif model_class == "PerceiverV":
+        model = _load_feats_v(mcfg, state_dict, "perceiver")
     else:
         model = ResMLPDistance(
             state_size=int(mcfg["state_size"]),

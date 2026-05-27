@@ -756,6 +756,40 @@ Before expensive neural bridge solving, try nearest known bridge repairs.
 
 ## 3. Neural network architectures
 
+### 3.0 Architecture survey verdict (2026-05) — every encoder hits the same saturation ceiling
+
+**The §3 architecture survey is CLOSED.** Across the model families tried as the V/Q scorer,
+none beats the ~6M ResMLP baseline, and the binding reason is the same every time: the
+deep-depth **saturation** property (Rule 23 — a working V flattens near the puzzle diameter
+~29 on deep random walks) is **problem-intrinsic** (it comes from the Bellman bootstrap's
+optimistic-min bias + megaminx's combinatorics), **not** a representation/encoder limit.
+Better fit (lower MSE) does NOT mean better saturation and does NOT mean better beam.
+
+| § | architecture | outcome | one-line why |
+|---|---|---|---|
+| 3.1 | Representation-upgraded ResMLP (gated feature bundle) | REJECTED | bundle tripled mid-depth V variance -> beam collapse (`m_repr_v0`, [[repr-upgrade-bundle-rejected]]) |
+| 3.2 | Bipartite Slot-Sticker Graph Transformer | REJECTED | recall == flat GT-Q (action nodes add ~0); far below ResMLP-Q; 30-50x slower |
+| 3.3 | Permutation-matrix axial Transformer | not built | its lightweight form *is* the rejected 3.2 |
+| 3.4 | Symmetry-equivariant V/Q | settled | consistency-loss beam-neutral (§13.4); symmetry pays at INFERENCE, not in the model |
+| 3.5 | Relative-state / Bridge Transformer | REJECTED | residual-distance D learns window-len (v0) or collapses to saturation (Bellman); scorer was never the bridge bottleneck |
+| 3.9 | Perceiver IO | REJECTED | drifts (V@d80-d40 gap frozen +14.5); the GT-V signature |
+| 3.8 | Dodecahedral CNN / geometric GNN | REJECTED | gap-canary "saturates" was a FALSE POSITIVE -- V collapsed (d80 slid 60->21, under-predicting); can't beam-solve pid 0; ~100x inference cost |
+
+**Three unifying findings:** (1) saturation near the diameter is the load-bearing property for
+beam, and it is set by the Bellman bootstrap + the problem, not the encoder (state_inv, GT-V,
+Perceiver, Bridge-Bellman all drift identically); (2) V's child-ordering is already near-optimal
+at 6M (frontier-regret §13.2), so a better Q/policy reranker has ~0 solve headroom; (3) attention
+encoders are 30-135x more expensive to train/infer and would deploy only via distillation back
+into the ResMLP anyway.
+
+**Conclusion: stop building global scorer architectures. The path to <70K is PURE-INFERENCE** —
+sym-ensemble at full-1001, multi-seed beam, rescue/merge, curated macros (see §12 and
+`to_do_shortlist.md`). Reusable probe harness retained: the two-stage pretrain->Bellman +
+`V@d80-V@d40` saturation gate (`scripts/88`, `scripts/89`) is the cheap go/no-go for any
+future encoder idea -- but add an ABSOLUTE-calibration check (d80 must sit near the diameter
+~29, not just `gap <= 10`), since the Dodeca collapsed uniformly and the gap-only canary
+false-positived "SATURATES".
+
 ---
 
 ### 3.1 Representation-upgraded ResMLP
@@ -828,6 +862,7 @@ policy CE from known paths
 Medium. Cheap and worthwhile, but unlikely to be the biggest breakthrough alone.
 
 ---
+
 
 ### 3.2 Bipartite Slot-Sticker Graph Transformer / GraphGPS
 
@@ -910,6 +945,20 @@ The model can score actions based on exactly the slots they affect, rather than 
 #### Training priority
 
 Train first as a **qshort / Q model**, not as full scalar V replacement.
+
+#### Result (2026-05-25) — TESTED, REJECTED (no architecture win)
+
+Built the full stack (bipartite graph features, model, distillation trainer, depth-stratified
+recall eval, runbook) and trained on GCP. The bipartite Q-shortlister's child-ranking recall
+**tracks the flat graph-transformer Q** (sticker-tokens + CLS readout, `scripts/75_train_gt_q.py`)
+essentially identically at matched size (~3.5M) and budget — the action nodes add ~nothing. Both
+stay far below the production ResMLP-Q (`m23_v3_az_v4_sym`, 12.4M) on the beam-relevant deep buckets
+(e29 alpha=2: d60 0.47 vs 0.81, d80 0.54 vs 0.79) and improve too slowly to close it. Better MSE fit
+did NOT translate to better recall (same lesson as the GraphTransformer-V failure). Combined with
+the frontier-regret finding (V child-ordering already near-optimal -> ~0 solve-quality headroom for
+any Q reranker) and the GT's ~30-50x inference cost (deploy-only-via-distill = back to the ResMLP-Q),
+the architecture bet does not pay. Stopped at epoch 30/120. Full write-up: `EXPERIMENTS.md`
+(2026-05-25), `bipartite_gt_q_runbook.md`, memory `bipartite-gt-q-shortlister`.
 
 ---
 
@@ -1071,6 +1120,45 @@ Use in:
 
 Very high if bridge replacement succeeds.
 
+#### Result (2026-05-25) — TESTED, REJECTED (saturation ceiling + scorer is not the constraint)
+
+Built the relative-distance model end-to-end and tested in three stages. Key identity: under
+the repo convention `apply(s,a)` maps the residual `X=make_residual(s,t)` to `apply(X,a)`, so
+`D(s,t)` is exactly distance-to-solved of the residual `X`, and Bridge-Bellman is standard
+Bellman on `X`. So D is just a `ResMLPDistance` on residual states; no new architecture needed.
+Files: `scripts/85_build_bridge_distance_data.py` (path-window residual dataset, balanced by
+window length, pid-split), `scripts/86_train_bridge_distance.py` (regress-to-wlen + per-bucket
+saturation table vs the production V), `scripts/87_train_bridge_bellman.py` (Bridge-Bellman via
+`cayley.bellman._bellman_targets` with `wlen` as the per-state `clip_upper`), and a
+`--scorer-checkpoint` flag added to `scripts/81_bridge_compression.py` for the deploy A/B.
+
+- **v0 (regress-to-wlen).** D extends the reliable calibration horizon from V's ~20 to ~40
+  (val d30->d70 slope: D +19 vs V +9; D ~= true to wlen 30) — the first model-side idea this
+  cycle with a measured positive. BUT the target is wrong: `j-i` is window length (an upper
+  bound), so D learns *window-length*, not *true distance*, and so carries no compressibility
+  signal beyond what `wlen` already says. Generalization ceiling at val MAE ~10 (train MAE ->0;
+  weight decay does not move it).
+- **v1 (Bridge-Bellman true-distance).** Warm-started from v0 and refined with
+  `clip(1 + min_a D(child), 0, wlen)`. It COLLAPSES the v0 curve toward V's saturated plateau
+  (d30->d70 slope 19 -> 15 -> 13, heading for V's 9) via the optimistic-min bias `bellman.py`
+  itself documents (the m05/m17/m26/m27 ceiling). `clip_upper(wlen)` only caps from above and
+  cannot resist the downward collapse. Worse than v0. The compressibility signal (pull D below
+  wlen on compressible windows) and the collapse bias (pull D below wlen everywhere) are the
+  same `min` op — inseparable without ground-truth deep distances we do not have.
+- **Deployment A/B (the deploy-level gate).** Swapped v0-D in as the bridge *scorer* (solver
+  held = V, same pids/windows/budget) on merge_v12 (77,214) top-15 long pids, windows 20-40.
+  Arm V (scorer=V): 5 wins / **7 moves**. Arm D (scorer=v0-D): 4 wins / **6 moves** — noise-level
+  WORSE, and D MISSED pid 342 that V caught. Mechanism: score = `wlen - scorer`; V's saturation
+  (under-prediction) inflates predicted-save, making it aggressively propose marginal windows,
+  and every real win here is a 1-2-move sliver, so aggression helps. D's accuracy makes it
+  conservative and it skips the marginal wins. Every winning window was 1-2 moves of slack,
+  identical across scorers -> **the binding constraint is path near-optimality, not scorer
+  calibration** (confirms [[bridge-compression-findings]]).
+
+Net: the Rule-23 saturation ceiling re-asserts itself in residual/bridge space, and the bridge
+scorer was never the bottleneck. §3.5 closed. Code retained (inert/default-off for `81`).
+Full write-up: EXPERIMENTS.md (2026-05-25), memory [[bridge-residual-distance-rejected]].
+
 ---
 
 ### 3.6 Multi-teacher qshort architecture
@@ -1224,6 +1312,32 @@ This is essentially a local GNN.
 - macro applicability classifier;
 - local repair scorer.
 
+#### Result (2026-05-27) — TESTED, REJECTED (collapse masquerading as saturation; can't beam)
+
+Built `src/megaminx/dodeca_cnn.py` (the doc's spec: per-slot message passing, each slot
+mean-aggregates over same-face / generator-edge / same-piece / stride-2 neighbours from the
+relation matrix, MLP-mixes, residual; NO attention -> cheap, no OOM) + `scripts/89_dodeca_v_probe.py`
+(same two-stage pretrain->Bellman + saturation-gate harness as the Perceiver). Trained on GCP L4
+(3.29M, d=256/4-layer).
+
+**The instructive part:** Dodeca is the ONLY encoder whose gap-canary printed "SATURATES"
+(gap +4.2 at bel-e19, vs the Perceiver's +14.7 drift) -- and it was a **FALSE POSITIVE**. The
+whole V curve slid down monotonically and never converged: d80 = 60.2 -> 32.1 -> 28.9 -> 23.4
+-> 20.7 across the canaries, ending a heavily **compressed, under-predicting** V (range 0->21
+where a healthy V spans 0->~29; d60/d80 only ~3 apart -> no depth resolution). That is the
+optimistic-min Bellman **collapse** (the §3.5 family), and the gap stayed small only because
+d40 and d80 collapsed *together*. **A beam bench confirmed it**: best.pt (e19, the least-collapsed
+checkpoint) at beam 65k did not solve even pid 0 after 91 min (a healthy V: seconds), GPU pinned
+at 100% / 21 GB -- the GNN message passing is ~100x the ResMLP's inference cost AND the collapsed
+V can't navigate beam. Killed.
+
+**Two lessons:** (1) the saturation gate needs an **absolute-calibration** check (d80 must sit
+*near* the diameter, ~29, not just `gap <= 10`) -- Dodeca is the case that proves the gap-mean
+alone is insufficient (Rule 21 / repr-bundle, now with a concrete false-positive). (2) Local
+geometric message passing did NOT escape the wall; it found a *different* failure (collapse) than
+the attention encoders' drift. Loader wired into `cayley.search` (`DodecaCNNV` branch), inert.
+Full write-up: EXPERIMENTS.md (2026-05-27), memory [[dodeca-cnn-rejected]].
+
 ---
 
 ### 3.9 Perceiver IO
@@ -1260,6 +1374,34 @@ macro action queries
 #### Expected use
 
 Good compromise if graph transformer is too heavy.
+
+#### Result (2026-05-26) — TESTED, REJECTED (drifts; same saturation wall as GT-V)
+
+Built a Perceiver V (`src/megaminx/perceiver_v.py`: 64-128 learned latents cross-attend to
+the 240 slot+sticker tokens reusing `bipartite_features.pt`, self-attend, mean-pool -> scalar
+V; NO attention mask anywhere, so it uses flash SDPA and dodges the rule-22/27 SDPA-mask
+blow-up that hit the bipartite GT) and a two-stage saturation probe
+(`scripts/88_perceiver_v_probe.py`: walk-depth MSE pretrain -> Bellman refine via
+`cayley.bellman._bellman_targets` with V0/d1 anchors). Gate = the deep-depth saturation
+canary `V@d80 - V@d40` on random walks (rule 23): a working V saturates near the diameter
+(~29); the rejected GraphTransformer-V drifted (V@d80=42).
+
+**Result (2.76M Perceiver, d=256/64-latent/3-layer, on GCP L4):** the gap is FROZEN across
+40 Bellman epochs -- pretrain +13.3, bel-e19 +14.7, bel-e39 +14.5 -- with V@d80 stuck at
+45-53 (diameter ~29). Bellman translates the whole curve DOWN uniformly toward the low-end
+anchors (V0~=0.3, V(d1)~=0.9, d30~=24 all calibrate fine) but CANNOT bend the deep end into
+saturation -- the exact GT-V signature (calibrates low, drifts high, gap won't close). Killed
+at e40 (verdict certain; 30 more epochs only confirm a frozen gap). So the Perceiver encoder
+hits the same problem-intrinsic saturation ceiling as ResMLP-state_inv, GraphTransformer-V,
+and the §3.5 Bridge-Bellman -- representation power is not the bottleneck.
+
+**Ops notes** (reusable): d=256/128-latent/4-layer at batch 4096 OOMs an L4 24GB (training
+activations accumulate across self-blocks) -> use batch <=2048 + fewer latents/layers +
+`PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True`. The Bellman target's 24x child forwards
+through an attention model are expensive (~135 s/epoch on L4, like the GT) and the target-net
+forward thrashes at large `target_net_chunk` (557s/epoch at 16384, caught locally) -> keep
+`target_net_chunk` small (4096) and run target forwards under bf16 autocast. Code retained,
+inert-by-default. Full write-up: EXPERIMENTS.md (2026-05-26), memory [[perceiver-v-rejected]].
 
 ---
 

@@ -106,6 +106,19 @@ collapsed into 4 themes; two launched this session.
 
 ---
 
+## §3 architecture survey CLOSED (2026-05-27) — do not re-propose encoder ideas
+
+Seven encoder families tried as the V/Q scorer, **all rejected, same root cause**: the
+deep-depth saturation property is problem-intrinsic, not a representation limit (attention
+encoders DRIFT; GNN/Bellman variants COLLAPSE). §3.1 repr-bundle, §3.2 bipartite GT, §3.3
+axial (≈3.2), §3.4 symmetry (settled — pays at inference), §3.5 bridge, §3.9 Perceiver,
+§3.8 Dodeca. See doc §3.0 verdict block + memories [[gt-v-no-saturation]],
+[[perceiver-v-rejected]], [[dodeca-cnn-rejected]]. **Per Rule 9, don't re-propose new global
+scorer architectures without a fundamentally different mechanism.** The path to <70K is
+PURE-INFERENCE — the items below (sym-ensemble full-1001, multi-seed, rescue, macros).
+
+---
+
 ## A. Highest-EV next moves (saved-for-last big bets)
 
 These are the score-race-defining items. The user's stated discipline:

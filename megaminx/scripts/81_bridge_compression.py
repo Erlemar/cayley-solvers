@@ -199,7 +199,13 @@ def _write_submission(out_path: Path, out_paths: dict) -> None:
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--checkpoint", required=True, type=Path,
-                    help="V model checkpoint (e.g. m_az_v4_v_only.pt)")
+                    help="V model checkpoint (e.g. m_az_v4_v_only.pt). Used as the beam SOLVER "
+                         "and, unless --scorer-checkpoint is given, also the window SCORER.")
+    ap.add_argument("--scorer-checkpoint", type=Path, default=None,
+                    help="Optional separate model for window SCORING (select_positions_v_trajectory) "
+                         "only; the beam solver still uses --checkpoint. Lets an A/B isolate the "
+                         "scorer (V vs bridge-distance D) with the solver held fixed. "
+                         "Default: reuse --checkpoint (current behavior).")
     ap.add_argument("--submission", required=True, type=Path,
                     help="Base submission CSV to compress")
     ap.add_argument("--out", required=True, type=Path,
@@ -284,6 +290,13 @@ def main() -> int:
     dtype = torch.bfloat16 if args.bf16 else torch.float32
     print(f"loading V model from {args.checkpoint.name} (dtype={dtype})", flush=True)
     model = load_model_checkpoint(args.checkpoint, device=args.device, dtype=dtype)
+
+    # Optional separate scorer model (A/B: isolate the window-ranking model from the solver).
+    scorer_model = model
+    if args.scorer_checkpoint is not None:
+        print(f"loading SCORER model from {args.scorer_checkpoint.name} (solver stays "
+              f"{args.checkpoint.name})", flush=True)
+        scorer_model = load_model_checkpoint(args.scorer_checkpoint, device=args.device, dtype=dtype)
 
     # Phase 2: build production-stack solver if any of A1/A2/A3 set, else simple.
     use_production = (args.sym_ensemble > 0 or args.niss or args.qshort_student is not None)
@@ -420,7 +433,7 @@ def main() -> int:
                 if args.select_mode == "v_trajectory":
                     positions = select_positions_v_trajectory(
                         prefix, window_len, args.positions_per_size,
-                        model, args.device, dtype,
+                        scorer_model, args.device, dtype,
                         use_hamming=not args.no_hamming_prefilter,
                     )
                 else:
