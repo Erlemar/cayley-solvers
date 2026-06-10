@@ -1,0 +1,17 @@
+{
+  "id": "artgor/cayleypy-megaminx-bridge-residuals-b1m-shareable",
+  "title": "Cayleypy Megaminx Bridge Residuals B1M Shareable",
+  "code_file": "cayleypy-megaminx-beam-bridge-residuals-b1m-shareable-jax.ipynb",
+  "language": "python",
+  "kernel_type": "notebook",
+  "is_private": true,
+  "enable_gpu": false,
+  "enable_tpu": true,
+  "enable_internet": true,
+  "dataset_sources": [
+    "artgor/megaminx-tpu-artifacts",
+    "artgor/megaminx-rotations-720"
+  ],
+  "competition_sources": [],
+  "kernel_sources": []
+}

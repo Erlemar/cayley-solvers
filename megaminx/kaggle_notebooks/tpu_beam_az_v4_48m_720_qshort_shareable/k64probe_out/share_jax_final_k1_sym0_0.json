@@ -1,0 +1,14 @@
+[
+  {
+    "pid": 0,
+    "sym_pos": 0,
+    "rot_idx": 0,
+    "found": false,
+    "verify_ok": false,
+    "path_len": 0,
+    "path_idx_orig": [],
+    "wall_s": 11.827657461166382,
+    "direction": "fwd",
+    "error": "RESOURCE_EXHAUSTED: Error allocating device buffer: Attempting to allocate 960.00M. That was not possible. There are 595.85M free.; (0x0x0_HBM0)"
+  }
+]

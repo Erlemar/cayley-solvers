@@ -1,0 +1,22 @@
+{
+  "attempts": [
+    {
+      "pid": 514,
+      "iter": 0,
+      "i": 49,
+      "j": 79,
+      "window_len": 30,
+      "bridge_len": 27,
+      "saved": 3,
+      "kind": "bridge_beam"
+    }
+  ],
+  "summary": {
+    "n_pids": 1,
+    "n_attempts": 64,
+    "n_wins": 1,
+    "total_saved": 3,
+    "solver_wall_s": 41735.56,
+    "total_wall_s": 41735.85
+  }
+}

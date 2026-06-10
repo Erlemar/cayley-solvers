@@ -1,0 +1,16 @@
+{
+  "id": "artgor/cayleypy-megaminx-niss-ablation-hardtail",
+  "title": "cayleypy megaminx niss ablation hardtail",
+  "code_file": "cayleypy-megaminx-niss-ablation-hardtail.ipynb",
+  "language": "python",
+  "kernel_type": "notebook",
+  "is_private": true,
+  "enable_gpu": true,
+  "enable_tpu": false,
+  "enable_internet": false,
+  "dataset_sources": [
+    "artgor/megaminx-bridge-gpu-artifacts"
+  ],
+  "competition_sources": [],
+  "kernel_sources": []
+}

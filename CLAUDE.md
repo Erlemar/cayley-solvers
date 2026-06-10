@@ -90,13 +90,17 @@ for what was tried and what worked. **Read `IDEAS.md`** for the prioritized untr
     step crashed at parse_args(). **Fix**: escape as `%%` or rephrase
     ("30 percent" not "30%"). Audit new `help=` strings before commit.
 
-11. **(Megaminx)** **Production full-1001 solve recipe is multi-pass + NISS**:
-    `--beams 16384,65536 --max-steps 60,150 --niss --bf16 --resume`. Single-pass
+11. **(Megaminx)** **Production full-1001 solve recipe is multi-pass + sym-ensemble 4**:
+    `--sym-ensemble 4 --beams 16384,65536 --max-steps 60,150 --bf16 --resume`. Single-pass
     `--beams 65536 --max-steps 120` is for SMOKE TESTS ONLY — confirmed
     2026-05-11 that single-pass fails for ~50% of pids past depth 60 (m_dd_v0
     50ep on GCP: 41/79 model solves, jumping to 0/20 for pids 60-79). Cost of
-    skipping: ~9h of GCP time wasted on an unsubmittable CSV. The 88,195 and
-    78,029 submissions both used the multi-pass + NISS recipe.
+    skipping: ~9h of GCP time wasted on an unsubmittable CSV. **`--niss` DROPPED
+    2026-05-27**: ablation (AZ v4 V + sym4, hardest pids 991-1000, fp32 on Kaggle
+    GPU) found no-NISS solves 10/10 -- sym4's rotation diversity already covers
+    what NISS would add (0 rescues; a rare 1-2 move shave at 2x wall). The 88,195
+    and 78,029 submissions used the older pre-sym4 multi-pass + NISS recipe.
+    See [[niss-redundant-with-sym4]].
 
 12. **(Megaminx)** **Long V-model training (>50 epochs) requires per-N-epoch
     beam bench validation, not just smoothed-loss early stopping.** Training
@@ -302,6 +306,23 @@ for what was tried and what worked. **Read `IDEAS.md`** for the prioritized untr
     same pids (community submissions, prior our-CSVs) and compare against THAT
     floor. Otherwise you're claiming credit for moves the community already
     contributed.
+
+27. **(Megaminx)** **Custom transformers with explicit-`attn_mask` SDPA are
+    memory-heavy — size the batch for the `(B,H,T,T)` score matrix, not param
+    count.** `F.scaled_dot_product_attention(q,k,v,attn_mask=...)` falls back to
+    the math kernel, which materializes AND saves-for-backward the full
+    `(B, n_heads, T, T)` attention matrix per call. For the bipartite GT (T=264,
+    8 heads, 2 SDPA/layer x 4 layers) that is ~4.25 GiB *per SDPA* at batch 2048
+    -> OOM on a 24 GB L4 **even with gradient checkpointing** (backward recompute
+    holds 2 matrices/layer). Confirmed 2026-05-25 (3 GCP OOM round-trips).
+    **Fixes**: train at batch <=1024 + `grad_checkpoint=True` +
+    `PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True`; for eval/beam build the
+    model with `inference_chunk_size<=1024` AND run under bf16 autocast (FP32 eval
+    doubles the matrix -- the pooled-4096 validation OOM'd this way). The model is
+    only ~3.5M params but ~30-50x slower per forward than the ResMLP, and L4 epoch
+    time was ~727s (GT is expensive to TRAIN too, not just infer). Sibling to
+    Rule 22 (compile-hang on the same SDPA-with-mask path). Full story:
+    EXPERIMENTS.md 2026-05-25 / `bipartite_gt_q_runbook.md`.
 
 ## Conventions
 

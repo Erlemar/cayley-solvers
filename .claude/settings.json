@@ -6,6 +6,12 @@
       "Bash(jobs -p)",
       "Bash(nvidia-smi *)",
       "Bash(tar tzf *)",
+      "Bash(tar -cz *)",
+      "Bash(tar -c *)",
+      "Bash(ssh -i /c/Users/and-l/.ssh/google_compute_engine *)",
+      "Bash(export PATH=\"/c/Users/and-l/AppData/Local/Google/Cloud SDK/google-cloud-sdk/bin:$PATH\"*)",
+      "Bash(gcloud compute *)",
+      "Bash(gcloud.cmd compute *)",
       "Bash(tasklist)",
       "Bash(tasklist *)",
       "Bash(tasklist | *)",
@@ -43,6 +49,9 @@
       "PowerShell(Get-CimInstance *)",
       "PowerShell(Get-Item *)",
       "PowerShell(Get-Process *)",
+      "PowerShell(& \"C:\\Users\\and-l\\cayley\\.venv\\Scripts\\python.exe\"*)",
+      "PowerShell(Stop-Process -Id *)",
+      "PowerShell(Remove-Item -Recurse -Force *)",
       "PowerShell(gh --version*)",
       "PowerShell(gh auth status*)",
       "PowerShell(gh repo view *)",
@@ -58,7 +67,10 @@
       "PowerShell(git remote*)",
       "PowerShell(git branch*)",
       "PowerShell(git ls-files*)",
-      "PowerShell(git config --get *)"
+      "PowerShell(git config --get *)",
+      "PowerShell(nvidia-smi *)",
+      "PowerShell(& \"C:\\Users\\and-l\\cayley\\.venv\\Scripts\\kaggle.exe\"*)",
+      "Bash(tar czf *)"
     ]
   }
 }

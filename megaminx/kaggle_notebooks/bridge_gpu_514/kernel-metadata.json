@@ -1,0 +1,16 @@
+{
+  "id": "artgor/cayleypy-megaminx-bridge-gpu-514",
+  "title": "cayleypy megaminx bridge gpu 514",
+  "code_file": "cayleypy-megaminx-bridge-gpu-514.ipynb",
+  "language": "python",
+  "kernel_type": "notebook",
+  "is_private": true,
+  "enable_gpu": true,
+  "enable_tpu": false,
+  "enable_internet": false,
+  "dataset_sources": [
+    "artgor/megaminx-bridge-gpu-artifacts"
+  ],
+  "competition_sources": [],
+  "kernel_sources": []
+}
