@@ -1,0 +1,17 @@
+{
+  "id": "artgor/cayleypy-megaminx-48m-720-qshort-shareable",
+  "title": "Cayleypy Megaminx 48M 720 Qshort Shareable",
+  "code_file": "cayleypy-megaminx-beam-az-v4-48m-720-qshort-shareable-jax.ipynb",
+  "language": "python",
+  "kernel_type": "notebook",
+  "is_private": true,
+  "enable_gpu": false,
+  "enable_tpu": true,
+  "enable_internet": true,
+  "dataset_sources": [
+    "artgor/megaminx-tpu-artifacts",
+    "artgor/megaminx-rotations-720"
+  ],
+  "competition_sources": [],
+  "kernel_sources": []
+}
