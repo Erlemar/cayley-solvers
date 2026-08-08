@@ -1,0 +1,51 @@
+# tq0 -- all-neighbours sparse-Q head for the Professor Tetraminx.
+#
+# Trunk is identical to tv0 (2048/512 + 2 res blocks, embedding encoding) so the
+# state dict stays warm-start compatible with 21_train_az.py; only the head is
+# 24-wide instead of scalar.
+#
+# k_max 40 against a ~28-move optimum. Upstream uses k_max 70 on megaminx (~29
+# diameter), but that only works because its pivot scheme is heavily weighted to
+# SHALLOW pivots. Once the walk index runs far past the diameter the walk is near
+# stationary and "undo the last move" is no longer reliably distance-reducing --
+# the RANKING label itself goes bad, not just its scale. Since pivot_tilt pushes
+# mass deeper, k_max has to come down to compensate. k_max/pivot_tilt is the first
+# ablation axis if the model underperforms.
+
+model:
+  state_size: 88
+  num_classes: 88
+  hidden_dims: [2048, 512]
+  num_res_blocks: 2
+  encoding: embedding
+  embed_dim: 16
+
+training:
+  n_epochs: 1500
+  steps_per_epoch: 256
+  batch_size: 2048           # samples BEFORE symmetry expansion (x14 rows after)
+  k_min: 2
+  k_max: 40
+  pivot_tilt: 0.5            # 0 = upstream scheme; >0 biases pivots deeper
+  lr: 3.0e-4
+  weight_decay: 3.0e-3
+  grad_clip: 1.0
+
+  sym_coverage: true         # our addition 2 -- expand 2-of-24 labels via the 24 frames
+  sym_rows: 0                # 0 = use the full greedy coverage width
+  verify_symmetry: true
+
+  anchor_batch: 512          # our addition 1 -- exact 24-way Q from the BFS tables
+  max_anchor_depth: 5        # children of a d<=5 state are all d<=6, so all are in the table
+  anchor_weight: 1.0
+
+  top1_margin: 1.0           # our addition 4 -- upstream ships this at weight 0.0
+  top1_margin_weight: 0.0
+
+  val_size: 2048
+  checkpoint_every_epochs: 50
+  amp: true
+  compile_model: true        # fixed shapes throughout, so Rule 2 permits it
+  fused_optimizer: true
+
+seed: 0

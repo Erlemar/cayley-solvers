@@ -1,0 +1,57 @@
+# tq4_baked_d7 -- exact 24-way Q anchors at d<=7, from the d7 table.
+#
+# Third point on the anchor-depth curve, all else identical:
+#   tq0            d<=5   1,771,577 anchors   (d6 table, cap = table_depth - 1)
+#   tq3_d7anchor   d<=6  27,779,749 anchors   (d7 table, same cap rule)
+#   tq4_baked_d7   d<=7  ~77.8M anchors       (d7 table + the inverse-closure argument)
+#
+# How d<=7 comes out of a d7 table. The 24 generators are closed under inverse, so
+# the Cayley graph is undirected and every child of a depth-d state is at d-1, d or
+# d+1. For an anchor at depth exactly 7 a child ABSENT from the d<=7 table can only
+# be at depth 8. So all 24 targets are determined without a d8 build. Verified at
+# small scale against an independent table: baking d<=5 anchors from the d5 table
+# gave 4,800,000 exact targets, 3,986,879 of them resolved by this argument alone.
+#
+# The anchors are PRE-BAKED (03b_build_bfs_deep.py --bake-anchor-depth 7), so there
+# is no endgame table on the device at all -- just states + 24 int8 targets. tq3
+# holds a 3.63 GB table on a 23 GB card; a d8 table would be 54 GB and fit nowhere.
+#
+# Everything else matches tq0/tq3 exactly: trunk, objective, k_max, tilt, lr, seed.
+
+model:
+  state_size: 88
+  num_classes: 88
+  hidden_dims: [2048, 512]
+  num_res_blocks: 2
+  encoding: embedding
+  embed_dim: 16
+
+training:
+  n_epochs: 1500
+  steps_per_epoch: 256
+  batch_size: 2048           # samples BEFORE symmetry expansion (x14 rows after)
+  k_min: 2
+  k_max: 40
+  pivot_tilt: 0.5            # 0 = upstream scheme; >0 biases pivots deeper
+  lr: 3.0e-4
+  weight_decay: 3.0e-3
+  grad_clip: 1.0
+
+  sym_coverage: true         # our addition 2 -- expand 2-of-24 labels via the 24 frames
+  sym_rows: 0                # 0 = use the full greedy coverage width
+  verify_symmetry: true
+
+  anchor_batch: 512          # our addition 1 -- exact 24-way Q from the BFS tables
+  anchor_baked: baked_d7_anchors.pt   # <-- the only real change vs tq3
+  anchor_weight: 1.0
+
+  top1_margin: 1.0           # our addition 4 -- upstream ships this at weight 0.0
+  top1_margin_weight: 0.0
+
+  val_size: 2048
+  checkpoint_every_epochs: 50
+  amp: true
+  compile_model: true        # fixed shapes throughout, so Rule 2 permits it
+  fused_optimizer: true
+
+seed: 0

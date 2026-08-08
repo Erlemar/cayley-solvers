@@ -1,135 +1,123 @@
-# cayley — IHES Picture Cube solver
+# cayley — CayleyPy competition solvers
 
-Neural distance heuristic + GPU beam search for the Kaggle
-[CayleyPy SuperCube: Solve Optimally IHES puzzle](https://www.kaggle.com/competitions/cayleypy-ihes-cube).
+Neural distance/action heuristics + large-scale beam search on GPU and TPU, for the
+CayleyPy family of Kaggle puzzle competitions.
 
-## Status (as of 2026-04-18)
+This repo now hosts **four** solvers sharing one core library (`src/cayley/`). Each has
+its own handoff doc, which is the authoritative state — this file is a router.
 
-- **Current best Kaggle score: 24,618** (from `submissions/ens_e5_all_pp.csv`).
-- Progression: `42,718 (v13 Kociemba) → 30,770 (first ML) → 28,224 → 27,106 → 24,998 → 24,618`.
-- Gap to leader (Rokicki, 21,840): **2,778 moves (12.7%)**.
+## Status (2026-08-03)
+
+| Puzzle | Best | Standing | Where |
+|---|---|---|---|
+| **Professor Tetraminx** | **28,467** | **#1 — beat Rokicki's 28,481 by 14** | [`tetraminx/HANDOFF.md`](tetraminx/HANDOFF.md) |
+| 4×4×4 cube (`cube444`) | 48,738 | #2 public LB at time of submission (53,426) | [`cube444/HANDOFF.md`](cube444/HANDOFF.md) |
+| Megaminx | 73,441 working floor (75,200 submitted) | — | [`megaminx/HANDOFF.md`](megaminx/HANDOFF.md) |
+| IHES Picture Cube | 24,618 | leader Rokicki 21,840 | [`EXPERIMENTS.md`](EXPERIMENTS.md), [`IDEAS.md`](IDEAS.md) |
+
+Tetraminx is the most developed and the only one currently in first place; its
+[`BLOG_tetraminx_progress.md`](tetraminx/BLOG_tetraminx_progress.md) is the best single
+narrative of the approach that works.
 
 ## Start here in a new session
 
-1. Read `EXPERIMENTS.md` for the current state, training runs, and decision log.
-2. Read `IDEAS.md` for prioritized untried ideas. Items `0a`-`0e` at the top are NEW
-   (forum-mined, highest-EV).
-3. `DATA_AND_FEATURES.md` — focused data/feature engineering ideas (orthogonal to search).
-4. If picking up Bellman: `src/cayley/bellman.py` + `configs/e6_bellman.yaml` is ready
-   to launch, warm-starts from `models/small_e5/epoch_7999.pt`.
+1. **`CLAUDE.md`** — non-negotiable rules and the anti-pattern list. Read this first;
+   several rules exist because ignoring them cost hours.
+2. The **`HANDOFF.md` of the puzzle you're working on** (table above). Each carries its
+   own score progression, measured ablations, and a prioritised next-experiments list.
+3. `EXPERIMENTS.md` / `IDEAS.md` — IHES-cube-specific log and untried ideas.
 
-## Quick reproduction commands
+## The approach, in one page
 
-```bash
-# Environment: Python 3.14 + torch 2.11.0+cu128 + cayleypy 0.1.0 + triton-windows
-# On Windows, always use .venv/Scripts/python.exe (not plain python)
+All four solvers share a shape:
 
-# Re-verify the current best submission (should print 1003/1003 valid):
-.venv/Scripts/python.exe -c "
-import sys; sys.path.insert(0, 'src')
-from cayley.puzzle import PictureCube
-from cayley.verify import verify_submission
-p = PictureCube.load('data/puzzle_info.json')
-r = verify_submission(p, 'data/test.csv', 'submissions/ens_e5_all_pp.csv')
-print(f'valid: {r.n_valid}/{r.n_total}, total: {r.total_moves}')
-"
-
-# Launch Bellman refinement (code ready, not yet run):
-.venv/Scripts/python.exe -u scripts/05_bellman_refine.py --config configs/e6_bellman.yaml --output models/e6
-
-# Typical solve command for the current best recipe:
-.venv/Scripts/python.exe -u scripts/02_solve.py \
-    --checkpoint models/small_e5/epoch_7999.pt \
-    --out submissions/my_run.csv \
-    --beam 65536 --max-steps 50 --bf16 \
-    --searcher khoruzhii \
-    --fallback data/kociemba_fallback.csv
-
-# Post-process any submission:
-.venv/Scripts/python.exe scripts/post_process_submission.py \
-    --in submissions/my_run.csv --out submissions/my_run_pp.csv \
-    --bfs-table data/bfs_table_d5.pkl
-
-# Combine multiple runs (ensemble = min per puzzle):
-.venv/Scripts/python.exe scripts/combine_submissions.py \
-    --candidates submissions/a.csv submissions/b.csv \
-    --fallback data/kociemba_fallback.csv \
-    --out submissions/combined.csv
-
-# Submit to Kaggle (token expires — re-ask user if this fails):
-export KAGGLE_API_TOKEN=$KAGGLE_API_TOKEN
-.venv/Scripts/kaggle.exe competitions submit \
-    -c cayleypy-ihes-cube -f submissions/combined_pp.csv -m "description"
-```
-
-## Required data files
-
-All in `data/` — do not delete:
-
-| File | Size | Purpose |
-|---|---|---|
-| `puzzle_info.json` | 5 KB | 18 generators + solved state |
-| `test.csv` | 214 KB | 1003 scrambled puzzles |
-| `sample_submission.csv` | 1.8 MB | original baseline (used as worst-case fallback) |
-| `kociemba_fallback.csv` | 1.7 MB | 38,440-move Kociemba output; our actual fallback floor |
-| `bfs_table_d5.pkl` | 126 MB | 790K-state BFS table for post-processing |
-
-## Key checkpoints
-
-| Path | Arch | Epochs | Final loss | Best solve |
-|---|---|---|---|---|
-| `models/fast/epoch_0499.pt` | embed [700,643]×4 | 500 | 14.14 MSE | 29,710 single / 28,224 +pp |
-| `models/embed/epoch_0199.pt` | embed [700,643]×4 | 200 | 14.40 MSE | 30,120 |
-| `models/ensemble_s{1,2,3}/epoch_0499.pt` | fast arch | 500 | ~14.2 | - |
-| `models/big_v1/epoch_0999.pt` | big [2048,1024]×8 | 999 | - | regressed |
-| `models/small_e1/epoch_0499.pt` | khoruzhii [1024,256]×1 | 500 | 14.33 MSE | - |
-| `models/small_e2/epoch_1999.pt` | small | 2000 | 13.51 MSE | - |
-| **`models/small_e3/epoch_3999.pt`** | small K_max=26 | 4000 | **8.50 MSE** | 25,070 single |
-| `models/small_e4/epoch_1999.pt` | small K_max=45 | 2000 | 46.1 (k=45 scale) | - |
-| **`models/small_e5/epoch_7999.pt`** | small K_max=26 | 8000 | **8.41 MSE** | **24,974 single** |
-
-## Gotchas (do not forget)
-
-1. **Always pass `return_all_hashes=True`** when building a BFS for MITM, or
-   `BfsResult.layers_hashes` is empty and the search silently degrades.
-2. **Don't use CayleyPy's `advanced` beam mode** — it doesn't return paths. Use `simple`
-   or the khoruzhii searcher.
-3. **`torch.compile` is HARMFUL for inference** — variable beam batch sizes trigger
-   8+ recompiles, 5.8× slowdown. Use for training only.
-4. **Checkpoints trained with `compile_model: true`** have `_orig_mod.` prefix on state
-   dict keys. `load_model_checkpoint` strips this automatically but direct
-   `load_state_dict` calls will fail.
-5. **Build `CayleyGraph` once per session** — fresh instances have different random hash
-   vectors. The `Solver` class already does this; use it.
-6. **BFS-d5 post-processing is bounded at max_window=12** by default (see
-   `post_process.py`) — saves 30-80 moves per submission, not more. Real gains would
-   require depth-6 BFS (~6 GB memory).
-7. **Windows + Python 3.14 requires** `triton-windows` package (not `triton`) for
-   `torch.compile`. Already installed in `.venv`.
+1. **Train a heuristic.** Either a value function `V(s)` (distance-to-solved) or an
+   **all-neighbours Q head** `Q(s,a)` with one output per generator. The Q head scores
+   every child from ONE forward on the parent — **17.2×** cheaper per beam step measured,
+   and what current tetraminx work uses. (The PyTorch searcher adds *progressive top-k*,
+   hashing only the top candidates, for 21.9×; the JAX/TPU kernel does **not** have it —
+   it still materializes and hashes all 24 children before its per-owner top-K.)
+2. **Beam search**, as wide as hardware allows. On every puzzle tried so far, **width has
+   been a stronger lever than heuristic quality**, up to a saturation point.
+3. **Exact endgame table.** Stop the beam when it enters a precomputed BFS ball
+   (d ≤ 6 for tetraminx, 27.8M states) and splice the table's optimal descent. The last
+   moves become provably optimal, and the beam stops where it is narrowest and least
+   reliable.
+4. **Symmetry frames.** Solve conjugated and inverted copies of the scramble and keep the
+   shortest path. The *inverse* frame does most of the work; frames saturate at 2.
+5. **N-way per-pid min** across every result source, replay-verified. This is the actual
+   submission — see CLAUDE.md rules 26 / 26b, which exist because scattered results have
+   repeatedly hidden 20–100 moves.
 
 ## Layout
 
-- `data/` — competition data + precomputed tables
-- `src/cayley/` — library code
-  - `puzzle.py` — `PictureCube` loader + state ops
-  - `data.py` — non-backtracking random walks (numpy + torch)
-  - `model.py` — `ResMLPDistance` (one-hot + embedding, chunked inference)
-  - `training.py` — fast-recipe training loop (bf16 + compile + fused AdamW)
-  - `bellman.py` — **Bellman refinement training (ready, not yet run)**
-  - `search.py` — CayleyPy wrapper (`Solver` class) + `load_model_checkpoint`
-  - `khoruzhii_search.py` — **self-contained 150-line beam with fp16 values; use `KhoruzhiiSolver`**
-  - `post_process.py` — pair-cancel + state-hash shortcut + BFS-d5 window replacement
-  - `bfs_table.py` — build/load BFS lookup tables
-  - `submit.py` — min-across-candidates submission builder with fallback
-  - `verify.py` — path verification
-- `scripts/` — CLI entrypoints
-- `configs/` — YAML hyperparameter configs
-- `models/` — checkpoints (gitignored)
-- `submissions/` — CSVs (gitignored, some kept for ensemble)
-- `tests/` — pytest unit tests
+```
+src/cayley/            shared library — puzzle, model, training, beam, verification
+  khoruzhii_search.py    PyTorch beam — Q-head path, progressive top-k, qv-rerank/consistency
+  bellman.py             Bellman refinement
+  model.py               ResMLPDistance
+scripts/               IHES cube entrypoints
+tetraminx/             Professor Tetraminx solver  (HANDOFF.md, src/, scripts/, kaggle_notebooks/)
+megaminx/              Megaminx solver             (HANDOFF.md, beam_lab/, scripts/)
+cube444/               4x4x4 cube solver           (HANDOFF.md)
+data/                  IHES competition data + precomputed tables
+configs/               YAML hyperparameter configs
+models/  submissions/  gitignored
+```
 
-## Plan & other references
+Each puzzle package duck-types the `PictureCube` interface, so everything in
+`src/cayley/` works against all of them unchanged.
 
-- Project plan: `C:\Users\and-l\.claude\plans\this-will-be-a-purrfect-shore.md`
-- Cross-project research notes: `C:\Users\and-l\kaggle_research\cayleypy-ihes-cube\experiment_log.md`
-- Khoruzhii's reference repo (cloned): `C:\Users\and-l\AppData\Local\Temp\cayleypy_cube\cayleypy-cube\`
+## Environment
+
+Python 3.14 + torch 2.11.0+cu128 + cayleypy 0.1.0 + triton-windows.
+
+**Always use `.venv/Scripts/python.exe`** — not `python`, `python3`, or `.venv/python`.
+Same for `.venv/Scripts/kaggle.exe` and `.venv/Scripts/pip.exe`. See CLAUDE.md rule 1.
+
+## Hardware paths
+
+| Target | Notes |
+|---|---|
+| Local RTX 4090 | training + solves; launch anything over ~20 min **detached** (`Start-Process` + `.bat`), not via background Bash |
+| GCP L4 / A100 spot | training; A100s need a boot `startup-script` + watchdog cron, since preempted spot VMs never restart themselves |
+| GCP TPU v6e-8 | the wide beam — one shared beam sharded across 8 cores via `all_to_all` |
+| Kaggle TPU v5e-8 | public/shareable notebooks; ~half a v6e-8 |
+
+## Slash commands
+
+| Command | Does |
+|---|---|
+| `/tetraminx-eval` | standard 15-pid TPU beam eval, guarded, scored against the standing best |
+| `/tetraminx-merge` | n-way per-pid min over every source → verified submission |
+| `/tetraminx-submit` | merge → independent replay-verify → submit → confirm the score |
+| `/megaminx-*` | megaminx bench / eval / sync / submit helpers |
+| `/check-gcp`, `/kaggle-push` | infra |
+
+## Gotchas that bite hardest
+
+These are the short list; **`CLAUDE.md` has the full set with the measurements behind
+them.**
+
+1. **`torch.compile` for beam inference is only safe with fixed-shape padding.** Naive
+   `model(candidates)` recompiles on every shape change (5.8× slowdown). With
+   `pad_to_batch_size=True` plus a pre-warm it is ~−27% wall. Training is always fine.
+2. **Reuse one `CayleyGraph` per session** — fresh instances get different random hash
+   vectors and corrupt cross-call state tracking.
+3. **Probe metrics do not select beam checkpoints.** Four separate models won on pair
+   accuracy / top-1 / recall / calibration and delivered **zero** moves in search. Only a
+   replay-verified beam total counts.
+4. **Run the matched control before quoting any A/B delta** (rule 28). Comparing across
+   machines or flag sets manufactured two retracted conclusions in one day. If a config
+   change gives *byte-identical* results, the flag is not wired.
+5. **The n-way merge is only as good as its source set** (rule 26b). Re-pull live
+   machines, copy sources into a stable dir, and search by file *content* — result files
+   have turned up in unrelated project folders.
+6. **Never use `sed -i`** on this machine — MINGW sed silently truncates files to 0 bytes.
+
+## References
+
+- Cross-project research notes: `C:\Users\and-l\kaggle_research\`
+- CayleyPy paper: arXiv:2502.13266 + 2502.18663
+- Sparse-Q objective / PieceTransformer origin:
+  [`AnanasClassic/cayleypy-training-core`](https://github.com/AnanasClassic/cayleypy-training-core)

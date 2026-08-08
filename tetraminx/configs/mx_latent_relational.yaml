@@ -1,0 +1,55 @@
+# Standalone latent relational Q scorer.
+#
+# Controlled architecture comparison against tq0 / mx_tf: identical sparse-Q
+# objective, random-walk sampler, symmetry expansion, exact d<=5 anchors, optimizer,
+# sample count per epoch, and 1500-epoch budget. No distillation, path labels, AZ
+# auxiliary loss, or online teacher.
+
+model:
+  arch: latent_relational
+  az_head: false
+  state_size: 88
+  num_classes: 88
+  layout_path: tetraminx/data/piece_layout.json
+  d_model: 96
+  nhead: 4
+  num_latents: 8
+  num_layers: 2
+  ff_dim: 192
+  action_ff_dim: 192
+  activation: silu
+  dropout: 0.0
+
+training:
+  n_epochs: 1500
+  # 2048 x 256 matches the ResMLP cell's base samples per epoch. Symmetry
+  # expansion is identical (currently x14), so every comparison cell sees the
+  # same total number of training rows. If this pages on a particular device,
+  # halve batch_size and double steps_per_epoch together.
+  steps_per_epoch: 256
+  batch_size: 2048
+  k_min: 2
+  k_max: 40
+  pivot_tilt: 0.5
+  lr: 3.0e-4
+  weight_decay: 3.0e-3
+  grad_clip: 1.0
+
+  sym_coverage: true
+  sym_rows: 0
+  verify_symmetry: true
+
+  anchor_batch: 512
+  max_anchor_depth: 5
+  anchor_weight: 1.0
+
+  top1_margin: 1.0
+  top1_margin_weight: 0.0
+
+  val_size: 2048
+  checkpoint_every_epochs: 50
+  amp: true
+  compile_model: true
+  fused_optimizer: true
+
+seed: 0

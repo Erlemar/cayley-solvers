@@ -1,0 +1,91 @@
+# tq6 -- REJECTED 2026-07-31. See tetraminx/TRIANGLE_BOX_REJECTED.md.
+# Better than tq5 at every mid/deep band (the centering-vs-separating fix was real)
+# but still worse than the plain tq1 control everywhere. Root cause: sorting routes
+# the gradient by the model's OWN current ranking, so a permutation-invariant target
+# entrenches the existing ordering instead of correcting it -- harmless where the
+# ordering is already right, damaging where it is near-random (i.e. at depth).
+# The whole permutation-invariant constraint family is closed.
+#
+# tq6 -- tq1 plus the SORTED-PROFILE loss on the 24 Q entries at path states.
+# The ONLY difference from tq1 is the profile_* block, so the pair is a clean A/B
+# against the same control that ran for tq5.
+#
+# WHY NOT THE BOX (tq5)
+# ---------------------
+# tq5 constrained every entry to [d-1, d+1]. REJECTED: worse at every pivot depth,
+# because that interval is satisfied PERFECTLY by the constant Q(s,a) = d(s). A
+# two-sided hinge is silent in its interior, which is exactly where the
+# discrimination lives, so it supplied centering pressure and no separating
+# pressure. See tetraminx/TRIANGLE_BOX_REJECTED.md.
+#
+# WHAT THIS DOES INSTEAD
+# ----------------------
+# Constrain the SORTED vector of the 24 outputs. Sorting is permutation-invariant,
+# so the loss never says WHICH action wins -- keeping the alternative-optima
+# immunity that motivated the box, and avoiding the m_rank_v0 failure -- but a flat
+# prediction now mismatches a step-shaped target and IS penalised.
+#
+# Measured mean sorted child profile at d=7, relative to d(s), over 4k states:
+#   -1.00 -0.50 +0.38 +0.49 +0.89 +0.90 +0.99 +0.99  then +1.00 x16
+# Best constant against that profile scores MSE 0.247 > 0. That is the collapse
+# check tq5 failed, and it is now a required pre-flight for any constraint loss.
+#
+# WHICH RANKS ARE CONSTRAINED, AND WHY ONLY THOSE
+# -----------------------------------------------
+# The profile is measured at d<=7 but applied out to d~31, and the number of
+# distance-reducing children drifts upward with depth (mean 1.00 at d=1 -> 1.60 at
+# d=7; p50 1, p90 2, max 4). So only the depth-robust ranks are pinned:
+#   rank 1       -> d-1   certain at EVERY depth, since a geodesic always exists
+#   ranks 9..24  -> d+1   safe even if reducing+same moves doubled from measurement
+#   ranks 2..8          left free -- that is exactly where the drift would land
+#
+# The separating mechanism: path_mse already pins ONE entry at d-1, and this pushes
+# 16 of 24 up to d+1. Neither "all at d" nor "all at d-1" survives the pair.
+
+model:
+  state_size: 88
+  num_classes: 88
+  hidden_dims: [2048, 512]
+  num_res_blocks: 2
+  encoding: embedding
+  embed_dim: 16
+
+training:
+  n_epochs: 1500
+  steps_per_epoch: 256
+  batch_size: 2048           # samples BEFORE symmetry expansion (x14 rows after)
+  k_min: 2
+  k_max: 40
+  pivot_tilt: 0.5            # 0 = upstream scheme; >0 biases pivots deeper
+  lr: 3.0e-4
+  weight_decay: 3.0e-3
+  grad_clip: 1.0
+
+  sym_coverage: true         # our addition 2 -- expand 2-of-24 labels via the 24 frames
+  sym_rows: 0                # 0 = use the full greedy coverage width
+  verify_symmetry: true
+
+  anchor_batch: 512          # our addition 1 -- exact 24-way Q from the BFS tables
+  max_anchor_depth: 5        # children of a d<=5 state are all d<=6, so all are in the table
+  anchor_weight: 1.0
+
+  top1_margin: 1.0           # our addition 4 -- upstream ships this at weight 0.0
+  top1_margin_weight: 0.0
+
+  path_dataset: tetraminx/data/path_labels_28821.pt
+  path_batch: 1024           # of ~30k rows/step; ablation axis
+  path_mse_weight: 1.0
+  path_rank_weight: 0.0      # the megaminx-falsified form, kept for ablation
+  path_rank_margin: 1.0
+
+  profile_high_weight: 1.0   # <-- the only real change vs tq1
+  profile_low_weight: 0.5    # nothing may sit below d-1 (certain)
+  profile_high_from: 9       # 1-indexed: ranks 9..24 are pinned to d+1
+
+  val_size: 2048
+  checkpoint_every_epochs: 50
+  amp: true
+  compile_model: true        # fixed shapes throughout, so Rule 2 permits it
+  fused_optimizer: true
+
+seed: 0

@@ -1,4 +1,4 @@
-# Running beam search on TPU: from PyTorch to JAX, and the bug that almost made us give up
+# Running beam search on TPU: the bug that almost made us give up, and the climb from 8M to 512M
 
 We've been running beam search for a Kaggle puzzle competition called CayleyPy
 Megaminx — the goal is to solve 1001 scrambled megaminx (dodecahedron-shaped Rubik's
@@ -7,14 +7,116 @@ beam search: a neural network estimates "distance to solved" for each candidate
 state, and a beam keeps the best `B` states per step over ~120 steps.
 
 This post is about the part of that project where we tried to run a *shared* B=8M
-beam across all 8 cores of a Kaggle TPU. It took five failed architectures, two
-frameworks, and a critical diagnostic before we figured out the bug was in our
-own code — not, as we'd been convinced, deep inside XLA.
-
+beam across all 8 cores of a Kaggle TPU, then kept pushing the same architecture
+until it reached 48M on Kaggle and 256M/512M on a larger v6e TPU. It took five
+failed architectures, two frameworks, and a critical diagnostic before we figured
+out the first bug was in our own code — not, as we'd been convinced, deep inside
+XLA. The later scaling work had a different flavor: not "is the collective
+wrong?", but "which one of these innocent-looking arrays just cost us 8 GB?".
+a
 The lesson, if there's one: **when you see the same failure across two completely
 different frameworks built on the same backend, the temptation is to blame the
 backend. Sometimes the right move is to look closer at what your code is actually
 doing on each rank, before declaring the whole architecture a dead end.**
+
+## What's a Cayley graph, and why would you solve one?
+
+Before the TPU war stories, a few paragraphs on what we're actually computing —
+"beam search over a Cayley graph" is doing a lot of quiet work in that first
+sentence.
+
+Start with the puzzle. Every legal move on a megaminx — turn one face a click
+clockwise or counter-clockwise — is a permutation of the puzzle's pieces.
+Compose two moves and you get another permutation; undo one and you get its
+inverse; do nothing and you have the identity. That's a *group*: all the
+configurations reachable from solved, with move-composition as the operation,
+and the 24 face turns as its *generators* — the handful of operations every
+other element is built from.
+
+A **Cayley graph** is the picture of that group. Drop one vertex for every
+element (every reachable configuration of the puzzle) and draw an edge between
+two vertices whenever a single generator takes one to the other. The solved
+state is just one distinguished vertex, the identity; a scramble is some other
+vertex. *Solving* the puzzle is finding a path through the graph from the
+scramble back to the identity, and solving it *well* — the thing the
+competition scores — is finding a short one. The shortest possible path is the
+scramble's true distance-to-solved; the largest such distance over all scrambles
+is the graph's diameter, known to cubers as **"God's number."**
+
+This reframing — puzzle as group, group as graph — is the whole game, not a cute
+analogy. And it isn't special to twisty puzzles: by **Cayley's theorem** every
+finite group is a group of permutations, so permutation puzzles are a concrete
+handle on finite group theory in general.
+
+### Why anyone cares
+
+Cayley graphs are a main bridge between abstract algebra and geometry. Once a
+group is a graph you can ask geometric questions of it — how fast the vertex
+count grows as you walk outward, whether it's "negatively curved," what it looks
+like from far away — and the answers encode deep algebraic facts. That's the
+field of *geometric group theory*, and its central figure, Mikhail Gromov, has
+spent decades at the very institute this competition is named after, studying
+groups by treating their Cayley graphs as metric spaces.
+
+They earn their keep in computer science too. The best-connected Cayley graphs —
+*expanders*, first built explicitly by Margulis out of group generators — are the
+machinery behind error-correcting codes, pseudorandom generators, and
+fault-tolerant networks. And the basic questions are genuinely hard: nobody
+proved the 3×3×3 cube's God's number is 20 until 2010, and for the megaminx the
+diameter is simply unknown.
+
+### Why it's a brutal search problem
+
+Here's what makes this an engineering problem and not just a math one: these
+graphs are far too big to write down. The 3×3×3 cube has about 4.3 × 10^19
+states; the megaminx has roughly 10^68, astronomically more. You never store the
+graph — you store one state and generate its 24 neighbors on demand. The graph is
+defined *implicitly*, by its generators.
+
+That rules out exact search. Breadth-first from solved is fine for a few moves —
+on megaminx the shells are 1, 24, 408, 6,208, 90,144, 1.28M, then ~18M states at
+depth six — but depth seven is ~250M and won't fit in memory, while a real
+scramble is dozens of moves deep. You can't compute the true distance-to-solved,
+so you *estimate* it. That estimate is the learned **V function** from the top of
+this post: a network trained to predict distance-to-solved, used to steer a beam
+that keeps the best `B` states at each step. The entire problem collapses to "how
+good is your estimate, and how wide a beam can you afford" — which is precisely
+why everything below is about cramming the largest possible beam onto a TPU.
+
+It also makes a clean benchmark: one unambiguous number — total moves over a
+fixed set of scrambles — for a question with no tractable exact answer, on a
+graph nobody can fully see.
+
+### CayleyPy, IHES, and megaminx
+
+**CayleyPy** is the umbrella for this line of work — a research project and a pair
+of 2025 papers (*A Machine Learning Approach That Beats Large Rubik's Cubes*,
+arXiv:2502.13266, and *CayleyPy RL*, arXiv:2502.18663) on finding short paths in
+Cayley graphs with learned heuristics and beam search instead of the hand-built
+solvers cubers traditionally use. It spun off a series of Kaggle competitions,
+each a different graph.
+
+The flagship is the **IHES** cube — a "picture cube," a 3×3×3 whose facelets are
+all distinct so orientation matters, with 1,003 scrambles to solve as short as
+possible. It's named after the **Institut des Hautes Études Scientifiques**, the
+French research institute outside Paris (mathematics and theoretical physics, the
+rough European counterpart to Princeton's IAS — and, fittingly, Gromov's home).
+
+**Megaminx**, the subject of this post, is the sibling competition: not a cube but
+a dodecahedron — twelve pentagonal faces, each turning in fifths of a full
+rotation. Our solver encodes a state as a length-120 vector with 24 generators
+(twelve faces × two directions), and the competition ships **1,001 scrambles**,
+scoring the total move count across all of them.
+
+Two things make it a good target. First, unlike the 3×3×3 there's no
+Kociemba-style two-phase algorithm to fall back on — no convenient subgroup
+decomposition for a classical solver to exploit — so learned-heuristic search
+isn't merely competitive, it's nearly the only game in town. (Tomas Rokicki, one
+of the people who pinned down the cube's God's number in 2010, sits mid-leaderboard
+here with a classical method; the top spots are all ML beam searches.) Second,
+because the score sums over a thousand scrambles, every move shaved off every path
+matters — exactly the relentless marginal pressure that pushed us from a 1M-state
+beam to the 512M-state monster the rest of this post is about.
 
 ## The setup
 
@@ -692,6 +794,287 @@ quality-neutral cheap optimizations are always worth keeping when they
 don't hurt anything — but the wall savings line on the changelog reads
 "0.3%".
 
+## Past the Kaggle ceiling: 256M on v6e-8
+
+The 48M ceiling above was a Kaggle v5e-8 ceiling, not a law of beam search.
+When we got access to an 8-chip v6e TPU VM, each chip had about twice the
+usable HBM: XLA reported a 31.25 GB per-chip budget instead of the ~15 GB
+budget we'd been fighting on Kaggle. That made the next question obvious:
+could we keep the same SPMD design and simply push the beam another order
+of magnitude?
+
+The first serious target was `B_GLOBAL = 268,435,456` — a 256M global beam,
+split across 8 chips:
+
+```
+B_GLOBAL = 268,435,456
+world_size = 8
+B_LOCAL  = 33,554,432
+```
+
+That broke a quiet assumption in our path tree. The old packed backpointer
+layouts were designed around smaller local beams:
+
+```
+23/3/5  uint32  -> parent_local up to  8,388,607
+24/3/5  uint32  -> parent_local up to 16,777,215
+```
+
+At 256M global, each rank owns 33,554,432 slots, so the parent index needs
+25 bits. There is no way to fit `25 + 3 + 5 = 33` bits into uint32. The tree
+had to become uint64:
+
+```
+bits  0..24  parent_local   (25 bits, up to 33,554,431)
+bits 25..27  parent_rank    (3 bits, 8 ranks)
+bits 28..32  move           (5 bits, 24 moves)
+bits 33..63  unused
+```
+
+That sounds like a small type change, but it changes the operational shape
+of the run. A 90-step, 8-rank, 256M tree is already about 193 GB on disk:
+
+```
+90 steps * 8 ranks * 33,554,432 slots/rank * 8 bytes = 193,273,528,320 bytes
+```
+
+The upside is that this cost is on host scratch, not HBM. Once the tree is a
+per-step `.u64` memmap and the device only carries the live frontier, the TPU
+doesn't care that the final path tree is hundreds of gigabytes.
+
+We also added a practical "V-all" path to the qshort kernel. With
+`student_alpha >= N_GEN` — in our case `student_alpha = 24` for 24 moves —
+the student is no longer shortlisting anything. The kernel should degrade to
+"score every child with V" instead of allocating a useless student shortlist
+that is the same size as the full expansion. That made it possible to use the
+same production runner for both qshort and V-only-equivalent experiments.
+
+The 256M run itself was deliberately conservative:
+
+```bash
+gcp_beam_v6e.py \
+    --b-global 268435456 \
+    --start-pid 991 --end-pid 992 \
+    --k-sym 1 \
+    --num-steps 90 \
+    --student-alpha 24 \
+    --receive-alpha 1.25 \
+    --alpha-req 1.25 \
+    --parent-chunk 524288 \
+    --internal-bs 131072 \
+    --nbhd-radius 4
+```
+
+It was a full 256M shared beam across all 8 chips, but it was not a symmetry
+ensemble. `k_sym=1`, `rot_idxs=[0]`, `rot_idx=0`: identity frame only. The
+model filename happened to contain `_sym`, because it was trained with
+symmetry-aware distillation, but the search itself did not rotate the puzzle.
+
+The result:
+
+```
+[step 073/89] device=717.9s copy=1.18s write=2.18s total=721.3s ... min_v=0.009 best_near=74
+[solve] pid=991 rot=0(idx0) found=True len=74 verify=True wall=53764s
+```
+
+Engineering-wise, this was a big success: the full 256M beam ran to a verified
+solution, with a 33M-state local frontier per chip, per-step tree writes, and
+host walkback. Competitively, it was not a win. The best public community path
+we had for pid 991 was length 69, so length 74 is a valid data point, not a
+merge candidate.
+
+That distinction matters. A giant beam that verifies is a systems milestone.
+A giant beam that beats the current best path is a search milestone. 256M gave
+us the first one.
+
+## Making 512M fit
+
+Once 256M worked, 512M looked temptingly close. The arithmetic is brutal but
+simple:
+
+```
+B_GLOBAL = 536,870,912
+world_size = 8
+B_LOCAL  = 67,108,864
+```
+
+`B_LOCAL` is exactly `2^26`, so the backpointer needed one more parent bit:
+
+```
+bits  0..25  parent_local   (26 bits, up to 67,108,863)
+bits 26..28  parent_rank    (3 bits)
+bits 29..33  move           (5 bits)
+bits 34..63  unused
+```
+
+That part was easy. The hard part was all the accidental "only a few gigabytes"
+temporaries that were harmless at 48M or 256M and fatal at 512M.
+
+The first 512M compile failed with:
+
+```
+Used 33.73G of 31.25G hbm
+```
+
+After one round of cuts it still failed:
+
+```
+Used 32.59G of 31.25G hbm
+```
+
+At this scale, a single casual `(B_LOCAL, 8)` int32 array is about 2 GB. A
+single `(B_LOCAL, 120)` uint8 frontier is 8 GB. The difference between "fits"
+and "doesn't load" is not an abstract optimization; it is one buffer.
+
+The final 512M fit came from four changes.
+
+### 1. Stop materializing request positions as `(B, 8)`
+
+The qshort receive path used to compute per-source request positions with a
+one-hot matrix:
+
+```python
+onehot = (sel_src[:, None] == owner_arange[None, :]).astype(jnp.int32)
+pos = jnp.cumsum(onehot, axis=0) - 1
+```
+
+At normal sizes this is just convenient. At 512M, `sel_src` is B-sized and
+`owner_arange` has length 8, so the temporary is `(67M, 8) int32`: about
+2 GB, plus more cumsum workspace.
+
+The fix was to loop over sources and keep only one B-length mask live at a
+time:
+
+```python
+for src in range(world_size):
+    mask = sel_src == src
+    pos_for_src = jnp.cumsum(mask.astype(jnp.int32)) - 1
+    # scatter this source's requests, then move on
+```
+
+It is less elegant, but it removes the giant rank-axis matrix entirely.
+
+### 2. Tile response materialization
+
+The request/response phase routes parent states back to the rank that needs
+to materialize the selected child. The old code stacked the full response
+payload before the return all-to-all:
+
+```
+(world_size * REQ_CAP, state_size)
+```
+
+At 512M, with 120-byte states, that is another multi-gigabyte transient, and
+XLA wants workspace around it. We changed response building to operate in
+tiles (`REQ_TILE`) and concatenate only the bounded tile outputs the collective
+expects.
+
+This was a fit patch, not a speed patch. We later tried `REQ_TILE = 4 *
+MAT_CHUNK` to reduce the number of response tiles. It compiled a little faster
+but the first real step was essentially unchanged. The bottleneck wasn't the
+number of response all-to-alls; it was the broader selection/materialization
+structure and HBM traffic.
+
+### 3. Scatter into the donated frontier, not a fresh zero frontier
+
+The old survivor-materialization code started from a clean zero buffer:
+
+```python
+new_states = jnp.zeros((B_LOCAL + 1, state_size), dtype=jnp.uint8)
+new_states = new_states.at[dst_pos].set(materialized_children)
+```
+
+At 512M, that zero buffer is another ~8 GB allocation. But the previous
+frontier is already the right shape and is donated into the step. We don't
+care about its old contents after the step. So the new version uses the
+donated frontier as the scatter base and drops invalid writes out-of-bounds:
+
+```python
+new_states = states.at[dst_pos].set(
+    materialized_children,
+    mode="drop",
+)
+```
+
+Same result for valid rows, no extra 8 GB base allocation.
+
+### 4. Build the seed frontier on host, not device
+
+This was the least glamorous bug and the one that finally made the executable
+load. After the compile OOMs were gone, we hit a different failure:
+
+```
+Attempting to reserve 17.73G ... only 7.73G free
+```
+
+The step had compiled, but loading the runtime executable needed a big device
+reserve. Why was only 7.73 GB free? Because the seed frontier had been built as
+a large JAX array first and then converted into a sharded array. That left an
+extra ~8 GB device buffer alive at exactly the wrong time.
+
+The fix was to build the padded seed in NumPy on the host, and then use
+`jax.make_array_from_callback` so each device receives only its shard. This
+is the same lesson we learned earlier with `jnp.broadcast_to((8, B_LOCAL, 120))`
+accidentally materializing the full beam on one device: for giant frontiers,
+host-side sharding is not optional plumbing. It is part of the memory model.
+
+## 512M ran. That doesn't mean it was worth running to completion.
+
+After those patches, 512M finally ran:
+
+```bash
+gcp_beam_v6e.py \
+    --b-global 536870912 \
+    --start-pid 991 --end-pid 992 \
+    --k-sym 1 \
+    --num-steps 3 \
+    --student-alpha 4 \
+    --receive-alpha 1.03125 \
+    --alpha-req 1.03125 \
+    --parent-chunk 262144 \
+    --internal-bs 131072 \
+    --nbhd-radius 4
+```
+
+The smoke numbers:
+
+```
+compile: 143.9s
+step 1: device=2515.6s copy=2.74s write=4.11s total=2522.5s  min_v=28.625
+step 2: device=2509.3s copy=2.43s write=4.12s total=2515.8s  min_v=27.875
+```
+
+Call it 42 minutes per step. A full 90-step pid would be roughly 62 hours,
+identity-only, before any symmetry or inverse-axis work. The tree would also
+be enormous:
+
+```
+90 steps * 8 ranks * 67,108,864 slots/rank * 8 bytes = 386,547,056,640 bytes
+```
+
+That is ~386 GB decimal before logs, partial outputs, and filesystem slack.
+Our 400 GB scratch disk was technically close, but operationally too tight;
+any serious full 512M run wants 600-800 GB.
+
+More importantly, the early search trace looked bad. The 512M smoke used
+`student_alpha=4`, meaning the Q student shortlisted 4 children per parent.
+That was the only way to keep the candidate flow small enough for the first
+fit attempt. But quality was poor: after two steps, `min_v` was still 27.875.
+In the 256M alpha24 run, `min_v` was already around 12.75 by step 2.
+
+So the conclusion was not "launch 512M for three days". It was:
+
+1. The 512M SPMD architecture now fits on 8 v6e chips.
+2. The tested alpha4 qshort setting is too miscalibrated for this hard-pid
+   endgame.
+3. The next useful experiments are short 512M smokes at `student_alpha=8` or
+   `12`, and possibly an alpha24 V-all step benchmark, before committing to a
+   full run.
+
+That's the uncomfortable but useful distinction: **capacity work can succeed
+while the search experiment it enables is still a bad bet.** We made 512M
+possible; we did not yet make 512M the right thing to spend two TPU-days on.
+
 ## What we learned
 
 **Identical fingerprint across two frameworks ≠ "framework / backend bug".**
@@ -727,6 +1110,20 @@ comfortably (~5 GB / rank); B=16M OOMs at runtime by ~240 MB. We could have
 predicted this with arithmetic before the push — `children_buffer =
 B_LOCAL * 24 * 120` bytes alone is 5.76 GB at B_LOCAL=2M — but didn't bother
 to compute it until after the OOM. One avoidable push lost.
+
+**Fitting a beam is not the same as making it a good beam.** The 512M smoke was
+the cleanest example: after the host-seed and transient-buffer fixes, the
+architecture ran. But alpha4 qshort had poor early search quality, and the full
+run would have cost roughly 62 hours plus a larger scratch disk. That's still a
+success — it tells us what experiment is now possible — but the next scientific
+question is alpha8/12 or V-all quality, not "press go on the biggest number".
+
+**For giant frontiers, host-side sharding is part of the algorithm.** Building a
+`(8, B_LOCAL, 120)` seed or padding buffer as a JAX array can silently place an
+extra multi-gigabyte object on device before sharding. At 8M that is annoying.
+At 512M it prevents the compiled executable from loading. `make_array_from_callback`
+and host NumPy construction stopped being implementation details and became
+the difference between "fits" and "does not start".
 
 Wrapping up: if you're running SPMD on TPU, dump per-rank state on your first
 debug push, do your cross-rank reduces on host first and move them inline only

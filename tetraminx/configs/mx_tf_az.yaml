@@ -1,0 +1,55 @@
+# Cell 4: PieceTransformer + AZ value head.
+#
+# Matched-budget cell of the architecture comparison matrix. Identical to
+# tq0_sparse_q.yaml except the model block, so arch/az_head is the only variable.
+# Budget 1500 epochs; extend by 500 if a BEAM bench (not the probe) shows
+# ep1500 beating ep1000.
+
+model:
+  arch: transformer
+  az_head: true
+  state_size: 88
+  num_classes: 88
+  layout_path: tetraminx/data/piece_layout.json
+  d_model: 256
+  nhead: 8
+  num_layers: 4
+  ff_dim: 1024
+  dropout: 0.0
+
+training:
+  n_epochs: 1500
+  # Transformer activations are ~5x the ResMLP's per row, and 2048 x 14 sym rows
+  # OOMs a 16 GB card. Quartering the batch and quadrupling the steps keeps
+  # samples/epoch IDENTICAL to the ResMLP cells, so the budget stays matched.
+  steps_per_epoch: 1024
+  batch_size: 512            # samples BEFORE symmetry expansion (x14 rows after)
+  k_min: 2
+  k_max: 40
+  pivot_tilt: 0.5            # 0 = upstream scheme; >0 biases pivots deeper
+  lr: 3.0e-4
+  weight_decay: 3.0e-3
+  grad_clip: 1.0
+
+  sym_coverage: true         # our addition 2 -- expand 2-of-24 labels via the 24 frames
+  sym_rows: 0                # 0 = use the full greedy coverage width
+  verify_symmetry: true
+
+  anchor_batch: 512          # our addition 1 -- exact 24-way Q from the BFS tables
+  max_anchor_depth: 5        # children of a d<=5 state are all d<=6, so all are in the table
+  anchor_weight: 1.0
+
+  top1_margin: 1.0           # our addition 4 -- upstream ships this at weight 0.0
+  top1_margin_weight: 0.0
+
+  val_size: 2048
+  checkpoint_every_epochs: 50
+  amp: true
+  # NOT a Rule 22 compile hang -- that was a misdiagnosis. The real cause was
+  # memory: base 512 peaks at 17.3 GB, and on a 16.4 GB card Windows WDDM pages
+  # instead of OOMing, taking the step from 340 ms to 3,617 ms with no error.
+  # torch.compile is fine here: 18.6 s warmup on the A100, ~12 pct faster.
+  compile_model: true
+  fused_optimizer: true
+
+seed: 0

@@ -1,10 +1,19 @@
-# Project: IHES Picture Cube solver
+# Project: CayleyPy competition solvers
 
-Kaggle competition: [CayleyPy SuperCube](https://www.kaggle.com/competitions/cayleypy-ihes-cube).
-Current best score: **24,618**. Leader: 21,840 (Rokicki).
+FOUR solvers share this repo and the `src/cayley/` library. **Read `README.md` first**
+for the router, then the HANDOFF of the puzzle you are working on.
 
-**Read `README.md` first** for full state, commands, and gotchas. **Read `EXPERIMENTS.md`**
-for what was tried and what worked. **Read `IDEAS.md`** for the prioritized untried ideas.
+| Puzzle | Best | Standing | Docs |
+|---|---|---|---|
+| **Professor Tetraminx** | **28,308** | **#1 — next is CayleyPy 28,398, +90 (2026-08-05)** | `tetraminx/HANDOFF.md` |
+| cube444 | 48,738 | #2 public LB when submitted | `cube444/HANDOFF.md` |
+| Megaminx | 73,441 floor / 75,200 submitted | — | `megaminx/HANDOFF.md` |
+| IHES Picture Cube | 21,870 on disk / 21,972 submitted | leader Rokicki 21,840; **21,870 is a 3-way community plateau** | `EXPERIMENTS.md`, `IDEAS.md` |
+
+Rules below are numbered globally; those tagged **(Megaminx)** are puzzle-specific but
+the mechanism usually generalises. Rules 1-10, 19-20, 24, 26, 26b and 28 apply to
+everything. **Read `EXPERIMENTS.md`** (IHES) / the relevant `HANDOFF.md` for what was
+tried and what worked, and **`IDEAS.md`** for prioritized untried ideas.
 
 ## Non-negotiable rules for this project
 
@@ -39,6 +48,10 @@ for what was tried and what worked. **Read `IDEAS.md`** for the prioritized untr
 
 7. **`Monitor` tool max timeout is 3,600,000 ms (1h).** For multi-hour solves, use
    `persistent: true` (runs until session ends) or accept the timeout and re-arm.
+   **Background Bash poll loops are NOT a substitute** — the harness kills them
+   after ~20-60 min (confirmed 3x on 2026-07-12 watching Kaggle TPU kernels).
+   For multi-hour watches use `Monitor` with `persistent: true` and a script
+   that emits only on state CHANGE and exits on terminal states.
 
 7b. **Use PowerShell `Get-Process` instead of `tasklist /FI` in Bash.** Bash MINGW
    translates `/FI "filter"` to `C:/Program Files/Git/FI` (silent path mangling
@@ -47,13 +60,31 @@ for what was tried and what worked. **Read `IDEAS.md`** for the prioritized untr
    via the `PowerShell` tool. `tasklist` without `/FI` (e.g. via `tasklist | grep`)
    works fine in Bash.
 
-7c. **Bash sessions do not persist cwd across calls.** Each `Bash` tool call
-   starts fresh from the project root, so `cd subdir && cmd` in one call does
-   NOT carry `subdir` over to the next call. For tools that require being inside
-   a specific directory (e.g. `kaggle models instances create -p .`), either
-   chain everything in a single `Bash` call with `&&`, or use absolute paths in
-   every invocation. Confirmed 2026-05-17: cost ~3 wasted calls during the
-   Kaggle Models push session.
+7b-ii. **PowerShell process queries SELF-MATCH, and torch workers inherit the
+   parent's command line.** `Get-CimInstance Win32_Process | Where-Object
+   { $_.CommandLine -like "*pat*" }` matches the **pwsh.exe running that query**
+   (the query text contains the pattern), so counts read one too high and a
+   "kill until clean" loop never converges. Separately, a torch child worker
+   inherits the parent's full command line, so one `30_solve.py` run shows as
+   2+ processes; killing the "duplicate" kills a worker, the parent `.bat`
+   advances to its next command, and the job looks like it is respawning.
+   Cost 2026-08-02: ~5 wasted calls plus one healthy run killed by mistake.
+   **Fix**: filter on `$_.Name -eq 'python.exe'` AND check `ParentProcessId`
+   (`parent=cmd.exe` is a real run; `parent=python.exe` is a worker). This is
+   the PowerShell twin of 7g.
+
+7c. **The Bash tool PERSISTS cwd across calls — a stray `cd` poisons every later
+   call.** The tool description states "working directory persists between calls,"
+   and this is the current behavior: a `cd subdir` (even `cd subdir 2>/dev/null`)
+   leaves the NEXT Bash call running from `subdir`, not the project root. Symptom:
+   `.venv/Scripts/python.exe: No such file or directory` (exit 127) or a
+   `ModuleNotFoundError` from a later call. **Always use ABSOLUTE paths in Bash and
+   avoid bare `cd`**; if a tool must run inside a dir (e.g.
+   `kaggle models instances create -p .`), chain everything in ONE `Bash` call with
+   `&&`. (A 2026-05-17 note claimed the opposite — that cwd does NOT persist; the
+   current harness DOES persist it — confirmed 2026-06-17, cost ~3 calls when a
+   `cd megaminx` leaked into later `python -c` invocations. Either way, absolute
+   paths are the safe habit.)
 
 7d. **Kaggle CLI on Windows always needs `PYTHONUTF8=1 PYTHONIOENCODING=utf-8`.**
    Without these, the CLI hits `cp932 codec can't decode byte 0x94` errors when
@@ -72,6 +103,100 @@ for what was tried and what worked. **Read `IDEAS.md`** for the prioritized untr
    write-scope issue. Prefix every call:
    `$env:KAGGLE_API_TOKEN="<token>"; $env:PYTHONUTF8=1; $env:PYTHONIOENCODING="utf-8"; <kaggle.exe ...>`.
 
+7e. **Windows-native tools need Windows-style paths `C:/Users/...`, NOT MINGW
+   `/c/Users/...`.** This covers `python -c` path STRINGS *and `gcloud`*. Python's
+   `sys.path.insert` / `open()` don't resolve MINGW paths → `ModuleNotFoundError` /
+   `FileNotFoundError`. MINGW `/c/...` is only for bash-native tools (ssh, scp, cp,
+   ls). The venv python as the *executable* works either way
+   (`.venv/Scripts/python.exe` or `/c/Users/and-l/cayley/.venv/Scripts/python.exe`);
+   it's the path arguments passed into Python that must use `C:/...`. Confirmed
+   2026-06-17 (1 wasted call).
+   **`gcloud` behaves the same and fails QUIETLY** — `gcloud storage cp
+   "/c/Users/.../tpubundle/*" gs://...` returns `ERROR: The following URLs matched
+   no objects or files` rather than a path error, so it reads like an empty source
+   dir. Use `"C:/Users/.../tpubundle/*"`. Confirmed 2026-08-01.
+
+7e-ii. **`~` in a shell variable expands on the LOCAL host, even when the string
+   is destined for a remote command.** `CKDIR=~/cayley/models` becomes
+   `/c/Users/and-l/cayley/models` locally, and sending that to a remote `stat`
+   via ssh silently never matches — a watcher waited forever on a checkpoint
+   that already existed (2026-08-02). Use LITERAL remote paths
+   (`/home/and-l/...`) in any string that will be evaluated on another machine.
+   Sibling of 7e (Windows-vs-MINGW path strings in `python -c`).
+
+7f. **Kaggle kernel versions: pull outputs BEFORE the next push, and don't trust
+   the status endpoint alone.** `kernels output`/`status`/`logs` serve ONLY the
+   LATEST version, so pushing v(N+1) before downloading vN's output hides vN
+   behind the UI (cost: a full seq-baseline run's results on 2026-07-12). Pull
+   first — it stays much cheaper than recovery — but the loss is NOT permanent;
+   see (d). Related session mechanics (all confirmed 2026-07-13/14): (a) ONE
+   batch TPU session per account — `kernels push` errors with "Maximum batch
+   TPU session count of 1 reached" while any version is queued/running, and CLI
+   2.2.0 exposes NO cancel (the SDK does have
+   `ApiCancelKernelSessionRequest` — a CLI-surface gap, untested);
+   (b) a push can produce a **phantom COMPLETE version** whose log is a
+   6-second nbconvert with ZERO cells executed while the real batch session
+   survives underneath and still blocks pushes — trust push session errors +
+   the UI Session history over `kernels status`; (c) `kaggle kernels files
+   <ref>` lists output filenames without downloading — cheap completion probe.
+
+   (d) **Old versions' outputs ARE recoverable — via the SDK, not the CLI**
+   (confirmed 2026-08-05; this REVERSES the earlier "REST rejects
+   `versionNumber`" claim). `ApiDownloadKernelOutputRequest` has a working
+   `version_number` field, even under CLI 2.2.0:
+
+   ```python
+   from kagglesdk import KaggleClient
+   from kagglesdk.kernels.types.kernels_api_service import ApiDownloadKernelOutputRequest
+   with KaggleClient(api_token=tok) as c:
+       req = ApiDownloadKernelOutputRequest()
+       req.owner_slug, req.kernel_slug = "artgor", "<kernel-slug>"
+       req.file_path, req.version_number = "submission.csv", 8
+       redirect = c.kernels.kernels_api_client.download_kernel_output(req)
+   # then urlopen(redirect.url)
+   ```
+
+   Do NOT route this through the CLI: 2.2.0's `kernels pull` accepts
+   `owner/slug/N` and **silently ignores it** (`/1`, `/3`, `/999` all returned
+   byte-identical bytes to latest — the rule-28 unwired-flag signature), and
+   2.2.2's `kernels output` documents the suffix but downloaded nothing at all.
+   Read the two 404s to find the version ceiling: from
+   `www.kaggleusercontent.com` = version EXISTS but has no such file
+   (failed/running/different filename); from `api.kaggle.com/.../
+   DownloadKernelOutput` = no such version. **A kernel's own version history is
+   a merge source** (rule 26b) and is invisible to every `kaggle kernels` read
+   command: on `cayleypy-tetraminx-tpu-beam-q` (31 versions, 15 with a
+   `submission.csv`), latest-only was worth -5 moves and the best single
+   version -7, but the union of all versions was **-51** across 13 versions
+   each holding a unique win -- 10x (28,359 -> 28,308). Puller:
+   `scripts/25_pull_kernel_versions.py --kernel <owner>/<slug> --file
+   submission.csv --out-dir <dir> --max-version 45`, then fold `<dir>` into
+   `90_merge_all.py --extra`.
+
+7g. **`pgrep -f <pat>` / `pkill -f <pat>` SELF-MATCH the checking command's own
+   arg list** — the running `bash -c "... pgrep -f gcp_beam ..."` contains the
+   pattern, so `pgrep -f gcp_beam` always finds ITSELF (false "still running")
+   and `pkill -f gcp_beam` can kill the shell before it relaunches. Cost 3+
+   wasted calls on 2026-07-24 (a self-kill of the launcher, a false "STILL
+   RUNNING"). **Fix**: check with `ps -eo cmd | grep '[g]cp_beam' | grep -v grep`
+   (bracket-first-char defeats the self-match) or match a path-qualified string
+   the checker doesn't contain (`ps -eo etimes,cmd | grep 'tpu-env/bin/python
+   gcp_beam'`). Never trust a bare `pgrep -f`/`pkill -f` on a pattern that also
+   appears in the command doing the matching. Sibling of 7b/7c (Windows process
+   management gotchas).
+   **BRACKETING THE PATTERN IS NECESSARY BUT NOT SUFFICIENT** — tripped 3x on
+   2026-08-01 *with this rule already written*. `[g]cp_beam` protects the pattern
+   token, but the self-match is against the WHOLE command line, so it still fires
+   whenever the name appears UNBRACKETED anywhere else in the same command:
+   a file path (`gcloud storage cp .../gcp_beam_tetraminx.py ~/tetra/`), a launch
+   line (`bash ~/supervise_generic.sh`), even a `grep FRAME_SPEC
+   ~/supervise_generic.sh`. All three killed their own ssh shell mid-command, and
+   two more produced FALSE "1 process running" counts that nearly caused a double
+   launch on one TPU. **The only reliable form is two calls**: read the pids
+   (`pgrep -f "[p]attern"`, harmless even if it self-matches), then
+   `kill <explicit numeric pids>` in a SEPARATE call that mentions no pattern at
+   all. Never put a kill and a launch/copy of the same binary in one command.
+
 8. **Never use `sed -i` for in-place edits on this machine.** Windows MINGW's
    sed silently truncates files to 0 bytes (one occurrence cost ~5 min recovering
    `run_benchmark.py`). Use the `Edit` tool, or `sed 'pattern' file > file.new && mv file.new file`.
@@ -80,7 +205,12 @@ for what was tried and what worked. **Read `IDEAS.md`** for the prioritized untr
    That file is the active to-do list; an idea already there or already superseded
    by something on the list shouldn't be re-proposed. The 70K-score goal is the
    anchor — evaluate every new suggestion against "does this move us toward 70K
-   or just save GPU hours?"
+   or just save GPU hours?" And before EVALUATING whether a forward-looking
+   idea would help, grep `megaminx/EXPERIMENTS.md` (and the cube `EXPERIMENTS.md`)
+   for a model-ID verdict and skim the relevant config dataclass (e.g.
+   `bellman.py`): many ideas are already run+rejected with the hook still present
+   as a default-off flag (e.g. symmetry/rotation augmentation on the V head =
+   m31, REJECTED). Confirmed 2026-06-10.
 
 10. **Never use literal `%` in argparse `help=` strings** — Python 3.14 became
     strict about `%` in help text (it's reserved for C-style format specs).
@@ -149,6 +279,14 @@ for what was tried and what worked. **Read `IDEAS.md`** for the prioritized untr
     rely on sym-ensemble + NISS for inference gains, or (b) re-distill a
     qshort from the new V's forward states first (m23-v3 style). Don't
     naively reuse m23_v2 with a different V.
+    **TPU clause (confirmed 2026-06-12):** on the TPU JAX beam, the production
+    driver is **`gcp_beam_v_only.py` (V-only)**. `gcp_beam_v6e.py` runs
+    V+qshort (m23_v3 Q) and INFLATES paths with the AZ v4 V — pid 992 = **96
+    (qshort 96M) vs 78 (V-only 48M)**, where V-only at half the width + no sym
+    beat the merged floor (85) by 7. Even the re-distilled m23_v3 qshort hurts.
+    Do NOT use `gcp_beam_v6e.py` for solves. NOTE: every TPU beam in the current
+    submission was qshort-built, so a V-only re-run likely improves many hard
+    pids. See [[megaminx-v6e-beam-port]] + `megaminx/findings_vonly_qshort_2026-06-12.md`.
 
 16. **(Megaminx)** **K_SYM + SYM_POSITIONS is the canonical sym-ensemble
     shard pattern in the shareable beam notebooks.** Two knobs, not one:
@@ -307,6 +445,25 @@ for what was tried and what worked. **Read `IDEAS.md`** for the prioritized untr
     floor. Otherwise you're claiming credit for moves the community already
     contributed.
 
+26b. **The n-way min is only as good as its SOURCE SET, and that set is not
+    stable.** Seven merges on 2026-08-03 scanned 121+85, 112+78, 122+78, 128+78
+    and finally 131+121 files — silently. Before quoting a merged total:
+    (a) **re-pull live machines every time** — one early `scp ~/out/*.json` went
+    stale and later merges only refreshed the watched file; the final full
+    re-pull took JSONs 78 -> 121 and found moves. A stale copy caps the merge
+    with no warning. (b) **Copy sources into a stable dir** (`submissions/`,
+    `results/<box>/`) instead of `--extra`-globbing session scratchpads under
+    `AppData/Local/Temp/...`, which are temp dirs whose set changes between runs
+    — `submission_31.csv` surfaced only on the 6th merge and was worth −3.
+    (c) **Search by CONTENT, not name or location**: `submission_dad.csv` sat in
+    `megaminx/` holding TETRAMINX data, and three `submission_publ*.csv` sat in
+    an unrelated `rogii-wellbore-geology-prediction/` folder — together −22
+    moves. Test the header AND that the move alphabet matches the puzzle's
+    generators (a megaminx file passes the header test and fails the second).
+    Attribution corollary: results from OTHERS RUNNING OUR PUBLISHED NOTEBOOK
+    are downstream of our own solver, not a third-party source — miscounting
+    them as external understated our own contribution ~3x that day.
+
 27. **(Megaminx)** **Custom transformers with explicit-`attn_mask` SDPA are
     memory-heavy — size the batch for the `(B,H,T,T)` score matrix, not param
     count.** `F.scaled_dot_product_attention(q,k,v,attn_mask=...)` falls back to
@@ -323,6 +480,25 @@ for what was tried and what worked. **Read `IDEAS.md`** for the prioritized untr
     time was ~727s (GT is expensive to TRAIN too, not just infer). Sibling to
     Rule 22 (compile-hang on the same SDPA-with-mask path). Full story:
     EXPERIMENTS.md 2026-05-25 / `bipartite_gt_q_runbook.md`.
+
+28. **Run the MATCHED control before quoting any A/B delta — and treat
+    byte-identical results as an unwired flag, not a null result.** A total is
+    only meaningful against the same pid set, machine, flags AND checkpoint;
+    any other difference gets silently attributed to the variable under test.
+    Cost 2026-08-02: a full day of local `history_depth=0` runs compared against
+    TPU `history_depth=1` baselines produced two conclusions that had to be
+    retracted — "V-consistency is falsified" (against its own matched baseline it
+    is **-5**) and "the soup is redundant with history_depth" (history was worth
+    only ~1 move on that path, far too little to absorb a -4). Three corollaries:
+    (a) if the control does not exist, run it — it is cheaper than the wrong
+    conclusion; (b) **never generalise an interaction from one measured pair to an
+    unmeasured one** — "hd+soup don't stack" was wrongly extended to hd+consistency,
+    which measured **90% additive**, and the user caught it; (c) if a config change
+    gives byte-identical per-pid results, the flag is not wired — `30_solve.py
+    --history-depth` was parsed and never forwarded, caught only because an "hd=1"
+    run reproduced the hd=0 control exactly. Score against the true standing best
+    with `tetraminx/scripts/56_compare_vs_final.py`, not a remembered floor
+    (see rule 26).
 
 ## Conventions
 
@@ -359,3 +535,9 @@ since the repo isn't published).
 - **>4000 training epochs on the E3 architecture**: diminishing returns past 3000 ep.
 - **k_max > 30** in random walks: no improvement — picture cube's effective diameter.
 - **Single/2-step state-hash post-processing alone**: <100 moves savings on 25K submissions.
+- **(Megaminx) Symmetry/rotation augmentation on the V head** (m31, 2026-04-29):
+  REJECTED -- 50/51 / 95.76 vs m05 89.4 (+6 mean). At 6M params it dilutes the
+  distance signal rather than sharpening it; falsified "orbit coverage is binding."
+  Symmetry aug belongs on the Q-shortlister (m23_v2, KEPT), not the V head. The
+  `lambda_sym` consistency-loss variant (`bellman.py`, default off) is the only
+  clean-untried angle -- confounded inside the rejected m_repr_v0 bundle.

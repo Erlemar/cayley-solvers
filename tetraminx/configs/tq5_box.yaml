@@ -1,0 +1,101 @@
+# tq5 -- REJECTED 2026-07-31. See tetraminx/TRIANGLE_BOX_REJECTED.md.
+# Worse than the control at EVERY pivot depth (gap roughly halved at 20-29) because
+# the box is satisfied perfectly by the constant Q(s,a)=d(s): a two-sided hinge is
+# silent in its interior, which is exactly where the discrimination signal lives.
+# Kept for the record and because the box_* knobs default to 0.0 (= the control).
+#
+# tq5 -- tq1 plus the triangle-inequality BOX on all 24 entries at path states.
+# The ONLY difference from tq1 is the box_* block, so the pair is a clean A/B.
+#
+# WHAT THE BOX IS
+# ---------------
+# `path_mse` supervises exactly ONE of 24 entries per path state. The other 23 are
+# unsupervised at every depth, and that is where the deep-band gap collapses
+# (0.216 in the pivot 30-40 band on tq0). But for ANY state and ANY action the
+# triangle inequality gives
+#
+#     d(s) - 1  <=  d(s.a)  <=  d(s) + 1
+#
+# and a path label hands us d(s) = target + 1. So all 24 entries can be pinned to a
+# DEPTH-DEPENDENT interval using nothing but a fact that is certainly true.
+#
+# MEASURED, not assumed. Against the exact d<=7 table, over ~370k children:
+#
+#   d(s)   frac at d-1   frac at d   frac at d+1   outside box
+#      1        0.042       0.042        0.917           0
+#      4        0.056       0.057        0.887           0
+#      7        0.067       0.068        0.865           0
+#
+# Zero violations at every depth (it is the triangle inequality), and the interior
+# is extremely skewed: ~89% of children sit at exactly d+1. So the box is not just
+# a loose sanity rail -- it is close to a hard label for the large majority of
+# entries, at any depth.
+#
+# WHY IT SHOULD HELP WHERE RANKING LOSSES DID NOT
+# -----------------------------------------------
+# The box asserts nothing about WHICH action is best. That is deliberate: forcing
+# the on-path move to rank first is what tied m_rank_v0 on megaminx, where 56.9%
+# of such disagreements were benign alternative optima. The box only says every
+# entry lies within one move of d(s) -- true regardless of which optimum the path
+# happened to take. What it rules out is FLATTENING: collapsing the 24 outputs
+# toward a depth-independent saturation constant violates a depth-dependent
+# interval at every depth, which is exactly the failure mode being fixed.
+#
+# ASYMMETRIC WEIGHTS, ON PURPOSE
+# ------------------------------
+# Path lengths are UPPER bounds on d(s) (~0.2 slack against the ~28 counting bound
+# on our 28.2/pid reference). So:
+#   * the UPPER hinge Q <= d+1 is certain -- if the true d(s) is smaller, d+1 only
+#     gets looser. Full weight.
+#   * the LOWER hinge Q >= d-1 can over-reach by that slack, so it carries
+#     `box_slack` and a smaller weight.
+#
+# Control arm: tq1_sparse_q_paths.yaml (box weights default to 0.0).
+
+model:
+  state_size: 88
+  num_classes: 88
+  hidden_dims: [2048, 512]
+  num_res_blocks: 2
+  encoding: embedding
+  embed_dim: 16
+
+training:
+  n_epochs: 1500
+  steps_per_epoch: 256
+  batch_size: 2048           # samples BEFORE symmetry expansion (x14 rows after)
+  k_min: 2
+  k_max: 40
+  pivot_tilt: 0.5            # 0 = upstream scheme; >0 biases pivots deeper
+  lr: 3.0e-4
+  weight_decay: 3.0e-3
+  grad_clip: 1.0
+
+  sym_coverage: true         # our addition 2 -- expand 2-of-24 labels via the 24 frames
+  sym_rows: 0                # 0 = use the full greedy coverage width
+  verify_symmetry: true
+
+  anchor_batch: 512          # our addition 1 -- exact 24-way Q from the BFS tables
+  max_anchor_depth: 5        # children of a d<=5 state are all d<=6, so all are in the table
+  anchor_weight: 1.0
+
+  top1_margin: 1.0           # our addition 4 -- upstream ships this at weight 0.0
+  top1_margin_weight: 0.0
+
+  path_dataset: tetraminx/data/path_labels_28821.pt
+  path_batch: 1024           # of ~30k rows/step; ablation axis
+  path_mse_weight: 1.0
+  path_rank_weight: 0.0      # the megaminx-falsified form, kept for ablation
+  path_rank_margin: 1.0
+
+  box_upper_weight: 1.0      # <-- the only real change vs tq1
+  box_lower_weight: 0.5      # softer: path length is an UPPER bound on d(s)
+  box_slack: 0.5             # absorbs the ~0.2 mean path slack
+
+  val_size: 2048
+  checkpoint_every_epochs: 50
+  amp: true
+  compile_model: true        # fixed shapes throughout, so Rule 2 permits it
+  fused_optimizer: true
+
+seed: 0

@@ -18,6 +18,7 @@ For deep history: `EXPERIMENTS.md` (ledger), `IDEAS.md` (backlog), `speed_optimi
 
 | date | source | score | notes |
 |---|---|---|---|
+| 2026-06-15 | working floor: exact relink + interior half-split repair (`half_split_rank201_400_b16k.csv`) | **73,441** | local/GCP verified 1001/1001; half-split saved -133 over `relink_v16_top200_bfsd6.csv` across 70 pids after top-200 + rank-201..400 slices. Not yet a submitted Kaggle score line. |
 | 2026-05-18 | min-merge of our 75,961 base + new community v4 CSV (75,355 standalone; v3 78,196 → v4 75,355 strictly dominates v3); 290 v4 wins beat our base, 71 base wins kept (`merge_v14_plus_min_count_v4.csv`). POLICY EXCEPTION (user-authorized) | **75,200** | current submitted best |
 | 2026-05-18 | min-merge of AZ v4 prod-1001 (79,606 standalone, 134h GCP L4) + our 77,877 + 76,251 community-best → 114 unique AZ v4 wins in mid buckets 4-7, -290 moves (`merge_v13_az_v4_plus_community.csv`). POLICY EXCEPTION (user-authorized) | 75,961 | superseded |
 | 2026-05-12 | min-merge of 76,304 community-best + m_dd_v0_50ep_prod_1001 (84,132 standalone, 33.9h GCP L4) → 20 unique wins, 53 moves saved (`merge_v11_community_plus_m_dd_v0.csv`). POLICY EXCEPTION (user-authorized) | 76,251 | superseded |
@@ -86,6 +87,24 @@ cayley/
 └── .venv/Scripts/python.exe         ALWAYS use this (Windows venv). Never `python` / `python3`.
 ```
 
+## 4a. Public AZ4 training kernel (shipped 2026-07-04)
+
+Teammate-facing modular training notebook (ogurtsov-style config-first) that reproduces
+AZ v4 end-to-end: **kernel `artgor/cayleypy-az4-trainer-megaminx`** + **dataset
+`artgor/megaminx-az4-training-assets`** (~2.4GB: all 5 stage warm-start checkpoints,
+bfs_d6_train.pt, frontier_states.pt, public `submission_73731.csv` + prebuilt policy
+dataset). Sources: `megaminx/kaggle_notebooks/az4_train_shareable/` (`cells/*` ->
+`build_ipynb.py` -> `kaggle kernels push`; local smoke via `smoke_run.py`, passed
+2026-07-04). Stage names: pretrain/curriculum/bellman/bellman_dd/az; default = az-only
+warm from m_dd_v0 ep49, epochs 30 with lr_t_max=200 (schedule parity at ep24). POLICY:
+only PUBLIC solutions CSVs go in the dataset (user decision 2026-07-04) — our private
+merges (73,614 / 71,362) stay local. **Run-verified on Kaggle T4 (33 min): ep24 trajectory
+matches the original, canary identical to reference, cayleypy bench 3/3.** NEW Kaggle
+gotchas encoded there: dataset mounts moved to `/kaggle/input/datasets/<owner>/<slug>`,
+and the torch 2.10 image DROPPED P100 — push kernels with `--accelerator NvidiaTeslaT4`
+(invalid names silently ignored). Full spec + deviations: `az4_train_shareable/PLAN.md`;
+memory `az4-trainer-kernel-shipped`.
+
 ## 5. What works (currently DEPLOYED)
 
 | component | what / where | state |
@@ -151,7 +170,126 @@ cayley/
 9. **Kaggle GPU quota is 30h/week** — easy to blow with one big training run. Plan budgets, use early-stopping.
 10. **Kaggle `kernels output` returns nothing while RUNNING** — only `status` is queryable. Use `_Tee` trick to write `/kaggle/working/run.log` so post-completion logs are recoverable.
 
-## 8. Where we ended (2026-05-25 — §13 batch concluded: PHS validated-but-marginal; rank/sym/frontier-regret neutral)
+## 8. Where we ended (2026-06-13 — v6e-8 256M/512M TPU beam mechanics; 2026-06-12 own-research program still queued)
+
+### THIS SESSION (2026-06-13) — pid 991 wide-beam TPU run + 512M fit work
+
+**256M/8-chip full run completed, identity-only, no score win.** On TPU VM
+`mm-v6e8` (`gen-lang-client-0977634337`, `us-east5-a`), the launched command was
+`gcp_beam_v6e.py --b-global 268435456 --start-pid 991 --end-pid 992
+--k-sym 1 --num-steps 90 --student-alpha 24 --receive-alpha 1.25
+--alpha-req 1.25 --parent-chunk 524288 --internal-bs 131072 --nbhd-radius 4`.
+It was a real 256Mi global beam over 8 chips (`b_local=33,554,432`) and found a
+verified path of **74** moves (`exact hit step 73`, `wall=53764s`, output
+`/mnt/data/out/pid991_256m_full_a24_recv1p25.json`). It did **not** run
+symmetries: `k_sym=1`, `rot_idxs=[0]`, `rot_idx=0`; the `_sym` in the model name
+is only the loaded Q/student artifact, not a search ensemble. The best public
+community CSV we used as the floor reference has pid 991 at **69**, so this is
+valid engineering data, not a merge candidate.
+
+**512M/8 now fits and runs on v6e-8, but the tested alpha4 qshort setting should
+NOT be expanded to a full 90-step record run.** The qshort kernel was widened to
+26/3/5 uint64 backpointers (parent/rank/move), removing the old per-chip
+`b_local <= 2^24` ceiling and supporting `b_local=67,108,864 = 512M/8`.
+Additional fit patches removed the `(B_local,8)` request-position matrix, tiled
+response materialization, reused the donated frontier as the scatter base instead
+of allocating an 8 GiB zero frontier, and built the padded seed on host NumPy
+before `make_array_from_callback` so executable loading did not collide with an
+extra 8 GiB device seed. Remote and local backpointer tests/py_compile passed.
+
+512M smoke command family:
+
+```bash
+gcp_beam_v6e.py --b-global 536870912 --start-pid 991 --end-pid 992 \
+    --k-sym 1 --student-alpha 4 --receive-alpha 1.03125 --alpha-req 1.03125 \
+    --parent-chunk 262144 --internal-bs 131072 --nbhd-radius 4
+```
+
+Successful smoke (`--num-steps 3`): compile `143.9s`; step 1 `2515.6s` device,
+step 2 `2509.3s`; `min_v=28.625 -> 27.875`; output
+`/mnt/data/out/pid991_512m_smoke3_a4_recv1p03125_hostseed.json`. Tile4 response
+materialization (`REQ_TILE=4*MAT_CHUNK`) was neutral (`2512.9s` for step 1), so
+the remaining bottleneck is the broad selection/materialization/HBM structure,
+not the number of response-all-to-alls.
+
+**Next gate before any full 512M run:** run 512M short smokes at
+`student-alpha=8` and/or `12`, plus optionally alpha24 V-all for a quality/speed
+anchor. Resize scratch first for a full attempt: 512M x 90 steps x 8 ranks x
+uint64 backptr is ~386.5 GB decimal before logs/slack, while the current 400GB
+disk is marginal. Use >=600-800GB. Only launch a full run if early `min_v` looks
+competitive with the 256M alpha24 trace (step 2 there was ~12.75; alpha4 was
+27.875).
+
+### THIS SESSION (2026-06-12) — community chat distilled + two original mechanisms built and measured
+
+**Context**: full read of the CayleyPy chat export (3,736 msgs, May 24-Jun 11;
+searchable dump `chat_export_dump.txt`). The outside world moved: Ivan Litvak's
+C++/CUDA MultiGPUBeamSearch runs 86M beams on Kaggle 2xT4 / 700M on 8xA100;
+Vlad Kuznetsov's 24-output Q-models feed it (his teacher beats AZ v4 86.05 vs
+92.2 @ 2^16 on pids 900-1000); community merged floor ~72,161. Catch-up plan +
+Rule-9 reconciliations (NISS = the chat's "dual" trick; m06-vs-modern-Q;
+m_sym_v0-tie vs Vlad's recipe): `chat_brainstorm_2026-06-12.md`. Original
+(non-replication) program: `own_research_directions_2026-06-12.md` (1A-1D
+search-aware training, 2A-2B search-serving models, 3A-3C symmetry economics).
+
+**3C sym-pooled beam — built, validated through 4 escalating A/Bs (EXPERIMENTS.md
+2026-06-12 x2)**. One beam of width K*B seeded with all K rotated (+ inverse)
+copies; per-root widths from a frame-bias-free progress softmax (per-root V-descent
+since its own start, EMA-smoothed); within-root selection unchanged; K=1 ==
+production solver bit-exactly. v0 (global top-k over raw V across frames) FAILED
+— V is deliberately non-invariant across frames; the pool defected from the
+leading root at the finish. Results at equal candidate budget (AZ v4 V fp32,
+4090): K=2 smoke -18 + rescued a both-rotations-failed pid; K=4 @16k total -9
+(991: 97 vs 107); pool+inverse 8 roots @16k total: 504 vs seq 525 (991: 92);
+**production-width gate (24 tail pids, 16k/rot vs 8 roots @65k): pool 2201 vs
+seq 2217 = -16, 8W/8T/8L, wall -7 pct, headline 991: 101 -> 82 (-19)**. All
+losses one bounded mechanism (width committed before path-length info exists;
+max +5). Inverse frames won 6/8 — the sym x inverse grid revives NISS at zero
+extra wall (Rule 11 dropped it for 2x wall, not uselessness).
+
+**1B certified stagnation anchors — pipeline shipped, finding logged.**
+Harvester (`scripts/89_harvest_stagnation_anchors.py`) certifies beam states
+claiming V < 6.5 against `bfs_bytes_d6` (exact d <= 6 / PROVEN d >= 7).
+**Finding: AZ v4 V has NO Fedor-style V~2-at-d~7 stall bug (V in [0,3): 0 pct
+provably wrong — the V0/d1 anchor fix likely covers it). Its real failure is an
+OPTIMISM BAND: V in [4,5) -> 59 pct provably d>=7, V in [5,6) -> 99 pct (mean
+certified gap >= 1.36)** — the beam's endgame ranking zone. Dataset
+`data/stagnation_anchors_v0.pt` (5,177 exact + 31,150 certified-LB anchors —
+a NEW label type). Trainer hook wired into `src/cayley/bellman.py` (flag-gated:
+`stag_anchor_path`, `n_anchor_stag` exact-MSE rows, `n_anchor_stag_lb` +
+`lambda_stag_lb` one-sided hinge), smoke-validated (`configs/stag_anchor_smoke.yaml`).
+
+### Files created this session
+
+- `chat_brainstorm_2026-06-12.md`, `own_research_directions_2026-06-12.md`,
+  `chat_export_dump.txt` (greppable chat transcript)
+- `beam_lab/beam_search_sympooled.py` (SymPooledSolver), `scripts/88_sympooled_ab.py`
+  (A/B driver + K=1 self-test), `scripts/89_harvest_stagnation_anchors.py`
+- `src/cayley/bellman.py` stagnation-anchor mixin (default-off flags)
+- `configs/stag_anchor_smoke.yaml`, `data/stagnation_anchors_v0.pt`
+- `results/sympooled_{smoke_k2,k4_hard,k4_hard_inv,prod_tail}.json` (occupancy traces inside)
+
+### Open at end of session
+
+1. **3C deploy queue**: (a) inverse-frame axis in TPU notebooks — zero kernel
+   surgery (feed R*inv(s)*R^-1 starts, invert path notebook-side); (b)
+   beam_lab pooled+inverse rescue passes on current-best's stubborn pids
+   (ready now, local/GCP); (c) JAX-kernel port of the allocator for 48M scale
+   — GO after a+b (rotation tag needs 3 backptr bits; 24/3/5 layout is full at
+   96M — re-layout, mind the 2026-06-08 overflow).
+2. **1B refine run**: Rule-13 recipe check first; re-harvest with the model
+   being refined (selection is model-specific; labels are certified facts).
+   Gates: calibration table improves in [4,6.5) + d~20 variance canary +
+   10-pid bench + strat-51.
+3. **Tier-0 score**: export CSVs min-merge = **73,984** (-1,216 vs submitted
+   75,200; driver = Liuda's `d_submission_74116.csv`, in the Telegram export
+   files) — awaiting user authorization per the policy-exception process.
+4. Own-research update: 1A cross-width expert iteration is DONE as a diagnostic
+   and REJECTED as a scalar-delta scorer (labels learn, solves regress). Still
+   queued: 3A orbit-mean distillation economics A/B, 2A/3B ensemble heads,
+   2B uncertainty head, 1C kill-gated REINFORCE, 1D learned beam schedule.
+
+## 8a. Prior session (2026-05-25 — §13 batch concluded: PHS validated-but-marginal; rank/sym/frontier-regret neutral)
 
 **Submitted score: 75,200** (unchanged). **Standalone best: 77,086** (unchanged this session).
 

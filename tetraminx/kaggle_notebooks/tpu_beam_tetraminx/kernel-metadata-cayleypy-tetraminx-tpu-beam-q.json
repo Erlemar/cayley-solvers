@@ -1,0 +1,18 @@
+{
+  "id": "artgor/cayleypy-tetraminx-tpu-beam-q",
+  "title": "CayleyPy Tetraminx TPU beam q",
+  "code_file": "cayleypy-tetraminx-tpu-beam-q.ipynb",
+  "language": "python",
+  "kernel_type": "notebook",
+  "is_private": true,
+  "enable_gpu": false,
+  "enable_tpu": true,
+  "enable_internet": false,
+  "dataset_sources": [
+    "artgor/tetraminx-tpu-artifacts"
+  ],
+  "competition_sources": [
+    "cayley-py-professor-tetraminx-solve-optimally"
+  ],
+  "kernel_sources": []
+}
