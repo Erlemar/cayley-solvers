@@ -3,20 +3,48 @@
 Competition: [cayley-py-professor-tetraminx-solve-optimally](https://www.kaggle.com/competitions/cayley-py-professor-tetraminx-solve-optimally)
 Deadline **2026-08-29 22:00**. Community comp, Kudos. 26 teams.
 
-## SUBMITTED 28,308 -- 2026-08-05, **#1** (next: CayleyPy 28,398, +90)
+## SUBMITTED 28,094 -- 2026-08-09, **#1** (next: CayleyPy 28,398, +304)
 
-**Kaggle public score 28,308**, `submissions/FINAL_tetraminx_28308.csv`, 1000/1000
+**Kaggle public score 28,094**, `submissions/FINAL_tetraminx_28094.csv`, 1000/1000
 replay-verified independently of the merge. Leaderboard at submission time:
 
 | rank | team | score |
 |---|---|---|
-| **1** | **us** | **28,308** |
-| 2 | CayleyPy | 28,398 (submitted 06:32, 16 min before ours) |
+| **1** | **us** | **28,094** |
+| 2 | CayleyPy | 28,398 |
 | 3 | Chekhlov Dmitrii | 28,456 |
 | 4 | Tomas Rokicki | 28,481 |
+| 5 | webmaking | 28,843 |
 
 **The field is moving daily now** -- CayleyPy went from absent to 28,398 in one
 morning. Re-check the leaderboard before assuming any bar still holds.
+
+### 28,185 -> 28,094 (-91): the SAME kernel's version history, swept a SECOND time
+
+A version sweep is not a one-shot harvest -- it pays again every time the kernel
+gets re-pushed. `cayleypy-tetraminx-tpu-beam-q` was swept on 2026-08-05 at 31
+versions (worth -51). Four days later it had **119**; pulling v55-v119 (51 held a
+`submission.csv`) was worth another **-91 over 72 pids**, with wins spread thin
+across v061/v063/v066/v070/v084/v100/v113/v115/v118 and others. The 30-move tail
+is what moved: len-30 bucket 148 -> 92, len-29 484 -> 511, len-28 266 -> 289.
+
+Two community kernels swept in the same pass contributed **exactly 0**:
+
+| kernel | versions | beam-quality pids (<=31) | contribution |
+|---|---|---|---|
+| `artgor/cayleypy-tetraminx-tpu-beam-q` | 119 | 320 / 1000 | **-91** |
+| `alexandervc/cayleypy-rw-models2-tetraminx` | 276 | 53 / 1000 (median len 401) | 0 |
+| `markcelliott/frames-saturate-at-two-tpu` | 1 | 37 / 1000 (median len 501) | 0 |
+
+That is a genuine null, not a parse failure -- both replay-verify against tetraminx
+with 0 bad-alphabet rows (rule 26b(c) check). They are RW-model / short-run
+notebooks whose `submission.csv` is mostly long fallback, so **version COUNT is a
+bad proxy for merge value**: 276 alexandervc versions were worth nothing while 51
+of ours were worth 91. Sweep depth should follow whether the kernel is a deep beam.
+
+Ceiling probe (binary search on the two distinct 404 sources -- `kaggleusercontent`
+= version exists / no such file, `api.kaggle.com` = no such version) finds a
+kernel's max version in ~10 requests instead of scanning blind.
 
 ### 28,359 -> 28,308 came ENTIRELY from old Kaggle kernel VERSIONS (-51)
 

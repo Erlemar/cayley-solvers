@@ -140,7 +140,7 @@ def main() -> int:
         student_set = set(student_topαB.cpu().tolist())
         intersection = teacher_set & student_set
         recall = len(intersection) / max(B, 1)
-        gate = "✓" if recall >= target_recall else " "
+        gate = "PASS" if recall >= target_recall else ""
         print(f"{alpha:>6.1f} {k:>10d} {recall:>8.4f} {gate:>11s}")
 
     return 0

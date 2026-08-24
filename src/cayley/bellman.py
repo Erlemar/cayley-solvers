@@ -180,6 +180,27 @@ class BellmanConfig:
     n_anchor_v0: int = 0
     n_anchor_d1: int = 0
 
+    # Certified stagnation/near-solved anchors (own-research 1B, 2026-06-12).
+    # Dataset built by `megaminx/scripts/89_harvest_stagnation_anchors.py`:
+    # beam-frontier states the model claimed were near solved (V < ~6.5), each
+    # CERTIFIED against the exact BFS-d6 table — label_type 0 = exact distance
+    # (d <= 6), label_type 1 = proven lower bound d >= 7. Measured on AZ v4
+    # (2026-06-12 harvest, 8 hard pids): V in [4,5) is 59 percent provably
+    # d>=7, V in [5,6) is 99 percent — a systematic optimism band exactly where
+    # the beam ranks endgame states. Two batch components, both default-off:
+    #   n_anchor_stag        exact rows per batch -> main MSE (like BFS-d6 mixin
+    #                        but BEAM-distributed, not shell-uniform)
+    #   n_anchor_stag_lb     lower-bound rows per batch -> one-sided hinge
+    #                        lambda_stag_lb * mean(relu(lb - V_pred)^2)
+    #                        (only pushes V UP to the proven bound; never down —
+    #                        an MSE-to-7 target would be WRONG for true d > 7)
+    # Distinct from m27 (BFS-d6 mixin, shell-uniform states, REJECTED) by the
+    # state distribution (beam-visited optimism band) and the LB label type.
+    stag_anchor_path: str = ""
+    n_anchor_stag: int = 0
+    n_anchor_stag_lb: int = 0
+    lambda_stag_lb: float = 1.0
+
     # Early stopping. When > 0, monitor smoothed training loss (mean over last
     # `early_stop_smooth_window` epochs) and stop if it doesn't improve by at
     # least `early_stop_min_delta` for `early_stop_patience` consecutive epochs.
@@ -432,7 +453,30 @@ def train_bellman(
     anchor_d1 = _apply_all_generators(anchor_v0, generators).squeeze(0).to(state_dtype)  # (24, S)
     if bcfg.n_anchor_v0 > 0 or bcfg.n_anchor_d1 > 0:
         print(f"[bellman] anchor mixin: V0={bcfg.n_anchor_v0}, "
-              f"d=1 children=24×{bcfg.n_anchor_d1}", flush=True)
+              f"d=1 children=24x{bcfg.n_anchor_d1}", flush=True)
+
+    # Certified stagnation anchors (own-research 1B): exact pool + LB pool.
+    stag_exact_states = stag_exact_targets = None
+    stag_lb_states = stag_lb_values = None
+    if bcfg.stag_anchor_path and (bcfg.n_anchor_stag > 0 or bcfg.n_anchor_stag_lb > 0):
+        _stag = torch.load(bcfg.stag_anchor_path, map_location="cpu", weights_only=False)
+        _st = _stag["states"].to(state_dtype)
+        _lt = _stag["label_type"]
+        _lv = _stag["label_value"].to(torch.float32)
+        _ex_m = _lt == 0
+        _lb_m = _lt == 1
+        if bcfg.n_anchor_stag > 0 and int(_ex_m.sum()) > 0:
+            stag_exact_states = _st[_ex_m].to(cfg.device)
+            stag_exact_targets = _lv[_ex_m].to(cfg.device)
+        if bcfg.n_anchor_stag_lb > 0 and int(_lb_m.sum()) > 0:
+            stag_lb_states = _st[_lb_m].to(cfg.device)
+            stag_lb_values = _lv[_lb_m].to(cfg.device)
+        print(f"[bellman] stagnation anchors: exact pool="
+              f"{0 if stag_exact_states is None else stag_exact_states.size(0)} "
+              f"(use {bcfg.n_anchor_stag}/batch), lb pool="
+              f"{0 if stag_lb_states is None else stag_lb_states.size(0)} "
+              f"(use {bcfg.n_anchor_stag_lb}/batch, lambda={bcfg.lambda_stag_lb})",
+              flush=True)
 
     # F2L positions: if set, switches Bellman boundary to "any state matching solved
     # on these positions". Used for V_F2L training (group decomposition).
@@ -649,6 +693,14 @@ def train_bellman(
                 bs_parts.append(anchor_d1.repeat(bcfg.n_anchor_d1, 1))
                 target_parts.append(torch.ones(24 * bcfg.n_anchor_d1,
                                                dtype=torch.float32, device=cfg.device))
+            # Stagnation-anchor EXACT rows: beam-distributed d<=6 states with
+            # exact distances — ride the main MSE like the BFS-d6 mixin.
+            if stag_exact_states is not None:
+                ridx = torch.randint(0, stag_exact_states.size(0),
+                                     (bcfg.n_anchor_stag,),
+                                     generator=batch_gen, device=cfg.device)
+                bs_parts.append(stag_exact_states[ridx])
+                target_parts.append(stag_exact_targets[ridx])
             if bfs6_ep_states is not None and bfs6_cursor + bfs6_count_per_batch <= bfs6_ep_states.size(0):
                 bs_parts.append(bfs6_ep_states[bfs6_cursor : bfs6_cursor + bfs6_count_per_batch])
                 target_parts.append(bfs6_ep_dists[bfs6_cursor : bfs6_cursor + bfs6_count_per_batch])
@@ -699,6 +751,17 @@ def train_bellman(
                     overshoot = (pred_rw.float().flatten() - bd_rw).clamp(min=0.0)
                     upper_loss = (overshoot ** 2).mean()
                     loss = loss + bcfg.lambda_upper * upper_loss
+                # Stagnation-anchor LOWER-BOUND hinge: states with certified
+                # d >= lb (proved by BFS-d6 exclusion). One-sided: only pushes
+                # V_pred UP to the bound; an MSE target at lb would be wrong
+                # for states whose true d exceeds the bound.
+                if stag_lb_states is not None:
+                    ridx_lb = torch.randint(0, stag_lb_states.size(0),
+                                            (bcfg.n_anchor_stag_lb,),
+                                            generator=batch_gen, device=cfg.device)
+                    pred_lb = model(stag_lb_states[ridx_lb]).float().flatten()
+                    undershoot_lb = (stag_lb_values[ridx_lb] - pred_lb).clamp(min=0.0)
+                    loss = loss + bcfg.lambda_stag_lb * (undershoot_lb ** 2).mean()
                 # Admissibility-aware penalty: pred should not undershoot
                 # the admissible PDB heuristic. Applied to the FULL batch
                 # (RW + mixins) since PDB is a global lower bound.

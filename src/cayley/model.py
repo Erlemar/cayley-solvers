@@ -301,3 +301,76 @@ class ResMLPDistance(nn.Module):
             "output_dim": self.output_dim,
             "inference_chunk_size": self.inference_chunk_size,
         }
+
+
+class DeltaVModel(nn.Module):
+    """Frozen base V plus a trainable residual delta V.
+
+    At initialization the delta network's final linear layer can be zeroed, making
+    the composed model exactly equal to the base model. This gives us a
+    function-preserving way to add capacity and train only corrections.
+    """
+
+    def __init__(
+        self,
+        base: nn.Module,
+        delta: ResMLPDistance,
+        delta_scale: float = 1.0,
+        freeze_base: bool = True,
+        inference_chunk_size: int | None = 2048,
+    ):
+        super().__init__()
+        self.base = base
+        self.delta = delta
+        self.delta_scale = float(delta_scale)
+        self.freeze_base = bool(freeze_base)
+        self.inference_chunk_size = inference_chunk_size
+        self.output_dim = 1
+        if self.freeze_base:
+            for p in self.base.parameters():
+                p.requires_grad = False
+
+    def _forward_single(self, x: torch.Tensor) -> torch.Tensor:
+        if self.freeze_base:
+            with torch.no_grad():
+                base_v = self.base(x).float().flatten()
+        else:
+            base_v = self.base(x).float().flatten()
+        delta_v = self.delta(x).float().flatten()
+        return base_v + self.delta_scale * delta_v
+
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        if self.training or self.inference_chunk_size is None or x.shape[0] <= self.inference_chunk_size:
+            return self._forward_single(x)
+        outs: list[torch.Tensor] = []
+        for i in range(0, x.shape[0], self.inference_chunk_size):
+            outs.append(self._forward_single(x[i : i + self.inference_chunk_size]))
+        return torch.cat(outs, dim=0)
+
+    def num_parameters(self) -> int:
+        return sum(p.numel() for p in self.parameters())
+
+    def trainable_parameters(self) -> int:
+        return sum(p.numel() for p in self.parameters() if p.requires_grad)
+
+    def get_model_config(self) -> dict:
+        if not hasattr(self.base, "get_model_config"):
+            raise TypeError("DeltaVModel base must expose get_model_config() for serialization")
+        if not hasattr(self.delta, "get_model_config"):
+            raise TypeError("DeltaVModel delta must expose get_model_config() for serialization")
+        return {
+            "model_class": "DeltaVModel",
+            "base_config": self.base.get_model_config(),
+            "delta_config": self.delta.get_model_config(),
+            "delta_scale": self.delta_scale,
+            "freeze_base": self.freeze_base,
+            "inference_chunk_size": self.inference_chunk_size,
+            "output_dim": 1,
+        }
+
+
+def zero_init_resmlp_head(model: ResMLPDistance) -> None:
+    """Make a ResMLPDistance residual head output exactly zero at init."""
+    with torch.no_grad():
+        model.head.weight.zero_()
+        model.head.bias.zero_()

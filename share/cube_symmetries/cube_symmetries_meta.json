@@ -1,0 +1,10 @@
+{
+  "state_size": 72,
+  "effective_symmetries": 48,
+  "with_inverse_antisymmetry": 96,
+  "facelet_automorphism_group_order": 1152,
+  "centralizer_order": 24,
+  "group_closure_ok": true,
+  "rotations_subgroup_ok": true,
+  "antisymmetry": "s -> P . invert(s) . P^-1 (group-invert the state, then conjugate)"
+}

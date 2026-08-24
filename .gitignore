@@ -160,3 +160,10 @@ cube555/gpu/_dscheck*/
 .tmp/
 .tmp_marimo_pair/
 .codex-tools/
+
+# cube666 Kaggle campaign run outputs (6k txt/json, regeneratable)
+cube666/kaggle_kmc_campaign/production_outputs/
+cube666/kaggle_kmc_campaign/smoke_output_*/
+# Kaggle push staging bundles -- duplicate copies of repo source, regenerable
+# (same rationale as .dataset_stage_*/ and kaggle_share/ above)
+cube666/kaggle_kmc_campaign/bundle_v*/

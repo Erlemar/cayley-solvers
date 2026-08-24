@@ -1,0 +1,21 @@
+{
+  "baseline_total_length": 46662,
+  "best_total_length": 46662,
+  "complete_count": 1043,
+  "dataset_count": 1043,
+  "ensemble_selected_count": 0,
+  "ensemble_solved_count": 0,
+  "moves_saved_vs_baseline": 0,
+  "output": "C:\\Users\\and-l\\cayley\\cube444\\kaggle_inference\\cube444_inference\\solver\\results\\submission_ensemble_w040.csv",
+  "run": {
+    "B": 2097152,
+    "mlp_sha256": "70a6a3ad69aece0e89ce1d098173ade47248db164d55ab5f837d7a014b9657f7",
+    "mlp_weight": 0.4,
+    "num_attempts": 2,
+    "num_steps": 150,
+    "search_seed": 0,
+    "transformer_sha256": "cbd24358fafb41f8832951b1ee92e48b22a43ece68df0df60df3b473ba9cc4f3",
+    "transformer_weight": 0.6
+  },
+  "updated_at": "2026-08-10T07:22:56Z"
+}

@@ -897,3 +897,625 @@ Do NOT re-run window rewriting, relation mining, MITM, bridge compression,
 splicing or Knuth-Bendix on this file. Those are all the same local-rewrite
 family, they are now known to be exhausted out to 20-move windows on the region
 they can reach, and the paths there are provably optimal.
+
+## 2026-08-23 -- cube666 path-context ranker: first strict model-selected wins
+
+Primitive/state-only imitation was rejected as the wrong objective for the
+KMCoders 6x6 pipeline.  The decisive counterexample is exact: on the initial
+16-PID gate, nine pairs of different rough words reach the same full 216-sticker
+state with the same rough length, yet the native insertion finisher differs by
+2--6 primitive moves.  The completion objective is therefore non-Markov in cube
+state; the rough word and its cancellation opportunities are part of the state
+for ranking purposes.
+
+`45_build_path_context_oracle.py` recovered 96 unique gate rough words and all
+128 native labels replay-verified.  `47_add_insertion_context_features.py` then
+summarized the best 512 exact reducing 3-cycle insertions for each word.  A first
+91-feature ridge correction appeared to improve the small gate by four moves,
+but **failed** the larger check (100 regret versus 74 for the fixed
+`rough_len + 4.34 * residual` proxy).  Do not reuse that unregularized ablation;
+the small-gate result was noise.
+
+A PID-disjoint corpus was then generated on 32 stratified pids using production
+control plus seed 50002, seed 50003, alpha 2.5, alpha 3.5 and keep-best rough
+searches.  All 192 final labels replayed, all 192 rough words were unique, and
+the per-PID oracle saved **156 moves** versus the 6,257-move incumbent subtotal.
+Alpha 3.5 cost 15m29s for 32 pids versus 5m39s--7m39s for the other variants;
+retain it only when its unique-winner yield justifies that cost.
+
+`50_train_path_context_ranker.py` selects a shrink-regularized correction using
+only four-fold PID-grouped CV on the 32-pid corpus.  The selected model combines
+compact insertion-frontier, path-summary and generator-configuration features:
+
+* corpus OOF: proxy regret 74 -> model regret **48**, pair accuracy 74.9% -> 79.8%;
+* separate 16-PID gate: proxy regret 34 -> model regret **30**, pair accuracy
+  76.8% -> 80.6%.
+
+`51_materialize_path_ranker_selections.py` materialized the OOF choices.  All
+32 selected paths replayed; raw selection saved 108 moves and strict-min merging
+kept 16 wins worth **126 moves**, discarding six regressions.  The final full
+merge `submissions/cube666_path_context_ranker_strictwin_v1.csv` is
+**176,543 moves, 1012/1012 replay-verified**, improving
+`cube666_model_hybrid_strictwin_v1.csv` (176,669) by 126.
+
+This validates model-based *rough-trajectory selection*, not state-value beam
+search.  The next clean test is online: generate several rough candidates on
+fresh pids, rank before wide completion, run the 20k finisher only on the model
+shortlist, and accept replay-verified strict wins.  Keep the fixed proxy as the
+fallback whenever the learned correction lacks candidate-set support.
+
+## 2026-08-23 -- cube666 uniform-label correction and fresh online result
+
+The first online test exposed a hidden label bug in the experiment above.  On
+24 new PIDs, the frozen v1 learned correction lost **8 moves** to the fixed proxy
+on its four disagreements.  Multi-trajectory generation itself still worked:
+strict proxy/model candidate merging improved the full score from 176,669 to
+176,389.  The learned correction, however, had not generalized.
+
+The cause was causal and large, not speculative.  The 32-PID training control
+had been completed at beam 20,000, while all five alternative rough generators
+had been labeled at beam 4,000.  Native `solve_cube_beam` now accepts a full
+`KMC_ROUGH_PATH` override, allowing the exact same insertion finisher to relabel
+arbitrary rough words.  The patched executable hash is
+`406e2fe91455dafb722ac148014660dd54290e5ef8b3d3f94b7678c54a8e0995`.
+All uniform labels below used beam 20,000, cap 1,000 and exact replay.
+
+Uniform relabeling of all 192 training candidates quantified the bias:
+
+| condition | uniform beam20k minus old label, mean | sum |
+|---|---:|---:|
+| control | 0.000 | 0 |
+| alpha 2.5 | -2.625 | -84 |
+| alpha 3.5 | -3.875 | -124 |
+| keep-best | -3.250 | -104 |
+| seed 50002 | -2.625 | -84 |
+| seed 50003 | -3.375 | -108 |
+
+Thus generator identity was a shortcut for label budget.  The corrected v2
+ranker explicitly disallowed every configuration feature.  It selected a
+44-feature compact insertion-frontier ridge correction by four-fold PID-grouped
+CV.  OOF regret improved 52 -> 38.  A separately relabeled 16-PID gate (96/96
+replays) improved proxy regret 30 -> **24** and pairwise accuracy 78.7% ->
+**82.5%**.  On the earlier 24 online PIDs, however, v2 still lost 4 moves to the
+proxy (half v1's regression).  Strictly merging only exact wins produced
+`cube666_path_context_uniform_v2_strictwin_v4.csv`, **176,377**, 1012/1012
+replay-verified.
+
+The uniform corpus was then expanded to all six candidates on those 24 online
+PIDs, reusing 35 already-paid exact completions.  Combining the three disjoint
+sets yielded **432 candidates / 72 PIDs**.  The frozen v3 model remained the
+configuration-blind compact frontier; grouped CV improved proxy regret
+110 -> **98** and pairwise accuracy 77.9% -> **82.9%**.
+
+The decisive online check used 12 entirely new stratified PIDs
+(238, 259, 293, 425, 542, 638, 689, 714, 775, 947, 994, 1010).  Six rough
+trajectories per PID were generated and ranked before any completion label.
+V3 disagreed with the proxy on five PIDs.  Beam-20k completion gave one model
+win (-6), one loss (+4) and three ties; across all 12, the model total was
+**2,290 versus proxy 2,292**, the first honest fresh-PID model win.  All 24
+compared paths replayed exactly.
+
+The raw selector win did not lower the incumbent beyond the proxy strict merge:
+the model's six-move win on PID 994 tied an already-known incumbent path, while
+the proxy's win on PID 714 did improve it.  Consequently the proxy-only strict
+merge and combined proxy+model safety merge both score **176,311**.  The durable
+combined artifact is
+`submissions/cube666_path_context_uniform_v3_hybrid_strictwin_v6.csv`,
+1012/1012 replay-verified.  It is 358 moves better than the 176,669 starting
+incumbent, but the final 66-move step came from fresh trajectory diversity, not
+an incremental model-only submission gain.
+
+Adding exact residual-cluster summary features did not improve grouped-CV
+selection regret (102 versus 98), so that ablation is rejected.  Four-fold
+uncertainty also could not separate the fresh six-move win from the four-move
+loss.  The evidence says the primary historical bottleneck was **incomparable
+labels**, followed now by limited predictive signal/sample size.  A larger
+network is not justified until substantially more uniform, PID-diverse labels
+or a representation of the exact insertion/cancellation process is available.
+
+## 2026-08-23 -- cube666 110k budget and stabilizer-factor capability gate
+
+The new target is 110,000.  The replay-verified incumbent is 176,311 over 1,012
+puzzles: mean 174.22, median 193 and maximum 212.  The gap is **66,311 moves,
+65.52 per PID**.  PIDs 200--1011 average about 195 moves, so neither rough-path
+selection nor a small beam-width gain can plausibly close it.  A qualitatively
+different macro solver is required.
+
+The 27,958-action KMC macro vocabulary was audited as an exact stabilizer
+library.  `58_build_stabilizer_ladder.py` found and replay-verified the
+invariant-aware order **0 -> 4 -> 5 -> 2 -> 3 -> 1**.  The first five projected
+stages retain full A24 reachability; once those are fixed, the last cluster is
+restricted to the exact 10,461,394,944,000-state residual subgroup generated
+by eight remaining macros.  Gate A passed with 112 inverse-closed basis actions
+across the six stages.  The exhaustive reachability evidence is in
+`cube666/reports/stabilizer_reachability_v1.json`; the durable ladder is
+`cube666/artifacts/stabilizer_ladder_v1.json`.
+
+Two important negative controls prevent overstating that algebraic result:
+
+- Exact greedy 3-cycle-cost descent solved **0/10 at every stage**.  This
+  reproduces the known valley problem inside the correct stabilizer graph.
+- A 12M stage-0 network trained on random walks over the minimal 11-action basis
+  solved **0/8** mixed states at beam 4,096.  Algebraically minimal generators
+  give a poor search diameter and random-walk distance remains a weak label.
+
+`62_build_stabilizer_factor_teacher.py` then supplied the missing independent
+deep teacher.  Dense Schreier--Sims factorization generated **1,000/1,000 exact,
+replay-verified arbitrary stage-0 solutions** and 130,977 labelled states.
+These are capability labels, not candidate paths: the constructive factors
+average 130.98 macro steps and 2,711 primitive moves.
+
+A 25M policy/value model learned those factors well at the row level.  On 8,192
+held-out rows split by complete source solution, action recall was **67.00%
+top-1 and 99.89% top-32**.  Nevertheless an autonomous beam 2,048 x 32 failed
+the held-out initial state even with a 350-step horizon and cumulative policy
+likelihood (0/1, 22.8M children).  Value MAE was 24.05 macro steps.  Gate B is
+therefore **not passed**: valid factor labels alone do not yet preserve a full
+unseen solution through search.
+
+The next bounded correction is to keep Schreier strong generators as atomic
+high-level actions.  Their exact factor horizon is about 20--35 rather than
+70--300 expanded macro steps.  Train and gate that short-horizon policy first;
+only after it solves unseen stage states should its strong actions be compiled
+into short primitive/macro words.  Do not scale the current expanded-action
+policy or train the remaining five stages yet.
+
+### Transversal policy passes the capability gate; cost geometry rejects it as the scorer
+
+`64_build_stabilizer_transversal_teacher.py` used the basic Schreier
+transversals rather than expanded strong-generator words.  The inverse-closed
+stage-0 vocabulary has **461 actions** and an exact base length of 22.  It
+factorized and replay-verified **2,000/2,000 arbitrary A24 states**, producing
+39,473 labeled states at mean horizon **19.7365** (maximum 22).
+
+The same 25M policy/value architecture trained for 3,000 updates.  With source
+solutions held out as whole groups, it reached **99.9364% top-1**, 100% top-32,
+and value MAE 0.9163 transversal steps.  Autonomous beam passed twice:
+
+- beam 4,096 / branch 32: **8/8** unseen arbitrary states solved;
+- beam 128 / branch 16: **100/100** unseen arbitrary states solved, in 11--18
+  actions (mean 15.21), roughly 0.12 seconds per state.
+
+This is Gate B passed: the model now solves unseen full projected scrambles on
+its own.  It also finds fewer high-level actions than the canonical teacher.
+
+The score gate is nevertheless a hard rejection.  Raw Schreier expansions
+average 2,328.88 primitive moves per stage-0 state.  Exhaustive one/two-dense-
+macro compilation in `65_compile_transversal_atoms.py` replay-verified all 461
+atoms, improved 170, and reduced the canonical mean to 977.224, but that remains
+orders of magnitude outside the 110k budget.  Applying the compiled atoms to the
+model's own 100 paths gives mean **652.58**, median 337, minimum 110, maximum
+2,460 primitive moves for just one cluster.  Therefore do not train the other
+five stage policies or present the transversal route as a scoring solver.
+
+The positive result is diagnostic: model size/capability and full-scramble
+generalization are no longer the primary blocker.  The blocker is the training
+and search cost geometry.  The next scorer must operate on short primitive/dense
+macros over the full six-cluster residual, with primitive-weighted Bellman/search
+targets and cross-cluster coordination; the exact transversal policy remains a
+fallback and representation/capability control.
+
+The approved marimo upload package was hash-pinned locally, but the supplied
+server returned HTTP 410 `sandbox terminated` before upload began.  No partial
+remote artifact was created.
+
+`66_eval_transversal_value_macro_beam.py` tested the most direct possible
+transfer: the full-path effect model proposed short, multi-cluster macros while
+the exact-factor model summed its value over all six clusters to rank children.
+On hard PID 597 at beam 32 / branch 16 / depth 80, the initial exact residual 65
+fell only to 57.  The matched exact-residual control, with the same proposals and
+search dimensions, reached 47.  Neither solved.  Therefore canonical
+transversal distance is not merely insufficiently scaled; it misorders progress
+in the primitive/multi-cluster geometry.  Do not widen this hybrid.  The direct
+scorer needs Bellman/search labels generated in the short-macro geometry itself.
+
+## 2026-08-23 -- cube666 candidate-local post-processing gate finds a strict win
+
+`67_postprocess_frame_gate.py` tested the Tetraminx-derived post-processing stack
+on the ten longest PIDs whose original three-frame KMC campaign was fully complete
+and which appear in no resume task: **668, 515, 384, 375, 643, 923, 276, 394,
+484 and 938**.  The input subtotal was 1,962 moves.  Identity/incumbent plus
+rot03/rot18/rot35 yielded 31 distinct replay-valid trajectories after exact word
+deduplication and commuting normalization.
+
+The acceptance harness was positive-controlled before the real sweep.  Appending
+the neutral word `f0^4` to PID 668 inflated 199 -> 203; commuting reduction,
+Walton's `optimize_bisearch`, exact radius-4 window rewriting and the union graph
+all independently recovered 199.  Every candidate was replayed on all 216
+stickers after every accepted rewrite, and the final 1,012-row CSV was replayed
+again by the separate `07_merge_verify.py` process.  The original and independently
+rebuilt CSVs have identical SHA-256
+`7facd1c355dcaa9776b2d54fa10ec5820d49ab8d46a2d64570e65a9041981be7`.
+
+Measured results:
+
+* Walton's previously unused polisher shortened PID 276 rot03 **207 -> 205**, but
+  the incumbent there was already 195.
+* Exact radius-4 rewriting shortened PID 923 rot18 **202 -> 200**, but its
+  incumbent was already 196.
+* Exact radius-4 rewriting shortened PID 515 rot18 **198 -> 196**, a strict
+  two-move incumbent win.  The decisive splice replaced the nine-move window at
+  offsets `[10,19)`,
+  `-f1.r4.d1.f1.-r4.-d2.r0.r2.r4`, with the replay-equivalent seven-move word
+  `-d2.-f1.r4.d1.f1.r0.r2`.
+* Exact shared-state loop/crossover found no further gain.  There were no repeated
+  states within any trajectory and only 2--3 shared states per PID across all
+  trajectories (the two endpoints plus at most one internal intersection); this
+  rejects exact crossover as the source of the win.
+
+The gate took 827.2 s: 91.9 s for 31 Walton passes with four CPU workers and
+691.2 s for the sequential GPU radius-4 fixpoint sweeps.  Candidate-local order
+was essential: ordinary per-PID min-merge saw the winning rot18 word only as a
+198-move tie and would have discarded it before rewriting.  The strict merged
+artifact is `submissions/cube666_kmc_postprocess_gate10_v1.csv`, **171,343 moves**
+over 1,012/1,012 replay-verified PIDs, improving the 171,345 incumbent by two.
+The durable report and caches are in
+`cube666/reports/postprocess_gate10_v1/`.
+
+This is a positive scale gate for radius 4, not for crossover.  The next campaign
+should radius-4 rewrite every distinct frame trajectory before min-merge, retaining
+the append-only cache/resume discipline.  Walton is cheap enough to keep in front
+of it, although its only gate hit did not score.  Radius 5 remains gated: radius 4
+already dominates runtime and the next ball rung is roughly a branching-factor
+increase.
+
+## 2026-08-24 -- cube666 three-frame KMC campaign complete: 170,051
+
+All ten Kaggle resume kernels `cayley-666-kmc-w1r-s00` through `s09` completed.
+`kaggle_kmc_campaign/harvest_resume_wave1.py` pulled them into an immutable
+`production_outputs/resume_wave1/slotXX` tree and refused extraction until every
+guard passed.  The harvest verified **10/10 shards and 1,044/1,044 missing tasks**,
+including exact campaign manifest, KMC binary, critical source hashes, per-frame PID
+sets, all four per-PID artifacts and safe ZIP paths.  Combined with the 1,992 original
+tasks, coverage is now exactly **3,036/3,036 = three frames for each of 1,012 PIDs**.
+
+The deterministic merge replayed all 3,036 frame candidates plus the 1,012-path
+171,343 incumbent (and the sample positive fallback) on the full 216-sticker states.
+It produced `submissions/cube666_kmc_wave1_complete_merged_v1.csv` at **170,051**,
+saving **1,292 moves on 200 strict-win PIDs**:
+
+* rot35: 151 strict wins, **940 moves saved**;
+* rot18: 49 strict wins, **352 moves saved**;
+* largest individual wins: PID 300 rot35 and PID 1005 rot18, both **-26**.
+
+The final-only independent replay rebuilt an identical 1,012-row CSV at the same
+170,051 score.  Both files have SHA-256
+`881c84d2a546897156c8f41d920bfbf913384c9b873b4a86a26bfabd430f1620`.
+The harvest provenance is in
+`cube666/kaggle_kmc_campaign/production_outputs/resume_wave1/harvest_report.json`;
+the merge and independent replay reports are
+`wave1_complete_merged_v1_report.json` and
+`wave1_complete_merged_v1_independent_reverify.json` in `production_outputs/`.
+
+This closes the frame-generation campaign.  The next score lever is candidate-local
+Walton + exact radius-4 rewriting over the now-complete three-frame corpus before a
+fresh min-merge; the 10-PID gate already proved why rewriting must precede discarding
+non-winning/tied frame trajectories.
+
+## 2026-08-23 -- cube666 primitive-cost model/search diagnosis and macro retrieval gates
+
+The merged full-path teacher was first repaired and re-audited.  The clean
+artifact in `cube666/training/macro_teacher_fullpath_primmoves_clean_v1/` has
+37,417 rows, 43,530 inverse-closed actions, 844 source PIDs and zero mixed-unit
+cost violations.  Targets are primitive moves (mean 46.49, maximum 244).  The
+action table contains 30,506 effects of cost at most 14, but 6,512 target actions
+are long (16--230 moves) and have 1,471 distinct cycle geometries.  Exact
+one/two-short-macro compilation covered none of those 6,512 long effects.
+
+The decisive primitive audit is local action rank, not scalar value correlation.
+The frozen/base primitive value model chose the correct next primitive top-1 on
+only 11.05% of held-out teacher states; the depth-20 frontier model fell to
+7.15% despite better frontier correlation/MAE.  At remaining distance 161+,
+state-only policy/value top-1 was about 3%.  Local all-neighbour rank training
+raised value top-1 to 16.87% but created severe off-trajectory value basins and
+still failed full residual PID 200.  A 16-action history model raised held-out
+policy top-1/top-8 to 26.03%/59.38% and deep top-1 to 16.36%, but policy-only
+beam 16,384 explored 113.8M children without solving.  Exact long histories
+were nearly unique across PIDs.  These gates reject a larger state/history MLP
+as the missing primitive solver.
+
+An autoregressive decoder over verified short macro words was a real proposer
+improvement: held-out exact-sequence/token accuracy was 12.62%/29.33%, and trie
+recall reached 44.53% at top 128 and 61.33% at top 512 (the old effect proposer
+had only 14.8% at top 512).  High-value top-512 recall was nevertheless just
+21.88%.  On PID 540's known nine-macro, 40-primitive suffix, top-256 recall was
+only 5/9.  A factorized value-initialized autoregressive encoder regressed to
+11.14% exact sequences, 24.82% token accuracy and 3/9 PID-540 top-256 recall.
+Exact primitive-word imitation is rejected: the high-value labels are mostly
+globally singleton words, so model size does not remove the ambiguity.
+
+`92_train_macro_factorized_primitive_value.py` supplied the strongest calibrated
+value representation so far.  Its initial held-out correlation/MAE was
+0.852/9.59.  Parent-local rank fine-tuning improved sampled child ranks but
+destroyed global calibration (MAE 25.93), and an oracle beam still lost the
+known path.  Proposer-hard-negative rank training produced excellent training
+ranks but the same cross-parent failure.  Batched trie decoding in
+`90_eval_macro_autoregressive_beam.py` made the failure measurable: on PID 540,
+the known path was globally ranked 3,096 at layer 3 with beam 512; beam 8,192
+retained it through layer 4, then dropped it at rank 65,400 on layer 5.
+
+The correction is certified return-cost supervision.  For an arbitrary macro
+of cost `c` from a teacher state of remaining cost `V`, undoing it and following
+the teacher suffix is a verified route of cost `V+c`.  Training on 16,384 states
+times 64 proposer-specific children improved held-out correlation/MAE to
+**0.884/8.51 with bias -0.03**, rather than sacrificing calibration.  It moved
+PID 540's layer-3 global teacher rank from 3,096 to 428 at beam 512, but the path
+still fell at rank 3,035 on layer 4; beam 4,096 fell at rank 12,661.  Thus wider
+beam alone remains rejected, while return-cost labels are retained as the right
+off-trajectory value target.
+
+A geometry-aware dual encoder then replaced opaque action IDs/primitive words
+with state and verified macro-effect embeddings.  On 256 PID-held-out states
+over the full 43,530-action library it reached 10.16% top-1, 39.45% top-64 and
+46.48% top-256 teacher recall.  Hard-negative DAgger modestly raised top-1/top-256
+to 12.5%/48.83%.  This does not solve the singleton-label problem: PID 540's
+eight symmetry-related value-40 labels are eight distinct cost-10 actions, each
+occurring exactly once globally, and their ranks remain 8K--38K.
+
+Dense Q distillation removed those arbitrary IDs by supervising
+`macro cost + calibrated child value` over 129 candidates per state.  It moved
+the exhaustive best-Q action's median retrieval rank from 16,669 to 5,331 and
+reduced branch-256 Q regret from 7.52 to 5.06 moves.  A fresh hard-negative,
+temperature-1 pass improved best-Q top-256 overlap only from 14.06% to 18.75%
+and left branch-256 regret at 5.02.  The single global dot-product retriever is
+therefore rejected as the production proposer.  The next model must jointly
+score state/action interactions after a cheap first-stage shortlist; repeating
+ID imitation, a larger monolithic MLP, or wider beam is not justified.
+
+The supplied marimo Pro-6000 endpoint
+`sb-ff6d333efc186440.sb.molab.run` failed connection before session discovery
+from the pairing client, including with approved network access.  All gates in
+this section therefore ran on the local RTX 4090; no partial remote upload was
+made.
+
+## 2026-08-23 -- production completion cost is path-contextual, not state-only
+
+Direct KMC completion labels reject the remaining state-only abstraction.  A
+uniform beam-1,000 / 1M-anneal corpus contains 191 macro frontier states over 11
+PIDs.  A frozen-factorized completion head reduced tuning-selection regret from
+30 to 18 moves, but the honest three-PID holdout improved only 36 -> 30 and one
+PID regressed 10 -> 24.  The older primitive value had essentially zero mean
+within-PID correlation on the eight longest cases and 122 moves of aggregate
+selection regret.  This is a label/representation failure, not evidence for a
+larger state MLP.
+
+The key confound was then isolated.  KMC production solves the original scramble
+with the exact corner/rough prefix supplied in `KMC_CORNER_PATH`; its insertion
+finisher may cancel or insert moves inside that prefix.  Completing the same
+corner-normalized endpoint with an empty prefix loses roughly 28 moves.  Therefore
+the production objective is non-Markov in the 216-sticker state: the rough word
+and its insertion opportunities are part of the search state.  Empty-context
+frontier labels and state-only beam scores must not be used as score-facing
+evidence.
+
+`29_query_kmc_frontiers.py --use-prefix-context` now preserves that production
+contract and replay-verifies the returned complete path from the original
+scramble.  PID 665 is the positive control.  The exact-corner no-op prefix under
+the campaign's frame 03, seed 50001, 40M anneal and beam 20,000 reproduced the
+known raw 214-move trajectory (commuting-reduced incumbent 208).  A four-move
+learned macro prefix, `r3.-f1.-d2.r1`, evaluated under matched frame 35 settings,
+returned a replay-valid **202-move** complete path, unchanged by commuting
+reduction.  The strict merged artifact
+`submissions/cube666_macro_context_pid665_v1.csv` is **171,337**, a six-move
+improvement over the 171,343 incumbent.  This is the first score-facing win from
+the macro-model branch and validates learned *prefix-context proposal*, not a
+state-value solver.
+
+The first hard-PID cascade strengthened that result.  On PID 822, cheap matched
+completion promoted action 714 (`-d1.r3.-r2.r1`) in frame 35 because it beat
+the frame's no-op by 18 moves.  The full production completion returned **187
+moves** versus the 203-move incumbent; a second promoted action in frame 18
+also improved it to 199.  Strict merge plus an independent 1,012/1,012 replay
+verification produced
+`submissions/cube666_macro_context_pid665_pid822_v2_verified.csv`, **171,321
+moves**.  Across the first two wide-promoted PIDs, learned prefix context has
+saved 22 moves.
+
+The next gate is a conservative cascade: generate exact-corner learned prefixes,
+cheap-complete each prefix plus a no-op control in the same symmetry frame, then
+wide-complete only candidates that beat their matched control.  The production
+model should ultimately rank or generate complete rough trajectories using path
+and exact insertion-context features; state-only completion heads are retained
+only as proposal features.
+
+A first recursive context-beam expansion appended 12 model-proposed macros to
+the winning PID 822 action.  At beam 1,000 / 1M anneal, action 200 appeared to
+improve the parent 205 -> 201, while every other child regressed.  Full matched
+completion rejected it: the two-macro prefix produced 197 moves versus its
+187-move parent.  Cheap KMC completion is therefore useful as a root diversity
+gate but is not a sufficiently faithful Bellman target for recursive beam
+search.
+
+`117_train_path_context_transformer.py` tested whether more sequence-model
+capacity repairs the trajectory ranker on the 432 uniformly beam-20,000-labeled
+rough paths from 72 PIDs.  Nested PID splits kept early stopping separate from
+each test fold.  The two-layer transformer consumed the ordered rough word,
+the exact six-cluster endpoint and insertion/configuration descriptors.  It
+improved the fixed proxy's out-of-fold selection regret only **110 -> 104**
+with the same 41/72 winner hits; the regularized compact-feature ridge remains
+better at 98 regret.  This rejects model size as the immediate fix and confirms
+that wide-cost label diversity/fidelity is now the limiting resource.
+
+The first production-context scale pass strict-improved five additional PIDs:
+783 200 -> 192, 653 200 -> 196, 804 199 -> 195, 594 199 -> 185 and 669
+198 -> 194.  The frame-35 beam-1,000 screen itself also found PID 351 at 194
+versus its 198 incumbent.  Together with PIDs 665 and 822, the independently
+replay-verified checkpoint is
+`submissions/cube666_macro_context_plus_pid669_wide_v9_verified.csv`, **171,283
+moves**, 60 below the 171,343 starting point.
+
+During this scale pass, the KMC rough-cache key was found to omit the candidate
+prefix.  It contained PID, solver parameters and frame but not
+`KMC_CORNER_PATH`, so later same-PID candidates could reuse the first candidate's
+rough trajectory.  This explains blocks of identical cheap labels and the fast,
+identical second-wide results.  It does not invalidate the accepted first-wide
+paths: those were cache misses and every final path independently replays.  It
+does invalidate those shared-cache rows as per-action training labels.
+`29_query_kmc_frontiers.py` now appends a SHA-256 digest of the complete prefix
+context to `KMC_CACHE_TAG` and records it in metadata.  All subsequent candidate
+screens must use the corrected key (or a new output directory); do not train on
+the old next24 per-action screen as if its rows were independent.
+
+## 2026-08-24 -- corrected context labels improve score but reject a larger ranker
+
+The first fully candidate-keyed scale screen evaluated 416 root contexts over 32
+PIDs in frame 35 at beam 1,000 / 1M anneal.  It completed in 2,722.6 seconds with
+416/416 independently keyed and replay-valid results.  Wide beam-20,000 / 40M
+completion converted strict wins on PIDs 547, 605, 474, 798, 834, 268, 924, 864,
+953, 913, 861 and 409.  The largest individual paths were PID 605 at 180, PID 924
+at 181, PIDs 798/864 at 183 and PID 409 at 186.  The independently replay-verified
+1,012-row checkpoint is
+`submissions/cube666_macro_context_plus_pid409_wide_v24_verified.csv`, **171,165
+moves**, 178 below the 171,343 pre-context incumbent.
+
+Cheap completion is only a diversity gate.  PID 924's winning 181-move wide path
+had a 203-move cheap label, and PID 605's 180-move path had a 204-move cheap label.
+Conversely, several candidates with strong cheap improvement tied or regressed at
+wide settings.  Do not interpret beam-1,000 completion length as a Bellman value.
+
+`118_build_context_action_dataset.py` materialized the corrected root/child/path
+rows with matched no-op deltas and optional wide overlays.  On all 416 rows (32
+PIDs, 17 wide labels), `119_train_context_action_crossranker.py` tested a joint
+root-state, child-state and ordered-prefix transformer with nested PID folds.  It
+failed decisively: OOF selection regret was **390**, versus 336 for the frozen Q
+proxy and 318 for no-op; winner hits were 3/32.  Larger path-context model capacity
+is rejected again until substantially more faithful wide/search-return labels
+exist.
+
+A deterministic short-cost random-control extension was added to scripts 108/116.
+On the first PID 547 pilot, 12 learned actions had cheap best/mean 206/217.17 while
+12 cost-matched random controls reached 202/216.00.  The best learned action's wide
+path is 192; wide validation of the two best random controls is pending.  This is
+the correct proposer-capability gate: if random controls match the learned actions
+on multiple PIDs, replace the current retriever with explicit diversity/search
+generation rather than merely increasing its parameter count.
+
+## 2026-08-24 -- mixed prefix diversity and certified-return shallow solver
+
+The corrected second 32-PID context screen completed 415/415 replay-valid queries.
+Wide completion added strict wins on PIDs 623, 515, 399, 375, 337, 927, 267, 882,
+810, 794 and 740.  A 96-query cost-matched random-control screen also produced a
+strict PID-877 win (196 -> 192), while its PID-849 candidate regressed.  Learned
+and random proposals are therefore complementary rather than interchangeable.
+The independently replay-verified 1,012-row artifact is
+`submissions/cube666_macro_context_plus_pid740_wide_v42_verified.csv`, **171,025
+moves**.  Every added query path also passed its independent query-time replay.
+
+The global short-macro branch isolated a different bottleneck.  Plain depth-3
+curriculum training improved a fresh shallow gate only to 13/20 at beam 128,
+branch 512.  `121_train_short_macro_trace_returncost.py` now trains exact trace
+prefixes, exact next-prefix values, and certified return costs for the model's
+own high-policy off-trace children.  It improved held-out value correlation/MAE
+from 0.801/3.35 to 0.830/3.02 and the same beam-128 gate to 14/20.  Crucially, all
+six remaining cases solved at beam 1,024 / branch 512, making the combined shallow
+gate **20/20 replay-verified**.  Correct actions were already inside branch 512;
+global beam retention, not proposer recall, was the last depth-3 failure.
+
+A direct jump to a 2M-state depth-6 corpus improved calibration (correlation 0.888,
+MAE 4.51, bias -0.87) but failed the depth-6 beam-1,024 gate and most sampled
+depth-4 cases.  The exact teacher child could still be misvalued by roughly ten
+moves.  This rejects a one-shot horizon jump.  Continue with staged depth-4,
+depth-5 and depth-6 promotion gates using much denser trace-prefix sampling before
+attempting full residuals such as PID 540's known nine-macro suffix.
+
+## 2026-08-24 -- staged short-macro capability, real-window wins and hierarchy rejection
+
+The staged short-horizon branch passed substantially stronger capability gates, but
+also established a sharp score ceiling for imitation-derived search.  Exact trace
+return training plus a factorized value model solved all five fresh depth-4 states.
+A direct 30,506-way action policy was then more robust than scalar value ranking at
+depth 5.  Separate small, 59M-wide and depth-conditioned policies, combined only as
+independent proposal lanes, solved **7/8** fixed depth-5 states autonomously.  The
+reusable exact one-macro endgame was essential.  The one remaining state was not
+rescued by focal loss, raw-logit ensembling, capped policy discrepancies, a larger
+scalar value model, or wider brute force.  This is a real depth-5 capability pass,
+not evidence for a full-residual solver.
+
+The score-facing test extracted exact five-action relative windows from the
+171,025-move incumbent.  Only 123 such windows were fully representable in the
+short-action vocabulary.  A policy-only beam reproduced many of them and found one
+strict replacement on PID 828: four learned macros / eight primitive moves replaced
+five macros / ten moves.  The full 1,012-row merge replayed and scored **171,023**.
+
+Coverage was then expanded without requiring the incumbent pieces themselves to be
+known actions.  Every net effect between nearby corner-fixed/even boundaries was
+deduplicated into 7,477 search queries.  An exhaustive one/two-short-macro join solved
+471 queries and found one strict PID-370 replacement, 8 -> 6 moves.  A beam-128 neural
+scan solved 1,565 total queries across the two batches and found two additional
+2-move candidates; one overlapped the PID-370 rewrite and one was a new PID-714
+replacement, 8 -> 6.  Weighted non-overlap merging and full replay produced
+`submissions/cube666_macro_context_plus_learned_windows_v45_verified.csv`,
+**171,019 moves, 1,012/1,012 replay-verified**.  Thus the model has now beaten the
+classical source on real unseen windows, but the total gain is only six moves.
+
+A trajectory-chunk hierarchy tested whether coverage rather than horizon was the
+remaining limitation.  All incumbent effects between eligible boundaries, plus
+their inverses, expanded the vocabulary to 52,904 actions.  It represented 834 PIDs
+as 11,892 exact trajectories of at most five actions.  A 1024-wide depth-conditioned
+policy trained on all represented PIDs reached median/p90 action rank 1/3 and 100%
+top-128 recall.  Exact one-action fallback plus neural search solved 834/834, but
+cost weights 0.2 and 0.5 found only the already-known PID-714 win.  An exhaustive
+effect-geometry proposal lane found zero additional wins.  Large options therefore
+repair horizon and retrieval but do not create cheaper trajectories; this hierarchy
+is rejected as the missing 110k scorer.
+
+Finally, a first fitted Bellman-policy test generated 100,000 depth-6 backups from
+the frozen depth-5 value model.  It predicted a suspicious mean 8.54-move advantage
+on 90,020 rows and selected the constructive teacher on only 12,067.  Distillation
+moved held-out median Bellman-action rank 69 -> 43, but the actual depth-6 beam gate
+was **0/8 at beam 1,024** (7.84M children per case).  The predicted advantages were
+therefore value underestimation, not verified policy improvement.  Do not train the
+value model on these targets or iterate them: the capability gate correctly blocked
+a fitted-value collapse.
+
+The remaining bottleneck is now narrower than “model size” or “more imitation.”
+Useful next labels must be independently verified cheaper continuations (or exact
+lower/upper-bounded search returns) in the multi-cluster short-macro geometry.  The
+current scalar value cannot be used as its own Bellman teacher.
+
+## 2026-08-24 -- depth-6 frontier returns, inversion symmetry and transition-ranker rejection
+
+The supplied marimo sandbox was recovered briefly, then terminated at the provider.
+Before termination it harvested 512 depth-2 frontiers (four states per root) and ran
+bounded replay-verified completions.  Of 2,048 frontier states, 381 completed and 380
+of 512 roots had at least one completion; every completed path tied the constructive
+teacher.  A frontier-return fine-tune fit training returns almost perfectly but
+regressed held-out MAE and tied the 32-case beam gate.  A macro-step cycle-dual lower
+bound certified zero negatives.  These frontier labels are too sparse and too
+teacher-shaped to justify another return fine-tune.
+
+A matched local beam-4,096 audit with two direct policies and the calibrated v9
+critic solved 9/32 depth-6 rows.  Oracle tracing localized the failure: the known
+first action was proposed on 22/32 rows, 16 known paths survived layer 2, and nine
+reached the exact one-macro finisher.  Equal first-action quotas, layer-2-only quotas,
+and a partial 128-group/four-state portfolio scored 8/32, 8/32 and 9/32 respectively.
+The beam-allocation family is rejected; early proposal recall and accumulated policy
+penalty dominate.
+
+Exact group-inversion augmentation was added to the direct policy trainer.  A mixed
+forward/inverse depth-5/6 fine-tune improved held-out top-512 recall from roughly 85%
+to 90.2%; a reverse specialist reached 91.2%.  This did not rescue bidirectional
+depth-3 meeting: a representative reverse first action improved from rank 12,537 to
+6,821 but remained outside the proposal.  Bidirectional search is implemented and
+replay-safe, but is gated off until a genuinely goal-conditioned or effect-aware
+reverse proposer exists.
+
+`143_train_short_macro_root_transition_ranker.py` tested the recommended two-stage
+state/action interaction without contaminating global calibration.  The factorized
+child-state ranker trains on replay-verifiable forward and inverse transitions and
+hard policy proposals.  On 4,096 held-out local candidate sets it improved top-8
+recall from 54.4% to 72.5%; exhaustive root-Q median rank on the original 32 rows
+improved 2,405 -> 1,141.  Streamed 2,048-to-128/512 parent-local reranking plus a
+larger value prefilter recovered two additional training-split depth-6 paths and
+improved one path 42 -> 40, demonstrating that the implementation can preserve a
+low-policy trajectory without OOM.
+
+The clean acceptance gate rejected generalization.  Eight depth-6 rows with
+`group_id % 10 == 0` were excluded from every training stage.  Control solved 3/8.
+Full transition reranking solved 1/8, root-only transition scoring 2/8, and a
+policy-plus-0.1Q root blend 2/8; every model solve was a subset of control.  The
+apparent mixed-split gain to 11/32 was therefore training-state recovery, not unseen
+capability.  Do not promote or score this lane.  The decisive missing supervision is
+multi-step, independently verified off-policy return quality; local transition
+ranking, more action-head capacity, beam portfolios, and self-bootstrapped values do
+not supply it.

@@ -1,0 +1,58 @@
+# tq3_d7anchor -- tq0 with the d7 BFS table behind the exact-Q anchors.
+#
+# Single-axis A/B against tq0_sparse_q.yaml: ONLY the anchor source changes.
+# Same trunk, same objective, same k_max/tilt/lr/schedule, same seed.
+#
+# Why. The anchor term is the only zero-noise ABSOLUTE-scale signal in the mix,
+# and the tq0 post-mortem found that absolute calibration -- not the label gap --
+# is what carries the win over V (band 30-40: Q says 27.46 against a true optimum
+# near 28, V says 21.65). The anchor cap is table_depth - 1 because every child
+# of a d<=k state must be in the table, so the d6 table pins it at d<=5 = 1,771,577
+# states. Against 512 x 256 x 1500 = 196,608,000 anchor draws that is 111 draws
+# per state: the term is memorised long before the run ends. The d7 table lifts
+# the cap to d<=6 = 27,779,749 states = 7.1 draws per state, which is the first
+# time this term has had generalisation pressure on it.
+#
+# Cost: none at train time (same 512 rows/step). The bigger table is 3.9 GB of
+# device memory and the anchor states are 2.4 GB of host memory -- see the
+# sizing note in BFSAnchors.
+
+model:
+  state_size: 88
+  num_classes: 88
+  hidden_dims: [2048, 512]
+  num_res_blocks: 2
+  encoding: embedding
+  embed_dim: 16
+
+training:
+  n_epochs: 1500
+  steps_per_epoch: 256
+  batch_size: 2048           # samples BEFORE symmetry expansion (x14 rows after)
+  k_min: 2
+  k_max: 40
+  pivot_tilt: 0.5            # 0 = upstream scheme; >0 biases pivots deeper
+  lr: 3.0e-4
+  weight_decay: 3.0e-3
+  grad_clip: 1.0
+
+  sym_coverage: true         # our addition 2 -- expand 2-of-24 labels via the 24 frames
+  sym_rows: 0                # 0 = use the full greedy coverage width
+  verify_symmetry: true
+
+  anchor_batch: 512          # our addition 1 -- exact 24-way Q from the BFS tables
+  anchor_states: bfs_d7_train.pt      # <-- the only real change vs tq0
+  anchor_table: bfs_endgame_d7.npz    # <--
+  max_anchor_depth: 6                 # <-- children of a d<=6 state are all d<=7
+  anchor_weight: 1.0
+
+  top1_margin: 1.0           # our addition 4 -- upstream ships this at weight 0.0
+  top1_margin_weight: 0.0
+
+  val_size: 2048
+  checkpoint_every_epochs: 50
+  amp: true
+  compile_model: true        # fixed shapes throughout, so Rule 2 permits it
+  fused_optimizer: true
+
+seed: 0

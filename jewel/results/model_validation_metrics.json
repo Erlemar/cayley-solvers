@@ -1,0 +1,35 @@
+{
+  "reported_exact_top1": 0.9391919626277829,
+  "reported_exact_top1_percent": 93.91919626277829,
+  "numerator_top1_descending_hits": 48050,
+  "denominator_exact_validation_rows": 51161,
+  "validation_rows_all_sources": 85061,
+  "validation_rows_nonexact": 33900,
+  "unique_exact_validation_states": 36080,
+  "duplicate_exact_validation_rows": 15081,
+  "maximum_state_multiplicity": 4583,
+  "depth_histogram_rows": {
+    "1": 4583,
+    "2": 3357,
+    "3": 3577,
+    "4": 3106,
+    "5": 3086,
+    "6": 3322,
+    "7": 5488,
+    "8": 24642
+  },
+  "metric_definition": "Argmax of the 12 policy logits is counted correct when it belongs to the complete set of exact distance-descending actions. The result is row-weighted.",
+  "split_definition": "Approximately 95/5 validation assignment is a stable function of the 51-bit state rank, so duplicate states cannot cross between training and validation.",
+  "important_limitation": "Exact states were sampled with replacement. This is not unique-state-weighted accuracy, not accuracy on the 1,000 competition states, and not an end-to-end solve rate.",
+  "checkpoint_epoch": 3,
+  "checkpoint_step": 2760,
+  "other_checkpoint_metrics": {
+    "exact_top2": 0.9800238462891656,
+    "exact_set_mass": 0.9188480112872842,
+    "exact_value_mae": 0.25113459226754753
+  },
+  "artifact_sha256": {
+    "train_mixed_v4_public.npz": "5efd8a8e78c0a7df80980baee6d0c2c0964d2c48fb2f1ac86b70f3254fc0755d",
+    "best.pt": "edfc9e16c1e42336ea6e989d71825381b04d44c8280ee764f7ffa3349d3237ff"
+  }
+}

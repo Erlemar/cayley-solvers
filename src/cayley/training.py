@@ -109,6 +109,7 @@ def train_one_epoch(
     batch_gen: torch.Generator,
     bfs_table=None,
     kociemba_data: tuple[torch.Tensor, torch.Tensor] | None = None,
+    anchor_sampler: Callable[[int], tuple[torch.Tensor, torch.Tensor]] | None = None,
 ) -> float:
     # Budget each source's share of the epoch. Random walks get whatever isn't claimed
     # by the supplementary sources. Fractions are a fraction of samples_per_epoch, not
@@ -156,8 +157,20 @@ def train_one_epoch(
         k_states = torch.empty((0, w_states.shape[1]), dtype=torch.int64, device=cfg.device)
         k_depths = torch.empty((0,), dtype=torch.int64, device=cfg.device)
 
-    states = torch.cat([w_states, b_states, k_states], dim=0)
-    depths = torch.cat([w_depths, b_depths, k_depths], dim=0)
+    if anchor_sampler is not None:
+        a_states, a_depths = anchor_sampler(data_seed)
+        if a_states.numel() > 0 and a_states.shape[1] != w_states.shape[1]:
+            raise ValueError(
+                f"anchor state size {a_states.shape[1]} != walk state size {w_states.shape[1]}"
+            )
+        a_states = a_states.to(device=cfg.device, dtype=torch.int64)
+        a_depths = a_depths.to(device=cfg.device)
+    else:
+        a_states = torch.empty((0, w_states.shape[1]), dtype=torch.int64, device=cfg.device)
+        a_depths = torch.empty((0,), dtype=torch.float32, device=cfg.device)
+
+    states = torch.cat([w_states, b_states, k_states, a_states], dim=0)
+    depths = torch.cat([w_depths, b_depths, k_depths, a_depths], dim=0)
 
     if cfg.augment_symmetry and _SYM_STATE is not None:
         rotations, rot_inv = _SYM_STATE
@@ -211,6 +224,7 @@ def train(
     cfg: TrainConfig,
     checkpoint_dir: str | Path,
     on_epoch_end: Callable[[EpochStats], None] | None = None,
+    anchor_sampler: Callable[[int], tuple[torch.Tensor, torch.Tensor]] | None = None,
 ) -> TrainResult:
     ckpt_dir = Path(checkpoint_dir)
     ckpt_dir.mkdir(parents=True, exist_ok=True)
@@ -269,6 +283,7 @@ def train(
             model, optimizer, puzzle, cfg,
             data_seed=cfg.seed + epoch, batch_gen=batch_gen,
             bfs_table=bfs_table, kociemba_data=kociemba_data,
+            anchor_sampler=anchor_sampler,
         )
         scheduler.step()
         stats = EpochStats(epoch=epoch, loss=loss, lr=float(scheduler.get_last_lr()[0]), elapsed_s=time.time() - t0)

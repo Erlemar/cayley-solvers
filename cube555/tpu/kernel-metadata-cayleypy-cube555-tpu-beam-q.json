@@ -1,0 +1,18 @@
+{
+  "id": "artgor/cayleypy-cube555-tpu-beam-q",
+  "title": "CayleyPy cube555 TPU beam q",
+  "code_file": "cayleypy-cube555-tpu-beam-q.ipynb",
+  "language": "python",
+  "kernel_type": "notebook",
+  "is_private": true,
+  "enable_gpu": false,
+  "enable_tpu": true,
+  "enable_internet": false,
+  "dataset_sources": [
+    "artgor/cube555-tpu-artifacts"
+  ],
+  "competition_sources": [
+    "cayley-py-555-cube"
+  ],
+  "kernel_sources": []
+}

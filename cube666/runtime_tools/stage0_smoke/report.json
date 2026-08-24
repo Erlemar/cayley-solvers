@@ -1,0 +1,40 @@
+{
+  "beam_steps": 6,
+  "beam_width": 128,
+  "checkpoint": "cube666\\runtime_tools\\stage0_smoke\\checkpoint.pt",
+  "config": {
+    "action_count": 11,
+    "embedding_dim": 32,
+    "hidden_dim": 1024,
+    "residual_blocks": 6
+  },
+  "elapsed_seconds": 1.315,
+  "eval_depth": 4,
+  "eval_trials": 1,
+  "gate_passed": false,
+  "history": [
+    {
+      "elapsed_seconds": 0.828,
+      "loss": 2.533318,
+      "policy_loss": 2.403506,
+      "top1": 0.09375,
+      "update": 1,
+      "value_mae_walk_steps": 2.541112
+    }
+  ],
+  "ladder": "cube666\\artifacts\\stabilizer_ladder_v1.json",
+  "results": [
+    {
+      "beam": 128,
+      "elapsed_seconds": 0.40093,
+      "generated": 5533,
+      "solved": false,
+      "steps": 6,
+      "trial": 0
+    }
+  ],
+  "seed": 666,
+  "solved": 0,
+  "stage_index": 0,
+  "steps": 1
+}

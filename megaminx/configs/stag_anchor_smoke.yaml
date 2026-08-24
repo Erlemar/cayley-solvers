@@ -1,0 +1,42 @@
+# SMOKE TEST ONLY for the stagnation-anchor mixin (own-research 1B, 2026-06-12).
+# Purpose: prove the new bellman.py code paths execute (anchor loader, exact
+# rows in the main batch, LB hinge term) — NOT a real training recipe.
+# 2 epochs, small samples, heavy mixins off. The real refine recipe is a
+# separate decision (Rule 13: read the prior run's resolved config first).
+
+model:
+  state_size: 120
+  num_classes: 120
+  hidden_dims: [2048, 512]
+  num_res_blocks: 2
+  encoding: embedding
+  embed_dim: 16
+
+training:
+  n_epochs: 2
+  samples_per_epoch: 50_000
+  batch_size: 4096
+  k_max: 80
+  lr: 1.0e-4
+  weight_decay: 0.0
+  checkpoint_every_epochs: 1
+  n_back: 1
+  loss: mse
+  amp: true
+  compile_model: false
+  fused_optimizer: true
+
+bellman:
+  warmstart_path: "megaminx/models/m_dd_v0/epoch_0049.pt"
+  target_update_every_epochs: 10
+  target_net_chunk: 4096
+  clip_upper: true
+  clip_lower: true
+  n_anchor_v0: 32
+  n_anchor_d1: 4
+  stag_anchor_path: "megaminx/data/stagnation_anchors_v0.pt"
+  n_anchor_stag: 256
+  n_anchor_stag_lb: 256
+  lambda_stag_lb: 1.0
+
+seed: 34

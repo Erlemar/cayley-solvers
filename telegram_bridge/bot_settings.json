@@ -1,0 +1,40 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//C:/Users/and-l/cayley/**)"
+    ],
+    "deny": [
+      "Read(//C:/Users/and-l/cayley/.claude/**)",
+      "Read(//C:/Users/and-l/cayley/telegram_bridge/.env)",
+      "Read(//C:/Users/and-l/cayley/telegram_bridge/state/**)",
+      "Read(**/.env)",
+      "Read(**/.env.*)",
+      "Read(**/settings.local.json)",
+      "Read(**/settings.local.json.bak)",
+      "Read(**/*credential*)",
+      "Read(**/*credentials*)",
+      "Read(**/kaggle.json)",
+      "Read(**/*.pem)",
+      "Read(**/id_rsa*)",
+      "Read(**/id_ed25519*)",
+      "Read(**/.git/config)",
+      "Read(**/.netrc)",
+      "Read(**/*token*)",
+      "Read(**/*secret*)",
+      "Bash",
+      "Edit",
+      "Write",
+      "NotebookEdit",
+      "WebFetch",
+      "WebSearch",
+      "Task",
+      "Agent"
+    ],
+    "additionalDirectories": [],
+    "defaultMode": "dontAsk"
+  },
+  "enableAllProjectMcpServers": false,
+  "enabledMcpjsonServers": [],
+  "disabledMcpjsonServers": [],
+  "includeCoAuthoredBy": false
+}

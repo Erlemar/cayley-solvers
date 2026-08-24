@@ -1,0 +1,58 @@
+# tq1 -- tq0 plus near-optimal-path labels. The ONLY difference from tq0 is the
+# path_* block, so the pair is a clean A/B on that one change.
+#
+# Motivation, measured on tq0 at epoch 250: the random-walk labels degrade past the
+# diameter (walk index over-states true distance, and "undo the last move" stops
+# being reliably distance-reducing), and the Q gap collapsed to 0.216 in the pivot
+# 30-40 band -- worse than the V it is meant to replace. Path samples come from
+# replay-verified solving paths at 28.2 moves/pid against a ~28 counting bound, so
+# they are accurate at exactly those depths.
+#
+# Supervised with MSE on the on-path entry, NOT a "this move must rank first"
+# penalty -- that is what tied m_rank_v0 on megaminx, where 56.9 pct of such
+# disagreements turned out to be benign alternative optima. path_rank_weight is
+# kept at 0 for ablation.
+
+model:
+  state_size: 88
+  num_classes: 88
+  hidden_dims: [2048, 512]
+  num_res_blocks: 2
+  encoding: embedding
+  embed_dim: 16
+
+training:
+  n_epochs: 1500
+  steps_per_epoch: 256
+  batch_size: 2048           # samples BEFORE symmetry expansion (x14 rows after)
+  k_min: 2
+  k_max: 40
+  pivot_tilt: 0.5            # 0 = upstream scheme; >0 biases pivots deeper
+  lr: 3.0e-4
+  weight_decay: 3.0e-3
+  grad_clip: 1.0
+
+  sym_coverage: true         # our addition 2 -- expand 2-of-24 labels via the 24 frames
+  sym_rows: 0                # 0 = use the full greedy coverage width
+  verify_symmetry: true
+
+  anchor_batch: 512          # our addition 1 -- exact 24-way Q from the BFS tables
+  max_anchor_depth: 5        # children of a d<=5 state are all d<=6, so all are in the table
+  anchor_weight: 1.0
+
+  top1_margin: 1.0           # our addition 4 -- upstream ships this at weight 0.0
+  top1_margin_weight: 0.0
+
+  path_dataset: tetraminx/data/path_labels_28821.pt
+  path_batch: 1024           # of ~30k rows/step; ablation axis
+  path_mse_weight: 1.0
+  path_rank_weight: 0.0      # the megaminx-falsified form, kept for ablation
+  path_rank_margin: 1.0
+
+  val_size: 2048
+  checkpoint_every_epochs: 50
+  amp: true
+  compile_model: true        # fixed shapes throughout, so Rule 2 permits it
+  fused_optimizer: true
+
+seed: 0

@@ -218,6 +218,17 @@ def main() -> int:
                          "over depth. Requires --policy-model + --lambda-policy>0 + "
                          "--qshort-student (same beam_lab path as the local penalty). "
                          "Sweep --lambda-policy over {0.01,0.03,0.05,0.1,0.2}.")
+    ap.add_argument("--cutoff-model", type=Path, default=None,
+                    help="Optional scalar beam-retention head. V first overgenerates "
+                         "top cutoff_pool_mult*B candidates, then this head reranks "
+                         "only that near-cutoff pool.")
+    ap.add_argument("--cutoff-lambda", type=float, default=0.0,
+                    help="Weight for the cutoff head inside the overgenerated pool. "
+                         "The head is z-normalized per step unless --no-cutoff-normalize.")
+    ap.add_argument("--cutoff-pool-mult", type=float, default=1.0,
+                    help="Overgeneration factor before cutoff reranking. 1 disables.")
+    ap.add_argument("--no-cutoff-normalize", action="store_true",
+                    help="Use raw cutoff-head outputs instead of per-step z-normalization.")
     ap.add_argument("--tensorrt-engine", type=Path, default=None,
                     help="path to a pre-built TensorRT engine (.ts) for the teacher "
                          "model. Replaces the eager teacher with the engine; engine is "
@@ -310,8 +321,19 @@ def main() -> int:
     dtype = torch.bfloat16 if args.bf16 else torch.float32
     model = load_model_checkpoint(args.checkpoint, device=args.device, dtype=dtype)
     if args.chunk_size is not None:
-        base = getattr(model, "_orig_mod", model)
-        base.inference_chunk_size = args.chunk_size
+        def _set_inference_chunk_size(obj, chunk_size: int, seen: set[int] | None = None) -> None:
+            if seen is None:
+                seen = set()
+            if obj is None or id(obj) in seen:
+                return
+            seen.add(id(obj))
+            base_obj = getattr(obj, "_orig_mod", obj)
+            if hasattr(base_obj, "inference_chunk_size"):
+                base_obj.inference_chunk_size = chunk_size
+            for child_name in ("base", "delta"):
+                _set_inference_chunk_size(getattr(base_obj, child_name, None), chunk_size, seen)
+
+        _set_inference_chunk_size(model, args.chunk_size)
 
     if args.quantile_reduce is not None:
         # Wrap a quantile-output model (output_dim > 1) into a scalar-V model
@@ -431,6 +453,30 @@ def main() -> int:
         ap.error("--phs-cumulative requires --policy-model and --lambda-policy>0 "
                  "(the cumulative term is lambda * sum of -log pi along the path).")
 
+    cutoff_model_obj = None
+    if args.cutoff_model is not None:
+        if args.mitm or detected_q:
+            ap.error("--cutoff-model requires a scalar V teacher (no mitm, no Q teacher)")
+        if args.cutoff_lambda == 0.0 or args.cutoff_pool_mult <= 1.0:
+            print(
+                "WARNING: --cutoff-model set but cutoff_lambda=0 or cutoff_pool_mult<=1; "
+                "cutoff rerank is effectively disabled.",
+                file=sys.stderr,
+            )
+        cutoff_model_obj = load_model_checkpoint(args.cutoff_model, device=args.device, dtype=dtype)
+        cutoff_base = getattr(cutoff_model_obj, "_orig_mod", cutoff_model_obj)
+        if getattr(cutoff_base, "output_dim", 1) != 1:
+            ap.error("--cutoff-model must be scalar output_dim=1")
+        if args.chunk_size is not None and hasattr(cutoff_base, "inference_chunk_size"):
+            cutoff_base.inference_chunk_size = args.chunk_size
+        if args.qshort_student is not None:
+            _bl_setup_inference(cutoff_model_obj)
+        print(
+            f"loaded cutoff model from {args.cutoff_model.name}: "
+            f"lambda={args.cutoff_lambda}, pool_mult={args.cutoff_pool_mult}, "
+            f"normalize={not args.no_cutoff_normalize}"
+        )
+
     # Optional macro library — extends action set for the V-path / qshort path.
     # m24 (Macro-Q shortlister) needs n_actions = n_gen + n_macros to match.
     macros_for_solver: list[tuple[list[int], list[str]]] | None = None
@@ -492,6 +538,10 @@ def main() -> int:
                 policy_model=policy_model_obj,
                 lambda_policy=args.lambda_policy,
                 phs_cumulative=args.phs_cumulative,
+                cutoff_model=cutoff_model_obj,
+                cutoff_lambda=args.cutoff_lambda,
+                cutoff_pool_mult=args.cutoff_pool_mult,
+                cutoff_normalize=not args.no_cutoff_normalize,
             )
             return _QShortAdapter(inner, args.qshort_internal_batch_size)
         else:
@@ -507,6 +557,10 @@ def main() -> int:
                 puzzle, model, device=args.device, state_dtype=state_dtype,
                 use_q_function=detected_q, random_seed=seed,
                 macros=macros_for_solver,
+                cutoff_model=cutoff_model_obj,
+                cutoff_lambda=args.cutoff_lambda,
+                cutoff_pool_mult=args.cutoff_pool_mult,
+                cutoff_normalize=not args.no_cutoff_normalize,
             )
 
     # Parse ensemble seeds. Empty -> single-seed (current behavior, seed=0).

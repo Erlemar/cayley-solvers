@@ -1,0 +1,51 @@
+{
+  "candidate_score_moves": 17012,
+  "competition_states": 1000,
+  "solved_and_officially_verified": 1000,
+  "hardware": "local NVIDIA RTX 4090 Laptop GPU (16 GB)",
+  "search_budget": {
+    "adaptive_widths": [
+      1,
+      4,
+      16,
+      64
+    ],
+    "max_learned_layers_per_width": 18,
+    "branch_actions": {
+      "width_1": 1,
+      "width_4_16_64": 4
+    },
+    "try_all_widths": true,
+    "raw_any_solution": true,
+    "incumbent_length_bound": null,
+    "explicit_node_cap": null,
+    "structural_max_expanded_parent_states_per_case": 1449,
+    "endgame": "exact depth-8 ball",
+    "ranking": "policy log-probability + predicted regret + admissible PDB/ring lower bound",
+    "deduplication": "exact 51-bit state rank",
+    "immediate_inverse_moves": "forbidden"
+  },
+  "expanded_parent_states": {
+    "min": 0,
+    "mean": 571.138,
+    "median": 556.0,
+    "p90": 769.8000000000002,
+    "p95": 952.05,
+    "p99": 1166.01,
+    "max": 1326,
+    "sum": 571138
+  },
+  "zero_neural_expansion_states": 10,
+  "total_seconds": 621.3177080003079,
+  "mean_seconds_per_state": 0.6213177080003079,
+  "end_to_end_expanded_parent_states_per_second": 919.2366363389034,
+  "reported_best_width_counts": {
+    "1": 740,
+    "4": 118,
+    "16": 77,
+    "64": 65
+  },
+  "node_definition": "One expanded parent state is one frontier state presented to the neural scorer. It is not a generated child edge. Generated-edge totals were not stored in this run.",
+  "score_definition": "sum of the 1,000 independently replay-verified candidate path lengths",
+  "source_result_sha256": "3ad4e2e8f1ab04d8da310afcb0ef50b7779216b115474aae8efdefd2d4e5b9a8"
+}

@@ -1,0 +1,20 @@
+{
+  "id": "artgor/cayleypy-cube555-2xt4-beam",
+  "title": "CayleyPy cube555 2xT4 beam",
+  "code_file": "cayleypy-cube555-2xt4-beam.ipynb",
+  "language": "python",
+  "kernel_type": "notebook",
+  "is_private": true,
+  "enable_gpu": true,
+  "enable_tpu": false,
+  "machine_shape": "NvidiaTeslaT4",
+  "enable_internet": false,
+  "dataset_sources": [
+    "artgor/cube555-gpu-code",
+    "artgor/cube555-tpu-artifacts"
+  ],
+  "competition_sources": [
+    "cayley-py-555-cube"
+  ],
+  "kernel_sources": []
+}

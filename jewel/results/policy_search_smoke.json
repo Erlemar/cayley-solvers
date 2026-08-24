@@ -1,0 +1,60 @@
+{
+  "args": {
+    "policy": "transformer",
+    "checkpoint": "jewel/models/transformer_v4_public/best.pt",
+    "variant": "phsh",
+    "device": "cpu",
+    "puzzle_info": "jewel/data/puzzle_info.json",
+    "test": "jewel/data/test.csv",
+    "baseline": "jewel/data/public_16490.csv",
+    "ball": "jewel/artifacts/ball_d8_official",
+    "pdb": null,
+    "offset": 20,
+    "limit": 1,
+    "node_limit": 5000,
+    "time_limit": 5.0,
+    "max_depth": 40,
+    "incumbent_bound": false,
+    "prove": false,
+    "proof_node_limit": 100000,
+    "proof_time_limit": 10.0,
+    "out": "jewel/results/policy_search_smoke.json"
+  },
+  "summary": {
+    "policy": "transformer",
+    "checkpoint": "jewel/models/transformer_v4_public/best.pt",
+    "checkpoint_step": -1,
+    "variant": "phsh",
+    "count": 1,
+    "solved_and_verified": 1,
+    "raw_candidate_score_on_solved": 15,
+    "baseline_score_same_rows": 15,
+    "wins": 0,
+    "ties": 1,
+    "losses": 0,
+    "optimality_certificates": 0,
+    "total_phs_expanded": 8,
+    "mean_phs_expanded": 8.0,
+    "total_phs_seconds": 0.06780849996721372
+  },
+  "rows": [
+    {
+      "initial_state_id": 20,
+      "baseline_length": 15,
+      "candidate_length": 15,
+      "delta": 0,
+      "valid_internal": true,
+      "valid_official": true,
+      "phs_optimal": false,
+      "phs_expanded": 8,
+      "phs_generated": 78,
+      "phs_seconds": 0.06780849996721372,
+      "phs_reason": "solved_exact_endgame",
+      "lower_bound": 9,
+      "proof_optimal": null,
+      "proof_expanded": null,
+      "proof_seconds": null,
+      "proof_reason": null
+    }
+  ]
+}

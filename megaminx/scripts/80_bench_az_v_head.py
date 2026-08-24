@@ -25,6 +25,15 @@ from cayley.khoruzhii_search import KhoruzhiiSearchConfig, KhoruzhiiSolver
 from megaminx.puzzle import Megaminx
 
 
+def parse_checkpoint_spec(spec: str) -> tuple[Path, str]:
+    direct = Path(spec)
+    if direct.exists():
+        return direct, direct.stem
+    path_s, label = (spec.rsplit(":", 1) + [None])[:2]
+    path = Path(path_s)
+    return path, label or path.stem
+
+
 class VOnlyWrapper(nn.Module):
     def __init__(self, gflow_model: ResMLPGFlowNet, inference_chunk_size: int = 4096):
         super().__init__()
@@ -74,9 +83,7 @@ def main():
 
     results = {}
     for spec in args.checkpoints:
-        path, label = (spec.rsplit(":", 1) + [None])[:2]
-        path = Path(path)
-        label = label or path.stem
+        path, label = parse_checkpoint_spec(spec)
         print(f"\n--- {label} ({path}) ---", flush=True)
         m = load_az_v_only(path, device="cuda")
         solver = KhoruzhiiSolver(

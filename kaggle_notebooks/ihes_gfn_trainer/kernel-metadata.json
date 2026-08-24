@@ -1,0 +1,15 @@
+{
+  "id": "artgor/cayleypy-ihes-gfn-trainer",
+  "title": "CayleyPy IHES GFN Trainer",
+  "code_file": "cayleypy-ihes-gfn-trainer.ipynb",
+  "language": "python",
+  "kernel_type": "notebook",
+  "is_private": false,
+  "enable_gpu": false,
+  "enable_tpu": true,
+  "enable_internet": true,
+  "keywords": ["gflownet", "tpu", "jax"],
+  "dataset_sources": ["artgor/ihes-gfn-checkpoint"],
+  "competition_sources": ["cayleypy-ihes-cube"],
+  "kernel_sources": []
+}

@@ -1,0 +1,63 @@
+# tv1 Stage B -- Bellman refinement with the deep-scale collapse fixed.
+#
+# WHY THIS EXISTS. tv0_bellman used plain single-target Bellman with BFS (d<=6)
+# anchors only. Near-solved calibration stayed exact (d=5 -> 5.05) but the DEEP
+# scale slid every epoch:
+#     V@d80:  28.08 (Stage A)  ->  23.90 (ep24)  ->  18.74 (ep99)
+# against a true ~28. The saturation-DRIFT gate passed the whole time (+0.57);
+# only the ABSOLUTE-level gate caught it. Mechanism: the target is
+# `1 + min_a V_target(child)`, and a min over 24 noisy estimates is biased LOW,
+# so each bootstrap iteration compounds the underestimate. Nothing in the
+# d<=6 anchors constrains depth 20-30, so the deep region is free to drift.
+#
+# TWO COUNTERMEASURES, both already in cayley.bellman:
+#   1. double_bellman -- select the child with net A, value it with net B.
+#      Decorrelating selection from estimation is the standard fix for exactly
+#      this min/max bootstrap bias (van Hasselt 2010).
+#   2. solver-trace mixin (25%) -- (state, remaining-moves) pairs from the floor
+#      paths, covering d = 1..36. These are UPPER bounds (the floor is near- but
+#      not exactly optimal), which is the right direction to push against a
+#      downward drift, and they reach the depths BFS anchors cannot.
+#      Mixin only, never primary: as a replacement it is an OOD catastrophe.
+#
+# Warm-start is Stage A, NOT the collapsed tv0 checkpoints -- Stage A's deep
+# scale (28.08) is the closest thing we have to correct.
+
+model:
+  state_size: 88
+  num_classes: 88
+  hidden_dims: [2048, 512]
+  num_res_blocks: 2
+  encoding: embedding
+  embed_dim: 16
+
+training:
+  n_epochs: 400
+  samples_per_epoch: 500_000
+  batch_size: 8192
+  k_max: 32
+  lr: 5.0e-4
+  weight_decay: 0.0
+  checkpoint_every_epochs: 25
+  n_back: 1
+  loss: mse
+  amp: true
+  compile_model: true
+  fused_optimizer: true
+
+bellman:
+  warmstart_path: "tetraminx/models/tv0_pretrain/epoch_0499.pt"
+  target_update_every_epochs: 10
+  target_net_chunk: 8192
+  clip_upper: true
+  clip_lower: true
+  double_bellman: true
+  bfs_d6_path: "tetraminx/data/bfs_d6_train.pt"
+  bfs_d6_fraction: 0.10
+  solver_trace_path: "tetraminx/data/solver_trace.pt"
+  solver_trace_fraction: 0.25
+  n_anchor_v0: 32
+  n_anchor_d1: 4
+  per_depth_diagnostic: true
+
+seed: 0

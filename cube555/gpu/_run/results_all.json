@@ -1,0 +1,15 @@
+[
+ {
+  "pid": 1034,
+  "sym": 0,
+  "inverted": false,
+  "wall_s": 35.1,
+  "note": "ok",
+  "device": "cuda:0",
+  "checkpoint": "q555_2k_BEST.pt",
+  "peak_gib": 2.65,
+  "state_dtype": "uint8",
+  "path_len": 7,
+  "path": "-d0.r0.-d1.-d3.r3.f3.f3"
+ }
+]

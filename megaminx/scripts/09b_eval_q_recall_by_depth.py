@@ -60,7 +60,8 @@ def _score_parents_student(student, parents, n_gen, chunk, device):
     return out
 
 
-def _recall_for_pool(teacher, student, parents, generators, n_gen, B, alpha_list, chunk, device):
+def _recall_for_pool(teacher, student, parents, generators, n_gen, B, alpha_list, chunk,
+                     device, student_higher_better=False):
     """Returns dict alpha -> recall for one parent pool (parents all same-ish depth)."""
     P, S = parents.shape
     children = torch.gather(
@@ -73,6 +74,9 @@ def _recall_for_pool(teacher, student, parents, generators, n_gen, B, alpha_list
 
     teacher_v = _score_children_teacher(teacher, children_flat, chunk, device)
     student_q = _score_parents_student(student, parents, n_gen, chunk, device).reshape(-1)
+    # policy heads score higher = better child; negate so "smaller = better" holds
+    if student_higher_better:
+        student_q = -student_q
 
     b = min(B, n_total)
     _, teacher_topB = torch.topk(teacher_v, b, largest=False, sorted=False)
@@ -103,6 +107,7 @@ def main() -> int:
     ap.add_argument("--alpha", type=str, default="1,1.5,2,3,4")
     ap.add_argument("--target-recall", type=float, default=0.99)
     ap.add_argument("--bf16", action="store_true")
+    ap.add_argument("--student-higher-better", action="store_true", help="policy head: higher logit = better child")
     args = ap.parse_args()
 
     device = "cuda" if torch.cuda.is_available() else "cpu"
@@ -159,7 +164,7 @@ def main() -> int:
         pooled_parents.append(parents)
         B = parents.shape[0]
         t0 = time.time()
-        rec = _recall_for_pool(teacher, student, parents, generators, n_gen, B, alpha_list, chunk, device)
+        rec = _recall_for_pool(teacher, student, parents, generators, n_gen, B, alpha_list, chunk, device, args.student_higher_better)
         cells = []
         for a in alpha_list:
             mark = "*" if rec[a] >= args.target_recall else " "
@@ -171,7 +176,7 @@ def main() -> int:
     if pooled_parents:
         parents = torch.cat(pooled_parents, dim=0)
         B = min(args.parents_per_bucket, parents.shape[0])
-        rec = _recall_for_pool(teacher, student, parents, generators, n_gen, B, alpha_list, chunk, device)
+        rec = _recall_for_pool(teacher, student, parents, generators, n_gen, B, alpha_list, chunk, device, args.student_higher_better)
         cells = []
         for a in alpha_list:
             mark = "*" if rec[a] >= args.target_recall else " "

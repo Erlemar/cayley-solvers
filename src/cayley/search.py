@@ -7,12 +7,13 @@ takes (B, state_size) int tensors and returns (B,) floats — which is exactly o
 
 from __future__ import annotations
 
+import pathlib
 from dataclasses import dataclass
 from pathlib import Path
 
 import torch
 
-from cayley.model import ResMLPDistance
+from cayley.model import DeltaVModel, ResMLPDistance
 from cayley.puzzle import PictureCube
 
 
@@ -186,6 +187,33 @@ def _load_feats_v(mcfg: dict, state_dict: dict, builder_name: str):
     return model
 
 
+def _build_resmlp_from_config(mcfg: dict) -> ResMLPDistance:
+    return ResMLPDistance(
+        state_size=int(mcfg["state_size"]),
+        num_classes=int(mcfg["num_classes"]),
+        hidden_dims=tuple(mcfg["hidden_dims"]),
+        num_res_blocks=int(mcfg["num_res_blocks"]),
+        encoding=mcfg.get("encoding", "onehot"),
+        embed_dim=int(mcfg.get("embed_dim", 16)),
+        output_dim=int(mcfg.get("output_dim", 1)),
+        inference_chunk_size=mcfg.get("inference_chunk_size", 2048),
+    )
+
+
+def _load_delta_v(mcfg: dict, state_dict: dict) -> DeltaVModel:
+    base = _build_resmlp_from_config(mcfg["base_config"])
+    delta = _build_resmlp_from_config(mcfg["delta_config"])
+    model = DeltaVModel(
+        base=base,
+        delta=delta,
+        delta_scale=float(mcfg.get("delta_scale", 1.0)),
+        freeze_base=bool(mcfg.get("freeze_base", True)),
+        inference_chunk_size=mcfg.get("inference_chunk_size", 2048),
+    )
+    model.load_state_dict(state_dict)
+    return model
+
+
 def load_model_checkpoint(
     path: str | Path,
     device: str = "cpu",
@@ -197,9 +225,20 @@ def load_model_checkpoint(
     Dispatches on `model_config["model_class"]`:
       - "GraphTransformerV"   -> megaminx.graph_transformer.GraphTransformerV
       - "GraphTransformerVPi" -> megaminx.graph_transformer.GraphTransformerVPi
+      - "DeltaVModel" -> frozen base V plus residual delta V
       - default (incl. "ResMLPDistance", "ResMLPVPi") -> cayley.model.ResMLPDistance
     """
-    ckpt = torch.load(path, map_location=device, weights_only=False)
+    try:
+        ckpt = torch.load(path, map_location=device, weights_only=False)
+    except pathlib.UnsupportedOperation as exc:
+        if "PosixPath" not in str(exc):
+            raise
+        orig_posix_path = pathlib.PosixPath
+        try:
+            pathlib.PosixPath = pathlib.WindowsPath
+            ckpt = torch.load(path, map_location=device, weights_only=False)
+        finally:
+            pathlib.PosixPath = orig_posix_path
     mcfg = ckpt.get("model_config") or {}
     if not mcfg:
         raise ValueError(f"checkpoint {path} has no 'model_config'; was it saved by an older version?")
@@ -214,16 +253,10 @@ def load_model_checkpoint(
         model = _load_feats_v(mcfg, state_dict, "dodeca")
     elif model_class == "PerceiverV":
         model = _load_feats_v(mcfg, state_dict, "perceiver")
+    elif model_class == "DeltaVModel":
+        model = _load_delta_v(mcfg, state_dict)
     else:
-        model = ResMLPDistance(
-            state_size=int(mcfg["state_size"]),
-            num_classes=int(mcfg["num_classes"]),
-            hidden_dims=tuple(mcfg["hidden_dims"]),
-            num_res_blocks=int(mcfg["num_res_blocks"]),
-            encoding=mcfg.get("encoding", "onehot"),
-            embed_dim=int(mcfg.get("embed_dim", 16)),
-            output_dim=int(mcfg.get("output_dim", 1)),
-        )
+        model = _build_resmlp_from_config(mcfg)
         # Multi-head model (e.g. ResMLPVPi) has additional `pi_head.*` keys.
         # When loading such a checkpoint as a vanilla V-model, drop those.
         if model_class == "ResMLPVPi":

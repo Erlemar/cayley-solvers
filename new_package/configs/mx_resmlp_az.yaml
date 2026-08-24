@@ -1,0 +1,46 @@
+# Cell 2: ResMLP trunk + 24-wide Q head + AZ value head.
+#
+# Matched-budget cell of the architecture comparison matrix. Identical to
+# tq0_sparse_q.yaml except the model block, so arch/az_head is the only variable.
+# Budget 1500 epochs; extend by 500 if a BEAM bench (not the probe) shows
+# ep1500 beating ep1000.
+
+model:
+  arch: resmlp
+  az_head: true
+  state_size: 88
+  num_classes: 88
+  hidden_dims: [2048, 512]
+  num_res_blocks: 2
+  encoding: embedding
+  embed_dim: 16
+
+training:
+  n_epochs: 1500
+  steps_per_epoch: 256
+  batch_size: 2048           # samples BEFORE symmetry expansion (x14 rows after)
+  k_min: 2
+  k_max: 40
+  pivot_tilt: 0.5            # 0 = upstream scheme; >0 biases pivots deeper
+  lr: 3.0e-4
+  weight_decay: 3.0e-3
+  grad_clip: 1.0
+
+  sym_coverage: true         # our addition 2 -- expand 2-of-24 labels via the 24 frames
+  sym_rows: 0                # 0 = use the full greedy coverage width
+  verify_symmetry: true
+
+  anchor_batch: 512          # our addition 1 -- exact 24-way Q from the BFS tables
+  max_anchor_depth: 5        # children of a d<=5 state are all d<=6, so all are in the table
+  anchor_weight: 1.0
+
+  top1_margin: 1.0           # our addition 4 -- upstream ships this at weight 0.0
+  top1_margin_weight: 0.0
+
+  val_size: 2048
+  checkpoint_every_epochs: 50
+  amp: true
+  compile_model: true        # fixed shapes throughout, so Rule 2 permits it
+  fused_optimizer: true
+
+seed: 0
