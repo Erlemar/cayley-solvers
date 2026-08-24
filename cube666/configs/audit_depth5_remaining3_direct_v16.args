@@ -1,0 +1,12 @@
+--checkpoint
+models/cube666_short_macro_beamreturn_d4_round1_v3/checkpoint.pt
+--factorized-value-checkpoint
+models/cube666_short_macro_factorized_trace_d5_v9/checkpoint.pt
+--direct-action-checkpoint
+models/cube666_short_macro_direct_action_policy_d5focus_v16/checkpoint.pt
+--dataset-dir
+cube666/training/short_macro_curriculum_d6_2m_v1
+--indices
+66490,376980,1714540
+--out
+cube666/reports/short_macro_depth5_remaining3_trace_audit_direct_v16.json
