@@ -104,3 +104,59 @@ megaminx/data/
 /tmp/
 nohup.out
 *.swp
+
+# cube444 generated artifacts
+# ~70 MB of hkociemba pruning tables, regenerable in ~30 min
+cube444/data/twophase_tables/
+cube444/data/lower_bounds.csv
+cube444/logs/
+
+# --- added 2026-08-24 when auditing "commit all new files" ---
+
+# Backups of local settings — settings.local.json holds the Kaggle token, and the
+# bare-name rule above does NOT cover a .bak suffix. This is the one that nearly
+# committed live credentials.
+.claude/settings.local.json*
+*.bak
+
+# Rust build output (cube666 runtime_tools / kmc campaign)
+target/
+*.rlib
+*.rmeta
+*.d
+*.timestamp
+*.exe
+*.pdb
+
+# Run outputs and reports — regeneratable, and 22k files of it
+cube666/results/
+cube666/reports/
+cube666/training/
+cube666/artifacts/
+cube666/tmp/
+megaminx/reports/
+tetraminx/logs/
+tetraminx/results/
+logs/
+**/run_logs/
+
+# Vendored / third-party checkouts with their own .git
+external/
+third_party/
+cube444/community/
+cube555/gpu/_cutlass/
+cube555/gpu/_engine/
+cube555/gpu/_build555/
+
+# Kernel pulls and per-run scratch dirs under cube555/gpu
+cube555/gpu/_eng*/
+cube555/gpu/_ours*/
+cube555/gpu/_sani/
+cube555/gpu/_v3log/
+cube555/gpu/_kernel_output*/
+cube555/gpu/_dscheck*/
+
+# Session scratch
+.tmp/
+.tmp_marimo_pair/
+.codex-tools/

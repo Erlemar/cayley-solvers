@@ -1,0 +1,181 @@
+{
+  "stages_to_run": [
+    "pretrain",
+    "curriculum",
+    "bellman",
+    "bellman_dd",
+    "az"
+  ],
+  "quick_test": true,
+  "experiment": "my-new-recipe",
+  "seed": 71,
+  "precision": "auto",
+  "compile": false,
+  "max_wall_hours": 99.0,
+  "eval_reserve_minutes": 20,
+  "auto_resume": true,
+  "model": {
+    "model_type": "ResMLPDistance",
+    "ResMLPDistance": {
+      "hidden_dims": [
+        2048,
+        512
+      ],
+      "num_res_blocks": 2,
+      "embed_dim": 16
+    },
+    "PilgrimAttnRes": {
+      "hd1": 1024,
+      "hd2": 256,
+      "nrd": 4,
+      "n_attn_blocks": 0,
+      "block_type": "residual",
+      "dropout_rate": 0.0
+    }
+  },
+  "pretrain": {
+    "warmstart": null,
+    "epochs": 2,
+    "samples_per_epoch": 20000,
+    "batch_size": 4096,
+    "k_max": 80,
+    "n_back": 1,
+    "lr": 0.002,
+    "optimizer": {
+      "name": "AdamW",
+      "params": {}
+    },
+    "loss": {
+      "name": "MSELoss",
+      "params": {}
+    },
+    "checkpoint_every": 2,
+    "resume": null
+  },
+  "curriculum": {
+    "warmstart": "auto",
+    "budget_epochs": 3,
+    "warmup_epochs": 1,
+    "warmup_k_max": 35,
+    "mix_k_list": [
+      50,
+      70,
+      80,
+      100
+    ],
+    "samples_per_epoch": 20000,
+    "batch_size": 8192,
+    "lr": 0.0005,
+    "n_back": 1,
+    "optimizer": {
+      "name": "AdamW",
+      "params": {}
+    },
+    "loss": {
+      "name": "MSELoss",
+      "params": {}
+    },
+    "ema_tau": 0.001,
+    "val_every": 1,
+    "patience": 2,
+    "val_k_max": 80,
+    "val_n_walks": 50,
+    "checkpoint_every": 2,
+    "resume": null
+  },
+  "bellman": {
+    "warmstart": "auto",
+    "epochs": 2,
+    "samples_per_epoch": 20000,
+    "batch_size": 2048,
+    "k_max": 80,
+    "n_back": 1,
+    "lr": 0.0005,
+    "optimizer": {
+      "name": "AdamW",
+      "params": {}
+    },
+    "target_update_every": 10,
+    "target_net_chunk": 4096,
+    "clip_upper": true,
+    "clip_lower": true,
+    "frontier_fraction": 0.25,
+    "frontier_walk_depth_cap": 200.0,
+    "bfs_d6_fraction": 0.1,
+    "n_anchor_v0": 0,
+    "n_anchor_d1": 0,
+    "checkpoint_every": 2,
+    "resume": null
+  },
+  "bellman_dd": {
+    "warmstart": "auto",
+    "epochs": 2,
+    "samples_per_epoch": 20000,
+    "batch_size": 2048,
+    "k_max": 80,
+    "n_back": 1,
+    "lr": 0.0005,
+    "optimizer": {
+      "name": "AdamW",
+      "params": {}
+    },
+    "target_update_every": 10,
+    "target_net_chunk": 4096,
+    "clip_upper": true,
+    "clip_lower": true,
+    "frontier_fraction": 0.25,
+    "frontier_walk_depth_cap": 200.0,
+    "bfs_d6_fraction": 0.1,
+    "n_anchor_v0": 32,
+    "n_anchor_d1": 4,
+    "checkpoint_every": 2,
+    "resume": null
+  },
+  "az": {
+    "warmstart": "auto",
+    "policy_csv": "auto",
+    "policy_dataset": "auto",
+    "epochs": 2,
+    "select_epoch": 1,
+    "lr_t_max": 200,
+    "samples_per_epoch": 20000,
+    "rw_batch_size": 2048,
+    "policy_batch_size": 256,
+    "alpha": 1.0,
+    "beta": 1.0,
+    "k_max": 80,
+    "n_back": 1,
+    "lr": 0.0005,
+    "optimizer": {
+      "name": "AdamW",
+      "params": {}
+    },
+    "anchor_v0": 32,
+    "anchor_d1": 4,
+    "bfs_d6_fraction": 0.1,
+    "target_update_every": 10,
+    "checkpoint_every": 1,
+    "resume": null
+  },
+  "eval": {
+    "canary": true,
+    "canary_bfs_samples": 20000,
+    "compare_reference": true,
+    "bench": true,
+    "bench_pids": [
+      0
+    ],
+    "bench_beam_width": 256,
+    "bench_max_steps": 60,
+    "history_depth": 10
+  },
+  "solve": {
+    "enabled": false,
+    "checkpoint": "auto",
+    "list_states_to_solve": [
+      0
+    ],
+    "beam_width": 256,
+    "max_steps": 60
+  }
+}
