@@ -167,3 +167,26 @@ cube666/kaggle_kmc_campaign/smoke_output_*/
 # Kaggle push staging bundles -- duplicate copies of repo source, regenerable
 # (same rationale as .dataset_stage_*/ and kaggle_share/ above)
 cube666/kaggle_kmc_campaign/bundle_v*/
+
+# Exported fp16 weight shards and per-run result DBs
+*.fp16
+*.sqlite3
+*.sqlite3-wal
+*.sqlite3-shm
+*.eqx
+cube555/gpu/_export_selfcheck/
+kaggle_notebooks/**/_kernel_output*/
+**/jax_cache/
+
+# twsearch / ladder working caches
+data/ladder/
+data/ladder_fleet/
+data/ladder_fleet_current/
+data/psplit/
+data/twsearch_cache/
+data/ihes_fleet_rescue/*/ladder/
+
+# stray run output
+cube444/kaggle_inference/cube444_inference/solver/results/
+megaminx/chat_export_dump.txt
+*.err

@@ -1,0 +1,257 @@
+From 609ebbc9c37ce6d94cb1ac35e1bed93189b98584 Mon Sep 17 00:00:00 2001
+From: Erlemar <andlukyane@gmail.com>
+Date: Sun, 23 Aug 2026 10:50:55 +0100
+Subject: [PATCH] Size the state payload per puzzle instead of capping
+ state_len at 120
+
+The build already infers BEAM_STATE_LOGICAL_BYTES from puzzle_info.json's
+central_state and rounds the physical size up to the alignment, so a puzzle
+wider than the historical 128-byte payload builds its own. The public runner's
+'1 <= state_len <= 120 for the State128 logical payload' guard described one
+particular build rather than a runtime limit, and blocked puzzles the engine
+can already size for (5x5x5 = 150, 6x6x6 = 216).
+
+Raising that bound alone would have been unsafe. Zobrist rows are indexed by
+state VALUE -- zobrist[p * STATE_VALUE_PAD + value] -- and STATE_VALUE_PAD was
+pinned at 128, so any alphabet above 128 would read into the next position's
+row with no crash and no warning. That was unreachable only because
+num_classes <= state_len <= 120 held by construction. STATE_VALUE_PAD is now
+inferred alongside the other sizes, with a static_assert that keeps the two
+bounds moving together.
+
+Verified: cmake infers 150/160/160/30 for a 5x5x5 puzzle_info.json; the CPU
+core compiles and runs at that shape with 22,500 distinct Zobrist rows over
+150 positions x 150 values; at the old pad of 128 the new static_assert fires
+at compile time instead of corrupting silently.
+---
+ CMakeLists.txt                                |  2 ++
+ cmake/BeamStateSizing.cmake                   | 12 ++++++++
+ cmake/CheckBeamStateSizing.cmake              | 22 +++++++++++++++
+ src/config.hpp                                |  8 +++++-
+ tests/cayleypy_public/test_data.py            | 28 +++++++++++++++++--
+ .../test_public_notebook_builder.py           |  2 +-
+ .../build_kaggle_cayleypy_public_notebook.py  |  9 ++++--
+ tools/cayleypy_public/data.py                 |  7 +++--
+ tools/cayleypy_public/results.py              |  2 +-
+ 9 files changed, 81 insertions(+), 11 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index b7d5a73..7e140dc 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -5,6 +5,7 @@ beam_configure_state_sizing()
+ message(STATUS "Beam state logical bytes: ${BEAM_STATE_LOGICAL_BYTES}")
+ message(STATUS "Beam state physical bytes: ${BEAM_STATE_PHYSICAL_BYTES}")
+ message(STATUS "Beam state alignment: ${BEAM_STATE_ALIGNMENT}")
++message(STATUS "Beam state value pad: ${BEAM_STATE_VALUE_PAD}")
+ message(STATUS "Beam move count: ${BEAM_MOVE_COUNT}")
+ project(beam_solver_contracts LANGUAGES CXX CUDA)
+ 
+@@ -96,6 +97,7 @@ target_compile_definitions(beam_core PUBLIC
+     BEAM_STATE_LOGICAL_BYTES=${BEAM_STATE_LOGICAL_BYTES}
+     BEAM_STATE_PHYSICAL_BYTES=${BEAM_STATE_PHYSICAL_BYTES}
+     BEAM_STATE_ALIGNMENT=${BEAM_STATE_ALIGNMENT}
++    BEAM_STATE_VALUE_PAD=${BEAM_STATE_VALUE_PAD}
+     BEAM_MOVE_COUNT=${BEAM_MOVE_COUNT}
+ )
+ 
+diff --git a/cmake/BeamStateSizing.cmake b/cmake/BeamStateSizing.cmake
+index 6992ec9..e6e63be 100644
+--- a/cmake/BeamStateSizing.cmake
++++ b/cmake/BeamStateSizing.cmake
+@@ -76,9 +76,21 @@ function(beam_configure_state_sizing)
+         math(EXPR BEAM_STATE_PHYSICAL_BYTES "(((${BEAM_STATE_LOGICAL_BYTES} + 4 + ${BEAM_STATE_ALIGNMENT} - 1) / ${BEAM_STATE_ALIGNMENT}) * ${BEAM_STATE_ALIGNMENT})")
+     endif()
+ 
++    # Zobrist rows are indexed by state VALUE, so the pad must cover num_classes.
++    # data.py already enforces contiguous labels 0..num_classes-1 all present in
++    # central_state, so num_classes <= state_len; sizing the pad from state_len is a
++    # safe upper bound without re-parsing the JSON for max(central_state).
++    # Cost is only memory: STATE_STORAGE_LEN * PAD * 16 B = 410 KB at 160/160.
++    math(EXPR BEAM_STATE_VALUE_PAD "(((${BEAM_STATE_LOGICAL_BYTES} + 15) / 16) * 16)")
++    if(BEAM_STATE_VALUE_PAD LESS 128)
++        set(BEAM_STATE_VALUE_PAD 128)
++    endif()
++
+     set(BEAM_STATE_PHYSICAL_BYTES "${BEAM_STATE_PHYSICAL_BYTES}" CACHE STRING "Physical state storage bytes" FORCE)
++    set(BEAM_STATE_VALUE_PAD "${BEAM_STATE_VALUE_PAD}" CACHE STRING "Zobrist value-table width" FORCE)
+     set(BEAM_STATE_LOGICAL_BYTES "${BEAM_STATE_LOGICAL_BYTES}" PARENT_SCOPE)
+     set(BEAM_STATE_PHYSICAL_BYTES "${BEAM_STATE_PHYSICAL_BYTES}" PARENT_SCOPE)
+     set(BEAM_STATE_ALIGNMENT "${BEAM_STATE_ALIGNMENT}" PARENT_SCOPE)
++    set(BEAM_STATE_VALUE_PAD "${BEAM_STATE_VALUE_PAD}" PARENT_SCOPE)
+     set(BEAM_MOVE_COUNT "${BEAM_MOVE_COUNT}" PARENT_SCOPE)
+ endfunction()
+diff --git a/cmake/CheckBeamStateSizing.cmake b/cmake/CheckBeamStateSizing.cmake
+index 81004ca..c7b2867 100644
+--- a/cmake/CheckBeamStateSizing.cmake
++++ b/cmake/CheckBeamStateSizing.cmake
+@@ -12,6 +12,28 @@ endif()
+ if(NOT BEAM_MOVE_COUNT STREQUAL "24")
+     message(FATAL_ERROR "Expected inferred move count 24, got ${BEAM_MOVE_COUNT}")
+ endif()
++if(NOT BEAM_STATE_VALUE_PAD STREQUAL "128")
++    message(FATAL_ERROR "Expected value pad 128, got ${BEAM_STATE_VALUE_PAD}")
++endif()
++
++# A puzzle wider than the historical 128-byte payload: the Zobrist value pad must
++# grow with it, or `zobrist[p * STATE_VALUE_PAD + value]` reads into the next
++# position's row for every value >= 128 -- silently, with no crash.
++set(BEAM_STATE_LOGICAL_BYTES "150" CACHE STRING "" FORCE)
++set(BEAM_STATE_VALUE_PAD "" CACHE STRING "" FORCE)
++set(BEAM_MOVE_COUNT "30" CACHE STRING "" FORCE)
++beam_configure_state_sizing()
++if(NOT BEAM_STATE_PHYSICAL_BYTES STREQUAL "160")
++    message(FATAL_ERROR "Expected physical bytes 160 for logical 150, got ${BEAM_STATE_PHYSICAL_BYTES}")
++endif()
++if(NOT BEAM_STATE_VALUE_PAD STREQUAL "160")
++    message(FATAL_ERROR "Expected value pad 160 for logical 150, got ${BEAM_STATE_VALUE_PAD}")
++endif()
++
++set(BEAM_STATE_LOGICAL_BYTES "" CACHE STRING "" FORCE)
++set(BEAM_STATE_VALUE_PAD "" CACHE STRING "" FORCE)
++set(BEAM_MOVE_COUNT "" CACHE STRING "" FORCE)
++beam_configure_state_sizing()
+ 
+ set(BEAM_STATE_LOGICAL_BYTES "128" CACHE STRING "" FORCE)
+ set(BEAM_MOVE_COUNT "24" CACHE STRING "" FORCE)
+diff --git a/src/config.hpp b/src/config.hpp
+index 640e904..cf579ed 100644
+--- a/src/config.hpp
++++ b/src/config.hpp
+@@ -9,7 +9,7 @@ namespace beam {
+ inline constexpr std::size_t STATE_LEN = BEAM_STATE_LOGICAL_BYTES;
+ inline constexpr std::size_t STATE_STORAGE_LEN = BEAM_STATE_PHYSICAL_BYTES;
+ inline constexpr std::size_t STATE_ALIGNMENT = BEAM_STATE_ALIGNMENT;
+-inline constexpr std::size_t STATE_VALUE_PAD = 128;
++inline constexpr std::size_t STATE_VALUE_PAD = BEAM_STATE_VALUE_PAD;
+ inline constexpr std::size_t MOVE_COUNT = BEAM_MOVE_COUNT;
+ inline constexpr std::size_t FINAL_RESPONSE_TARGET_LOCAL_IDX_OFFSET = STATE_LEN;
+ static_assert(STATE_LEN > 0);
+@@ -20,6 +20,12 @@ static_assert(STATE_ALIGNMENT == 16 || STATE_ALIGNMENT == 32 || STATE_ALIGNMENT
+ static_assert(STATE_STORAGE_LEN % STATE_ALIGNMENT == 0);
+ static_assert(STATE_STORAGE_LEN >= STATE_LEN + sizeof(std::uint32_t), "FinalResponse requires 4 padding bytes");
+ static_assert(STATE_VALUE_PAD <= 256);
++// Zobrist rows are indexed by state value (`zobrist[p * STATE_VALUE_PAD + value]`),
++// and num_classes <= STATE_LEN because central_state must carry every contiguous
++// label 0..num_classes-1. Without this the table silently reads into the next
++// position's row for any puzzle whose alphabet exceeds the pad -- no crash, just
++// wrong hashes. This is the assert that must move in step with the state_len bound.
++static_assert(STATE_VALUE_PAD >= STATE_LEN, "Zobrist value pad must cover num_classes");
+ inline constexpr std::uint32_t STREAM1_SINGLE_SCORE_OUTPUT_DIM = 1;
+ inline constexpr std::uint32_t STREAM1_BACKEND_MLP = 0;
+ inline constexpr std::uint32_t STREAM1_BACKEND_PIECE_TRANSFORMER = 1;
+diff --git a/tests/cayleypy_public/test_data.py b/tests/cayleypy_public/test_data.py
+index fe3ca78..912085d 100644
+--- a/tests/cayleypy_public/test_data.py
++++ b/tests/cayleypy_public/test_data.py
+@@ -47,9 +47,31 @@ def test_load_contract_derives_value_alphabet_independently_of_state_length(tmp_
+     assert contract.num_classes == 6
+ 
+ 
+-def test_load_contract_rejects_state_len_above_state128_logical_capacity(tmp_path):
++def test_load_contract_accepts_state_len_above_the_historical_128_byte_payload(tmp_path):
++    """A 150-slot puzzle (e.g. the 5x5x5 picture cube) is now in contract.
++
++    The payload is sized per puzzle at build time, so the old 120 bound described
++    one particular build rather than a runtime limit.
++    """
++    puzzle_info, test_csv, submission_csv = write_fixtures(tmp_path, ids=(7,))
++    wide_state = list(range(150))
++    puzzle_info.write_text(json.dumps({
++        "central_state": wide_state,
++        "generators": {"identity": wide_state},
++    }), encoding="utf-8")
++    pd.DataFrame({
++        "initial_state_id": [7],
++        "initial_state": [",".join(str(value) for value in wide_state)],
++    }).to_csv(test_csv, index=False)
++
++    contract = load_puzzle_contract(puzzle_info, test_csv, submission_csv, 7, 7)
++    assert contract.state_len == 150
++    assert contract.num_classes == 150
++
++
++def test_load_contract_rejects_state_len_above_the_value_pad_ceiling(tmp_path):
+     puzzle_info, test_csv, submission_csv = write_fixtures(tmp_path, ids=(7,))
+-    oversized_state = list(range(121))
++    oversized_state = list(range(257))
+     puzzle_info.write_text(json.dumps({
+         "central_state": oversized_state,
+         "generators": {"identity": oversized_state},
+@@ -59,7 +81,7 @@ def test_load_contract_rejects_state_len_above_state128_logical_capacity(tmp_pat
+         "initial_state": [",".join(str(value) for value in oversized_state)],
+     }).to_csv(test_csv, index=False)
+ 
+-    with pytest.raises(ValueError, match=r"1 <= state_len <= 120.*State128"):
++    with pytest.raises(ValueError, match=r"1 <= state_len <= 256"):
+         load_puzzle_contract(puzzle_info, test_csv, submission_csv, 7, 7)
+ 
+ 
+diff --git a/tests/cayleypy_public/test_public_notebook_builder.py b/tests/cayleypy_public/test_public_notebook_builder.py
+index 11d7b43..60284b4 100644
+--- a/tests/cayleypy_public/test_public_notebook_builder.py
++++ b/tests/cayleypy_public/test_public_notebook_builder.py
+@@ -49,7 +49,7 @@ def test_public_notebook_contract_and_no_hidden_model_or_secret_controls(tmp_pat
+         "puzzle_info.json", "test.csv", "sample_submission.csv", "Tesla/NVIDIA T4",
+         "checkpoint-only", "batchnorm-folded", "resmlp-layernorm", "piece Transformer", "fp16",
+         "separate 2xT4 profile registries", "cross-applying profiles fails closed",
+-        "output_dim=1", "output_dim=move_count", "1 <= state_len <= 120", "0..num_classes-1",
++        "output_dim=1", "output_dim=move_count", "1 <= state_len <= 256", "0..num_classes-1",
+         "PUZZLE_ID_START..PUZZLE_ID_END",
+         "off`, `after_original`, or `only", "first", "collect", "touch-BFS",
+         "best effort", "MLP supports through `2**25`",
+diff --git a/tools/build_kaggle_cayleypy_public_notebook.py b/tools/build_kaggle_cayleypy_public_notebook.py
+index 5e02712..d1f18ea 100644
+--- a/tools/build_kaggle_cayleypy_public_notebook.py
++++ b/tools/build_kaggle_cayleypy_public_notebook.py
+@@ -40,9 +40,12 @@ implementation; this notebook does not contain a second solver.
+ - MLP and Transformer use separate 2xT4 profile registries. A profile is selected
+   only after backend detection, and cross-applying profiles fails closed.
+ - Model dtype is automatically **fp16**; users do not select dtype or format.
+-- The fixed public State128 runner requires `1 <= state_len <= 120`. The value
+-  alphabet is inferred independently from contiguous central-state labels
+-  `0..num_classes-1`; every selected initial state must use that same alphabet.
++- The runner requires `1 <= state_len <= 256`. The state payload is sized per
++  puzzle at build time -- `BEAM_STATE_LOGICAL_BYTES` and the Zobrist value pad are
++  both inferred from `central_state` -- so a puzzle wider than the historical
++  128-byte payload builds its own. The value alphabet is inferred independently
++  from contiguous central-state labels `0..num_classes-1`; every selected initial
++  state must use that same alphabet.
+ - The inclusive `PUZZLE_ID_START..PUZZLE_ID_END` range is checked strictly:
+   a missing ID is a configuration error.
+ 
+diff --git a/tools/cayleypy_public/data.py b/tools/cayleypy_public/data.py
+index 60b3fa1..4421982 100644
+--- a/tools/cayleypy_public/data.py
++++ b/tools/cayleypy_public/data.py
+@@ -57,9 +57,12 @@ def load_puzzle_contract(
+     info = json.loads(puzzle_info_path.read_text(encoding="utf-8"))
+     central_state = _strict_json_integer_state(info["central_state"], "central_state")
+     state_len = len(central_state)
+-    if not 1 <= state_len <= 120:
++    if not 1 <= state_len <= 256:
+         raise ValueError(
+-            "public runner requires 1 <= state_len <= 120 for the State128 logical payload"
++            "public runner requires 1 <= state_len <= 256; the state payload is sized "
++            "per puzzle at build time (BEAM_STATE_LOGICAL_BYTES is inferred from "
++            "central_state), and 256 is the ceiling set by "
++            "static_assert(STATE_VALUE_PAD <= 256)"
+         )
+     if any(value < 0 or value > 255 for value in central_state):
+         raise ValueError("central_state values must fit the State128 uint8 payload")
+diff --git a/tools/cayleypy_public/results.py b/tools/cayleypy_public/results.py
+index 8d30c61..2ab7948 100644
+--- a/tools/cayleypy_public/results.py
++++ b/tools/cayleypy_public/results.py
+@@ -181,7 +181,7 @@ def _validate_replay_contract(envelope: Mapping[str, object]) -> None:
+     initial_state = tuple(_state_list(proof.get("initial_state"), "envelope.proof.initial_state"))
+     central_state = tuple(_state_list(proof.get("central_state"), "envelope.proof.central_state"))
+     state_len = len(initial_state)
+-    if not 1 <= state_len <= 120 or len(central_state) != state_len:
++    if not 1 <= state_len <= 256 or len(central_state) != state_len:
+         raise ValueError("proof states must share a State128 logical length in 1..120")
+ 
+     generator_source = _mapping(proof.get("generators"), "envelope.proof.generators")
+-- 
+2.53.0.windows.3
+

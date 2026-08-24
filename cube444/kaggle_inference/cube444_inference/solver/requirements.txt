@@ -1,0 +1,6 @@
+# Install PyTorch separately for your exact CPU/CUDA environment:
+# https://pytorch.org/get-started/locally/
+
+tqdm>=4.66
+pandas>=2.2
+scipy>=1.10
