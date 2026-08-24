@@ -1,0 +1,61 @@
+# Phase-1 masked V (distance-to-R) WITHOUT the margin term -- the CONTROL arm.
+#
+# Trunk matches the deployed single-phase recipe (3.3M, hidden [2048,512], 2 res
+# blocks, onehot) -- Rule 14 / the cube444 matched-epoch sweep both say a bigger
+# trunk buys nothing here, and width is the lever.
+#
+# Input is 72 slots, not 96: corners are a closed orbit and R does not constrain
+# them, so distance-to-R is exactly a function of the non-corner projection.
+#
+# The ONLY difference from p1_margin.yaml is `lambda_margin: 0.0`. Everything else
+# is identical (same seed, same trunk, same walk spec) so any beam difference is
+# attributable to the margin term alone.
+
+model:
+  num_classes: 6
+  hidden_dims: [2048, 512]
+  num_res_blocks: 2
+  encoding: onehot
+  inference_chunk_size: 8192
+
+training:
+  pretrain:
+    n_epochs: 120
+    steps_per_epoch: 30
+    batch_size: 8192
+    margin_batch_size: 2048
+    k_max: 120
+    label_clip: 30
+    margin_k_max: 20
+    h_walk_max: 40
+    n_back: 1
+    lr: 5.0e-4
+    weight_decay: 0.0
+    lambda_margin: 0.0
+    n_anchor_r: 256
+    n_anchor_d1: 64
+    checkpoint_every_epochs: 40
+    amp: true
+
+  bellman:
+    warmstart_path: "cube444/models/p1_control_v2/epoch_0119.pt"
+    n_epochs: 150
+    steps_per_epoch: 30
+    batch_size: 4096
+    margin_batch_size: 2048
+    k_max: 120
+    label_clip: 30
+    margin_k_max: 20
+    h_walk_max: 40
+    n_back: 1
+    lr: 3.0e-4
+    weight_decay: 0.0
+    lambda_margin: 0.0
+    n_anchor_r: 256
+    n_anchor_d1: 64
+    target_update_every_epochs: 10
+    clip_upper: 30
+    checkpoint_every_epochs: 25
+    amp: true
+
+seed: 444

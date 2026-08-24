@@ -1,0 +1,35 @@
+# Stage 2 -- random-walk MSE pretrain, "small" trunk (3.30M params).
+#
+# Same recipe as c_v0_pretrain.yaml at 1/4.5 the size. This variant exists
+# because the score is inference-bound, not training-bound: at fixed GPU-seconds
+# beam_width x model_size = const, and the organiser's own width scaling
+# (2^20 -> 66.0, 2^22 -> 57.3, 2^24 -> 54.5 mean moves) says width is worth a lot.
+#
+# Measured on a 4090 laptop:
+#   3.30M -> 2.90 M states/s inference, 0.63 s per 500k-sample epoch
+#  15.01M -> 0.98 M states/s inference, 2.21 s per 500k-sample epoch
+#
+# Train both, then pick on solve-score-at-fixed-wall, NOT on training loss.
+
+model:
+  state_size: 96
+  num_classes: 6
+  hidden_dims: [2048, 512]
+  num_res_blocks: 2
+  encoding: onehot
+
+training:
+  n_epochs: 1000
+  samples_per_epoch: 500_000
+  batch_size: 16384
+  k_max: 60
+  lr: 5.0e-4
+  weight_decay: 0.0
+  checkpoint_every_epochs: 100
+  n_back: 1
+  loss: mse
+  amp: true
+  compile_model: true
+  fused_optimizer: true
+
+seed: 444
