@@ -190,3 +190,88 @@ data/ihes_fleet_rescue/*/ladder/
 cube444/kaggle_inference/cube444_inference/solver/results/
 megaminx/chat_export_dump.txt
 *.err
+
+# ---- 2026-09-19: generated artifacts found in the tree ----
+# JAX persistent compilation caches (~12 MB per entry) and profiler output: all regenerable
+**/cpu-cache/
+**/jax-cache/
+**/*-jax-cache/
+*.trace.json.gz
+**/profile_analysis/
+# exact-search binary caches (tws9 .dat is 4.96 GB)
+*.dat
+# stray Windows metadata
+*.winmd
+
+# generated research/data outputs over 1 MB (regenerable from the scripts beside them)
+/cube444/tpu_experiments/speed_ram_20260908/local_verify_20260909_0430/stage_a2/completion.manifest.json
+/data/ihes_pdb/prefix_ranks.txt
+/research/wrapped4/adaptive_extraction_c3_2.json
+/research/wrapped4/adaptive_extraction_c3_2_pruned.json
+/research/wrapped4/adaptive_extraction_c3_2_reused.json
+/research/wrapped4/adaptive_extraction_c3_2_wide.json
+/research/wrapped4/adaptive_extraction_c3_2_wide_before_inverse_k10.json
+/research/wrapped4/adaptive_extraction_c7_4_pruned.json
+/research/wrapped4/adaptive_extraction_c7_4_wide.json
+/research/wrapped4/adjacent_extremes_n11.json
+/research/wrapped4/adjacent_layer_d3_four_n15.json
+/research/wrapped4/four_cycle_core_certificate.json
+/research/wrapped4/gap_d3_support4_words.json
+/research/wrapped4/gap_d3_support5_words.json
+/research/wrapped4/gap_roots_d3.json
+/research/wrapped4/merge_extraction_c1_2_wide_trim.json
+/research/wrapped4/merge_extraction_c1_2_wide_trim_before_beam.json
+/research/wrapped4/merge_n12_defect14.json
+/research/wrapped4/merge_n16_defect14.json
+/research/wrapped4/partial_extraction_blocks_c26_15_snapshot.json
+/research/wrapped4/partial_extraction_c12_7.json
+/research/wrapped4/partial_extraction_c12_7_beam.json
+/research/wrapped4/partial_extraction_c12_7_beam5000.json
+/research/wrapped4/partial_extraction_c12_7_padded.json
+/research/wrapped4/partial_extraction_c26_15_padded.json
+/research/wrapped4/partial_extraction_c3_2.json
+/research/wrapped4/partial_extraction_c5_3.json
+/research/wrapped4/partial_extraction_hybrid_c7_4.json
+/research/wrapped4/partial_extraction_known_c19_11.json
+/research/wrapped4/partial_extraction_known_c26_15.json
+/research/wrapped4/partial_extraction_known_c40_23.json
+/research/wrapped4/partial_extraction_reference_c7_4.json
+/research/wrapped4/partial_extraction_translated_snapshot.json
+/research/wrapped4/search_mixed_n15_offset0.json
+/research/wrapped4/search_mixed_n16_offset0.json
+/research/wrapped4/two_defect_inflation_certificate.json
+/research/wrapped4/two_defect_inflation_complete.json
+/research/wrapped4/two_defect_inflation_refined.json
+
+# run debris: process-id files, SSH host keys, XLA HLO text dumps, object files
+*.pid
+**/pid
+known_hosts
+*.hlo.txt.gz
+*.o
+
+# ---- 2026-09-19: kept local by request ----
+# Kaggle inference-kernel bundles: notebooks, kernel-metadata, pushed module copies,
+# asset datasets and downloaded kernel outputs. Training kernels (*train*) stay tracked.
+**/kaggle_notebooks/*
+!**/kaggle_notebooks/*train*/
+**/kaggle_datasets/*
+!**/kaggle_datasets/*train*/
+**/_kernel_output*/
+**/kernel_output*/
+cube444/tpu/kaggle_q_beam/
+cube444/tpu/kaggle_dataset/
+cube555/gpu/_ref/
+cube555/gpu/push/
+cube555/gpu/push_engine/
+cube555/gpu/kaggle_dataset/
+cube555/gpu/*.ipynb
+cube555/tpu/push/
+cube555/tpu/kaggle_dataset/
+cube555/tpu/*.ipynb
+cube666/kaggle_kmc_campaign/*/
+cube666/kaggle_walton_macro_mining/
+# experiment workspaces and generated run logs
+**/tpu_experiments/
+data/ihes_pdb/
+runs/
