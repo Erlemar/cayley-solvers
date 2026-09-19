@@ -199,6 +199,8 @@ def main() -> int:
     ap.add_argument("--journal", required=True, type=Path)
     ap.add_argument("--out", type=Path)
     ap.add_argument("--k", type=int, default=2, help="forced opening length")
+    ap.add_argument("--fixed-prefix", default="",
+                    help="dot-separated fixed opening moves; enumerate remaining k moves, using suffix IDs")
     ap.add_argument("--path-length", type=int, help="only pids whose incumbent is this long")
     ap.add_argument("--pids", type=int, nargs="*")
     ap.add_argument("--skip-pids", type=int, nargs="*",
@@ -235,6 +237,7 @@ def main() -> int:
                     help="how far the feeder may run ahead of the reader; small keeps "
                          "early-exit-on-hit effective, large keeps the pipe busy")
     args = ap.parse_args()
+    args.fixed_prefix = args.fixed_prefix.split(".") if args.fixed_prefix else []
 
     puzzle = PictureCube.load(PROJECT / "data/puzzle_info.json")
     generators = {n: np.asarray(v, dtype=np.int64) for n, v in puzzle.generators.items()}
@@ -243,8 +246,13 @@ def main() -> int:
     args.journal.parent.mkdir(parents=True, exist_ok=True)
 
     if not args.apply_only:
-        prefixes = canonical_prefixes(args.k, generators, names)
-        print(f"k={args.k}: {len(names)**args.k} move-strings -> "
+        if len(args.fixed_prefix) >= args.k or any(move not in generators for move in args.fixed_prefix):
+            raise SystemExit("fixed prefix must contain valid moves and be shorter than k")
+        if args.fixed_prefix and args.self_test:
+            raise SystemExit("fixed prefix is incompatible with self-test mode")
+        prefixes = [args.fixed_prefix + suffix for suffix in
+                    canonical_prefixes(args.k - len(args.fixed_prefix), generators, names)]
+        print(f"k={args.k}, fixed={args.fixed_prefix}: {len(names)**(args.k-len(args.fixed_prefix))} suffix move-strings -> "
               f"{len(prefixes)} distinct openings", flush=True)
 
         pid_filter = set(args.pids or ())
@@ -297,6 +305,8 @@ def main() -> int:
                     except json.JSONDecodeError:
                         continue
                     if rec.get("verdict") in ("hit", "none"):
+                        if rec.get("prefix") != prefixes[rec["prefix_id"]]:
+                            raise SystemExit("resume prefix identity mismatch; use a separate journal")
                         done.add((rec["pid"], rec["prefix_id"]))
                     if rec.get("verdict") == "hit":
                         hit_pids.add(rec["pid"])
@@ -382,6 +392,8 @@ def main() -> int:
             index = -1
             words: list[list[str]] = []
             timed_out = False
+            exhausted = False
+            solver_log = args.journal.with_suffix('.solver.log').open('a', encoding='utf-8')
             t0 = time.time()
             t_block = t0
             n_hit = n_none = n_timeout = 0
@@ -402,7 +414,7 @@ def main() -> int:
                     n_hit += 1
                     with lock:
                         hit_pids.add(pid)
-                elif timed_out:
+                elif timed_out or not exhausted:
                     verdict, payload = "timeout", None
                     n_timeout += 1
                 else:
@@ -422,12 +434,14 @@ def main() -> int:
                           f"{len(window) - args.k} -> {total}", flush=True)
 
             for raw in proc.stdout:
+                solver_log.write(raw)
+                solver_log.flush()
                 line = raw.rstrip("\r\n")
                 if line == "Solving":
                     close_block()
                     index += 1
                     processed[0] = index
-                    words, timed_out = [], False
+                    words, timed_out, exhausted = [], False, False
                     t_block = time.time()
                     if index and index % 200 == 0:
                         rate = index / max(time.time() - t0, 1e-9)
@@ -439,18 +453,27 @@ def main() -> int:
                 if line.startswith("Search timed out"):
                     timed_out = True
                     continue
+                if line.startswith("No solution found in "):
+                    exhausted = line.split()[-1] == str(max_depth)
+                    continue
                 if index < 0 or not raw.startswith(" "):
                     continue
                 try:
                     words.append([tws_token_to_official(t) for t in line.split()])
                 except ValueError:
                     continue
-            close_block()
             code = proc.wait()
+            if code:
+                exhausted = False
+                timed_out = True
+            close_block()
             journal.close()
+            solver_log.close()
             print(f"twsearch exit {code}: chunks={index + 1:,}/{len(work):,} hits={n_hit} "
                   f"none={n_none} timeout={n_timeout} wall={time.time() - t0:.0f}s",
                   flush=True)
+            if code:
+                return 1
 
             if args.self_test:
                 bad = [p for p in scope if pid_state[p]["hit"] == 0]
@@ -463,14 +486,14 @@ def main() -> int:
                       f"through their own opening.", flush=True)
                 return 0
 
-            if args.max_openings or args.opening_offset:
+            if args.max_openings or args.opening_offset or args.fixed_prefix:
                 print(f"\npartial sweep ({args.max_openings} of {len(prefixes)} openings "
                       f"from #{args.opening_offset}): a pid with no hit is NOT proven "
                       f"optimal -- the remaining openings were never searched.", flush=True)
             else:
                 proven = [p for p in scope
                           if pid_state[p]["timeout"] == 0 and pid_state[p]["hit"] == 0
-                          and pid_state[p]["none"] > 0]
+                          and pid_state[p]["none"] == len(prefixes)]
                 print(f"\nfully covered (every opening returned none) => PROVEN optimal at "
                       f"L={L}: {len(proven)}/{len(scope)} pids", flush=True)
 

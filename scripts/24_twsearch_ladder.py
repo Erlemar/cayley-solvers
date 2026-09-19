@@ -163,6 +163,7 @@ def apply_journal(
 
 
 def main() -> int:
+    run_failed = False
     ap = argparse.ArgumentParser()
     ap.add_argument("--baseline", required=True, type=Path)
     ap.add_argument("--journal", required=True, type=Path)
@@ -334,6 +335,7 @@ def main() -> int:
             index = -1
             words: list[list[str]] = []
             timed_out = False
+            exhausted = False
             t0 = time.time()
             t_block = t0
             n_hit = n_none = n_timeout = 0
@@ -352,7 +354,7 @@ def main() -> int:
                     best = min(good, key=lambda w: (len(w), w))
                     verdict, payload = "hit", best
                     n_hit += 1
-                elif timed_out:
+                elif timed_out or not exhausted:
                     verdict, payload = "timeout", None
                     n_timeout += 1
                 else:
@@ -371,12 +373,15 @@ def main() -> int:
                         flush=True,
                     )
 
+            raw_log = args.journal.with_suffix(".solver.log").open("a", encoding="utf-8")
             for raw in proc.stdout:
+                raw_log.write(raw)
+                raw_log.flush()
                 line = raw.rstrip("\r\n")
                 if line == "Solving":
                     close_block()
                     index += 1
-                    words, timed_out = [], False
+                    words, timed_out, exhausted = [], False, False
                     t_block = time.time()
                     if index and index % 50 == 0:
                         rate = index / max(time.time() - t0, 1e-9)
@@ -391,14 +396,23 @@ def main() -> int:
                 if line.startswith("Search timed out"):
                     timed_out = True
                     continue
+                if line.startswith("No solution found in "):
+                    exhausted = True
+                    continue
                 if index < 0 or not raw.startswith(" "):
                     continue
                 try:
                     words.append([tws_token_to_official(t) for t in line.split()])
                 except ValueError:
                     continue
-            close_block()
             code = proc.wait()
+            raw_log.close()
+            if code != 0:
+                # A crash/aborted worker has not exhausted its final search tree.
+                # Keep any independently replay-valid hit, but never record NONE.
+                timed_out = True
+                run_failed = True
+            close_block()
             journal.close()
             print(
                 f"twsearch exit {code}: blocks={index + 1:,}/{len(work):,} "
@@ -427,7 +441,7 @@ def main() -> int:
         f"{rep.n_valid}/{rep.n_total} valid -> {out}",
         flush=True,
     )
-    return 0 if rep.all_valid else 1
+    return 0 if rep.all_valid and not run_failed else 1
 
 
 if __name__ == "__main__":
