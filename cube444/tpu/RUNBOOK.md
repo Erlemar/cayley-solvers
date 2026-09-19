@@ -1,8 +1,21 @@
 # cube444 TPU beam — runbook
 
-The JAX SPMD V-only beam ported to the 4x4x4 color cube. Everything here is
-CPU-validated (see `EXPERIMENTS.md` 2026-07-23 "TPU beam port"); this doc is the
-recipe to run it at width on a v6e.
+For the validated **256M Q-beam on Kaggle v5e-8**, use
+[notebook version 3](https://www.kaggle.com/code/artgor/cayleypy-cube444-q-beam-tpu-256m)
+and the [frozen recipe and results](../tpu_experiments/speed_ram_20260908/RESULTS.md).
+It completed PID 1001 in 44 moves in about 6h10m, including startup and finalization.
+Recorded host RSS peaked at 109.86 GiB; scratch stayed at 1.96 GiB. Ancestry uses
+anonymous RAM to avoid Kaggle's disk quota. All paths and final merged rows were
+independently replayed. Do not substitute the older disk-backed ancestry settings.
+
+A [readable public edition](https://www.kaggle.com/code/artgor/cayleypy-cube444-q-beam-tpu-256m-explained)
+includes the settings, explanations, codec builder and source in ordinary cells.
+It was published on CPU at the user's request because TPU quota was exhausted;
+that publication intentionally stops at the TPU check. Copy it and select TPU
+v5e-8 to use the search. See the [publication checks](../tpu_experiments/public_256m_20260909/README.md).
+
+The material below documents the earlier JAX SPMD V-only port and v6e recipe,
+CPU-validated in `EXPERIMENTS.md` on 2026-07-23.
 
 ## Files
 
