@@ -1,0 +1,41 @@
+# IHES PieceTransformer -- arm A: Vlad Kuznetsov's IHES sampler + AZ value head.
+# Plan: IHES_TRANSFORMER_PLAN_2026-09-16.md section 3.3. Trainer:
+#   tetraminx/scripts/51_train_sparse_q.py --config configs/ihes_tf_a.yaml --data-dir data
+# Run from the repo root (layout_path is relative and is stored in the checkpoint as given).
+# n_epochs is an UPPER BOUND: checkpoints are beam-evaluated every 200 epochs and training
+# continues only while the found path lengths keep shortening.
+puzzle: ihes
+seed: 0
+model:
+  arch: transformer
+  az_head: true
+  layout_path: data/ihes_piece_layout.json   # 26 pieces: 6 centres x4, 8 corners x3, 12 edges x2
+  state_size: 72
+  num_classes: 72          # permutation puzzle: 72 facelet labels (NOT 6)
+  d_model: 256
+  nhead: 8
+  num_layers: 4
+  ff_dim: 1024
+  dropout: 0.0
+training:
+  n_epochs: 3000
+  steps_per_epoch: 256
+  batch_size: 2048         # 524,288 fresh pivots per epoch
+  k_min: 2
+  k_max: 23                # Vlad's ihes_p901_t000 value (~1.08x the ~21.3 counting bound)
+  pivot_tilt: 0.0          # p ~ U[1, k-1]: exactly Vlad's rw_middle_sparse
+  lr: 3.0e-4               # constant; Vlad used 1e-4 (fp32), tetraminx ran 3e-4 on this trainer
+  weight_decay: 3.0e-3
+  grad_clip: 1.0
+  sym_prefix: cube         # data/cube_symmetries*.npy + data/cube_move_relabel.npy
+  verify_symmetry: true
+  sym_coverage: false      # Vlad: identity augmentation
+  anchor_batch: 0          # Vlad: no anchors
+  value_weight: 1.0
+  top1_margin: 1.0
+  top1_margin_weight: 0.0
+  val_size: 8192
+  checkpoint_every_epochs: 50
+  amp: true
+  compile_model: true
+  fused_optimizer: true

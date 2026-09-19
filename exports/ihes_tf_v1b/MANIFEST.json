@@ -1,0 +1,16 @@
+{
+ "name": "ihes_tf_v1b",
+ "files": {
+  "ihes_piece_layout.json": "46bc5d3459c8264d6fccadae790d761af7bcf444442e3f2c2a914b79d1e7c7c6",
+  "ihes_tf_v1b.npz": "fc09703fc03014f9df8c6d8cff908ef86b2e35c87b11c6faad1e5b6c0cbd2e12",
+  "ihes_tf_v1b.pt": "838d56bf4406e60f7d153246569ae191d24850ccebc695307c9b5b7a63b66a26",
+  "puzzle_info.json": "005e4477015c6f79fb0da6652d27df08f06c143690ac5f8f77b1d48134666955",
+  "README.md": "5ffcdbb5e3f26961726ee0def4226d548619ed4f354c62023ba5e4221b1d3310"
+ },
+ "parity": [
+  "JAX full  vs torch: max|dQ| 1.72e-05  argmin agreement 1.0000 over 656 states",
+  "JAX mixed vs torch: max|dQ| 1.72e-05  argmin agreement 1.0000 over 656 states",
+  "JAX value vs torch: max|dV| 7.63e-06"
+ ],
+ "gate": "108-pid held-out gate, B=262144, 1 frame, endgame d6: total 2511 vs floor 2423 (+88), ties 65, solved 108/108\n- Same 108-pid gate, B=262,144, A100 (the selection run): v1a 2537, arm-B e800 + Bellman 2533, Bellman rounds 2/3 of this model 2513 (plateau).\n- Width scaling on gate-54 (floor 1215), 1 forward frame, RTX 4090 bf16: B=65,536 -> 1283 (+68, 22 ties); B=262,144 -> 1255 (+40, 35 ties); B=1,048,576 -> 1243 (+28, 41 ties; all 7 length-24 pids at the floor). Gains shrink per 4x of width.\n- At wide beams also run the INVERSE frame: the short length-21 pids stay +12 at 2^20 with the forward frame alone.\n- Recipe (arm B): sparse-Q from scratch + 48-frame symmetry coverage (4 rows) + exact d<=5 anchors + pivot tilt 0.5, k_max 26, AZ value head; 1200 epochs at lr 3e-4 (batch 2048 x 256 steps); 100 epochs at lr 3e-5; Q-Bellman 2000 steps (exact d<=6 anchors, path states, 108 gate pids held out)."
+}

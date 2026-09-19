@@ -256,6 +256,19 @@ class KhoruzhiiSolver:
             0, int(1e15), (self.state_size,), dtype=torch.int64, device=device, generator=gen
         )
 
+        # Read-only scoring hook, Q path only (see `_do_greedy_step_q_topk`).
+        # Fires once per step with the parents, their RAW Q, the parent V (if the dual
+        # head is being read) and the final selection scores, BEFORE any candidate is
+        # chosen. None by default and never consulted in the hot path when unset, so a
+        # normal solve is byte-identical with or without it.
+        #
+        # Two consumers, both of which need exactly this tensor set:
+        #   * 72_path_rank_probe.py -- cross-parent percentile of the on-path candidate
+        #   * 73_gen_harvest.py     -- Bellman targets 1 + min_a Q(child, a)
+        # Both want RAW Q, not `score_flat`: the qv-consistency term is a search
+        # heuristic, and training on it would be self-confirming.
+        self.step_probe = None
+
     def _get_neighbors(self, states: torch.Tensor) -> torch.Tensor:
         """(B, S) → (B*n_actions, S). Action 0..n_gen-1 is a generator; action
         n_gen..n_actions-1 is a macro applied as a single permutation."""
@@ -358,6 +371,11 @@ class KhoruzhiiSolver:
             # Macros cost more than one real move, so charge them before ranking.
             penalty = (self.action_cost.float() - 1.0).view(1, -1).expand_as(q_all)
             score_flat = score_flat + penalty.reshape(-1)
+
+        if self.step_probe is not None:
+            # Read-only; the hook must not mutate anything it is handed.
+            self.step_probe(states=states, q_all=q_all, v_parent=v_parent,
+                            score_flat=score_flat)
 
         # Q-shortlist -> V-rerank: take alpha*B candidates by Q, then let a scalar
         # V model choose the final B among them. This is the only mode in which a
