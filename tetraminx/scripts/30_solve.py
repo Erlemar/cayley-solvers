@@ -165,7 +165,34 @@ def main() -> int:
                          "beam uses 10); 0 = dedup within the current layer only")
     ap.add_argument("--pids", type=str, default="", help="e.g. 0-99 or 3,7,11")
     ap.add_argument("--limit", type=int, default=None)
-    ap.add_argument("--chunk-size", type=int, default=32768)
+    # 4096, NOT the 32768 this defaulted to until 2026-08-26. The PieceTransformer
+    # scores 88 tokens with SDPA under an explicit attn_mask, which falls back to the
+    # math kernel and MATERIALIZES a (chunk, n_heads, 88, 88) score matrix. Peak
+    # transient memory is therefore linear in chunk and independent of beam width:
+    # 8.79 GiB at 32768 against 1.12 GiB at 4096. On a 16 GB Windows card that 8.79 GiB
+    # does not OOM -- WDDM silently spills it to host RAM -- so the only symptom is
+    # wall-clock. Measured on the 4090 at B=65536 with the deployed blend:
+    #
+    #     chunk  4096 -> 1.0 s/step      chunk 32768 -> 9.2 s/step      (9.2x)
+    #
+    # Throughput is flat from 2048 to 8192 (~65k rows/s), so 4096 is the cheap end of
+    # the plateau with the most headroom. The tell that it was the forward and not the
+    # search: transformer-only, the 2-model blend, and blend-without-qv-consistency all
+    # timed 209.8 s on the same pid -- a cost that does not move with the variable is
+    # not caused by that variable (CLAUDE.md 28). Same failure class as rules 27
+    # (SDPA attn_mask memory) and 31 (WDDM spills past physical VRAM).
+    #
+    # Chunking is pure batching -- loop stride for the forward, _apply_move,
+    # _hash_flat_candidates and _state_hash -- so this is a wall-clock fix only and
+    # does not invalidate any banked comparison. VERIFIED, not assumed: the blend's
+    # forward is BIT-identical (max_abs_diff exactly 0) across chunk 1024 / 2048 /
+    # 4096 / 8192 / 16384 on the same 16,384 rows, and _state_hash is stride-invariant.
+    # Nothing in the scoring path reduces across rows -- attention is within a state's
+    # own 88 tokens -- so batch size cannot reach the bits, and a cuBLAS kernel swap
+    # cannot flip a topk tie. Range tested stops at 16384 only because 32768 peaks at
+    # 8.79 GiB and a concurrent run was using the card.
+    ap.add_argument("--chunk-size", type=int, default=4096,
+                    help="solver internal_batch_size; see the comment above before raising it")
     ap.add_argument("--bf16", action="store_true")
     ap.add_argument("--device", default="cuda" if torch.cuda.is_available() else "cpu")
     ap.add_argument("--resume", action="store_true", help="skip pids already in --out")

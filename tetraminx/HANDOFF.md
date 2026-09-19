@@ -3,6 +3,83 @@
 Competition: [cayley-py-professor-tetraminx-solve-optimally](https://www.kaggle.com/competitions/cayley-py-professor-tetraminx-solve-optimally)
 Deadline **2026-08-29 22:00**. Community comp, Kudos. 26 teams.
 
+## 2026-08-27 UPDATE -- read this before anything below it
+
+**EVERYTHING BELOW IS STALE ON SCORE AND TEAM.** Live Kaggle state, checked
+2026-08-26: we are team **CayleyPy** at **27,665** (submitted 2026-08-26 03:10 by an
+hourly auto min-merge pipeline), #1, with Rokicki second at 28,481 -- a **816-move**
+lead. The sections below say "us 28,094" and list CayleyPy as a *rival* at 28,398;
+those are the same team now. Two consequences:
+
+* **27.665/pid falsifies this file's own "realistic true optimum ~28"** in the
+  puzzle-facts table. The true optimum is by definition <= 27.665; against the 26.7
+  counting bound the remaining headroom is <= ~965 moves, upper bound, not a forecast.
+* **Nothing in `tetraminx/submissions/` is newer than 2026-08-21**, and the 27,665
+  artifacts are not on this machine. Never quote a score from local disk (rule 26b(a)).
+
+### 9.2x FREE ON EVERY LOCAL TRANSFORMER BEAM -- `--chunk-size 4096`
+
+`30_solve.py --chunk-size` defaulted to 32768. The PieceTransformer scores 88 tokens
+through SDPA under an explicit `attn_mask`, which falls back to the math kernel and
+materializes a `(chunk, n_heads, 88, 88)` score matrix. Peak transient is linear in
+CHUNK and independent of beam width -- **8.79 GiB at 32768 vs 1.12 GiB at 4096** -- and
+on a 16 GB Windows card the big one does not OOM, WDDM silently spills it to host RAM.
+The only symptom is wall-clock:
+
+| chunk | s/step at B=65536 | peak |
+|---|---|---|
+| 4096 | **1.0** | 1.12 GiB |
+| 32768 | **9.2** | 8.79 GiB |
+
+Throughput is flat 2048-8192 (~65k rows/s). Default changed to 4096. Results are
+UNCHANGED -- the forward is bit-identical (max_abs_diff exactly 0) across chunk
+1024/2048/4096/8192/16384 and `_state_hash` is stride-invariant, because nothing in the
+scoring path reduces across rows. Rules 27 + 31, together.
+
+**How it was found:** transformer-only, the 2-model blend, and blend-without-qv all
+timed 209.8 s on the same pid -- identical to 0.1 s. A cost that does not move with the
+variable is not caused by that variable (rule 28), which pointed at the forward.
+
+### GOTCHA: the test set is ORDERED BY DIFFICULTY at the start
+
+**pids 0-35 are the shallow block** -- mean reference length **15.2** against **28.6**
+for pids 40-999 (pid 0 is a 1-move scramble). 34 of the 46 pids with a <=26-move
+reference live in 0-35. Any "stratified sample" built as a contiguous low-pid block is
+therefore a shallow sample and will report comfortable numbers that mean nothing. Cost:
+one 40-pid probe run had to be killed and relaunched. Use a stride across 40-999.
+
+### BEAM-AVI REJECTED (2026-08-26/27) -- full write-up in `BEAM_AVI_PLAN.md`
+
+Approximate value iteration on the Q head over BEAM-frontier states (the cube444
+`BEAM_AVI_METHOD.md` recipe, which took that puzzle 4.2 percent below its floor).
+Two independent 5-round loops, two gates, ~9 h of beam. **Negative.**
+
+| gate | arms | result |
+|---|---|---|
+| B=2^18, blend, 6 arms | incumbent 441 | every AVI arm +4 to +6, same per-pid pattern |
+| **B=2^20, solo, 3 arms** | **incumbent 427** | r000 (1 rd) 429, 3W/3L/9T, p=1.0; r004 (5 rd) 434, 1W/7L, p=0.07 |
+
+Dose-response descends: one round ties, five rounds lose. Mechanism is **Q-space
+flattening** -- deep-band top-1 gap halves (0.438 -> 0.270), cross-parent sd contracts
+6.83 -> 6.23, believed distance-reducing children rise 1.90 -> 2.65 against a true
+~1.6. Since the beam takes a global top-B across (parent, action), cross-parent spread
+is exactly what it runs on. Same family as [[allneighbor_qhead_rejected]].
+
+**The go/no-go probe PASSED** (deep conditioned percentile 0.055-0.102 vs a 0.5 null),
+so the failure is not absence of signal -- fitting the bootstrap flattens the landscape
+faster than it sharpens it. **The precondition probe is necessary but not sufficient.**
+
+**Cheap test that would have saved ~9 h:** `77_level_check.py` + the variance
+decomposition predicted BOTH gate outcomes before either gate ran, in ~2 minutes. Run it
+first on any future bootstrapping experiment here. Training loss and `E[target]` both
+looked healthy throughout and were both wrong -- again.
+
+New scripts, all reusable: `72_path_rank_probe.py` (cross-parent rank probe),
+`73_gen_harvest.py` (free Bellman harvest off the beam), `74_train_avi.py`,
+`75_avi_loop.py`, `76_gate_avi.py` (paired matched-control gate with a sign test),
+`77_level_check.py`. Plus a read-only `step_probe` hook in
+`src/cayley/khoruzhii_search.py`.
+
 ## SUBMITTED 28,094 -- 2026-08-09, **#1** (next: CayleyPy 28,398, +304)
 
 **Kaggle public score 28,094**, `submissions/FINAL_tetraminx_28094.csv`, 1000/1000

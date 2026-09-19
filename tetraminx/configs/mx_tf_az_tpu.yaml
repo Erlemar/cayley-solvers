@@ -1,0 +1,69 @@
+# PieceTransformer + AZ value head, TPU (v6e) cell.
+#
+# MATCHED to mx_tf_az.yaml -- the config that produced models/mx_tf_az/epoch_1500.pt
+# on the A100 -- so the only variable is the hardware. Every training field below is
+# byte-identical to that file except the two noted, and neither changes the math:
+#
+#   anchor_baked   Anchor supervision comes from 45_bake_anchors.py instead of a
+#                  live BFSAnchors hash lookup. 45_bake_anchors.py --verify asserts
+#                  the targets are identical row-for-row; precomputing them keeps the
+#                  1.77M-state d6 endgame table out of HBM and removes a Zobrist hash
+#                  + searchsorted from every step.
+#   anchor_resident
+#                  Anchor pool lives in HBM (0.19 GB) instead of host RAM, so the
+#                  per-step sample does not round-trip through the host. Same rows,
+#                  same order for a given seed.
+#
+# Batch/steps/lr/k/tilt/sym/anchor weights are all unchanged, so samples-per-epoch
+# and the objective match the GPU run exactly.
+
+model:
+  arch: transformer
+  az_head: true
+  state_size: 88
+  num_classes: 88
+  layout_path: tetraminx/data/piece_layout.json
+  d_model: 256
+  nhead: 8
+  num_layers: 4
+  ff_dim: 1024
+  dropout: 0.0
+  # TPU-only attention path. Identical maths (CPU fp32 agreement 5.8e-07) and
+  # identical parameters, so checkpoints interchange with the default "sdpa"
+  # build. Measured on v6e at our shapes: 25.1 -> 14.9 ms per layer fwd+bwd.
+  # The win is in the BACKWARD; on a GPU keep "sdpa", which gets flash attention.
+  attn_impl: einsum
+
+training:
+  n_epochs: 2000
+  steps_per_epoch: 1024
+  batch_size: 512            # samples BEFORE symmetry expansion (x14 rows after)
+  k_min: 2
+  k_max: 40
+  pivot_tilt: 0.5            # 0 = upstream scheme; >0 biases pivots deeper
+  lr: 3.0e-4
+  weight_decay: 3.0e-3
+  grad_clip: 1.0
+
+  sym_coverage: true         # our addition 2 -- expand 2-of-24 labels via the 24 frames
+  sym_rows: 0                # 0 = use the full greedy coverage width
+  verify_symmetry: true
+
+  anchor_batch: 512          # our addition 1 -- exact 24-way Q from the BFS tables
+  max_anchor_depth: 5        # children of a d<=5 state are all d<=6, so all are in the table
+  anchor_weight: 1.0
+  anchor_baked: baked_anchors_d5.npz
+  anchor_resident: true
+
+  top1_margin: 1.0           # our addition 4 -- upstream ships this at weight 0.0
+  top1_margin_weight: 0.0
+
+  val_size: 2048
+  checkpoint_every_epochs: 50
+  amp: true
+  # TPU requires dynamic=False, which this trainer already satisfies: every shape in
+  # the step is fixed by batch_size x sym width + anchor_batch.
+  compile_model: true
+  fused_optimizer: true      # ignored on TPU; the trainer picks torch_tpu's AdamW
+
+seed: 0

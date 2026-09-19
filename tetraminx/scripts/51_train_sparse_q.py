@@ -49,14 +49,17 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import sys
 import time
 from pathlib import Path
 
 import numpy as np
 import torch
+import torch.distributed as dist
 import torch.nn.functional as F
 import yaml
+from torch.nn.parallel import DistributedDataParallel as DDP
 
 PROJECT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(PROJECT / "src"))
@@ -64,6 +67,61 @@ sys.path.insert(0, str(PROJECT / "tetraminx" / "src"))
 
 from tetraminx.models import build_model, count_parameters
 from tetraminx.puzzle import Tetraminx
+
+
+def _load_puzzle(kind: str, data_dir: Path):
+    """`puzzle: tetraminx` (default) or `puzzle: ihes` (the IHES picture cube).
+
+    Both classes expose the same interface (move_names, generators, inverse_name,
+    solved_state, verify_inverse_pairs), so nothing downstream branches on the kind.
+    """
+    if kind == "tetraminx":
+        return Tetraminx.load(data_dir / "puzzle_info.json")
+    if kind == "ihes":
+        from cayley.puzzle import PictureCube
+        return PictureCube.load(data_dir / "puzzle_info.json")
+    raise ValueError(f"unknown puzzle {kind!r}; expected 'tetraminx' or 'ihes'")
+
+
+# --------------------------------------------------------------------------
+# device plumbing
+# --------------------------------------------------------------------------
+def _default_device() -> str:
+    """Prefer a TPU, then CUDA, then CPU."""
+    if hasattr(torch, "tpu") and torch.tpu.is_available():
+        return "tpu"
+    if torch.cuda.is_available():
+        return "cuda"
+    return "cpu"
+
+
+def _make_generator(dev: str, seed: int):
+    """A per-device `torch.Generator` where the backend has one, else None.
+
+    torch_tpu does support `torch.Generator(device="tpu")` (probed 2026-08-24), so
+    train and val keep independent RNG streams there exactly as they do on CUDA.
+    The fallback stays for any backend that lacks one: `generator=None` means "use
+    the global RNG" everywhere this trainer passes the argument, so sampling still
+    happens on device and only the stream differs.
+    """
+    dev_type = torch.device(dev).type
+    try:
+        g = torch.Generator(device=dev)
+        g.manual_seed(seed)
+        return g
+    except (RuntimeError, TypeError):
+        _reseed(None, seed, dev_type)
+        return None
+
+
+def _reseed(g, seed: int, dev_type: str) -> None:
+    """Reset whichever RNG `_make_generator` handed back."""
+    if g is not None:
+        g.manual_seed(seed)
+        return
+    torch.manual_seed(seed)
+    if dev_type == "tpu" and hasattr(torch, "tpu"):
+        torch.tpu.manual_seed_all(seed)
 
 
 # --------------------------------------------------------------------------
@@ -77,10 +135,12 @@ class Symmetries:
     so an action `a` labelled on `s` becomes action `sigma^-1(a)` on `conj(s)`.
     """
 
-    def __init__(self, data_dir: Path, device: str):
-        P = np.load(data_dir / "tetra_symmetries.npy").astype(np.int64)
-        P_inv = np.load(data_dir / "tetra_symmetries_inv.npy").astype(np.int64)
-        sigma = np.load(data_dir / "tetra_move_relabel.npy").astype(np.int64)
+    def __init__(self, data_dir: Path, device: str, prefix: str = "tetra"):
+        # IHES: prefix "cube" -> cube_symmetries.npy / _inv.npy and the relabel table
+        # from scripts/80_build_ihes_move_relabel.py (already in THIS convention).
+        P = np.load(data_dir / f"{prefix}_symmetries.npy").astype(np.int64)
+        P_inv = np.load(data_dir / f"{prefix}_symmetries_inv.npy").astype(np.int64)
+        sigma = np.load(data_dir / f"{prefix}_move_relabel.npy").astype(np.int64)
         sigma_inv = np.zeros_like(sigma)
         rows = np.arange(sigma.shape[1])
         for k in range(sigma.shape[0]):
@@ -184,7 +244,14 @@ class SparseQSampler:
         self.g = generator
         self.device = generators.device
 
-    def sample(self, batch: int):
+    def sample(self, batch: int, check: bool = False):
+        """Draw a batch. `check` costs a host sync, so it is off in the hot loop.
+
+        The invariant (every row got a pivot, and prev != nxt) is a property of the
+        sampling scheme, not of the data, so verifying it once at startup is
+        sufficient. Leaving it on every step would put two `.item()` calls in the
+        inner loop -- on TPU each one cuts the graph and blocks on the device.
+        """
         dev = self.device
         lengths = torch.randint(self.k_min, self.k_max + 1, (batch,), generator=self.g, device=dev)
         u = torch.rand((batch,), generator=self.g, device=dev)
@@ -209,7 +276,8 @@ class SparseQSampler:
             nxt = torch.where(at_pivot, moves, nxt)
             states = torch.where(active.unsqueeze(1), successors, states)
             last = torch.where(active, moves, last)
-        assert int((prev < 0).sum()) == 0 and int((prev == nxt).sum()) == 0
+        if check:
+            assert int((prev < 0).sum()) == 0 and int((prev == nxt).sum()) == 0
         return pivot_states, pivots, prev, nxt
 
 
@@ -269,7 +337,9 @@ class BFSAnchors:
     def __init__(self, train_path: Path, endgame_path: Path, generators: torch.Tensor,
                  max_anchor_depth: int, device: str):
         blob = torch.load(train_path, map_location="cpu", weights_only=False)
-        states, dists = blob["states"], blob["distances"]
+        # tetraminx files use "distances"; the IHES bfs_d6_train.pt uses "depths"
+        states = blob["states"]
+        dists = blob["distances"] if "distances" in blob else blob["depths"]
         keep = dists <= max_anchor_depth
         # host-resident, narrow dtype; sample() moves 512 rows per step
         self.states = states[keep].contiguous()
@@ -325,25 +395,49 @@ class BakedAnchors:
     It also reaches a level deeper than the table it came from. The generator set is
     closed under inverse, so a child missing from a d<=k table is at exactly k+1;
     the builder resolves those, giving exact d<=7 anchors out of the d7 table.
+
+    Accepts either the `.pt` the bake-out writes or the compressed `.npz` from
+    45_bake_anchors.py; the payload keys are the same.
+
+    Two storage modes. `resident=False` keeps the pool on the host and moves only
+    the sampled rows, which is what the d7 pool needs on a 24 GB card. `resident`
+    puts the whole pool in device memory as int8 and indexes there -- the d5 pool
+    is 0.19 GB, and it removes a host round-trip per step. That matters most on
+    TPU, where `idx.to("cpu")` blocks the pipeline and cuts the graph.
     """
 
-    def __init__(self, path: Path, device: str):
-        blob = torch.load(path, map_location="cpu", weights_only=False)
-        self.states = blob["states"].contiguous()          # int8 (N, 88)
-        self.q = blob["q_targets"].contiguous()            # int8 (N, 24)
-        self.depths = blob["depths"].contiguous()          # int8 (N,)
+    def __init__(self, path: Path, device: str, resident: bool = False):
+        if path.suffix == ".npz":
+            z = np.load(path)
+            states = torch.from_numpy(z["states"])
+            q = torch.from_numpy(z["q_targets"])
+            depths = torch.from_numpy(z["depths"])
+            table_depth = int(z["table_depth"])
+        else:
+            blob = torch.load(path, map_location="cpu", weights_only=False)
+            states, q, depths = blob["states"], blob["q_targets"], blob["depths"]
+            table_depth = int(blob["table_depth"])
+        assert q.size(0) == states.size(0) == depths.size(0)
         self.device = device
-        assert self.q.size(0) == self.states.size(0)
-        d = self.depths.to(torch.int64)
-        hist = {int(k): int(v) for k, v in zip(*torch.unique(d, return_counts=True))}
-        gb = (self.states.numel() + self.q.numel()) / 2**30
-        print(f"  baked anchors: {self.states.size(0):,} states from a d"
-              f"{int(blob['table_depth'])} table ({gb:.2f} GB host, no table needed); "
-              f"per-depth {hist}", flush=True)
+        self.resident = resident
+        home = device if resident else "cpu"
+        self.states = states.contiguous().to(home)         # int8 (N, 88)
+        self.q = q.contiguous().to(home)                   # int8 (N, 24)
+        self.depths = depths.contiguous().to(home)         # int8 (N,)
+        hist = {int(k): int(v) for k, v in
+                zip(*torch.unique(depths.to(torch.int64), return_counts=True))}
+        gb = (states.numel() + q.numel() + depths.numel()) / 2**30
+        print(f"  baked anchors: {states.size(0):,} states from a d{table_depth} table "
+              f"({gb:.2f} GB on {home}, no endgame table needed); per-depth {hist}",
+              flush=True)
 
-    def sample(self, batch: int, g: torch.Generator):
-        idx = torch.randint(self.states.size(0), (batch,), generator=g, device=g.device)
-        ih = idx.to("cpu")
+    def sample(self, batch: int, g: torch.Generator | None):
+        n = self.states.size(0)
+        if g is None:
+            idx = torch.randint(n, (batch,), device=self.device)
+        else:
+            idx = torch.randint(n, (batch,), generator=g, device=g.device)
+        ih = idx if self.resident else idx.to("cpu")
         s = self.states.index_select(0, ih).to(self.device).long()
         t = self.q.index_select(0, ih).to(self.device).float()
         d0 = self.depths.index_select(0, ih).to(self.device).float()
@@ -360,20 +454,32 @@ def expand_labels(sym, tables, states, pivots, prev, nxt, used):
     sym_ids = sym_ids_t[prev, nxt, :used]                       # (B, used)
     columns = columns_t[prev, nxt, :used]                       # (B, used, 2)
     sides = sides_t[prev, nxt, :used]                           # (B, used, 2)
-    src = torch.arange(B, device=states.device).view(-1, 1).expand(-1, used).reshape(-1)
+    dev = states.device
+    A = sym.n_actions
+    src = torch.arange(B, device=dev).view(-1, 1).expand(-1, used).reshape(-1)
     out_states = sym.conjugate(states.index_select(0, src), sym_ids.reshape(-1))
     total = out_states.size(0)
-    targets = torch.zeros((total, sym.n_actions), device=states.device)
-    mask = torch.zeros_like(targets, dtype=torch.bool)
+    # STATIC-SHAPE scatter rather than boolean indexing. `x[bool_mask]` lowers to
+    # nonzero(), whose output size is data-dependent -- on TPU that forces a host
+    # round-trip and then recompiles the graph for every distinct count (see
+    # torch_tpu ops/nonzero/nonzero_aten_kernels.cc, which calls .cpu().item()).
+    # Dead slots scatter into a sentinel column that is sliced off afterwards, so
+    # every shape below is fixed. Numerically identical to the indexed form: the
+    # (row, col) pairs are unique within a row because sigma_inv is a permutation
+    # and prev != nxt, so there are no colliding writes to resolve.
     flat_sides = sides.reshape(total, 2)
+    flat_cols = columns.reshape(total, 2)
     live = flat_sides >= 0
-    rows = torch.arange(total, device=states.device).view(-1, 1).expand(-1, 2)[live]
-    cols = columns.reshape(total, 2)[live]
-    side = flat_sides[live]
-    piv = pivots.float().index_select(0, src)[rows]
-    targets[rows, cols] = torch.where(side == 0, piv - 1.0, piv + 1.0)
-    mask[rows, cols] = True
-    identity_rows = torch.arange(B, device=states.device) * used
+    col_idx = torch.where(live, flat_cols, torch.full_like(flat_cols, A))
+    piv = pivots.float().index_select(0, src).unsqueeze(1).expand(-1, 2)
+    val = torch.where(flat_sides == 0, piv - 1.0, piv + 1.0)
+    tgt_ext = torch.zeros((total, A + 1), device=dev)
+    msk_ext = torch.zeros((total, A + 1), device=dev)
+    tgt_ext.scatter_(1, col_idx, val)
+    msk_ext.scatter_(1, col_idx, live.to(tgt_ext.dtype))
+    targets = tgt_ext[:, :A].contiguous()
+    mask = msk_ext[:, :A].gt(0)
+    identity_rows = torch.arange(B, device=dev) * used
     return out_states, targets, mask, identity_rows
 
 
@@ -394,14 +500,48 @@ def sparse_metrics(pred, prev, nxt, margin):
     }
 
 
+# Order is load-bearing: `metric_vector` stacks in exactly this order and the epoch
+# loop zips the readback back onto these names.
+METRIC_KEYS = ("loss", "sparse", "anchor", "path", "value", "margin",
+               "pair", "top1", "ptop1", "gap", "box", "bviol")
+
+
+def _optimizer_state_to_cpu(opt) -> dict:
+    """Optimizer state_dict with every tensor pulled to host.
+
+    Same reason as the model state_dict: this has to happen on all ranks, so it
+    cannot live inside an `if is_main` block.
+    """
+    sd = opt.state_dict()
+    moved = {}
+    for pid, entries in sd.get("state", {}).items():
+        moved[pid] = {k: (v.detach().to("cpu") if isinstance(v, torch.Tensor) else v)
+                      for k, v in entries.items()}
+    return {**sd, "state": moved}
+
+
+def metric_vector(loss, sparse, anchor_mse, path_mse, met) -> torch.Tensor:
+    """Pack the epoch's twelve scalars into one device tensor (no host sync)."""
+    return torch.stack([
+        loss.detach(), sparse.detach(), anchor_mse.detach(), path_mse.detach(),
+        met["value_mse"].detach(), met["margin_loss"].detach(),
+        met["pair_acc"].detach(), met["top1_acc"].detach(),
+        met["path_top1"].detach(), met["gap"].detach(),
+        met["box_loss"].detach(), met["box_viol"].detach(),
+    ]).float()
+
+
 # --------------------------------------------------------------------------
 def main() -> int:
     ap = argparse.ArgumentParser(description="Train an all-neighbours sparse-Q head for Tetraminx.")
     ap.add_argument("--config", required=True, type=Path)
     ap.add_argument("--output", required=True, type=Path)
-    ap.add_argument("--device", default="cuda" if torch.cuda.is_available() else "cpu")
+    ap.add_argument("--device", default=_default_device())
     ap.add_argument("--epochs", type=int, default=None)
     ap.add_argument("--resume", type=Path, default=None)
+    ap.add_argument("--resume-lr", type=float, default=None,
+                    help="after --resume, set the optimizer lr to this value (the restored "
+                         "optimizer state otherwise keeps the old lr); e.g. a step-down anneal")
     ap.add_argument("--data-dir", type=Path, default=PROJECT / "tetraminx" / "data")
     ap.add_argument("--set", action="append", default=[], metavar="DOTTED.PATH=JSON",
                     help="override a config field, e.g. training.batch_size=2048")
@@ -425,10 +565,33 @@ def main() -> int:
     if args.epochs is not None:
         tcfg["n_epochs"] = args.epochs
     dev = args.device
+    dev_type = torch.device(dev).type
+
+    # --- distributed ------------------------------------------------------
+    # torchrun sets WORLD_SIZE/RANK. On TPU each process owns exactly one core and
+    # addresses it as "tpu:0", so DDP takes no device_ids. Data-parallel here is a
+    # memory fix as much as a speed one: the per-rank activation footprint scales
+    # with the per-rank batch, and the global batch stays the config's value so the
+    # recipe remains matched to the single-GPU run.
+    world = int(os.environ.get("WORLD_SIZE", "1"))
+    rank = int(os.environ.get("RANK", "0"))
+    ddp_on = world > 1
+    if ddp_on:
+        if not dist.is_initialized():
+            dist.init_process_group(
+                backend="tpu_dist" if dev_type == "tpu" else "nccl")
+        rank, world = dist.get_rank(), dist.get_world_size()
+    is_main = rank == 0
+    if not is_main:
+        # Only rank 0 narrates. Every rank still executes the identical graph --
+        # diverging around a materialization is what deadlocks a TPU mesh.
+        sys.stdout = open(os.devnull, "w", encoding="utf-8")
+
     args.output.mkdir(parents=True, exist_ok=True)
 
     torch.manual_seed(cfg.get("seed", 0))
-    puzzle = Tetraminx.load(args.data_dir / "puzzle_info.json")
+    puzzle_kind = str(cfg.get("puzzle", "tetraminx"))
+    puzzle = _load_puzzle(puzzle_kind, args.data_dir)
     puzzle.verify_inverse_pairs()
     names = list(puzzle.move_names)
     A = len(names)
@@ -438,13 +601,14 @@ def main() -> int:
     solved = torch.tensor(puzzle.solved_state, dtype=torch.int64, device=dev)
 
     print("=" * 72, flush=True)
-    print(f"sparse-Q tetraminx | device {dev} | actions {A}", flush=True)
+    print(f"sparse-Q {puzzle_kind} | device {dev} | actions {A}", flush=True)
     print(f"config: {json.dumps({'model': mcfg, 'training': tcfg}, sort_keys=True)}", flush=True)
 
-    sym = Symmetries(args.data_dir, dev)
+    sym = Symmetries(args.data_dir, dev, prefix=str(tcfg.get("sym_prefix", "tetra")))
     if tcfg.get("verify_symmetry", True):
         sym.verify(gen)
-        print("  symmetry transport verified over all 24 frames x 24 actions", flush=True)
+        print(f"  symmetry transport verified over all {sym.n_sym} frames x "
+              f"{sym.n_actions} actions", flush=True)
     use_sym = bool(tcfg.get("sym_coverage", True))
     if use_sym:
         sid, scol, sside, width = sym.coverage_table()
@@ -456,10 +620,16 @@ def main() -> int:
 
     anchors = None
     n_anchor = int(tcfg.get("anchor_batch", 0))
+    if ddp_on and n_anchor > 0:
+        if n_anchor % world:
+            raise SystemExit(f"anchor_batch {n_anchor} must divide world size {world}")
+        n_anchor //= world
     if n_anchor > 0:
         baked = tcfg.get("anchor_baked")
         if baked:
-            anchors = BakedAnchors(args.data_dir / baked, dev)
+            anchors = BakedAnchors(args.data_dir / baked, dev,
+                                   resident=bool(tcfg.get("anchor_resident",
+                                                          dev_type == "tpu")))
         else:
             anchors = BFSAnchors(
                 args.data_dir / tcfg.get("anchor_states", "bfs_d6_train.pt"),
@@ -484,6 +654,9 @@ def main() -> int:
             d_model=int(mcfg.get("d_model", 256)), nhead=int(mcfg.get("nhead", 8)),
             num_layers=int(mcfg.get("num_layers", 4)), ff_dim=int(mcfg.get("ff_dim", 1024)),
             dropout=float(mcfg.get("dropout", 0.0)),
+            # "einsum" is a TPU-only speed path; identical parameters, so
+            # checkpoints interchange with the default "sdpa" build.
+            attn_impl=str(mcfg.get("attn_impl", "sdpa")),
         ).to(dev)
     elif arch == "latent_relational":
         model = build_model(
@@ -559,28 +732,56 @@ def main() -> int:
         raise ValueError("model has no trainable parameters")
 
     trainable = [p for p in model.parameters() if p.requires_grad]
-    opt = torch.optim.AdamW(trainable, lr=float(tcfg["lr"]),
-                            weight_decay=float(tcfg.get("weight_decay", 0.0)),
-                            fused=bool(tcfg.get("fused_optimizer", False)) and dev.startswith("cuda"))
+    # Default to stock AdamW everywhere -- that is what the GPU run used, so the
+    # optimizer is not a second variable when comparing against it. TorchTPU also
+    # ships a fork (it pre-allocates `step` on device, where stock AdamW allocates
+    # it lazily on CPU and Dynamo turns that into a graph break). Opt in with
+    # training.tpu_optimizer=true only if a profile shows that break actually costs
+    # something; it is a different implementation, not a free switch.
+    if dev_type == "tpu" and bool(tcfg.get("tpu_optimizer", False)):
+        from torch_tpu._internal.optim.adamw import AdamW as TpuAdamW
+        opt = TpuAdamW(trainable, lr=float(tcfg["lr"]),
+                       weight_decay=float(tcfg.get("weight_decay", 0.0)))
+        print("  optimizer: torch_tpu AdamW fork", flush=True)
+    else:
+        opt = torch.optim.AdamW(trainable, lr=float(tcfg["lr"]),
+                                weight_decay=float(tcfg.get("weight_decay", 0.0)),
+                                fused=bool(tcfg.get("fused_optimizer", False))
+                                and dev_type == "cuda")
     if args.resume is not None and args.resume.exists():
         ck = torch.load(args.resume, map_location=dev, weights_only=False)
         model.load_state_dict({k.removeprefix("_orig_mod."): v for k, v in ck["state_dict"].items()})
         opt.load_state_dict(ck["optimizer"])
         start_epoch, best = int(ck["epoch"]) + 1, float(ck.get("best", float("inf")))
         print(f"  resumed from {args.resume} at epoch {start_epoch}", flush=True)
+        if args.resume_lr is not None:
+            for group in opt.param_groups:
+                group["lr"] = float(args.resume_lr)
+            tcfg["lr"] = float(args.resume_lr)
+            print(f"  optimizer lr set to {args.resume_lr:g} after resume", flush=True)
 
     model.return_value = az_head          # single-trunk dual output while training
     net = model
+    if ddp_on:
+        net = DDP(model)                  # no device_ids: each rank sees only tpu:0
     if bool(tcfg.get("compile_model", False)):
-        net = torch.compile(model, dynamic=False)
+        net = torch.compile(net, dynamic=False)     # TPU requires dynamic=False
 
-    g_train = torch.Generator(device=dev); g_train.manual_seed(cfg.get("seed", 0))
-    g_val = torch.Generator(device=dev); g_val.manual_seed(cfg.get("seed", 0) + 1_000_000)
+    # Ranks must draw DIFFERENT samples or data-parallel just recomputes one batch
+    # four times. Model init above used the shared seed, so weights still match.
+    seed_train = cfg.get("seed", 0) + rank * 100_003
+    seed_val = cfg.get("seed", 0) + 1_000_000 + rank * 100_003
+    g_train = _make_generator(dev, seed_train)
+    g_val = _make_generator(dev, seed_val)
     k_min, k_max = int(tcfg["k_min"]), int(tcfg["k_max"])
     tilt = float(tcfg.get("pivot_tilt", 0.0))
     sampler = SparseQSampler(gen, inv_idx, solved, k_min, k_max, tilt, g_train)
     val_sampler = SparseQSampler(gen, inv_idx, solved, k_min, k_max, tilt, g_val)
     base_batch = int(tcfg["batch_size"])
+    if ddp_on:
+        if base_batch % world:
+            raise SystemExit(f"batch_size {base_batch} must divide world size {world}")
+        base_batch //= world
     steps = int(tcfg["steps_per_epoch"])
     margin = float(tcfg.get("top1_margin", 1.0))
     margin_w = float(tcfg.get("top1_margin_weight", 0.0))
@@ -599,7 +800,17 @@ def main() -> int:
     prof_from = int(tcfg.get("profile_high_from", 9))   # 1-indexed rank
     path_rank_margin = float(tcfg.get("path_rank_margin", 1.0))
     value_w = float(tcfg.get("value_weight", 1.0))
-    amp = bool(tcfg.get("amp", True)) and dev.startswith("cuda")
+    amp = bool(tcfg.get("amp", True)) and dev_type in ("cuda", "tpu")
+
+    # The pivot/prev/next invariant is a property of the sampling scheme, so check
+    # it once here rather than on every step (see SparseQSampler.sample). Run it on
+    # a throwaway sampler and then re-seed, so the training stream is byte-identical
+    # to a run without the check.
+    SparseQSampler(gen, inv_idx, solved, k_min, k_max, tilt,
+                   _make_generator(dev, 987_654_321)).sample(256, check=True)
+    print("  sampler invariant verified (all rows pivoted, prev != next)", flush=True)
+    _reseed(g_val, seed_val, dev_type)
+    _reseed(g_train, seed_train, dev_type)
 
     vs, vp, vprev, vnext = val_sampler.sample(int(tcfg.get("val_size", 8192)))
     hist = torch.bincount(vp, minlength=k_max + 1).tolist()
@@ -607,7 +818,7 @@ def main() -> int:
           f"{ {d: n for d, n in enumerate(hist) if n} }", flush=True)
 
     log_path = args.output / "train_log.csv"
-    if not log_path.exists():
+    if is_main and not log_path.exists():
         log_path.write_text(
             "epoch,loss,sparse_mse,anchor_mse,path_mse,margin,pair_acc,top1_acc,"
             "path_top1,gap,secs\n", encoding="utf-8")
@@ -637,7 +848,7 @@ def main() -> int:
         if paths is not None:
             p_s, p_a, p_t = paths.sample(n_path, gg)
             xs = torch.cat((xs, p_s), 0)
-        with torch.autocast("cuda", dtype=torch.bfloat16, enabled=amp):
+        with torch.autocast(dev_type, dtype=torch.bfloat16, enabled=amp):
             out = net(xs)
             if az_head:
                 # Auxiliary AZ value head, computed from the SAME trunk pass so the
@@ -656,7 +867,11 @@ def main() -> int:
                 pred_all = out
                 value_loss = out.new_zeros(())
         pred = pred_all[:n_rw].float()
-        sparse = pred.sub(tgt).pow(2).masked_select(msk).mean()
+        # Masked mean written as sum/count. `masked_select` has a data-dependent
+        # output size, which is a host round-trip plus a recompile on TPU; this
+        # form is the same number with static shapes.
+        sq = pred.sub(tgt).pow(2).mul(msk.to(pred.dtype))
+        sparse = sq.sum() / msk.sum().to(pred.dtype).clamp_min(1.0)
         anchor_mse = pred_all.new_zeros(())
         if anchors is not None:
             anchor_mse = pred_all[n_rw:n_rw + n_anchor].float().sub(a_t).pow(2).mean()
@@ -743,35 +958,32 @@ def main() -> int:
 
     n_epochs = int(tcfg["n_epochs"])
     ckpt_every = int(tcfg.get("checkpoint_every_epochs", 25))
+    clip = float(tcfg.get("grad_clip", 0))
     for epoch in range(start_epoch, n_epochs + 1):
         model.train()
         t0 = time.time()
-        acc = {k: 0.0 for k in ("loss", "sparse", "anchor", "path", "value", "margin",
-                                "pair", "top1", "ptop1", "gap", "box", "bviol")}
+        # Metrics accumulate ON DEVICE and are read back once per epoch. The old
+        # form called float() on twelve scalars every step; each one is a device
+        # sync, which on TPU also ends the deferred graph, so the step could not
+        # overlap with anything. One sync per epoch instead of 12 x steps.
+        acc_t = torch.zeros(len(METRIC_KEYS), device=dev)
         for _ in range(steps):
             loss, sparse, anchor_mse, path_mse, met = run_batch(True)
             opt.zero_grad(set_to_none=True)
             loss.backward()
-            if float(tcfg.get("grad_clip", 0)) > 0:
-                torch.nn.utils.clip_grad_norm_(model.parameters(), float(tcfg["grad_clip"]))
+            if clip > 0:
+                torch.nn.utils.clip_grad_norm_(model.parameters(), clip)
             opt.step()
-            acc["loss"] += float(loss.detach())
-            acc["sparse"] += float(sparse.detach())
-            acc["anchor"] += float(anchor_mse.detach())
-            acc["path"] += float(path_mse.detach())
-            acc["value"] += float(met["value_mse"])
-            acc["margin"] += float(met["margin_loss"].detach())
-            acc["pair"] += float(met["pair_acc"])
-            acc["top1"] += float(met["top1_acc"])
-            acc["ptop1"] += float(met["path_top1"])
-            acc["gap"] += float(met["gap"])
-            acc["box"] += float(met["box_loss"])
-            acc["bviol"] += float(met["box_viol"])
-        for k in acc:
-            acc[k] /= steps
+            acc_t += metric_vector(loss, sparse, anchor_mse, path_mse, met)
+        if ddp_on:
+            # Report the GLOBAL batch, not rank 0's shard.
+            dist.all_reduce(acc_t, op=dist.ReduceOp.SUM)
+            acc_t = acc_t / world
+        acc = {k: v / steps for k, v in zip(METRIC_KEYS, acc_t.tolist())}
         secs = time.time() - t0
-        with log_path.open("a", encoding="utf-8") as fh:
-            fh.write(f"{epoch},{acc['loss']:.5f},{acc['sparse']:.5f},{acc['anchor']:.5f},"
+        if is_main:
+            with log_path.open("a", encoding="utf-8") as fh:
+                fh.write(f"{epoch},{acc['loss']:.5f},{acc['sparse']:.5f},{acc['anchor']:.5f},"
                      f"{acc['path']:.5f},{acc['margin']:.5f},{acc['pair']:.5f},"
                      f"{acc['top1']:.5f},{acc['ptop1']:.5f},{acc['gap']:.4f},{secs:.1f}\n")
         print(f"epoch {epoch:5d} | loss {acc['loss']:8.4f} sparse {acc['sparse']:8.4f} "
@@ -781,17 +993,28 @@ def main() -> int:
 
         if epoch % ckpt_every == 0 or epoch == n_epochs:
             model.eval()
-            g_val.manual_seed(cfg.get("seed", 0) + 1_000_000)   # same val anchors every time
+            # same val anchors every time
+            _reseed(g_val, seed_val, dev_type)
             with torch.no_grad():
                 vloss, vsparse, vanchor, vpath, vmet = run_batch(False)
             print(f"  val: loss {float(vloss):.4f} pair {float(vmet['pair_acc']):.4f} "
                   f"top1 {float(vmet['top1_acc']):.4f} ptop1 {float(vmet['path_top1']):.4f} "
                   f"gap {float(vmet['gap']):.3f} bviol {float(vmet['box_viol']):.4f}", flush=True)
+            # Materialise on EVERY rank, then let only rank 0 write.
+            # torch_tpu's golden rule for distributed: never diverge around a
+            # materialization. Under DEFER_AND_FUSE the state_dict tensors are
+            # still deferred, and pulling them executes a graph that can contain
+            # this step's DDP collectives -- if only rank 0 does that while the
+            # others wait at the barrier below, the mesh deadlocks. Observed
+            # exactly that: torch.save stalled with the file frozen part-written
+            # and all four ranks alive.
+            cpu_state = {k.removeprefix("_orig_mod."): v.detach().to("cpu")
+                         for k, v in model.state_dict().items()}
+            cpu_opt = _optimizer_state_to_cpu(opt)
             payload = {
                 "epoch": epoch,
-                "state_dict": {k.removeprefix("_orig_mod."): v
-                               for k, v in model.state_dict().items()},
-                "optimizer": opt.state_dict(),
+                "state_dict": cpu_state,
+                "optimizer": cpu_opt,
                 "loss": acc["loss"],
                 "val_loss": float(vloss),
                 "best": min(best, float(vloss)),
@@ -799,12 +1022,20 @@ def main() -> int:
                 "train_config": tcfg,
                 "metrics": {k: float(v) for k, v in vmet.items()},
             }
-            torch.save(payload, args.output / f"epoch_{epoch:04d}.pt")
+            if is_main:
+                torch.save(payload, args.output / f"epoch_{epoch:04d}.pt")
             if float(vloss) < best:
                 best = float(vloss)
-                torch.save(payload, args.output / "best.pt")
+                if is_main:
+                    torch.save(payload, args.output / "best.pt")
+            if ddp_on:
+                # Ranks 1..N-1 skip the file writes, so re-align before the next
+                # epoch's collectives.
+                dist.barrier()
             model.train()
     print("done", flush=True)
+    if ddp_on:
+        dist.destroy_process_group()
     return 0
 
 

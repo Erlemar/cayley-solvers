@@ -154,10 +154,13 @@ class _SelfAttn(nn.Module):
     the JAX loader in jax_model.py both keep working unchanged.
     """
 
-    def __init__(self, d_model, nhead):
+    def __init__(self, d_model, nhead, attn_impl="sdpa"):
         super().__init__()
         if d_model % nhead != 0:
             raise ValueError(f"d_model={d_model} must be divisible by nhead={nhead}")
+        if attn_impl not in ("sdpa", "einsum"):
+            raise ValueError(f"attn_impl must be 'sdpa' or 'einsum', got {attn_impl!r}")
+        self.attn_impl = attn_impl
         self.d_model, self.nhead = d_model, nhead
         self.head_dim = d_model // nhead
         self.in_proj_weight = nn.Parameter(torch.empty(3 * d_model, d_model))
@@ -169,10 +172,36 @@ class _SelfAttn(nn.Module):
     def forward(self, x):
         B, T, _ = x.shape
         qkv = F.linear(x, self.in_proj_weight, self.in_proj_bias)
+        if self.attn_impl == "einsum":
+            return self._forward_einsum(qkv, B, T)
         qkv = qkv.view(B, T, 3, self.nhead, self.head_dim).permute(2, 0, 3, 1, 4)
         q, k, v = qkv.unbind(0)
         a = F.scaled_dot_product_attention(q, k, v)        # no mask -> flash path
         return self.out_proj(a.transpose(1, 2).reshape(B, T, self.d_model))
+
+    def _forward_einsum(self, qkv, B, T):
+        """Same maths, but the heads never leave dim 2. TPU-motivated.
+
+        The SDPA path above costs 25.1 ms fwd+bwd per layer on a v6e at our
+        shapes; this costs 14.9 (1.69x). The saving is in the BACKWARD -- the
+        permute itself is only 0.06 ms forward, but reversing it around SDPA's
+        saved tensors is not. On a GPU the SDPA path wins (flash attention), so
+        this is opt-in rather than the new default.
+
+        The softmax is taken in float32 on purpose. torch_tpu's fused SDPA
+        accumulates internally in float32; a naive bf16 einsum does not, and
+        that alone measured 1.5e-2 relative error against a float64 reference
+        versus SDPA's 8.2e-3. Promoting only the softmax -- elementwise on
+        (B,H,T,T), so nearly free -- closes the gap without paying for an fp32
+        matmul. Both paths sit at ~4.6e-3 in fp32 regardless: that is the MXU's
+        default 1-pass bf16 multiply, not a property of either formulation.
+        """
+        q, k, v = qkv.view(B, T, 3, self.nhead, self.head_dim).unbind(2)
+        scale = 1.0 / math.sqrt(self.head_dim)
+        scores = torch.einsum("bthd,bshd->bhts", q, k) * scale
+        probs = scores.float().softmax(dim=-1).to(v.dtype)
+        a = torch.einsum("bhts,bshd->bthd", probs, v)
+        return self.out_proj(a.reshape(B, T, self.d_model))
 
 
 class _CrossAttn(nn.Module):
@@ -213,10 +242,11 @@ class _CrossAttn(nn.Module):
 class _EncoderBlock(nn.Module):
     """Pre-norm block, unmasked self-attention so SDPA takes the fused path."""
 
-    def __init__(self, d_model, nhead, ff_dim, dropout, activation="silu"):
+    def __init__(self, d_model, nhead, ff_dim, dropout, activation="silu",
+                 attn_impl="sdpa"):
         super().__init__()
         self.norm1 = nn.LayerNorm(d_model)
-        self.attn = _SelfAttn(d_model, nhead)
+        self.attn = _SelfAttn(d_model, nhead, attn_impl=attn_impl)
         self.norm2 = nn.LayerNorm(d_model)
         act = {"silu": nn.SiLU, "gelu": nn.GELU, "relu": nn.ReLU}[activation]()
         self.ff = nn.Sequential(nn.Linear(d_model, ff_dim), act,
@@ -287,8 +317,9 @@ class PieceTransformerQ(nn.Module):
 
     def __init__(self, layout_path, state_size=88, num_classes=88, n_actions=24,
                  d_model=256, nhead=8, num_layers=4, ff_dim=1024, dropout=0.0,
-                 activation="silu", az_head=False):
+                 activation="silu", az_head=False, attn_impl="sdpa"):
         super().__init__()
+        self.attn_impl = attn_impl
         layout = json.loads(Path(layout_path).read_text(encoding="utf-8"))
         self.layout_path = str(layout_path)
         self.state_size, self.num_classes, self.output_dim = state_size, num_classes, n_actions
@@ -315,7 +346,8 @@ class PieceTransformerQ(nn.Module):
         nn.init.normal_(self.cls_token, mean=0.0, std=0.02)
         self.input_norm = nn.LayerNorm(d_model)
         self.dropout = nn.Dropout(dropout)
-        self.blocks = nn.ModuleList([_EncoderBlock(d_model, nhead, ff_dim, dropout, activation)
+        self.blocks = nn.ModuleList([_EncoderBlock(d_model, nhead, ff_dim, dropout,
+                                                   activation, attn_impl=attn_impl)
                                      for _ in range(num_layers)])
         self.output_norm = nn.LayerNorm(d_model)
         self.head = nn.Linear(d_model, n_actions)
@@ -371,7 +403,8 @@ class PieceTransformerQ(nn.Module):
                 "state_size": self.state_size, "num_classes": self.num_classes,
                 "n_actions": self.output_dim, "d_model": self.d_model, "nhead": self.nhead,
                 "num_layers": self.num_layers, "ff_dim": self.ff_dim,
-                "activation": self.activation, "az_head": self.has_value_head}
+                "activation": self.activation, "az_head": self.has_value_head,
+                "attn_impl": self.attn_impl}
 
 
 class LatentRelationalQ(nn.Module):
