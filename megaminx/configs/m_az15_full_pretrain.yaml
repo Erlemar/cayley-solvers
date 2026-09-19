@@ -1,0 +1,30 @@
+# m_az15_full_pretrain — full-pipeline 15M scale-up, stage 1.
+#
+# Purpose: answer whether the failed 15M AZ-v6 runs were bad because the larger
+# trunk was not pretrained from random walks. This is the same 15M-ish shape used
+# by m_az_v6 (hidden=[2048,1024], 4 residual blocks), but trained as a real
+# V model before Bellman/AZ fine-tuning.
+
+model:
+  state_size: 120
+  num_classes: 120
+  hidden_dims: [2048, 1024]
+  num_res_blocks: 4
+  encoding: embedding
+  embed_dim: 16
+
+training:
+  n_epochs: 4000
+  samples_per_epoch: 500_000
+  batch_size: 8192
+  k_max: 80
+  lr: 1.5e-3
+  weight_decay: 0.0
+  checkpoint_every_epochs: 500
+  n_back: 1
+  loss: mse
+  amp: true
+  compile_model: true
+  fused_optimizer: true
+
+seed: 115

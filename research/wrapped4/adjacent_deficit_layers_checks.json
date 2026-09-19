@@ -1,0 +1,221 @@
+{
+  "complete_layer_checks": [
+    {
+      "n": 2,
+      "deficit": 0,
+      "states": 1,
+      "method": "independent BFS"
+    },
+    {
+      "n": 2,
+      "deficit": 1,
+      "states": 1,
+      "method": "independent BFS"
+    },
+    {
+      "n": 3,
+      "deficit": 0,
+      "states": 2,
+      "method": "independent BFS"
+    },
+    {
+      "n": 3,
+      "deficit": 1,
+      "states": 3,
+      "method": "independent BFS"
+    },
+    {
+      "n": 3,
+      "deficit": 2,
+      "states": 1,
+      "method": "independent BFS"
+    },
+    {
+      "n": 4,
+      "deficit": 0,
+      "states": 1,
+      "method": "independent BFS"
+    },
+    {
+      "n": 4,
+      "deficit": 1,
+      "states": 8,
+      "method": "independent BFS"
+    },
+    {
+      "n": 4,
+      "deficit": 2,
+      "states": 10,
+      "method": "independent BFS"
+    },
+    {
+      "n": 4,
+      "deficit": 3,
+      "states": 4,
+      "method": "independent BFS"
+    },
+    {
+      "n": 5,
+      "deficit": 0,
+      "states": 2,
+      "method": "independent BFS"
+    },
+    {
+      "n": 5,
+      "deficit": 1,
+      "states": 20,
+      "method": "independent BFS"
+    },
+    {
+      "n": 5,
+      "deficit": 2,
+      "states": 42,
+      "method": "independent BFS"
+    },
+    {
+      "n": 5,
+      "deficit": 3,
+      "states": 35,
+      "method": "independent BFS"
+    },
+    {
+      "n": 6,
+      "deficit": 0,
+      "states": 1,
+      "method": "independent BFS"
+    },
+    {
+      "n": 6,
+      "deficit": 1,
+      "states": 17,
+      "method": "independent BFS"
+    },
+    {
+      "n": 6,
+      "deficit": 2,
+      "states": 100,
+      "method": "independent BFS"
+    },
+    {
+      "n": 6,
+      "deficit": 3,
+      "states": 195,
+      "method": "independent BFS"
+    },
+    {
+      "n": 7,
+      "deficit": 0,
+      "states": 2,
+      "method": "independent BFS"
+    },
+    {
+      "n": 7,
+      "deficit": 1,
+      "states": 42,
+      "method": "independent BFS"
+    },
+    {
+      "n": 7,
+      "deficit": 2,
+      "states": 282,
+      "method": "independent BFS"
+    },
+    {
+      "n": 7,
+      "deficit": 3,
+      "states": 777,
+      "method": "independent BFS"
+    },
+    {
+      "n": 8,
+      "deficit": 0,
+      "states": 1,
+      "method": "independent BFS"
+    },
+    {
+      "n": 8,
+      "deficit": 1,
+      "states": 30,
+      "method": "independent BFS"
+    },
+    {
+      "n": 8,
+      "deficit": 2,
+      "states": 308,
+      "method": "independent BFS"
+    },
+    {
+      "n": 8,
+      "deficit": 3,
+      "states": 1624,
+      "method": "independent BFS"
+    },
+    {
+      "n": 10,
+      "deficit": 0,
+      "states": 1,
+      "method": "stored full enumeration"
+    },
+    {
+      "n": 10,
+      "deficit": 1,
+      "states": 47,
+      "method": "stored full enumeration"
+    },
+    {
+      "n": 10,
+      "deficit": 2,
+      "states": 750,
+      "method": "stored full enumeration"
+    },
+    {
+      "n": 10,
+      "deficit": 3,
+      "states": 6150,
+      "method": "stored full enumeration"
+    },
+    {
+      "n": 11,
+      "deficit": 0,
+      "states": 2,
+      "method": "stored full enumeration"
+    },
+    {
+      "n": 11,
+      "deficit": 1,
+      "states": 110,
+      "method": "stored full enumeration"
+    },
+    {
+      "n": 11,
+      "deficit": 2,
+      "states": 1982,
+      "method": "stored full enumeration"
+    },
+    {
+      "n": 11,
+      "deficit": 3,
+      "states": 17930,
+      "method": "stored full enumeration"
+    }
+  ],
+  "third_core_types_checked": 21,
+  "core_counts_by_support": {
+    "0": {
+      "0": 1
+    },
+    "1": {
+      "2": 1
+    },
+    "2": {
+      "3": 2,
+      "4": 2
+    },
+    "3": {
+      "4": 6,
+      "5": 10,
+      "6": 5
+    }
+  },
+  "scope": "Finite checks of the general enumeration theorem in ROTATION_ASCENT_LEMMA.md."
+}

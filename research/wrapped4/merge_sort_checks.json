@@ -1,0 +1,112 @@
+{
+  "certificate": {
+    "complete": true,
+    "cases": 396,
+    "stages": [
+      {
+        "k": 3,
+        "cases": 24,
+        "words": 13
+      },
+      {
+        "k": 4,
+        "cases": 22,
+        "words": 5
+      },
+      {
+        "k": 5,
+        "cases": 34,
+        "words": 7
+      },
+      {
+        "k": 6,
+        "cases": 54,
+        "words": 25
+      },
+      {
+        "k": 7,
+        "cases": 58,
+        "words": 23
+      },
+      {
+        "k": 8,
+        "cases": 70,
+        "words": 46
+      },
+      {
+        "k": 9,
+        "cases": 48,
+        "words": 23
+      },
+      {
+        "k": 10,
+        "cases": 50,
+        "words": 44
+      },
+      {
+        "k": 11,
+        "cases": 12,
+        "words": 6
+      },
+      {
+        "k": 12,
+        "cases": 12,
+        "words": 9
+      },
+      {
+        "k": 13,
+        "cases": 6,
+        "words": 3
+      },
+      {
+        "k": 14,
+        "cases": 6,
+        "words": 6
+      }
+    ],
+    "maximum_selected": 14,
+    "buffer_width": 16
+  },
+  "all_small_merges": 8188,
+  "full_words_verified": 1656,
+  "sizes": "16..150;250;500;1000",
+  "last_samples": [
+    {
+      "n": 250,
+      "adjacent_length": 10380,
+      "four_cycle_length": 3594,
+      "first_inversions": 8370,
+      "last_inversions": 1939,
+      "first_cost": 2900,
+      "pivot_cost": 27,
+      "last_cost": 667,
+      "upper_bound": 6203,
+      "merge_upper_bound": 5470
+    },
+    {
+      "n": 500,
+      "adjacent_length": 41538,
+      "four_cycle_length": 14112,
+      "first_inversions": 30439,
+      "last_inversions": 10882,
+      "first_cost": 10351,
+      "pivot_cost": 75,
+      "last_cost": 3686,
+      "upper_bound": 22828,
+      "merge_upper_bound": 21345
+    },
+    {
+      "n": 1000,
+      "adjacent_length": 169087,
+      "four_cycle_length": 56891,
+      "first_inversions": 123020,
+      "last_inversions": 45602,
+      "first_cost": 41396,
+      "pivot_cost": 155,
+      "last_cost": 15340,
+      "upper_bound": 87328,
+      "merge_upper_bound": 84345
+    }
+  ],
+  "bound_n_ge_16": "floor((floor(n^2/4)+3n+35)/3)"
+}

@@ -1,0 +1,38 @@
+# Regenerated 2026-08-23 from the config embedded in q555_pretrained.pt
+# (cube555/models/q555_pretrained.pt -> ck["config"]). The original
+# cube555/configs/q555_a.yaml was not shipped in the handoff; this is a
+# byte-faithful reconstruction of the config that produced that checkpoint.
+# Verified: every value matches APPROACH.md s3.
+model:
+  state_size: 150
+  num_classes: 150
+  output_dim: 30
+  encoding: embedding
+  embed_dim: 24
+  d_model: 1024
+  num_res_blocks: 10
+  az_head: true
+  inference_chunk_size: 262144
+training:
+  n_epochs: 11719
+  steps_per_epoch: 256
+  base_batch: 2048
+  sym_random: true
+  sym_rows: 4
+  verify_symmetry: true
+  k_min: 2
+  k_max: 80
+  pivot_tilt: 0.5
+  pivot_block: 65536
+  lr: 0.0003
+  weight_decay: 0.003
+  grad_clip: 1.0
+  amp: true
+  fused_optimizer: true
+  checkpoint_every_epochs: 400
+sparse_q:
+  anchor_max_depth: 4
+  n_anchor: 256
+  anchor_weight: 1.0
+  value_weight: 1.0
+seed: 555

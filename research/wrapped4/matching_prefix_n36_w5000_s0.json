@@ -1,0 +1,746 @@
+{
+  "status": "beam_empty",
+  "seconds": 9.94291750001139,
+  "trace": [
+    {
+      "depth": 1,
+      "candidates": 18,
+      "kept": 18,
+      "min_adjacent_length": 297,
+      "max_adjacent_length": 297
+    },
+    {
+      "depth": 2,
+      "candidates": 53,
+      "kept": 53,
+      "min_adjacent_length": 294,
+      "max_adjacent_length": 294
+    },
+    {
+      "depth": 3,
+      "candidates": 134,
+      "kept": 134,
+      "min_adjacent_length": 291,
+      "max_adjacent_length": 291
+    },
+    {
+      "depth": 4,
+      "candidates": 280,
+      "kept": 280,
+      "min_adjacent_length": 288,
+      "max_adjacent_length": 288
+    },
+    {
+      "depth": 5,
+      "candidates": 518,
+      "kept": 518,
+      "min_adjacent_length": 285,
+      "max_adjacent_length": 285
+    },
+    {
+      "depth": 6,
+      "candidates": 886,
+      "kept": 886,
+      "min_adjacent_length": 282,
+      "max_adjacent_length": 282
+    },
+    {
+      "depth": 7,
+      "candidates": 1429,
+      "kept": 1429,
+      "min_adjacent_length": 279,
+      "max_adjacent_length": 279
+    },
+    {
+      "depth": 8,
+      "candidates": 2201,
+      "kept": 2201,
+      "min_adjacent_length": 276,
+      "max_adjacent_length": 276
+    },
+    {
+      "depth": 9,
+      "candidates": 3265,
+      "kept": 3265,
+      "min_adjacent_length": 273,
+      "max_adjacent_length": 273
+    },
+    {
+      "depth": 10,
+      "candidates": 4701,
+      "kept": 4701,
+      "min_adjacent_length": 270,
+      "max_adjacent_length": 270
+    },
+    {
+      "depth": 11,
+      "candidates": 6601,
+      "kept": 5000,
+      "min_adjacent_length": 267,
+      "max_adjacent_length": 267
+    },
+    {
+      "depth": 12,
+      "candidates": 8786,
+      "kept": 5000,
+      "min_adjacent_length": 264,
+      "max_adjacent_length": 264
+    },
+    {
+      "depth": 13,
+      "candidates": 10847,
+      "kept": 5000,
+      "min_adjacent_length": 261,
+      "max_adjacent_length": 261
+    },
+    {
+      "depth": 14,
+      "candidates": 12625,
+      "kept": 5000,
+      "min_adjacent_length": 258,
+      "max_adjacent_length": 258
+    },
+    {
+      "depth": 15,
+      "candidates": 14112,
+      "kept": 5000,
+      "min_adjacent_length": 255,
+      "max_adjacent_length": 255
+    },
+    {
+      "depth": 16,
+      "candidates": 15565,
+      "kept": 5000,
+      "min_adjacent_length": 252,
+      "max_adjacent_length": 252
+    },
+    {
+      "depth": 17,
+      "candidates": 16541,
+      "kept": 5000,
+      "min_adjacent_length": 249,
+      "max_adjacent_length": 249
+    },
+    {
+      "depth": 18,
+      "candidates": 17281,
+      "kept": 5000,
+      "min_adjacent_length": 246,
+      "max_adjacent_length": 246
+    },
+    {
+      "depth": 19,
+      "candidates": 18147,
+      "kept": 5000,
+      "min_adjacent_length": 243,
+      "max_adjacent_length": 243
+    },
+    {
+      "depth": 20,
+      "candidates": 18761,
+      "kept": 5000,
+      "min_adjacent_length": 240,
+      "max_adjacent_length": 240
+    },
+    {
+      "depth": 21,
+      "candidates": 19484,
+      "kept": 5000,
+      "min_adjacent_length": 237,
+      "max_adjacent_length": 237
+    },
+    {
+      "depth": 22,
+      "candidates": 20134,
+      "kept": 5000,
+      "min_adjacent_length": 234,
+      "max_adjacent_length": 234
+    },
+    {
+      "depth": 23,
+      "candidates": 20708,
+      "kept": 5000,
+      "min_adjacent_length": 231,
+      "max_adjacent_length": 231
+    },
+    {
+      "depth": 24,
+      "candidates": 21297,
+      "kept": 5000,
+      "min_adjacent_length": 228,
+      "max_adjacent_length": 228
+    },
+    {
+      "depth": 25,
+      "candidates": 21827,
+      "kept": 5000,
+      "min_adjacent_length": 225,
+      "max_adjacent_length": 225
+    },
+    {
+      "depth": 26,
+      "candidates": 22248,
+      "kept": 5000,
+      "min_adjacent_length": 222,
+      "max_adjacent_length": 222
+    },
+    {
+      "depth": 27,
+      "candidates": 22826,
+      "kept": 5000,
+      "min_adjacent_length": 219,
+      "max_adjacent_length": 219
+    },
+    {
+      "depth": 28,
+      "candidates": 23352,
+      "kept": 5000,
+      "min_adjacent_length": 216,
+      "max_adjacent_length": 216
+    },
+    {
+      "depth": 29,
+      "candidates": 23727,
+      "kept": 5000,
+      "min_adjacent_length": 213,
+      "max_adjacent_length": 213
+    },
+    {
+      "depth": 30,
+      "candidates": 24136,
+      "kept": 5000,
+      "min_adjacent_length": 210,
+      "max_adjacent_length": 210
+    },
+    {
+      "depth": 31,
+      "candidates": 24556,
+      "kept": 5000,
+      "min_adjacent_length": 207,
+      "max_adjacent_length": 207
+    },
+    {
+      "depth": 32,
+      "candidates": 24822,
+      "kept": 5000,
+      "min_adjacent_length": 204,
+      "max_adjacent_length": 204
+    },
+    {
+      "depth": 33,
+      "candidates": 25349,
+      "kept": 5000,
+      "min_adjacent_length": 201,
+      "max_adjacent_length": 201
+    },
+    {
+      "depth": 34,
+      "candidates": 25481,
+      "kept": 5000,
+      "min_adjacent_length": 198,
+      "max_adjacent_length": 198
+    },
+    {
+      "depth": 35,
+      "candidates": 25726,
+      "kept": 5000,
+      "min_adjacent_length": 195,
+      "max_adjacent_length": 195
+    },
+    {
+      "depth": 36,
+      "candidates": 26076,
+      "kept": 5000,
+      "min_adjacent_length": 192,
+      "max_adjacent_length": 192
+    },
+    {
+      "depth": 37,
+      "candidates": 26243,
+      "kept": 5000,
+      "min_adjacent_length": 189,
+      "max_adjacent_length": 189
+    },
+    {
+      "depth": 38,
+      "candidates": 26654,
+      "kept": 5000,
+      "min_adjacent_length": 186,
+      "max_adjacent_length": 186
+    },
+    {
+      "depth": 39,
+      "candidates": 26894,
+      "kept": 5000,
+      "min_adjacent_length": 183,
+      "max_adjacent_length": 183
+    },
+    {
+      "depth": 40,
+      "candidates": 27145,
+      "kept": 5000,
+      "min_adjacent_length": 180,
+      "max_adjacent_length": 180
+    },
+    {
+      "depth": 41,
+      "candidates": 27199,
+      "kept": 5000,
+      "min_adjacent_length": 177,
+      "max_adjacent_length": 177
+    },
+    {
+      "depth": 42,
+      "candidates": 27506,
+      "kept": 5000,
+      "min_adjacent_length": 174,
+      "max_adjacent_length": 174
+    },
+    {
+      "depth": 43,
+      "candidates": 27722,
+      "kept": 5000,
+      "min_adjacent_length": 171,
+      "max_adjacent_length": 171
+    },
+    {
+      "depth": 44,
+      "candidates": 27845,
+      "kept": 5000,
+      "min_adjacent_length": 168,
+      "max_adjacent_length": 168
+    },
+    {
+      "depth": 45,
+      "candidates": 28139,
+      "kept": 5000,
+      "min_adjacent_length": 165,
+      "max_adjacent_length": 165
+    },
+    {
+      "depth": 46,
+      "candidates": 28192,
+      "kept": 5000,
+      "min_adjacent_length": 162,
+      "max_adjacent_length": 162
+    },
+    {
+      "depth": 47,
+      "candidates": 28157,
+      "kept": 5000,
+      "min_adjacent_length": 159,
+      "max_adjacent_length": 159
+    },
+    {
+      "depth": 48,
+      "candidates": 28376,
+      "kept": 5000,
+      "min_adjacent_length": 156,
+      "max_adjacent_length": 156
+    },
+    {
+      "depth": 49,
+      "candidates": 28656,
+      "kept": 5000,
+      "min_adjacent_length": 153,
+      "max_adjacent_length": 153
+    },
+    {
+      "depth": 50,
+      "candidates": 28911,
+      "kept": 5000,
+      "min_adjacent_length": 150,
+      "max_adjacent_length": 150
+    },
+    {
+      "depth": 51,
+      "candidates": 29195,
+      "kept": 5000,
+      "min_adjacent_length": 147,
+      "max_adjacent_length": 147
+    },
+    {
+      "depth": 52,
+      "candidates": 29546,
+      "kept": 5000,
+      "min_adjacent_length": 144,
+      "max_adjacent_length": 144
+    },
+    {
+      "depth": 53,
+      "candidates": 29816,
+      "kept": 5000,
+      "min_adjacent_length": 141,
+      "max_adjacent_length": 141
+    },
+    {
+      "depth": 54,
+      "candidates": 30088,
+      "kept": 5000,
+      "min_adjacent_length": 138,
+      "max_adjacent_length": 138
+    },
+    {
+      "depth": 55,
+      "candidates": 30290,
+      "kept": 5000,
+      "min_adjacent_length": 135,
+      "max_adjacent_length": 135
+    },
+    {
+      "depth": 56,
+      "candidates": 30218,
+      "kept": 5000,
+      "min_adjacent_length": 132,
+      "max_adjacent_length": 132
+    },
+    {
+      "depth": 57,
+      "candidates": 30389,
+      "kept": 5000,
+      "min_adjacent_length": 129,
+      "max_adjacent_length": 129
+    },
+    {
+      "depth": 58,
+      "candidates": 30361,
+      "kept": 5000,
+      "min_adjacent_length": 126,
+      "max_adjacent_length": 126
+    },
+    {
+      "depth": 59,
+      "candidates": 30494,
+      "kept": 5000,
+      "min_adjacent_length": 123,
+      "max_adjacent_length": 123
+    },
+    {
+      "depth": 60,
+      "candidates": 30621,
+      "kept": 5000,
+      "min_adjacent_length": 120,
+      "max_adjacent_length": 120
+    },
+    {
+      "depth": 61,
+      "candidates": 30626,
+      "kept": 5000,
+      "min_adjacent_length": 117,
+      "max_adjacent_length": 117
+    },
+    {
+      "depth": 62,
+      "candidates": 30887,
+      "kept": 5000,
+      "min_adjacent_length": 114,
+      "max_adjacent_length": 114
+    },
+    {
+      "depth": 63,
+      "candidates": 30919,
+      "kept": 5000,
+      "min_adjacent_length": 111,
+      "max_adjacent_length": 111
+    },
+    {
+      "depth": 64,
+      "candidates": 30849,
+      "kept": 5000,
+      "min_adjacent_length": 108,
+      "max_adjacent_length": 108
+    },
+    {
+      "depth": 65,
+      "candidates": 30745,
+      "kept": 5000,
+      "min_adjacent_length": 105,
+      "max_adjacent_length": 105
+    },
+    {
+      "depth": 66,
+      "candidates": 30627,
+      "kept": 5000,
+      "min_adjacent_length": 102,
+      "max_adjacent_length": 102
+    },
+    {
+      "depth": 67,
+      "candidates": 30605,
+      "kept": 5000,
+      "min_adjacent_length": 99,
+      "max_adjacent_length": 99
+    },
+    {
+      "depth": 68,
+      "candidates": 30704,
+      "kept": 5000,
+      "min_adjacent_length": 96,
+      "max_adjacent_length": 96
+    },
+    {
+      "depth": 69,
+      "candidates": 31048,
+      "kept": 5000,
+      "min_adjacent_length": 93,
+      "max_adjacent_length": 93
+    },
+    {
+      "depth": 70,
+      "candidates": 31056,
+      "kept": 5000,
+      "min_adjacent_length": 90,
+      "max_adjacent_length": 90
+    },
+    {
+      "depth": 71,
+      "candidates": 31078,
+      "kept": 5000,
+      "min_adjacent_length": 87,
+      "max_adjacent_length": 87
+    },
+    {
+      "depth": 72,
+      "candidates": 31164,
+      "kept": 5000,
+      "min_adjacent_length": 84,
+      "max_adjacent_length": 84
+    },
+    {
+      "depth": 73,
+      "candidates": 31019,
+      "kept": 5000,
+      "min_adjacent_length": 81,
+      "max_adjacent_length": 81
+    },
+    {
+      "depth": 74,
+      "candidates": 31091,
+      "kept": 5000,
+      "min_adjacent_length": 78,
+      "max_adjacent_length": 78
+    },
+    {
+      "depth": 75,
+      "candidates": 31109,
+      "kept": 5000,
+      "min_adjacent_length": 75,
+      "max_adjacent_length": 75
+    },
+    {
+      "depth": 76,
+      "candidates": 30854,
+      "kept": 5000,
+      "min_adjacent_length": 72,
+      "max_adjacent_length": 72
+    },
+    {
+      "depth": 77,
+      "candidates": 30799,
+      "kept": 5000,
+      "min_adjacent_length": 69,
+      "max_adjacent_length": 69
+    },
+    {
+      "depth": 78,
+      "candidates": 30675,
+      "kept": 5000,
+      "min_adjacent_length": 66,
+      "max_adjacent_length": 66
+    },
+    {
+      "depth": 79,
+      "candidates": 30582,
+      "kept": 5000,
+      "min_adjacent_length": 63,
+      "max_adjacent_length": 63
+    },
+    {
+      "depth": 80,
+      "candidates": 30517,
+      "kept": 5000,
+      "min_adjacent_length": 60,
+      "max_adjacent_length": 60
+    },
+    {
+      "depth": 81,
+      "candidates": 30044,
+      "kept": 5000,
+      "min_adjacent_length": 57,
+      "max_adjacent_length": 57
+    },
+    {
+      "depth": 82,
+      "candidates": 29468,
+      "kept": 5000,
+      "min_adjacent_length": 54,
+      "max_adjacent_length": 54
+    },
+    {
+      "depth": 83,
+      "candidates": 28896,
+      "kept": 5000,
+      "min_adjacent_length": 51,
+      "max_adjacent_length": 51
+    },
+    {
+      "depth": 84,
+      "candidates": 28432,
+      "kept": 5000,
+      "min_adjacent_length": 48,
+      "max_adjacent_length": 48
+    },
+    {
+      "depth": 85,
+      "candidates": 27772,
+      "kept": 5000,
+      "min_adjacent_length": 45,
+      "max_adjacent_length": 45
+    },
+    {
+      "depth": 86,
+      "candidates": 27162,
+      "kept": 5000,
+      "min_adjacent_length": 42,
+      "max_adjacent_length": 42
+    },
+    {
+      "depth": 87,
+      "candidates": 26184,
+      "kept": 5000,
+      "min_adjacent_length": 39,
+      "max_adjacent_length": 39
+    },
+    {
+      "depth": 88,
+      "candidates": 24972,
+      "kept": 5000,
+      "min_adjacent_length": 36,
+      "max_adjacent_length": 36
+    },
+    {
+      "depth": 89,
+      "candidates": 23195,
+      "kept": 5000,
+      "min_adjacent_length": 33,
+      "max_adjacent_length": 33
+    },
+    {
+      "depth": 90,
+      "candidates": 20958,
+      "kept": 5000,
+      "min_adjacent_length": 30,
+      "max_adjacent_length": 30
+    },
+    {
+      "depth": 91,
+      "candidates": 18161,
+      "kept": 5000,
+      "min_adjacent_length": 27,
+      "max_adjacent_length": 27
+    },
+    {
+      "depth": 92,
+      "candidates": 14587,
+      "kept": 5000,
+      "min_adjacent_length": 24,
+      "max_adjacent_length": 24
+    },
+    {
+      "depth": 93,
+      "candidates": 10621,
+      "kept": 5000,
+      "min_adjacent_length": 21,
+      "max_adjacent_length": 21
+    },
+    {
+      "depth": 94,
+      "candidates": 6268,
+      "kept": 5000,
+      "min_adjacent_length": 18,
+      "max_adjacent_length": 18
+    },
+    {
+      "depth": 95,
+      "candidates": 2506,
+      "kept": 2506,
+      "min_adjacent_length": 15,
+      "max_adjacent_length": 15
+    },
+    {
+      "depth": 96,
+      "candidates": 588,
+      "kept": 588,
+      "min_adjacent_length": 12,
+      "max_adjacent_length": 12
+    },
+    {
+      "depth": 97,
+      "candidates": 66,
+      "kept": 66,
+      "min_adjacent_length": 9,
+      "max_adjacent_length": 9
+    }
+  ],
+  "n": 36,
+  "permutation": [
+    19,
+    18,
+    21,
+    20,
+    23,
+    22,
+    25,
+    24,
+    27,
+    26,
+    29,
+    28,
+    31,
+    30,
+    33,
+    32,
+    35,
+    34,
+    1,
+    0,
+    3,
+    2,
+    5,
+    4,
+    7,
+    6,
+    9,
+    8,
+    11,
+    10,
+    13,
+    12,
+    15,
+    14,
+    17,
+    16
+  ],
+  "budget": 104,
+  "prefix": [
+    [
+      3,
+      -1
+    ],
+    [
+      5,
+      -1
+    ],
+    [
+      7,
+      -1
+    ],
+    [
+      0,
+      1
+    ]
+  ],
+  "width": 5000,
+  "seed": 0,
+  "scope": "Finite constructive tests, not an all-n induction."
+}

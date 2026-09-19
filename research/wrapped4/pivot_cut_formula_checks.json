@@ -1,0 +1,245 @@
+{
+  "cases": [
+    {
+      "b": 1,
+      "n": 4,
+      "actual": 4,
+      "formula": 4
+    },
+    {
+      "b": 2,
+      "n": 8,
+      "actual": 16,
+      "formula": 16
+    },
+    {
+      "b": 3,
+      "n": 12,
+      "actual": 40,
+      "formula": 40
+    },
+    {
+      "b": 4,
+      "n": 16,
+      "actual": 72,
+      "formula": 72
+    },
+    {
+      "b": 5,
+      "n": 20,
+      "actual": 116,
+      "formula": 116
+    },
+    {
+      "b": 6,
+      "n": 24,
+      "actual": 168,
+      "formula": 168
+    },
+    {
+      "b": 7,
+      "n": 28,
+      "actual": 232,
+      "formula": 232
+    },
+    {
+      "b": 8,
+      "n": 32,
+      "actual": 304,
+      "formula": 304
+    },
+    {
+      "b": 9,
+      "n": 36,
+      "actual": 388,
+      "formula": 388
+    },
+    {
+      "b": 10,
+      "n": 40,
+      "actual": 480,
+      "formula": 480
+    },
+    {
+      "b": 11,
+      "n": 44,
+      "actual": 584,
+      "formula": 584
+    },
+    {
+      "b": 12,
+      "n": 48,
+      "actual": 696,
+      "formula": 696
+    },
+    {
+      "b": 13,
+      "n": 52,
+      "actual": 820,
+      "formula": 820
+    },
+    {
+      "b": 14,
+      "n": 56,
+      "actual": 952,
+      "formula": 952
+    },
+    {
+      "b": 15,
+      "n": 60,
+      "actual": 1096,
+      "formula": 1096
+    },
+    {
+      "b": 16,
+      "n": 64,
+      "actual": 1248,
+      "formula": 1248
+    },
+    {
+      "b": 17,
+      "n": 68,
+      "actual": 1412,
+      "formula": 1412
+    },
+    {
+      "b": 18,
+      "n": 72,
+      "actual": 1584,
+      "formula": 1584
+    },
+    {
+      "b": 19,
+      "n": 76,
+      "actual": 1768,
+      "formula": 1768
+    },
+    {
+      "b": 20,
+      "n": 80,
+      "actual": 1960,
+      "formula": 1960
+    },
+    {
+      "b": 21,
+      "n": 84,
+      "actual": 2164,
+      "formula": 2164
+    },
+    {
+      "b": 22,
+      "n": 88,
+      "actual": 2376,
+      "formula": 2376
+    },
+    {
+      "b": 23,
+      "n": 92,
+      "actual": 2600,
+      "formula": 2600
+    },
+    {
+      "b": 24,
+      "n": 96,
+      "actual": 2832,
+      "formula": 2832
+    },
+    {
+      "b": 25,
+      "n": 100,
+      "actual": 3076,
+      "formula": 3076
+    },
+    {
+      "b": 26,
+      "n": 104,
+      "actual": 3328,
+      "formula": 3328
+    },
+    {
+      "b": 27,
+      "n": 108,
+      "actual": 3592,
+      "formula": 3592
+    },
+    {
+      "b": 28,
+      "n": 112,
+      "actual": 3864,
+      "formula": 3864
+    },
+    {
+      "b": 29,
+      "n": 116,
+      "actual": 4148,
+      "formula": 4148
+    },
+    {
+      "b": 30,
+      "n": 120,
+      "actual": 4440,
+      "formula": 4440
+    },
+    {
+      "b": 31,
+      "n": 124,
+      "actual": 4744,
+      "formula": 4744
+    },
+    {
+      "b": 32,
+      "n": 128,
+      "actual": 5056,
+      "formula": 5056
+    },
+    {
+      "b": 33,
+      "n": 132,
+      "actual": 5380,
+      "formula": 5380
+    },
+    {
+      "b": 34,
+      "n": 136,
+      "actual": 5712,
+      "formula": 5712
+    },
+    {
+      "b": 35,
+      "n": 140,
+      "actual": 6056,
+      "formula": 6056
+    },
+    {
+      "b": 36,
+      "n": 144,
+      "actual": 6408,
+      "formula": 6408
+    },
+    {
+      "b": 37,
+      "n": 148,
+      "actual": 6772,
+      "formula": 6772
+    },
+    {
+      "b": 38,
+      "n": 152,
+      "actual": 7144,
+      "formula": 7144
+    },
+    {
+      "b": 39,
+      "n": 156,
+      "actual": 7528,
+      "formula": 7528
+    },
+    {
+      "b": 40,
+      "n": 160,
+      "actual": 7920,
+      "formula": 7920
+    }
+  ],
+  "all_match": true
+}

@@ -1,0 +1,35 @@
+{
+  "independent_bfs_states": 46232,
+  "core_formulas_checked_against_bfs": 92457,
+  "bounded_lifts_checked": 125670,
+  "endpoint_deletions_checked": 251326,
+  "larger_core_checks": 500,
+  "second_layers": [
+    {
+      "n": 6,
+      "size": 100,
+      "method": "independent BFS"
+    },
+    {
+      "n": 7,
+      "size": 282,
+      "method": "independent BFS"
+    },
+    {
+      "n": 8,
+      "size": 308,
+      "method": "independent BFS"
+    },
+    {
+      "n": 10,
+      "size": 750,
+      "method": "stored full enumeration"
+    },
+    {
+      "n": 11,
+      "size": 1982,
+      "method": "stored full enumeration"
+    }
+  ],
+  "scope": "Finite verification of all-n results proved in ROTATION_ASCENT_LEMMA.md."
+}

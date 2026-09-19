@@ -1,0 +1,14 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "cube666-portable-solver"
+version = "2026.8.26"
+description = "Portable exact-sticker CUBE666 neural and KMC solver bundle"
+requires-python = ">=3.10"
+dependencies = ["numpy>=2.0,<3", "torch>=2.5"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+

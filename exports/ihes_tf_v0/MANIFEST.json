@@ -1,0 +1,16 @@
+{
+ "name": "ihes_tf_v0",
+ "files": {
+  "ihes_piece_layout.json": "46bc5d3459c8264d6fccadae790d761af7bcf444442e3f2c2a914b79d1e7c7c6",
+  "ihes_tf_v0.npz": "da04fcc4381e9d77b0a65a24993d54587560892ae53820468a7b323e0c977e51",
+  "ihes_tf_v0.pt": "f2eb08f037a4167434111d767b5ee9f52eb61a5bff01adc550577dc10cdd4e6e",
+  "puzzle_info.json": "005e4477015c6f79fb0da6652d27df08f06c143690ac5f8f77b1d48134666955",
+  "README.md": "89fbcbfd4f86a1340027fa845f4cae4ee6240c67b059e8186d7a0765cf8a02c3"
+ },
+ "parity": [
+  "JAX full  vs torch: max|dQ| 2.29e-05  argmin agreement 1.0000 over 656 states",
+  "JAX mixed vs torch: max|dQ| 2.29e-05  argmin agreement 1.0000 over 656 states",
+  "JAX value vs torch: max|dV| 3.81e-06"
+ ],
+ "gate": "54-pid gate, B=65536, 1 frame, endgame d6: total 1313 vs floor 1215 (+98), ties 14, solved 54/54"
+}

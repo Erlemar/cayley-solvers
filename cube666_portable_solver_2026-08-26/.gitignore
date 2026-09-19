@@ -1,0 +1,11 @@
+.venv/
+__pycache__/
+.pytest_cache/
+outputs/*
+cube666/results/
+cube666/artifacts/corner_paths_cayley_v1/
+external/third_party/kmcoders_santa2023/solution/cache/
+external/third_party/kmcoders_santa2023/solution/target/*
+!external/third_party/kmcoders_santa2023/solution/target/release/
+external/third_party/kmcoders_santa2023/solution/target/release/*
+!external/third_party/kmcoders_santa2023/solution/target/release/solve_cube_beam.exe

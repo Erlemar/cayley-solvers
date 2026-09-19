@@ -1,0 +1,401 @@
+{
+  "args": {
+    "gflownet": "jewel/models/gflownet_v1/best.pt",
+    "transformer": "jewel/models/transformer_v4_public/best.pt",
+    "puzzle_info": "jewel/data/puzzle_info.json",
+    "ball": "jewel/artifacts/ball_d8_official",
+    "pdb": null,
+    "depths": "12",
+    "trials": 10,
+    "algorithms": "ida_heuristic,ida_policy",
+    "policy": "gflownet",
+    "node_limit": 200000,
+    "time_limit": 15.0,
+    "policy_batch_size": 256,
+    "seed": 20260811,
+    "device": "cuda",
+    "out": "jewel/results/policy_ida_gfn_depth12_10.json"
+  },
+  "summary": {
+    "ida_heuristic": {
+      "cases": 10,
+      "solved": 10,
+      "optimal_certificates": 10,
+      "mean_length_solved": 11.6,
+      "mean_expanded": 6203.0,
+      "median_expanded": 4343.0,
+      "total_seconds": 15.555486399971414
+    },
+    "ida_policy": {
+      "cases": 10,
+      "solved": 10,
+      "optimal_certificates": 10,
+      "mean_length_solved": 11.6,
+      "mean_expanded": 4198.1,
+      "median_expanded": 3830.5,
+      "total_seconds": 19.027074799814727
+    }
+  },
+  "rows": [
+    {
+      "walk_depth": 12,
+      "trial": 0,
+      "algorithm": "ida_heuristic",
+      "valid": true,
+      "path_length": 10,
+      "optimal": true,
+      "expanded": 5465,
+      "generated": 5469,
+      "seconds": 1.3945262000197545,
+      "reason": "solved",
+      "lower_bound": 8,
+      "thresholds": [
+        8,
+        10
+      ],
+      "incumbent_length": 12
+    },
+    {
+      "walk_depth": 12,
+      "trial": 0,
+      "algorithm": "ida_policy",
+      "valid": true,
+      "path_length": 10,
+      "optimal": true,
+      "expanded": 38,
+      "generated": 57,
+      "seconds": 0.14778239995939657,
+      "reason": "solved",
+      "lower_bound": 8,
+      "thresholds": [
+        8,
+        10
+      ],
+      "incumbent_length": 12
+    },
+    {
+      "walk_depth": 12,
+      "trial": 1,
+      "algorithm": "ida_heuristic",
+      "valid": true,
+      "path_length": 10,
+      "optimal": true,
+      "expanded": 15289,
+      "generated": 15298,
+      "seconds": 3.848517599981278,
+      "reason": "solved",
+      "lower_bound": 8,
+      "thresholds": [
+        8,
+        10
+      ],
+      "incumbent_length": 12
+    },
+    {
+      "walk_depth": 12,
+      "trial": 1,
+      "algorithm": "ida_policy",
+      "valid": true,
+      "path_length": 10,
+      "optimal": true,
+      "expanded": 467,
+      "generated": 486,
+      "seconds": 0.18516920000547543,
+      "reason": "solved",
+      "lower_bound": 8,
+      "thresholds": [
+        8,
+        10
+      ],
+      "incumbent_length": 12
+    },
+    {
+      "walk_depth": 12,
+      "trial": 2,
+      "algorithm": "ida_heuristic",
+      "valid": true,
+      "path_length": 12,
+      "optimal": true,
+      "expanded": 3337,
+      "generated": 3335,
+      "seconds": 0.8205001999740489,
+      "reason": "incumbent_proved",
+      "lower_bound": 8,
+      "thresholds": [
+        8,
+        10
+      ],
+      "incumbent_length": 12
+    },
+    {
+      "walk_depth": 12,
+      "trial": 2,
+      "algorithm": "ida_policy",
+      "valid": true,
+      "path_length": 12,
+      "optimal": true,
+      "expanded": 3358,
+      "generated": 3356,
+      "seconds": 1.2578462999663316,
+      "reason": "incumbent_proved",
+      "lower_bound": 8,
+      "thresholds": [
+        8,
+        10
+      ],
+      "incumbent_length": 12
+    },
+    {
+      "walk_depth": 12,
+      "trial": 3,
+      "algorithm": "ida_heuristic",
+      "valid": true,
+      "path_length": 12,
+      "optimal": true,
+      "expanded": 4338,
+      "generated": 4336,
+      "seconds": 1.0660758999874815,
+      "reason": "incumbent_proved",
+      "lower_bound": 8,
+      "thresholds": [
+        8,
+        10
+      ],
+      "incumbent_length": 12
+    },
+    {
+      "walk_depth": 12,
+      "trial": 3,
+      "algorithm": "ida_policy",
+      "valid": true,
+      "path_length": 12,
+      "optimal": true,
+      "expanded": 4358,
+      "generated": 4356,
+      "seconds": 1.9555801999522373,
+      "reason": "incumbent_proved",
+      "lower_bound": 8,
+      "thresholds": [
+        8,
+        10
+      ],
+      "incumbent_length": 12
+    },
+    {
+      "walk_depth": 12,
+      "trial": 4,
+      "algorithm": "ida_heuristic",
+      "valid": true,
+      "path_length": 12,
+      "optimal": true,
+      "expanded": 12333,
+      "generated": 12331,
+      "seconds": 3.1141707000206225,
+      "reason": "incumbent_proved",
+      "lower_bound": 8,
+      "thresholds": [
+        8,
+        10
+      ],
+      "incumbent_length": 12
+    },
+    {
+      "walk_depth": 12,
+      "trial": 4,
+      "algorithm": "ida_policy",
+      "valid": true,
+      "path_length": 12,
+      "optimal": true,
+      "expanded": 12429,
+      "generated": 12427,
+      "seconds": 5.705438899982255,
+      "reason": "incumbent_proved",
+      "lower_bound": 8,
+      "thresholds": [
+        8,
+        10
+      ],
+      "incumbent_length": 12
+    },
+    {
+      "walk_depth": 12,
+      "trial": 5,
+      "algorithm": "ida_heuristic",
+      "valid": true,
+      "path_length": 12,
+      "optimal": true,
+      "expanded": 4348,
+      "generated": 4346,
+      "seconds": 1.1100570999551564,
+      "reason": "incumbent_proved",
+      "lower_bound": 8,
+      "thresholds": [
+        8,
+        10
+      ],
+      "incumbent_length": 12
+    },
+    {
+      "walk_depth": 12,
+      "trial": 5,
+      "algorithm": "ida_policy",
+      "valid": true,
+      "path_length": 12,
+      "optimal": true,
+      "expanded": 4348,
+      "generated": 4346,
+      "seconds": 1.9907411999884062,
+      "reason": "incumbent_proved",
+      "lower_bound": 8,
+      "thresholds": [
+        8,
+        10
+      ],
+      "incumbent_length": 12
+    },
+    {
+      "walk_depth": 12,
+      "trial": 6,
+      "algorithm": "ida_heuristic",
+      "valid": true,
+      "path_length": 12,
+      "optimal": true,
+      "expanded": 4271,
+      "generated": 4269,
+      "seconds": 1.0701495000394061,
+      "reason": "incumbent_proved",
+      "lower_bound": 8,
+      "thresholds": [
+        8,
+        10
+      ],
+      "incumbent_length": 12
+    },
+    {
+      "walk_depth": 12,
+      "trial": 6,
+      "algorithm": "ida_policy",
+      "valid": true,
+      "path_length": 12,
+      "optimal": true,
+      "expanded": 4303,
+      "generated": 4301,
+      "seconds": 1.9480782999889925,
+      "reason": "incumbent_proved",
+      "lower_bound": 8,
+      "thresholds": [
+        8,
+        10
+      ],
+      "incumbent_length": 12
+    },
+    {
+      "walk_depth": 12,
+      "trial": 7,
+      "algorithm": "ida_heuristic",
+      "valid": true,
+      "path_length": 12,
+      "optimal": true,
+      "expanded": 3007,
+      "generated": 3005,
+      "seconds": 0.7296910000150092,
+      "reason": "incumbent_proved",
+      "lower_bound": 8,
+      "thresholds": [
+        8,
+        10
+      ],
+      "incumbent_length": 12
+    },
+    {
+      "walk_depth": 12,
+      "trial": 7,
+      "algorithm": "ida_policy",
+      "valid": true,
+      "path_length": 12,
+      "optimal": true,
+      "expanded": 3017,
+      "generated": 3015,
+      "seconds": 1.4102189000113867,
+      "reason": "incumbent_proved",
+      "lower_bound": 8,
+      "thresholds": [
+        8,
+        10
+      ],
+      "incumbent_length": 12
+    },
+    {
+      "walk_depth": 12,
+      "trial": 8,
+      "algorithm": "ida_heuristic",
+      "valid": true,
+      "path_length": 12,
+      "optimal": true,
+      "expanded": 2963,
+      "generated": 2961,
+      "seconds": 0.7465571999782696,
+      "reason": "incumbent_proved",
+      "lower_bound": 8,
+      "thresholds": [
+        8,
+        10
+      ],
+      "incumbent_length": 12
+    },
+    {
+      "walk_depth": 12,
+      "trial": 8,
+      "algorithm": "ida_policy",
+      "valid": true,
+      "path_length": 12,
+      "optimal": true,
+      "expanded": 2963,
+      "generated": 2961,
+      "seconds": 1.393179499951657,
+      "reason": "incumbent_proved",
+      "lower_bound": 8,
+      "thresholds": [
+        8,
+        10
+      ],
+      "incumbent_length": 12
+    },
+    {
+      "walk_depth": 12,
+      "trial": 9,
+      "algorithm": "ida_heuristic",
+      "valid": true,
+      "path_length": 12,
+      "optimal": true,
+      "expanded": 6679,
+      "generated": 6677,
+      "seconds": 1.6552410000003874,
+      "reason": "incumbent_proved",
+      "lower_bound": 8,
+      "thresholds": [
+        8,
+        10
+      ],
+      "incumbent_length": 12
+    },
+    {
+      "walk_depth": 12,
+      "trial": 9,
+      "algorithm": "ida_policy",
+      "valid": true,
+      "path_length": 12,
+      "optimal": true,
+      "expanded": 6700,
+      "generated": 6698,
+      "seconds": 3.033039900008589,
+      "reason": "incumbent_proved",
+      "lower_bound": 8,
+      "thresholds": [
+        8,
+        10
+      ],
+      "incumbent_length": 12
+    }
+  ]
+}

@@ -26,6 +26,12 @@ narrative of the approach that works.
 2. The **`HANDOFF.md` of the puzzle you're working on** (table above). Each carries its
    own score progression, measured ablations, and a prioritised next-experiments list.
 3. `EXPERIMENTS.md` / `IDEAS.md` — IHES-cube-specific log and untried ideas.
+4. **`pathkit/`** — every path post-processing method (min-merge, window rewriting,
+   bridging, exact ladders, neural bridge, suffix re-solve) as one puzzle-agnostic
+   package, with the measured verdict for each in
+   [`pathkit/VERDICTS.md`](pathkit/VERDICTS.md) and the process rules in
+   [`pathkit/DISCIPLINE.md`](pathkit/DISCIPLINE.md). Start with
+   `python -m pathkit.cli plan --preset <puzzle> --in <submission.csv>`.
 
 ## The approach, in one page
 

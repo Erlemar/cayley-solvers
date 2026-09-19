@@ -1,0 +1,20 @@
+{
+  "state_size": 72,
+  "n_generators": 18,
+  "facelet_automorphism_group_order": 1152,
+  "centralizer_order": 24,
+  "effective_symmetries": 48,
+  "effective_with_antisymmetry": 96,
+  "full_with_antisymmetry": 2304,
+  "group_closure_ok": true,
+  "identity_present": true,
+  "rotations_subgroup_ok": true,
+  "antisymmetry": "s -> P . invert_state(s) . P^-1 (state inversion + conjugation)",
+  "note": "centralizer elements commute with every move, so they act trivially on any state reachable from solved; distinct augmentations on real states number 'effective_symmetries'.",
+  "files": {
+    "cube_symmetries.npy": "effective symmetry perms P, shape (48, 72)",
+    "cube_symmetries_inv.npy": "their inverses, shape (48, 72)",
+    "cube_symmetry_group.npz": "effective sym+antisym, shape (96, 72)",
+    "cube_symmetries_full.npy": "full facelet-automorphism group, shape (1152, 72)"
+  }
+}

@@ -1,0 +1,16 @@
+{
+ "name": "ihes_tf_v1a",
+ "files": {
+  "ihes_piece_layout.json": "46bc5d3459c8264d6fccadae790d761af7bcf444442e3f2c2a914b79d1e7c7c6",
+  "ihes_tf_v1a.npz": "a2b0faf0733cde5395d5a4638270de58b447ae08e77f3659beb7deb0705d5362",
+  "ihes_tf_v1a.pt": "968ffd3c3251ee33530b5019ef9e0e5e137e9c955ab5c04282fa0f535c14ae0c",
+  "puzzle_info.json": "005e4477015c6f79fb0da6652d27df08f06c143690ac5f8f77b1d48134666955",
+  "README.md": "5b23b49361a64af1f3ddc08f980e7c359dd9b3d271fa41070da1f23da5560646"
+ },
+ "parity": [
+  "JAX full  vs torch: max|dQ| 2.29e-05  argmin agreement 1.0000 over 656 states",
+  "JAX mixed vs torch: max|dQ| 2.29e-05  argmin agreement 1.0000 over 656 states",
+  "JAX value vs torch: max|dV| 4.77e-06"
+ ],
+ "gate": "108-pid held-out gate, B=65536, 1 frame, endgame d6: total 2597 vs floor 2423 (+174), ties 36, solved 108/108; gate-54 at B=262,144, 1 frame, RTX 4090 bf16: total 1267 vs floor 1215 (+52), ties 29 (same setting: pre-Bellman parent 1285, arm-B stage-1 e800 1279, E6 V at B=65,536 1355); recipe: sparse-Q from scratch (Vlad's IHES sampler, k 2-23) + AZ value head, 1000 epochs lr 3e-4, 100 epochs lr 3e-5, Q-Bellman 2000 steps (d<=6 exact anchors, path states)"
+}

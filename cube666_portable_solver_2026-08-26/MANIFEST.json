@@ -1,0 +1,391 @@
+{
+  "bundle_format": 1,
+  "created_utc": "2026-08-26T16:41:53.265814+00:00",
+  "files": [
+    {
+      "bytes": 435,
+      "path": ".gitignore",
+      "sha256": "6046dd8c80107a0481497a52dd7b4f85238a729f6fc619ef9ccaaf6dfb1264c7"
+    },
+    {
+      "bytes": 5373,
+      "path": "README.md",
+      "sha256": "fffc76f11a8a3265130dfeab23c8c7a99302f802b2ebc204a17df1be35b99846"
+    },
+    {
+      "bytes": 620,
+      "path": "THIRD_PARTY.md",
+      "sha256": "c75f8703dda779dc41d91708ff6a5c368c01ffbab0f40285e5ff7fbf0c6161c1"
+    },
+    {
+      "bytes": 249,
+      "path": "build_kmc.ps1",
+      "sha256": "66cb34da4f116214461a073e73fe4eb361aceca2423b03b3f2b196fbcab3e88f"
+    },
+    {
+      "bytes": 210,
+      "path": "build_kmc.sh",
+      "sha256": "5cd5a8cac6b8fc372ced6051c59a0dde7dbf15df861ff57f810f39ddcbb92276"
+    },
+    {
+      "bytes": 18230,
+      "path": "cayley-py-666-cube/codex_666_solution.md",
+      "sha256": "3ee9e702ed75df1f0bf898a69af8a0eefc274b9a452a14eac67a192ffd32081e"
+    },
+    {
+      "bytes": 36385,
+      "path": "cayley-py-666-cube/puzzle_info.json",
+      "sha256": "f9d435ba6345f52d68ae52659cbe3acb5f4d5d055e42bd3d55410661c246cc31"
+    },
+    {
+      "bytes": 1762136,
+      "path": "cayley-py-666-cube/sample_submission.csv",
+      "sha256": "ed7b55a5df7772eac93214102b27be2a2072b861ef07d010d6d631bb467d1a11"
+    },
+    {
+      "bytes": 769053,
+      "path": "cayley-py-666-cube/test.csv",
+      "sha256": "19a4a192fae217dfb693364512fb7d49cd598acd173c2f2434031cda992887fd"
+    },
+    {
+      "bytes": 2377792,
+      "path": "cube666/artifacts/three_cycle_library.json",
+      "sha256": "b8d32d88ad00029ae94fac3a9ff0e4ecceeb1babf357829b6c142a92ce89c397"
+    },
+    {
+      "bytes": 20083,
+      "path": "cube666/kaggle_walton_macro_mining/output/walton_runs.json",
+      "sha256": "4f5d4ed9c1d34aca13c30b0e4bb33b2493daf7bc2c1adff7bbcc6e6355207d8c"
+    },
+    {
+      "bytes": 23845,
+      "path": "cube666/scripts/06_run_kmcoders_beam.py",
+      "sha256": "457bb8d627612ae86183d9311263b3003a089aefc66856bcec3b4d950d29d306"
+    },
+    {
+      "bytes": 5488,
+      "path": "cube666/scripts/07_merge_verify.py",
+      "sha256": "74a8860e3648b5b3adc6cb60a55e3a6dbba4efe5ae468bcc8912bb6e7da3e4cf"
+    },
+    {
+      "bytes": 11674,
+      "path": "cube666/scripts/16_run_finisher_policy_beam.py",
+      "sha256": "24ea32d8d5e79ebd140c85a2cbc984fcd08cfeb49871793f15d97a227ecb4377"
+    },
+    {
+      "bytes": 1436627,
+      "path": "cube666/training/finisher_policy_v1/action_library.json",
+      "sha256": "5c415f52542d141cb79ca01a01a70a3482edf62c9c7705656e1549c7a516fd79"
+    },
+    {
+      "bytes": 41471,
+      "path": "cube666/training/kmc_macro_teacher_v1/action_library.json",
+      "sha256": "86ab51d6d73d60b83efb56b81a7d8edff2c3f5607b3f50fe65c7bbbcf384cdf3"
+    },
+    {
+      "bytes": 43307,
+      "path": "cube666/training/kmc_walton_macro4/action_library.json",
+      "sha256": "e091673cc4f38fc08660c2364b365b51ca0b2ed0393a2f5057678dc9cde3d316"
+    },
+    {
+      "bytes": 7459,
+      "path": "cube_nnn/src/cube_nnn/beam.py",
+      "sha256": "51ed7c73790f347e959481cfc37ec477f959689aeb6453f7a5214bf00cc65ee7"
+    },
+    {
+      "bytes": 6003,
+      "path": "cube_nnn/src/cube_nnn/endgame.py",
+      "sha256": "b620502d3896bbfef2615ac21a24af77116c5b38c16e86a29c139e7ea8e2edf8"
+    },
+    {
+      "bytes": 4778,
+      "path": "cube_nnn/src/cube_nnn/g1_action.py",
+      "sha256": "58e667acf74c66df98cd3807a21694b9ef64696c10adf2ac8046f3dbd5953d46"
+    },
+    {
+      "bytes": 6731,
+      "path": "cube_nnn/src/cube_nnn/g1_heuristic.py",
+      "sha256": "7657fa66d498a15e8470befc7b0f02e6d8156e1d427ff114348073629ddc3318"
+    },
+    {
+      "bytes": 2178,
+      "path": "cube_nnn/src/cube_nnn/orbit_heuristic.py",
+      "sha256": "3f96f27d6f379b7aa9897dd5b4f703b2a3a8c3a02eba7f51ef1d9bbb72d70ac8"
+    },
+    {
+      "bytes": 4547,
+      "path": "cube_nnn/src/cube_nnn/pdb.py",
+      "sha256": "2177868d9088a49c2b90a2f46decd4187b168cfbe0604e1c18af12cf09978650"
+    },
+    {
+      "bytes": 10151,
+      "path": "cube_nnn/src/cube_nnn/puzzle.py",
+      "sha256": "32eed29a874a194dcb669c8ec32292376fd93b2ab0a51226bbdeb32a50e2511f"
+    },
+    {
+      "bytes": 5064,
+      "path": "cube_nnn/src/cube_nnn/reduction.py",
+      "sha256": "e9b05c51b74bc3e588d3c21243a45da80b12a4c834e6d713204b5560dfe5e775"
+    },
+    {
+      "bytes": 6141,
+      "path": "cube_nnn/src/cube_nnn/symmetry.py",
+      "sha256": "3c642b1507acc18678ab948aaaf6db626050d5ea98ef53c9bb8f334a942846aa"
+    },
+    {
+      "bytes": 7776,
+      "path": "cube_nnn/src/cube_nnn/tw_coords.py",
+      "sha256": "0a079f26be58ecd040da6e738e5f6784486cff28f52c9214f0862c65522bb119"
+    },
+    {
+      "bytes": 32730,
+      "path": "docs/CUBE666_MODEL_RESEARCH_2026-08-24.md",
+      "sha256": "3ec0594c21cf6eb0c6acdfbc523be24d0d96cd9fc6e5c97a8baf61e218a58e1d"
+    },
+    {
+      "bytes": 25688,
+      "path": "docs/CUBE666_MODEL_UPDATED_ANALYSIS_AND_PLAN_2026-08-24.md",
+      "sha256": "90bdf24b21b51fbb967b28d81ac6daec45c0637f218e3623adf51a8d944fa190"
+    },
+    {
+      "bytes": 10512,
+      "path": "docs/MACRO_POLICY_TRAINING.md",
+      "sha256": "84b035b62155e51f17fa883ca5ce7f5b609d361ed42b3131099fabc0e0c0e62c"
+    },
+    {
+      "bytes": 5207,
+      "path": "docs/README.md",
+      "sha256": "a46de0bd4d747cbe6ac91da5c686628a86ed7dd29ea741481e3a9662f8c618d6"
+    },
+    {
+      "bytes": 18008,
+      "path": "external/third_party/kmcoders_santa2023/solution/Cargo.lock",
+      "sha256": "352058548170cdded760f704442de74ff436a759d283a9f380693349d68fbd71"
+    },
+    {
+      "bytes": 737,
+      "path": "external/third_party/kmcoders_santa2023/solution/Cargo.toml",
+      "sha256": "710dba82d353f0a61d516cf8a0f85b1ee730c56d66da1fb2192352850c7a8755"
+    },
+    {
+      "bytes": 101411,
+      "path": "external/third_party/kmcoders_santa2023/solution/src/bin/solve_cube_beam.rs",
+      "sha256": "65dbeedac9229d034541af9b979f7aa073aba3770cddfdcb8c59583a16e9b901"
+    },
+    {
+      "bytes": 33243,
+      "path": "external/third_party/kmcoders_santa2023/solution/src/lib.rs",
+      "sha256": "3ea042e7e29c91a18f2d02781730790b94ed515d9e59732045729891880360ae"
+    },
+    {
+      "bytes": 41938,
+      "path": "external/third_party/kmcoders_santa2023/solution/src/rotate.txt",
+      "sha256": "17eb9cc3473f96fd00238a07cf31992bfdd94cd9fb4ff151e848d3076c0aac28"
+    },
+    {
+      "bytes": 363824,
+      "path": "external/third_party/kmcoders_santa2023/solution/src/rotate_all.txt",
+      "sha256": "49e9cc0a21337a40761a5c1ee2741ce74ecf1dba4ee71101bc408b4c9feb6d3f"
+    },
+    {
+      "bytes": 1375744,
+      "path": "external/third_party/kmcoders_santa2023/solution/target/release/solve_cube_beam.exe",
+      "sha256": "406e2fe91455dafb722ac148014660dd54290e5ef8b3d3f94b7678c54a8e0995"
+    },
+    {
+      "bytes": 15956,
+      "path": "external/third_party/kmcoders_santa2023/tools/Cargo.lock",
+      "sha256": "a73f30c1a6e3a2ad0cbdc446eafc129206f026df08d3befed7b552d3bd00eff1"
+    },
+    {
+      "bytes": 622,
+      "path": "external/third_party/kmcoders_santa2023/tools/Cargo.toml",
+      "sha256": "170579c9a46a7f9f42ca290f3f9d4defa0a92aa93652d88c56dd367845243fe9"
+    },
+    {
+      "bytes": 5052086,
+      "path": "external/third_party/kmcoders_santa2023/tools/puzzle_info.csv",
+      "sha256": "adf2985aa81fc0176d32fb0dcecb0bb6d953e3ce71367d0f7c75d901a71bb099"
+    },
+    {
+      "bytes": 329381,
+      "path": "external/third_party/kmcoders_santa2023/tools/puzzles.csv",
+      "sha256": "1770696cc5cfb0804af7424a1632c4a7a0f7a8a77fb414555fcb9a2e3ace5ebb"
+    },
+    {
+      "bytes": 17776,
+      "path": "external/third_party/kmcoders_santa2023/tools/src/lib.rs",
+      "sha256": "b7187de2185fbd404055ecdccc364dc745c231fb9d155760d58b544ac19777dc"
+    },
+    {
+      "bytes": 16609429,
+      "path": "models/cube666_finisher_factorized_pro6000_v1/checkpoint.pt",
+      "sha256": "b09663eef1b669948f58103e1753594206b9460bc0d13aa1c5763c5be1dc2bd2"
+    },
+    {
+      "bytes": 360,
+      "path": "pyproject.toml",
+      "sha256": "dbcf9742d4e95f1765a179a5ff4eca8198e23aea90ac859912e004c247378cb4"
+    },
+    {
+      "bytes": 66,
+      "path": "pytest.ini",
+      "sha256": "f5d0b19c834ff2fcb5b3ad9d30e20fe52ea147818bc25b838011ac9d5ebcc626"
+    },
+    {
+      "bytes": 36,
+      "path": "requirements.txt",
+      "sha256": "c5695ddd857aec74afabad5f0f70c515e74e331c4182402de4b82a1611749a52"
+    },
+    {
+      "bytes": 904,
+      "path": "run_solver.py",
+      "sha256": "c56b767ddf6c8689db45d29c7eb4f0b5697eaac40565bf2820dfe9d949488d68"
+    },
+    {
+      "bytes": 381,
+      "path": "setup.ps1",
+      "sha256": "9161f5098642da6c96c94a673742125e849c9b756dfd773b5e877ffee4a50893"
+    },
+    {
+      "bytes": 307,
+      "path": "setup.sh",
+      "sha256": "0f417fb70d359d5c4c260aca394020a0d2ac39c8d90caf0ed4a8d7537ef4dde8"
+    },
+    {
+      "bytes": 3343,
+      "path": "smoke_test.py",
+      "sha256": "9ca06f4536e59885fc9b21a0741a26f19a5670d43dd58f3c88a0a34f0e5a06f5"
+    },
+    {
+      "bytes": 9829,
+      "path": "solver/solve_neural.py",
+      "sha256": "413a8e841e647b47a8629ae26fbe68cefa7c8ac29a2bc07caa857d40f5c667e7"
+    },
+    {
+      "bytes": 1618,
+      "path": "src/cube666/__init__.py",
+      "sha256": "f3eef4392835c5795f7fbdb57abd433793e61f80362af590641a5bf0316d9db1"
+    },
+    {
+      "bytes": 22029,
+      "path": "src/cube666/bridge.py",
+      "sha256": "f09cf79fd070305e45cffc12346afb6cca7aea0b58f32733dfd28831f4135280"
+    },
+    {
+      "bytes": 18409,
+      "path": "src/cube666/classical.py",
+      "sha256": "421a6a479077b2e1d2ad33abc11ea299a2973ca1c65c37ee7906aec919bbcf81"
+    },
+    {
+      "bytes": 24667,
+      "path": "src/cube666/corners.py",
+      "sha256": "c0018c560f8112bb5c6fd9d7603de40b8c80df8f017e3a62c908f8da68e3f5ce"
+    },
+    {
+      "bytes": 4051,
+      "path": "src/cube666/frames.py",
+      "sha256": "15c570ca4504116587d777cfb4ec756440250cbc4ec9f2edb86c608bff3a63bc"
+    },
+    {
+      "bytes": 3286,
+      "path": "src/cube666/macro_action_policy.py",
+      "sha256": "a99096fde1f62ba198df72eaa244c1f26fe345d5e7144e1da6a261dfd56dc0c4"
+    },
+    {
+      "bytes": 9000,
+      "path": "src/cube666/macro_autoregressive.py",
+      "sha256": "9b5dcef3821de114745f6c9b5371f1388b6c711cde39f56f3e1fc1a52b2a17f3"
+    },
+    {
+      "bytes": 22047,
+      "path": "src/cube666/macro_beam.py",
+      "sha256": "7dfff577bb7030e5014eb6c04bfbc410d2c18491f3ae550b8c59fe73b5e78a16"
+    },
+    {
+      "bytes": 26129,
+      "path": "src/cube666/macro_data.py",
+      "sha256": "59ccda1c6556bb83e7ea25b8e102eac600f92da4a52fad43ba7a8d4bc81b3a88"
+    },
+    {
+      "bytes": 6945,
+      "path": "src/cube666/macro_dual_policy.py",
+      "sha256": "0d89e8212b6d478f431bf50ce6a172319c7113bf14e73698a4654bc5d0c76114"
+    },
+    {
+      "bytes": 3529,
+      "path": "src/cube666/macro_factorized_value.py",
+      "sha256": "90473f44dca86446d396dd36088ed584ae0f234deab5b16935ffa636d8e3f20a"
+    },
+    {
+      "bytes": 16832,
+      "path": "src/cube666/macro_policy.py",
+      "sha256": "dae5c9a17113e0131bb9a549559d6d407129b10221fea42e2b15143e93735a2b"
+    },
+    {
+      "bytes": 52617,
+      "path": "src/cube666/macros.py",
+      "sha256": "3cdc8855b003701f287e21b58075370aa0c88fa5c93cdd268d60924b3faf68c7"
+    },
+    {
+      "bytes": 4518,
+      "path": "src/cube666/primitive_history_policy.py",
+      "sha256": "7e26e6a05636ff84bcd05d7be1d454c255cd8f18a96cf581d3c31cb83a88faf0"
+    },
+    {
+      "bytes": 4747,
+      "path": "src/cube666/primitive_policy.py",
+      "sha256": "802a0a76af21664f92f4e9ca157849f87690d693f733bb2d3c10f5f8dcba018b"
+    },
+    {
+      "bytes": 4216,
+      "path": "src/cube666/puzzle.py",
+      "sha256": "7d1bad189f4b988dedc28d75586ea0a4325198171c445536f433650231adab88"
+    },
+    {
+      "bytes": 1981,
+      "path": "src/cube666/stabilizer_policy.py",
+      "sha256": "efe8c5fd56eff1afb52c68977e2e05b0ef3e4bd0a698ed77bb3d25768ee67836"
+    },
+    {
+      "bytes": 6021,
+      "path": "src/cube666/walton.py",
+      "sha256": "9a2d6fb52733ad43518305ce06a2d5a432fcc72c0decb39f33980d5b5baa0cb3"
+    },
+    {
+      "bytes": 596999,
+      "path": "submissions/current_best_171019_verified.csv",
+      "sha256": "59de7f2967b567ace0356c8d90f69084de24d4901b5089b20f77df77fe2083eb"
+    },
+    {
+      "bytes": 3804,
+      "path": "tests/test_cube666_bridge.py",
+      "sha256": "3ce55a5ac697011269119a26d2c24d96398148994f7b02ae4dce0797168df925"
+    },
+    {
+      "bytes": 9038,
+      "path": "tests/test_cube666_classical.py",
+      "sha256": "90f7e74f130d70f50e38ded69583fc3fa53ac881228da7973500c2ecc3ae36d4"
+    },
+    {
+      "bytes": 2121,
+      "path": "tests/test_cube666_frames.py",
+      "sha256": "3c73278c3f0fff7740d75c38010a40f39a7c5349e05ba40a087105215d875061"
+    },
+    {
+      "bytes": 13558,
+      "path": "tests/test_cube666_macro_policy.py",
+      "sha256": "3ed05309d8172c68e26352d57b6da663595b7862ae9c8e3eabf09ee652fac099"
+    },
+    {
+      "bytes": 3981,
+      "path": "tests/test_cube666_walton.py",
+      "sha256": "2269c573cae3f76fe1d6065ba1497bd37b9b1ffe06c16b1f4e9db86f2afa5554"
+    },
+    {
+      "bytes": 2800,
+      "path": "verify_manifest.py",
+      "sha256": "7e874f6bb858f02541c09c59971a7f01524b558145b5a91407962d4b0eef79d6"
+    }
+  ]
+}

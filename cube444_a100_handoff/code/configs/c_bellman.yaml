@@ -1,0 +1,51 @@
+# Stage 3 -- Bellman refinement. Mirrors megaminx m_dd_v0.yaml, the recipe that
+# produced our only beam-usable V models.
+#
+# Deltas from m_dd_v0:
+#   * state_size/num_classes/encoding for the color cube (see c_v0_pretrain.yaml)
+#   * lambda_pdb 0 (no PDB for this puzzle; max-combining a corner PDB with a
+#     strong V was neutral on megaminx -- see pdb_corner_findings)
+#   * frontier_fraction 0 (needs solver traces; enable on the second pass once
+#     we have beam output)
+#   * k_max 60 instead of 80 (diameter ~37-40 here vs ~29 on megaminx)
+#
+# n_anchor_v0 / n_anchor_d1 are the load-bearing part: exact-label anchors in
+# every batch (solved -> 0, the 24 d=1 children -> 1). Without them the Bellman
+# bootstrap settles at V(solved) ~ 2. See v_v0_bug_and_anchor_fix.
+
+model:
+  state_size: 96
+  num_classes: 6
+  hidden_dims: [4096, 1024]
+  num_res_blocks: 4
+  encoding: onehot
+
+training:
+  n_epochs: 400          # measured: Bellman quality still improving at ep124 of the
+                         # first 300-epoch run, so give the bigger trunk more
+  samples_per_epoch: 500_000
+  batch_size: 16384
+  k_max: 60
+  lr: 5.0e-4
+  weight_decay: 0.0
+  checkpoint_every_epochs: 25
+  n_back: 1
+  loss: mse
+  amp: true
+  compile_model: true
+  fused_optimizer: true
+
+bellman:
+  warmstart_path: "cube444/models/c_v0/epoch_0399.pt"   # mid pretrain now runs 400 ep
+  target_update_every_epochs: 10
+  target_net_chunk: 8192
+  clip_upper: true
+  clip_lower: true
+  bfs_d6_path: "cube444/data/bfs_anchors.pt"
+  bfs_d6_fraction: 0.10
+  n_anchor_v0: 32
+  n_anchor_d1: 4
+  lambda_pdb: 0.0
+  frontier_fraction: 0.0
+
+seed: 444

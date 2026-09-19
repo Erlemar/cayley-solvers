@@ -1,0 +1,11 @@
+{
+  "complete_words_replayed": 2254,
+  "moves_replayed": 183658,
+  "refinement_steps_exercised": 150,
+  "largest_n": 151,
+  "excess_over_lower_bound": {
+    "2": 1258,
+    "0": 996
+  },
+  "scope": "Implementation audit; complete finite coverage checked separately."
+}

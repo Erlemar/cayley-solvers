@@ -51,6 +51,10 @@ class QShortlisterSolver(KhoruzhiiSolver):
         policy_model=None,
         lambda_policy: float = 0.0,
         phs_cumulative: bool = False,
+        cutoff_model=None,
+        cutoff_lambda: float = 0.0,
+        cutoff_pool_mult: float = 1.0,
+        cutoff_normalize: bool = True,
     ):
         # Initialize parent with teacher as the "model" — most helpers use self.model.
         super().__init__(
@@ -66,6 +70,12 @@ class QShortlisterSolver(KhoruzhiiSolver):
         self.teacher = teacher
         self.student = student.to(device).eval()
         self.alpha = alpha
+        self.cutoff_model = cutoff_model.to(device).eval() if cutoff_model is not None else None
+        self.cutoff_lambda = float(cutoff_lambda)
+        self.cutoff_pool_mult = float(cutoff_pool_mult)
+        self.cutoff_normalize = bool(cutoff_normalize)
+        if self.cutoff_pool_mult < 1.0:
+            raise ValueError(f"cutoff_pool_mult must be >= 1.0, got {self.cutoff_pool_mult}")
         # Validate student's output_dim matches n_actions (n_gen for vanilla m23,
         # n_gen + n_macros for the m24 Macro-Q shortlister).
         student_base = getattr(student, "_orig_mod", student)
@@ -202,7 +212,33 @@ class QShortlisterSolver(KhoruzhiiSolver):
         # stage (cumulative or local), indexed to the shortlist subset.
         if policy_cost is not None:
             teacher_score = teacher_score + self.lambda_policy * policy_cost[shortlist_local].to(teacher_score.dtype)
-        if teacher_score.numel() <= B:
+        if (
+            self.cutoff_model is not None
+            and self.cutoff_lambda != 0.0
+            and self.cutoff_pool_mult > 1.0
+            and teacher_score.numel() > B
+        ):
+            pool_n = min(teacher_score.numel(), max(B, int(round(B * self.cutoff_pool_mult))))
+            if pool_n >= teacher_score.numel():
+                pool_idx = torch.arange(teacher_score.numel(), device=self.device)
+            else:
+                _, pool_idx = torch.topk(teacher_score, pool_n, largest=False, sorted=False)
+            cutoff_value = _model_predict(
+                self.cutoff_model,
+                shortlist_states[pool_idx],
+                bs,
+                pad_to_batch_size=self.pad_to_batch_size,
+            ).float()
+            if self.cutoff_normalize and cutoff_value.numel() > 1:
+                cutoff_std = cutoff_value.std(unbiased=False).clamp_min(1e-3)
+                cutoff_value = (cutoff_value - cutoff_value.mean()) / cutoff_std
+            final_score = teacher_score[pool_idx].float() + self.cutoff_lambda * cutoff_value
+            if final_score.numel() <= B:
+                chosen_in_pool = torch.arange(final_score.numel(), device=self.device)
+            else:
+                _, chosen_in_pool = torch.topk(final_score, B, largest=False, sorted=False)
+            chosen_local = pool_idx[chosen_in_pool]
+        elif teacher_score.numel() <= B:
             chosen_local = torch.arange(teacher_score.numel(), device=self.device)
         else:
             _, chosen_local = torch.topk(teacher_score, B, largest=False, sorted=False)

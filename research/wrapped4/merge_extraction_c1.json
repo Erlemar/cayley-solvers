@@ -1,0 +1,12885 @@
+{
+  "coefficient": "1",
+  "complete": true,
+  "records": [
+    {
+      "bits": "AAA",
+      "gap": 0,
+      "pattern": [
+        0,
+        1,
+        2
+      ],
+      "width": 9,
+      "inversions": 0,
+      "budget": 0,
+      "status": "found",
+      "word": []
+    },
+    {
+      "bits": "AAA",
+      "gap": 1,
+      "pattern": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "width": 9,
+      "inversions": 0,
+      "budget": 0,
+      "status": "found",
+      "word": []
+    },
+    {
+      "bits": "AAA",
+      "gap": 2,
+      "pattern": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "width": 9,
+      "inversions": 0,
+      "budget": 0,
+      "status": "found",
+      "word": []
+    },
+    {
+      "bits": "AAB",
+      "gap": 0,
+      "pattern": [
+        0,
+        1,
+        2
+      ],
+      "width": 9,
+      "inversions": 0,
+      "budget": 0,
+      "status": "found",
+      "word": []
+    },
+    {
+      "bits": "AAB",
+      "gap": 1,
+      "pattern": [
+        0,
+        1,
+        3,
+        2
+      ],
+      "width": 9,
+      "inversions": 1,
+      "budget": 1,
+      "status": "exhausted"
+    },
+    {
+      "bits": "AAB",
+      "gap": 2,
+      "pattern": [
+        0,
+        1,
+        3,
+        4,
+        2
+      ],
+      "width": 9,
+      "inversions": 2,
+      "budget": 0,
+      "status": "exhausted"
+    },
+    {
+      "bits": "ABA",
+      "gap": 0,
+      "pattern": [
+        0,
+        2,
+        1
+      ],
+      "width": 9,
+      "inversions": 1,
+      "budget": 1,
+      "status": "exhausted"
+    },
+    {
+      "bits": "ABA",
+      "gap": 1,
+      "pattern": [
+        0,
+        2,
+        3,
+        1
+      ],
+      "width": 9,
+      "inversions": 2,
+      "budget": 0,
+      "status": "exhausted"
+    },
+    {
+      "bits": "ABA",
+      "gap": 2,
+      "pattern": [
+        0,
+        2,
+        3,
+        4,
+        1
+      ],
+      "width": 9,
+      "inversions": 3,
+      "budget": 1,
+      "status": "found",
+      "word": [
+        [
+          1,
+          -1
+        ]
+      ]
+    },
+    {
+      "bits": "ABB",
+      "gap": 0,
+      "pattern": [
+        0,
+        1,
+        2
+      ],
+      "width": 9,
+      "inversions": 0,
+      "budget": 0,
+      "status": "found",
+      "word": []
+    },
+    {
+      "bits": "ABB",
+      "gap": 1,
+      "pattern": [
+        0,
+        3,
+        1,
+        2
+      ],
+      "width": 9,
+      "inversions": 2,
+      "budget": 0,
+      "status": "exhausted"
+    },
+    {
+      "bits": "ABB",
+      "gap": 2,
+      "pattern": [
+        0,
+        3,
+        4,
+        1,
+        2
+      ],
+      "width": 9,
+      "inversions": 4,
+      "budget": 2,
+      "status": "found",
+      "word": [
+        [
+          1,
+          1
+        ],
+        [
+          1,
+          1
+        ]
+      ]
+    },
+    {
+      "bits": "BAA",
+      "gap": 0,
+      "pattern": [
+        1,
+        2,
+        0
+      ],
+      "width": 9,
+      "inversions": 2,
+      "budget": 0,
+      "status": "exhausted"
+    },
+    {
+      "bits": "BAA",
+      "gap": 1,
+      "pattern": [
+        1,
+        2,
+        3,
+        0
+      ],
+      "width": 9,
+      "inversions": 3,
+      "budget": 1,
+      "status": "found",
+      "word": [
+        [
+          0,
+          -1
+        ]
+      ]
+    },
+    {
+      "bits": "BAA",
+      "gap": 2,
+      "pattern": [
+        1,
+        2,
+        3,
+        4,
+        0
+      ],
+      "width": 9,
+      "inversions": 4,
+      "budget": 2,
+      "status": "exhausted"
+    },
+    {
+      "bits": "BAB",
+      "gap": 0,
+      "pattern": [
+        1,
+        0,
+        2
+      ],
+      "width": 9,
+      "inversions": 1,
+      "budget": 1,
+      "status": "exhausted"
+    },
+    {
+      "bits": "BAB",
+      "gap": 1,
+      "pattern": [
+        1,
+        3,
+        0,
+        2
+      ],
+      "width": 9,
+      "inversions": 3,
+      "budget": 1,
+      "status": "exhausted"
+    },
+    {
+      "bits": "BAB",
+      "gap": 2,
+      "pattern": [
+        1,
+        3,
+        4,
+        0,
+        2
+      ],
+      "width": 9,
+      "inversions": 5,
+      "budget": 1,
+      "status": "exhausted"
+    },
+    {
+      "bits": "BBA",
+      "gap": 0,
+      "pattern": [
+        2,
+        0,
+        1
+      ],
+      "width": 9,
+      "inversions": 2,
+      "budget": 0,
+      "status": "exhausted"
+    },
+    {
+      "bits": "BBA",
+      "gap": 1,
+      "pattern": [
+        2,
+        3,
+        0,
+        1
+      ],
+      "width": 9,
+      "inversions": 4,
+      "budget": 2,
+      "status": "found",
+      "word": [
+        [
+          0,
+          1
+        ],
+        [
+          0,
+          1
+        ]
+      ]
+    },
+    {
+      "bits": "BBA",
+      "gap": 2,
+      "pattern": [
+        2,
+        3,
+        4,
+        0,
+        1
+      ],
+      "width": 9,
+      "inversions": 6,
+      "budget": 2,
+      "status": "found",
+      "word": [
+        [
+          0,
+          -1
+        ],
+        [
+          1,
+          -1
+        ]
+      ]
+    },
+    {
+      "bits": "BBB",
+      "gap": 0,
+      "pattern": [
+        0,
+        1,
+        2
+      ],
+      "width": 9,
+      "inversions": 0,
+      "budget": 0,
+      "status": "found",
+      "word": []
+    },
+    {
+      "bits": "BBB",
+      "gap": 1,
+      "pattern": [
+        3,
+        0,
+        1,
+        2
+      ],
+      "width": 9,
+      "inversions": 3,
+      "budget": 1,
+      "status": "found",
+      "word": [
+        [
+          0,
+          1
+        ]
+      ]
+    },
+    {
+      "bits": "BBB",
+      "gap": 2,
+      "pattern": [
+        3,
+        4,
+        0,
+        1,
+        2
+      ],
+      "width": 9,
+      "inversions": 6,
+      "budget": 2,
+      "status": "found",
+      "word": [
+        [
+          1,
+          1
+        ],
+        [
+          0,
+          1
+        ]
+      ]
+    },
+    {
+      "bits": "AABA",
+      "gap": 0,
+      "pattern": [
+        0,
+        1,
+        3,
+        2
+      ],
+      "width": 9,
+      "inversions": 1,
+      "budget": 1,
+      "status": "exhausted"
+    },
+    {
+      "bits": "AABA",
+      "gap": 1,
+      "pattern": [
+        0,
+        1,
+        3,
+        4,
+        2
+      ],
+      "width": 9,
+      "inversions": 2,
+      "budget": 2,
+      "status": "exhausted"
+    },
+    {
+      "bits": "AABB",
+      "gap": 1,
+      "pattern": [
+        0,
+        1,
+        4,
+        2,
+        3
+      ],
+      "width": 9,
+      "inversions": 2,
+      "budget": 2,
+      "status": "exhausted"
+    },
+    {
+      "bits": "AABB",
+      "gap": 2,
+      "pattern": [
+        0,
+        1,
+        4,
+        5,
+        2,
+        3
+      ],
+      "width": 9,
+      "inversions": 4,
+      "budget": 2,
+      "status": "found",
+      "word": [
+        [
+          2,
+          1
+        ],
+        [
+          2,
+          1
+        ]
+      ]
+    },
+    {
+      "bits": "ABAA",
+      "gap": 0,
+      "pattern": [
+        0,
+        2,
+        3,
+        1
+      ],
+      "width": 9,
+      "inversions": 2,
+      "budget": 2,
+      "status": "exhausted"
+    },
+    {
+      "bits": "ABAA",
+      "gap": 2,
+      "pattern": [
+        0,
+        2,
+        3,
+        4,
+        5,
+        1
+      ],
+      "width": 9,
+      "inversions": 4,
+      "budget": 2,
+      "status": "exhausted"
+    },
+    {
+      "bits": "ABAB",
+      "gap": 0,
+      "pattern": [
+        0,
+        2,
+        1,
+        3
+      ],
+      "width": 9,
+      "inversions": 1,
+      "budget": 1,
+      "status": "exhausted"
+    },
+    {
+      "bits": "ABAB",
+      "gap": 1,
+      "pattern": [
+        0,
+        2,
+        4,
+        1,
+        3
+      ],
+      "width": 9,
+      "inversions": 3,
+      "budget": 1,
+      "status": "exhausted"
+    },
+    {
+      "bits": "ABBA",
+      "gap": 0,
+      "pattern": [
+        0,
+        3,
+        1,
+        2
+      ],
+      "width": 9,
+      "inversions": 2,
+      "budget": 2,
+      "status": "exhausted"
+    },
+    {
+      "bits": "ABBB",
+      "gap": 1,
+      "pattern": [
+        0,
+        4,
+        1,
+        2,
+        3
+      ],
+      "width": 9,
+      "inversions": 3,
+      "budget": 1,
+      "status": "found",
+      "word": [
+        [
+          1,
+          1
+        ]
+      ]
+    },
+    {
+      "bits": "BAAA",
+      "gap": 1,
+      "pattern": [
+        1,
+        2,
+        3,
+        4,
+        0
+      ],
+      "width": 9,
+      "inversions": 4,
+      "budget": 2,
+      "status": "exhausted"
+    },
+    {
+      "bits": "BAAA",
+      "gap": 2,
+      "pattern": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        0
+      ],
+      "width": 9,
+      "inversions": 5,
+      "budget": 3,
+      "status": "exhausted"
+    },
+    {
+      "bits": "BAAB",
+      "gap": 0,
+      "pattern": [
+        1,
+        2,
+        0,
+        3
+      ],
+      "width": 9,
+      "inversions": 2,
+      "budget": 2,
+      "status": "exhausted"
+    },
+    {
+      "bits": "BAAB",
+      "gap": 2,
+      "pattern": [
+        1,
+        2,
+        4,
+        5,
+        0,
+        3
+      ],
+      "width": 9,
+      "inversions": 6,
+      "budget": 2,
+      "status": "exhausted"
+    },
+    {
+      "bits": "BABA",
+      "gap": 0,
+      "pattern": [
+        1,
+        3,
+        0,
+        2
+      ],
+      "width": 9,
+      "inversions": 3,
+      "budget": 1,
+      "status": "exhausted"
+    },
+    {
+      "bits": "BABA",
+      "gap": 1,
+      "pattern": [
+        1,
+        3,
+        4,
+        0,
+        2
+      ],
+      "width": 9,
+      "inversions": 5,
+      "budget": 3,
+      "status": "found",
+      "word": [
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          0,
+          1
+        ]
+      ]
+    },
+    {
+      "bits": "BABA",
+      "gap": 2,
+      "pattern": [
+        1,
+        3,
+        4,
+        5,
+        0,
+        2
+      ],
+      "width": 9,
+      "inversions": 7,
+      "budget": 3,
+      "status": "exhausted"
+    },
+    {
+      "bits": "BABB",
+      "gap": 0,
+      "pattern": [
+        1,
+        0,
+        2,
+        3
+      ],
+      "width": 9,
+      "inversions": 1,
+      "budget": 1,
+      "status": "exhausted"
+    },
+    {
+      "bits": "BABB",
+      "gap": 1,
+      "pattern": [
+        1,
+        4,
+        0,
+        2,
+        3
+      ],
+      "width": 9,
+      "inversions": 4,
+      "budget": 2,
+      "status": "exhausted"
+    },
+    {
+      "bits": "BABB",
+      "gap": 2,
+      "pattern": [
+        1,
+        4,
+        5,
+        0,
+        2,
+        3
+      ],
+      "width": 9,
+      "inversions": 7,
+      "budget": 3,
+      "status": "found",
+      "word": [
+        [
+          0,
+          -1
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          2,
+          1
+        ]
+      ]
+    },
+    {
+      "bits": "BBAA",
+      "gap": 2,
+      "pattern": [
+        2,
+        3,
+        4,
+        5,
+        0,
+        1
+      ],
+      "width": 9,
+      "inversions": 8,
+      "budget": 4,
+      "status": "found",
+      "word": [
+        [
+          2,
+          1
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          0,
+          1
+        ]
+      ]
+    },
+    {
+      "bits": "BBAB",
+      "gap": 0,
+      "pattern": [
+        2,
+        0,
+        1,
+        3
+      ],
+      "width": 9,
+      "inversions": 2,
+      "budget": 2,
+      "status": "exhausted"
+    },
+    {
+      "bits": "AABAA",
+      "gap": 0,
+      "pattern": [
+        0,
+        1,
+        3,
+        4,
+        2
+      ],
+      "width": 9,
+      "inversions": 2,
+      "budget": 2,
+      "status": "exhausted"
+    },
+    {
+      "bits": "AABAA",
+      "gap": 2,
+      "pattern": [
+        0,
+        1,
+        3,
+        4,
+        5,
+        6,
+        2
+      ],
+      "width": 9,
+      "inversions": 4,
+      "budget": 2,
+      "status": "exhausted"
+    },
+    {
+      "bits": "AABAB",
+      "gap": 0,
+      "pattern": [
+        0,
+        1,
+        3,
+        2,
+        4
+      ],
+      "width": 9,
+      "inversions": 1,
+      "budget": 1,
+      "status": "exhausted"
+    },
+    {
+      "bits": "AABAB",
+      "gap": 1,
+      "pattern": [
+        0,
+        1,
+        3,
+        5,
+        2,
+        4
+      ],
+      "width": 9,
+      "inversions": 3,
+      "budget": 1,
+      "status": "exhausted"
+    },
+    {
+      "bits": "AABBA",
+      "gap": 0,
+      "pattern": [
+        0,
+        1,
+        4,
+        2,
+        3
+      ],
+      "width": 9,
+      "inversions": 2,
+      "budget": 2,
+      "status": "exhausted"
+    },
+    {
+      "bits": "AABBB",
+      "gap": 1,
+      "pattern": [
+        0,
+        1,
+        5,
+        2,
+        3,
+        4
+      ],
+      "width": 9,
+      "inversions": 3,
+      "budget": 1,
+      "status": "found",
+      "word": [
+        [
+          2,
+          1
+        ]
+      ]
+    },
+    {
+      "bits": "ABAAA",
+      "gap": 1,
+      "pattern": [
+        0,
+        2,
+        3,
+        4,
+        5,
+        1
+      ],
+      "width": 9,
+      "inversions": 4,
+      "budget": 2,
+      "status": "exhausted"
+    },
+    {
+      "bits": "ABAAA",
+      "gap": 2,
+      "pattern": [
+        0,
+        2,
+        3,
+        4,
+        5,
+        6,
+        1
+      ],
+      "width": 9,
+      "inversions": 5,
+      "budget": 3,
+      "status": "exhausted"
+    },
+    {
+      "bits": "ABAAB",
+      "gap": 0,
+      "pattern": [
+        0,
+        2,
+        3,
+        1,
+        4
+      ],
+      "width": 9,
+      "inversions": 2,
+      "budget": 2,
+      "status": "exhausted"
+    },
+    {
+      "bits": "ABAAB",
+      "gap": 2,
+      "pattern": [
+        0,
+        2,
+        3,
+        5,
+        6,
+        1,
+        4
+      ],
+      "width": 9,
+      "inversions": 6,
+      "budget": 2,
+      "status": "exhausted"
+    },
+    {
+      "bits": "ABABA",
+      "gap": 0,
+      "pattern": [
+        0,
+        2,
+        4,
+        1,
+        3
+      ],
+      "width": 9,
+      "inversions": 3,
+      "budget": 1,
+      "status": "exhausted"
+    },
+    {
+      "bits": "ABABA",
+      "gap": 2,
+      "pattern": [
+        0,
+        2,
+        4,
+        5,
+        6,
+        1,
+        3
+      ],
+      "width": 9,
+      "inversions": 7,
+      "budget": 3,
+      "status": "exhausted"
+    },
+    {
+      "bits": "ABABB",
+      "gap": 0,
+      "pattern": [
+        0,
+        2,
+        1,
+        3,
+        4
+      ],
+      "width": 9,
+      "inversions": 1,
+      "budget": 1,
+      "status": "exhausted"
+    },
+    {
+      "bits": "ABABB",
+      "gap": 1,
+      "pattern": [
+        0,
+        2,
+        5,
+        1,
+        3,
+        4
+      ],
+      "width": 9,
+      "inversions": 4,
+      "budget": 2,
+      "status": "exhausted"
+    },
+    {
+      "bits": "ABBAA",
+      "gap": 2,
+      "pattern": [
+        0,
+        3,
+        4,
+        5,
+        6,
+        1,
+        2
+      ],
+      "width": 9,
+      "inversions": 8,
+      "budget": 4,
+      "status": "found",
+      "word": [
+        [
+          3,
+          1
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          1,
+          1
+        ]
+      ]
+    },
+    {
+      "bits": "ABBAB",
+      "gap": 0,
+      "pattern": [
+        0,
+        3,
+        1,
+        2,
+        4
+      ],
+      "width": 9,
+      "inversions": 2,
+      "budget": 2,
+      "status": "exhausted"
+    },
+    {
+      "bits": "BAAAA",
+      "gap": 0,
+      "pattern": [
+        1,
+        2,
+        3,
+        4,
+        0
+      ],
+      "width": 9,
+      "inversions": 4,
+      "budget": 2,
+      "status": "exhausted"
+    },
+    {
+      "bits": "BAAAA",
+      "gap": 1,
+      "pattern": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        0
+      ],
+      "width": 9,
+      "inversions": 5,
+      "budget": 3,
+      "status": "exhausted"
+    },
+    {
+      "bits": "BAAAB",
+      "gap": 1,
+      "pattern": [
+        1,
+        2,
+        3,
+        5,
+        0,
+        4
+      ],
+      "width": 9,
+      "inversions": 5,
+      "budget": 3,
+      "status": "exhausted"
+    },
+    {
+      "bits": "BAAAB",
+      "gap": 2,
+      "pattern": [
+        1,
+        2,
+        3,
+        5,
+        6,
+        0,
+        4
+      ],
+      "width": 9,
+      "inversions": 7,
+      "budget": 3,
+      "status": "found",
+      "word": [
+        [
+          3,
+          1
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          0,
+          -1
+        ]
+      ]
+    },
+    {
+      "bits": "BAABA",
+      "gap": 1,
+      "pattern": [
+        1,
+        2,
+        4,
+        5,
+        0,
+        3
+      ],
+      "width": 9,
+      "inversions": 6,
+      "budget": 2,
+      "status": "exhausted"
+    },
+    {
+      "bits": "BAABA",
+      "gap": 2,
+      "pattern": [
+        1,
+        2,
+        4,
+        5,
+        6,
+        0,
+        3
+      ],
+      "width": 9,
+      "inversions": 8,
+      "budget": 4,
+      "status": "found",
+      "word": [
+        [
+          3,
+          1
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          0,
+          -1
+        ],
+        [
+          3,
+          1
+        ]
+      ]
+    },
+    {
+      "bits": "BAABB",
+      "gap": 0,
+      "pattern": [
+        1,
+        2,
+        0,
+        3,
+        4
+      ],
+      "width": 9,
+      "inversions": 2,
+      "budget": 2,
+      "status": "exhausted"
+    },
+    {
+      "bits": "BAABB",
+      "gap": 2,
+      "pattern": [
+        1,
+        2,
+        5,
+        6,
+        0,
+        3,
+        4
+      ],
+      "width": 9,
+      "inversions": 8,
+      "budget": 4,
+      "status": "found",
+      "word": [
+        [
+          1,
+          1
+        ],
+        [
+          0,
+          -1
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          2,
+          1
+        ]
+      ]
+    },
+    {
+      "bits": "BABAA",
+      "gap": 1,
+      "pattern": [
+        1,
+        3,
+        4,
+        5,
+        0,
+        2
+      ],
+      "width": 9,
+      "inversions": 7,
+      "budget": 3,
+      "status": "exhausted"
+    },
+    {
+      "bits": "BABAA",
+      "gap": 2,
+      "pattern": [
+        1,
+        3,
+        4,
+        5,
+        6,
+        0,
+        2
+      ],
+      "width": 9,
+      "inversions": 9,
+      "budget": 3,
+      "status": "exhausted"
+    },
+    {
+      "bits": "BABAB",
+      "gap": 0,
+      "pattern": [
+        1,
+        3,
+        0,
+        2,
+        4
+      ],
+      "width": 9,
+      "inversions": 3,
+      "budget": 1,
+      "status": "exhausted"
+    },
+    {
+      "bits": "BABAB",
+      "gap": 2,
+      "pattern": [
+        1,
+        3,
+        5,
+        6,
+        0,
+        2,
+        4
+      ],
+      "width": 9,
+      "inversions": 9,
+      "budget": 3,
+      "status": "exhausted"
+    },
+    {
+      "bits": "BABBA",
+      "gap": 0,
+      "pattern": [
+        1,
+        4,
+        0,
+        2,
+        3
+      ],
+      "width": 9,
+      "inversions": 4,
+      "budget": 2,
+      "status": "exhausted"
+    },
+    {
+      "bits": "BABBA",
+      "gap": 2,
+      "pattern": [
+        1,
+        4,
+        5,
+        6,
+        0,
+        2,
+        3
+      ],
+      "width": 9,
+      "inversions": 10,
+      "budget": 4,
+      "status": "found",
+      "word": [
+        [
+          3,
+          1
+        ],
+        [
+          0,
+          -1
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          2,
+          1
+        ]
+      ]
+    },
+    {
+      "bits": "BABBB",
+      "gap": 0,
+      "pattern": [
+        1,
+        0,
+        2,
+        3,
+        4
+      ],
+      "width": 9,
+      "inversions": 1,
+      "budget": 1,
+      "status": "exhausted"
+    },
+    {
+      "bits": "BABBB",
+      "gap": 1,
+      "pattern": [
+        1,
+        5,
+        0,
+        2,
+        3,
+        4
+      ],
+      "width": 9,
+      "inversions": 5,
+      "budget": 3,
+      "status": "exhausted"
+    },
+    {
+      "bits": "BBABA",
+      "gap": 2,
+      "pattern": [
+        2,
+        4,
+        5,
+        6,
+        0,
+        1,
+        3
+      ],
+      "width": 9,
+      "inversions": 11,
+      "budget": 5,
+      "status": "found",
+      "word": [
+        [
+          1,
+          -1
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          1
+        ]
+      ]
+    },
+    {
+      "bits": "BBABB",
+      "gap": 0,
+      "pattern": [
+        2,
+        0,
+        1,
+        3,
+        4
+      ],
+      "width": 9,
+      "inversions": 2,
+      "budget": 2,
+      "status": "exhausted"
+    },
+    {
+      "bits": "AABAAA",
+      "gap": 1,
+      "pattern": [
+        0,
+        1,
+        3,
+        4,
+        5,
+        6,
+        2
+      ],
+      "width": 9,
+      "inversions": 4,
+      "budget": 2,
+      "status": "exhausted"
+    },
+    {
+      "bits": "AABAAA",
+      "gap": 2,
+      "pattern": [
+        0,
+        1,
+        3,
+        4,
+        5,
+        6,
+        7,
+        2
+      ],
+      "width": 9,
+      "inversions": 5,
+      "budget": 3,
+      "status": "exhausted"
+    },
+    {
+      "bits": "AABAAB",
+      "gap": 0,
+      "pattern": [
+        0,
+        1,
+        3,
+        4,
+        2,
+        5
+      ],
+      "width": 9,
+      "inversions": 2,
+      "budget": 2,
+      "status": "exhausted"
+    },
+    {
+      "bits": "AABAAB",
+      "gap": 2,
+      "pattern": [
+        0,
+        1,
+        3,
+        4,
+        6,
+        7,
+        2,
+        5
+      ],
+      "width": 9,
+      "inversions": 6,
+      "budget": 4,
+      "status": "found",
+      "word": [
+        [
+          3,
+          1
+        ],
+        [
+          2,
+          -1
+        ],
+        [
+          4,
+          1
+        ],
+        [
+          4,
+          1
+        ]
+      ]
+    },
+    {
+      "bits": "AABABA",
+      "gap": 0,
+      "pattern": [
+        0,
+        1,
+        3,
+        5,
+        2,
+        4
+      ],
+      "width": 9,
+      "inversions": 3,
+      "budget": 3,
+      "status": "exhausted"
+    },
+    {
+      "bits": "AABABA",
+      "gap": 2,
+      "pattern": [
+        0,
+        1,
+        3,
+        5,
+        6,
+        7,
+        2,
+        4
+      ],
+      "width": 9,
+      "inversions": 7,
+      "budget": 3,
+      "status": "exhausted"
+    },
+    {
+      "bits": "AABABB",
+      "gap": 0,
+      "pattern": [
+        0,
+        1,
+        3,
+        2,
+        4,
+        5
+      ],
+      "width": 9,
+      "inversions": 1,
+      "budget": 1,
+      "status": "exhausted"
+    },
+    {
+      "bits": "AABABB",
+      "gap": 1,
+      "pattern": [
+        0,
+        1,
+        3,
+        6,
+        2,
+        4,
+        5
+      ],
+      "width": 9,
+      "inversions": 4,
+      "budget": 2,
+      "status": "exhausted"
+    },
+    {
+      "bits": "AABBAA",
+      "gap": 2,
+      "pattern": [
+        0,
+        1,
+        4,
+        5,
+        6,
+        7,
+        2,
+        3
+      ],
+      "width": 9,
+      "inversions": 8,
+      "budget": 4,
+      "status": "found",
+      "word": [
+        [
+          4,
+          1
+        ],
+        [
+          4,
+          1
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          2,
+          1
+        ]
+      ]
+    },
+    {
+      "bits": "AABBAB",
+      "gap": 0,
+      "pattern": [
+        0,
+        1,
+        4,
+        2,
+        3,
+        5
+      ],
+      "width": 9,
+      "inversions": 2,
+      "budget": 2,
+      "status": "exhausted"
+    },
+    {
+      "bits": "ABAAAA",
+      "gap": 0,
+      "pattern": [
+        0,
+        2,
+        3,
+        4,
+        5,
+        1
+      ],
+      "width": 9,
+      "inversions": 4,
+      "budget": 2,
+      "status": "exhausted"
+    },
+    {
+      "bits": "ABAAAA",
+      "gap": 1,
+      "pattern": [
+        0,
+        2,
+        3,
+        4,
+        5,
+        6,
+        1
+      ],
+      "width": 9,
+      "inversions": 5,
+      "budget": 3,
+      "status": "exhausted"
+    },
+    {
+      "bits": "ABAAAB",
+      "gap": 1,
+      "pattern": [
+        0,
+        2,
+        3,
+        4,
+        6,
+        1,
+        5
+      ],
+      "width": 9,
+      "inversions": 5,
+      "budget": 3,
+      "status": "exhausted"
+    },
+    {
+      "bits": "ABAAAB",
+      "gap": 2,
+      "pattern": [
+        0,
+        2,
+        3,
+        4,
+        6,
+        7,
+        1,
+        5
+      ],
+      "width": 9,
+      "inversions": 7,
+      "budget": 3,
+      "status": "found",
+      "word": [
+        [
+          4,
+          1
+        ],
+        [
+          4,
+          1
+        ],
+        [
+          1,
+          -1
+        ]
+      ]
+    },
+    {
+      "bits": "ABAABA",
+      "gap": 1,
+      "pattern": [
+        0,
+        2,
+        3,
+        5,
+        6,
+        1,
+        4
+      ],
+      "width": 9,
+      "inversions": 6,
+      "budget": 4,
+      "status": "found",
+      "word": [
+        [
+          2,
+          1
+        ],
+        [
+          1,
+          -1
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          3,
+          1
+        ]
+      ]
+    },
+    {
+      "bits": "ABAABA",
+      "gap": 2,
+      "pattern": [
+        0,
+        2,
+        3,
+        5,
+        6,
+        7,
+        1,
+        4
+      ],
+      "width": 9,
+      "inversions": 8,
+      "budget": 4,
+      "status": "found",
+      "word": [
+        [
+          4,
+          1
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          1,
+          -1
+        ],
+        [
+          4,
+          1
+        ]
+      ]
+    },
+    {
+      "bits": "ABAABB",
+      "gap": 0,
+      "pattern": [
+        0,
+        2,
+        3,
+        1,
+        4,
+        5
+      ],
+      "width": 9,
+      "inversions": 2,
+      "budget": 2,
+      "status": "exhausted"
+    },
+    {
+      "bits": "ABAABB",
+      "gap": 2,
+      "pattern": [
+        0,
+        2,
+        3,
+        6,
+        7,
+        1,
+        4,
+        5
+      ],
+      "width": 9,
+      "inversions": 8,
+      "budget": 4,
+      "status": "found",
+      "word": [
+        [
+          2,
+          1
+        ],
+        [
+          1,
+          -1
+        ],
+        [
+          4,
+          1
+        ],
+        [
+          3,
+          1
+        ]
+      ]
+    },
+    {
+      "bits": "ABABAA",
+      "gap": 1,
+      "pattern": [
+        0,
+        2,
+        4,
+        5,
+        6,
+        1,
+        3
+      ],
+      "width": 9,
+      "inversions": 7,
+      "budget": 3,
+      "status": "exhausted"
+    },
+    {
+      "bits": "ABABAA",
+      "gap": 2,
+      "pattern": [
+        0,
+        2,
+        4,
+        5,
+        6,
+        7,
+        1,
+        3
+      ],
+      "width": 9,
+      "inversions": 9,
+      "budget": 5,
+      "status": "found",
+      "word": [
+        [
+          3,
+          -1
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          4,
+          -1
+        ],
+        [
+          2,
+          1
+        ]
+      ]
+    },
+    {
+      "bits": "ABABAB",
+      "gap": 0,
+      "pattern": [
+        0,
+        2,
+        4,
+        1,
+        3,
+        5
+      ],
+      "width": 9,
+      "inversions": 3,
+      "budget": 3,
+      "status": "exhausted"
+    },
+    {
+      "bits": "ABABAB",
+      "gap": 2,
+      "pattern": [
+        0,
+        2,
+        4,
+        6,
+        7,
+        1,
+        3,
+        5
+      ],
+      "width": 9,
+      "inversions": 9,
+      "budget": 5,
+      "status": "found",
+      "word": [
+        [
+          2,
+          -1
+        ],
+        [
+          3,
+          -1
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          4,
+          -1
+        ],
+        [
+          2,
+          -1
+        ]
+      ]
+    },
+    {
+      "bits": "ABABBA",
+      "gap": 0,
+      "pattern": [
+        0,
+        2,
+        5,
+        1,
+        3,
+        4
+      ],
+      "width": 9,
+      "inversions": 4,
+      "budget": 2,
+      "status": "exhausted"
+    },
+    {
+      "bits": "ABABBA",
+      "gap": 2,
+      "pattern": [
+        0,
+        2,
+        5,
+        6,
+        7,
+        1,
+        3,
+        4
+      ],
+      "width": 9,
+      "inversions": 10,
+      "budget": 4,
+      "status": "found",
+      "word": [
+        [
+          4,
+          1
+        ],
+        [
+          1,
+          -1
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          3,
+          1
+        ]
+      ]
+    },
+    {
+      "bits": "ABABBB",
+      "gap": 0,
+      "pattern": [
+        0,
+        2,
+        1,
+        3,
+        4,
+        5
+      ],
+      "width": 9,
+      "inversions": 1,
+      "budget": 1,
+      "status": "exhausted"
+    },
+    {
+      "bits": "ABABBB",
+      "gap": 1,
+      "pattern": [
+        0,
+        2,
+        6,
+        1,
+        3,
+        4,
+        5
+      ],
+      "width": 9,
+      "inversions": 5,
+      "budget": 3,
+      "status": "exhausted"
+    },
+    {
+      "bits": "ABBABA",
+      "gap": 2,
+      "pattern": [
+        0,
+        3,
+        5,
+        6,
+        7,
+        1,
+        2,
+        4
+      ],
+      "width": 9,
+      "inversions": 11,
+      "budget": 5,
+      "status": "found",
+      "word": [
+        [
+          2,
+          -1
+        ],
+        [
+          4,
+          1
+        ],
+        [
+          4,
+          1
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          2,
+          1
+        ]
+      ]
+    },
+    {
+      "bits": "ABBABB",
+      "gap": 0,
+      "pattern": [
+        0,
+        3,
+        1,
+        2,
+        4,
+        5
+      ],
+      "width": 9,
+      "inversions": 2,
+      "budget": 2,
+      "status": "exhausted"
+    },
+    {
+      "bits": "BAAAAA",
+      "gap": 0,
+      "pattern": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        0
+      ],
+      "width": 9,
+      "inversions": 5,
+      "budget": 3,
+      "status": "exhausted"
+    },
+    {
+      "bits": "BAAAAA",
+      "gap": 2,
+      "pattern": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        0
+      ],
+      "width": 9,
+      "inversions": 7,
+      "budget": 3,
+      "status": "exhausted"
+    },
+    {
+      "bits": "BAAAAB",
+      "gap": 0,
+      "pattern": [
+        1,
+        2,
+        3,
+        4,
+        0,
+        5
+      ],
+      "width": 9,
+      "inversions": 4,
+      "budget": 2,
+      "status": "exhausted"
+    },
+    {
+      "bits": "BAAAAB",
+      "gap": 1,
+      "pattern": [
+        1,
+        2,
+        3,
+        4,
+        6,
+        0,
+        5
+      ],
+      "width": 9,
+      "inversions": 6,
+      "budget": 4,
+      "status": "found",
+      "word": [
+        [
+          2,
+          1
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          0,
+          -1
+        ],
+        [
+          3,
+          1
+        ]
+      ]
+    },
+    {
+      "bits": "BAAABA",
+      "gap": 0,
+      "pattern": [
+        1,
+        2,
+        3,
+        5,
+        0,
+        4
+      ],
+      "width": 9,
+      "inversions": 5,
+      "budget": 3,
+      "status": "exhausted"
+    },
+    {
+      "bits": "BAAABB",
+      "gap": 1,
+      "pattern": [
+        1,
+        2,
+        3,
+        6,
+        0,
+        4,
+        5
+      ],
+      "width": 9,
+      "inversions": 6,
+      "budget": 4,
+      "status": "found",
+      "word": [
+        [
+          3,
+          1
+        ],
+        [
+          0,
+          -1
+        ]
+      ]
+    },
+    {
+      "bits": "BAABAA",
+      "gap": 0,
+      "pattern": [
+        1,
+        2,
+        4,
+        5,
+        0,
+        3
+      ],
+      "width": 9,
+      "inversions": 6,
+      "budget": 4,
+      "status": "found",
+      "word": [
+        [
+          1,
+          1
+        ],
+        [
+          0,
+          -1
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          2,
+          1
+        ]
+      ]
+    },
+    {
+      "bits": "BAABAB",
+      "gap": 1,
+      "pattern": [
+        1,
+        2,
+        4,
+        6,
+        0,
+        3,
+        5
+      ],
+      "width": 9,
+      "inversions": 7,
+      "budget": 3,
+      "status": "found",
+      "word": [
+        [
+          2,
+          1
+        ],
+        [
+          0,
+          -1
+        ],
+        [
+          3,
+          1
+        ]
+      ]
+    },
+    {
+      "bits": "BAABBA",
+      "gap": 2,
+      "pattern": [
+        1,
+        2,
+        5,
+        6,
+        7,
+        0,
+        3,
+        4
+      ],
+      "width": 9,
+      "inversions": 11,
+      "budget": 5,
+      "status": "found",
+      "word": [
+        [
+          4,
+          1
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          0,
+          -1
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          2,
+          1
+        ]
+      ]
+    },
+    {
+      "bits": "BAABBB",
+      "gap": 0,
+      "pattern": [
+        1,
+        2,
+        0,
+        3,
+        4,
+        5
+      ],
+      "width": 9,
+      "inversions": 2,
+      "budget": 2,
+      "status": "exhausted"
+    },
+    {
+      "bits": "BABAAA",
+      "gap": 0,
+      "pattern": [
+        1,
+        3,
+        4,
+        5,
+        0,
+        2
+      ],
+      "width": 9,
+      "inversions": 7,
+      "budget": 3,
+      "status": "exhausted"
+    },
+    {
+      "bits": "BABAAA",
+      "gap": 1,
+      "pattern": [
+        1,
+        3,
+        4,
+        5,
+        6,
+        0,
+        2
+      ],
+      "width": 9,
+      "inversions": 9,
+      "budget": 5,
+      "status": "found",
+      "word": [
+        [
+          2,
+          -1
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          3,
+          -1
+        ],
+        [
+          1,
+          1
+        ]
+      ]
+    },
+    {
+      "bits": "BABAAB",
+      "gap": 1,
+      "pattern": [
+        1,
+        3,
+        4,
+        6,
+        0,
+        2,
+        5
+      ],
+      "width": 9,
+      "inversions": 8,
+      "budget": 4,
+      "status": "found",
+      "word": [
+        [
+          2,
+          1
+        ],
+        [
+          1,
+          -1
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          0,
+          -1
+        ]
+      ]
+    },
+    {
+      "bits": "BABAAB",
+      "gap": 2,
+      "pattern": [
+        1,
+        3,
+        4,
+        6,
+        7,
+        0,
+        2,
+        5
+      ],
+      "width": 9,
+      "inversions": 11,
+      "budget": 5,
+      "status": "found",
+      "word": [
+        [
+          2,
+          -1
+        ],
+        [
+          4,
+          1
+        ],
+        [
+          4,
+          1
+        ],
+        [
+          1,
+          -1
+        ],
+        [
+          0,
+          -1
+        ]
+      ]
+    },
+    {
+      "bits": "BABABA",
+      "gap": 1,
+      "pattern": [
+        1,
+        3,
+        5,
+        6,
+        0,
+        2,
+        4
+      ],
+      "width": 9,
+      "inversions": 9,
+      "budget": 5,
+      "status": "found",
+      "word": [
+        [
+          1,
+          -1
+        ],
+        [
+          2,
+          -1
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          3,
+          -1
+        ],
+        [
+          1,
+          -1
+        ]
+      ]
+    },
+    {
+      "bits": "BABABA",
+      "gap": 2,
+      "pattern": [
+        1,
+        3,
+        5,
+        6,
+        7,
+        0,
+        2,
+        4
+      ],
+      "width": 9,
+      "inversions": 12,
+      "budget": 6,
+      "status": "found",
+      "word": [
+        [
+          2,
+          -1
+        ],
+        [
+          4,
+          1
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          4,
+          1
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          0,
+          1
+        ]
+      ]
+    },
+    {
+      "bits": "BABABB",
+      "gap": 0,
+      "pattern": [
+        1,
+        3,
+        0,
+        2,
+        4,
+        5
+      ],
+      "width": 9,
+      "inversions": 3,
+      "budget": 3,
+      "status": "exhausted"
+    },
+    {
+      "bits": "BABABB",
+      "gap": 2,
+      "pattern": [
+        1,
+        3,
+        6,
+        7,
+        0,
+        2,
+        4,
+        5
+      ],
+      "width": 9,
+      "inversions": 11,
+      "budget": 5,
+      "status": "found",
+      "word": [
+        [
+          2,
+          -1
+        ],
+        [
+          4,
+          1
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          0,
+          -1
+        ],
+        [
+          3,
+          1
+        ]
+      ]
+    },
+    {
+      "bits": "BABBAA",
+      "gap": 2,
+      "pattern": [
+        1,
+        4,
+        5,
+        6,
+        7,
+        0,
+        2,
+        3
+      ],
+      "width": 9,
+      "inversions": 13,
+      "budget": 5,
+      "status": "found",
+      "word": [
+        [
+          4,
+          1
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          0,
+          -1
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          2,
+          1
+        ]
+      ]
+    },
+    {
+      "bits": "BABBAB",
+      "gap": 0,
+      "pattern": [
+        1,
+        4,
+        0,
+        2,
+        3,
+        5
+      ],
+      "width": 9,
+      "inversions": 4,
+      "budget": 2,
+      "status": "exhausted"
+    },
+    {
+      "bits": "BABBBA",
+      "gap": 0,
+      "pattern": [
+        1,
+        5,
+        0,
+        2,
+        3,
+        4
+      ],
+      "width": 9,
+      "inversions": 5,
+      "budget": 3,
+      "status": "exhausted"
+    },
+    {
+      "bits": "BABBBA",
+      "gap": 2,
+      "pattern": [
+        1,
+        5,
+        6,
+        7,
+        0,
+        2,
+        3,
+        4
+      ],
+      "width": 9,
+      "inversions": 13,
+      "budget": 5,
+      "status": "found",
+      "word": [
+        [
+          3,
+          1
+        ],
+        [
+          0,
+          -1
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          4,
+          -1
+        ]
+      ]
+    },
+    {
+      "bits": "BABBBB",
+      "gap": 0,
+      "pattern": [
+        1,
+        0,
+        2,
+        3,
+        4,
+        5
+      ],
+      "width": 9,
+      "inversions": 1,
+      "budget": 1,
+      "status": "exhausted"
+    },
+    {
+      "bits": "BABBBB",
+      "gap": 1,
+      "pattern": [
+        1,
+        6,
+        0,
+        2,
+        3,
+        4,
+        5
+      ],
+      "width": 9,
+      "inversions": 6,
+      "budget": 4,
+      "status": "found",
+      "word": [
+        [
+          1,
+          1
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          0,
+          -1
+        ]
+      ]
+    },
+    {
+      "bits": "BBABBA",
+      "gap": 2,
+      "pattern": [
+        2,
+        5,
+        6,
+        7,
+        0,
+        1,
+        3,
+        4
+      ],
+      "width": 9,
+      "inversions": 14,
+      "budget": 6,
+      "status": "found",
+      "word": [
+        [
+          1,
+          -1
+        ],
+        [
+          2,
+          -1
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          4,
+          1
+        ],
+        [
+          4,
+          1
+        ],
+        [
+          2,
+          1
+        ]
+      ]
+    },
+    {
+      "bits": "BBABBB",
+      "gap": 0,
+      "pattern": [
+        2,
+        0,
+        1,
+        3,
+        4,
+        5
+      ],
+      "width": 9,
+      "inversions": 2,
+      "budget": 2,
+      "status": "exhausted"
+    },
+    {
+      "bits": "AABAAAA",
+      "gap": 0,
+      "pattern": [
+        0,
+        1,
+        3,
+        4,
+        5,
+        6,
+        2
+      ],
+      "width": 9,
+      "inversions": 4,
+      "budget": 2,
+      "status": "exhausted"
+    },
+    {
+      "bits": "AABAAAA",
+      "gap": 1,
+      "pattern": [
+        0,
+        1,
+        3,
+        4,
+        5,
+        6,
+        7,
+        2
+      ],
+      "width": 9,
+      "inversions": 5,
+      "budget": 3,
+      "status": "exhausted"
+    },
+    {
+      "bits": "AABAAAB",
+      "gap": 1,
+      "pattern": [
+        0,
+        1,
+        3,
+        4,
+        5,
+        7,
+        2,
+        6
+      ],
+      "width": 9,
+      "inversions": 5,
+      "budget": 3,
+      "status": "exhausted"
+    },
+    {
+      "bits": "AABAAAB",
+      "gap": 2,
+      "pattern": [
+        0,
+        1,
+        3,
+        4,
+        5,
+        7,
+        8,
+        2,
+        6
+      ],
+      "width": 9,
+      "inversions": 7,
+      "budget": 3,
+      "status": "found",
+      "word": [
+        [
+          5,
+          1
+        ],
+        [
+          5,
+          1
+        ],
+        [
+          2,
+          -1
+        ]
+      ]
+    },
+    {
+      "bits": "AABAABA",
+      "gap": 2,
+      "pattern": [
+        0,
+        1,
+        3,
+        4,
+        6,
+        7,
+        8,
+        2,
+        5
+      ],
+      "width": 9,
+      "inversions": 8,
+      "budget": 4,
+      "status": "found",
+      "word": [
+        [
+          5,
+          1
+        ],
+        [
+          4,
+          1
+        ],
+        [
+          2,
+          -1
+        ],
+        [
+          5,
+          1
+        ]
+      ]
+    },
+    {
+      "bits": "AABAABB",
+      "gap": 0,
+      "pattern": [
+        0,
+        1,
+        3,
+        4,
+        2,
+        5,
+        6
+      ],
+      "width": 9,
+      "inversions": 2,
+      "budget": 2,
+      "status": "exhausted"
+    },
+    {
+      "bits": "AABABAA",
+      "gap": 1,
+      "pattern": [
+        0,
+        1,
+        3,
+        5,
+        6,
+        7,
+        2,
+        4
+      ],
+      "width": 9,
+      "inversions": 7,
+      "budget": 3,
+      "status": "exhausted"
+    },
+    {
+      "bits": "AABABAA",
+      "gap": 2,
+      "pattern": [
+        0,
+        1,
+        3,
+        5,
+        6,
+        7,
+        8,
+        2,
+        4
+      ],
+      "width": 9,
+      "inversions": 9,
+      "budget": 5,
+      "status": "found",
+      "word": [
+        [
+          4,
+          -1
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          5,
+          -1
+        ],
+        [
+          3,
+          1
+        ]
+      ]
+    },
+    {
+      "bits": "AABABAB",
+      "gap": 0,
+      "pattern": [
+        0,
+        1,
+        3,
+        5,
+        2,
+        4,
+        6
+      ],
+      "width": 9,
+      "inversions": 3,
+      "budget": 3,
+      "status": "exhausted"
+    },
+    {
+      "bits": "AABABAB",
+      "gap": 2,
+      "pattern": [
+        0,
+        1,
+        3,
+        5,
+        7,
+        8,
+        2,
+        4,
+        6
+      ],
+      "width": 9,
+      "inversions": 9,
+      "budget": 5,
+      "status": "found",
+      "word": [
+        [
+          3,
+          -1
+        ],
+        [
+          4,
+          -1
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          5,
+          -1
+        ],
+        [
+          3,
+          -1
+        ]
+      ]
+    },
+    {
+      "bits": "AABABBA",
+      "gap": 0,
+      "pattern": [
+        0,
+        1,
+        3,
+        6,
+        2,
+        4,
+        5
+      ],
+      "width": 9,
+      "inversions": 4,
+      "budget": 2,
+      "status": "exhausted"
+    },
+    {
+      "bits": "AABABBA",
+      "gap": 2,
+      "pattern": [
+        0,
+        1,
+        3,
+        6,
+        7,
+        8,
+        2,
+        4,
+        5
+      ],
+      "width": 9,
+      "inversions": 10,
+      "budget": 4,
+      "status": "found",
+      "word": [
+        [
+          5,
+          1
+        ],
+        [
+          2,
+          -1
+        ],
+        [
+          4,
+          1
+        ],
+        [
+          4,
+          1
+        ]
+      ]
+    },
+    {
+      "bits": "AABABBB",
+      "gap": 0,
+      "pattern": [
+        0,
+        1,
+        3,
+        2,
+        4,
+        5,
+        6
+      ],
+      "width": 9,
+      "inversions": 1,
+      "budget": 1,
+      "status": "exhausted"
+    },
+    {
+      "bits": "AABABBB",
+      "gap": 1,
+      "pattern": [
+        0,
+        1,
+        3,
+        7,
+        2,
+        4,
+        5,
+        6
+      ],
+      "width": 9,
+      "inversions": 5,
+      "budget": 3,
+      "status": "exhausted"
+    },
+    {
+      "bits": "AABBABA",
+      "gap": 2,
+      "pattern": [
+        0,
+        1,
+        4,
+        6,
+        7,
+        8,
+        2,
+        3,
+        5
+      ],
+      "width": 9,
+      "inversions": 11,
+      "budget": 5,
+      "status": "found",
+      "word": [
+        [
+          3,
+          -1
+        ],
+        [
+          5,
+          1
+        ],
+        [
+          5,
+          1
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          3,
+          1
+        ]
+      ]
+    },
+    {
+      "bits": "AABBABB",
+      "gap": 0,
+      "pattern": [
+        0,
+        1,
+        4,
+        2,
+        3,
+        5,
+        6
+      ],
+      "width": 9,
+      "inversions": 2,
+      "budget": 2,
+      "status": "exhausted"
+    },
+    {
+      "bits": "ABAAAAA",
+      "gap": 0,
+      "pattern": [
+        0,
+        2,
+        3,
+        4,
+        5,
+        6,
+        1
+      ],
+      "width": 9,
+      "inversions": 5,
+      "budget": 3,
+      "status": "exhausted"
+    },
+    {
+      "bits": "ABAAAAA",
+      "gap": 2,
+      "pattern": [
+        0,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        1
+      ],
+      "width": 9,
+      "inversions": 7,
+      "budget": 3,
+      "status": "exhausted"
+    },
+    {
+      "bits": "ABAAAAB",
+      "gap": 0,
+      "pattern": [
+        0,
+        2,
+        3,
+        4,
+        5,
+        1,
+        6
+      ],
+      "width": 9,
+      "inversions": 4,
+      "budget": 2,
+      "status": "exhausted"
+    },
+    {
+      "bits": "ABAAAAB",
+      "gap": 1,
+      "pattern": [
+        0,
+        2,
+        3,
+        4,
+        5,
+        7,
+        1,
+        6
+      ],
+      "width": 9,
+      "inversions": 6,
+      "budget": 4,
+      "status": "found",
+      "word": [
+        [
+          3,
+          1
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          1,
+          -1
+        ],
+        [
+          4,
+          1
+        ]
+      ]
+    },
+    {
+      "bits": "ABAAABA",
+      "gap": 0,
+      "pattern": [
+        0,
+        2,
+        3,
+        4,
+        6,
+        1,
+        5
+      ],
+      "width": 9,
+      "inversions": 5,
+      "budget": 3,
+      "status": "exhausted"
+    },
+    {
+      "bits": "ABAAABB",
+      "gap": 1,
+      "pattern": [
+        0,
+        2,
+        3,
+        4,
+        7,
+        1,
+        5,
+        6
+      ],
+      "width": 9,
+      "inversions": 6,
+      "budget": 4,
+      "status": "found",
+      "word": [
+        [
+          4,
+          1
+        ],
+        [
+          1,
+          -1
+        ]
+      ]
+    },
+    {
+      "bits": "ABAABBA",
+      "gap": 2,
+      "pattern": [
+        0,
+        2,
+        3,
+        6,
+        7,
+        8,
+        1,
+        4,
+        5
+      ],
+      "width": 9,
+      "inversions": 11,
+      "budget": 5,
+      "status": "found",
+      "word": [
+        [
+          5,
+          1
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          1,
+          -1
+        ],
+        [
+          4,
+          1
+        ],
+        [
+          3,
+          1
+        ]
+      ]
+    },
+    {
+      "bits": "ABAABBB",
+      "gap": 0,
+      "pattern": [
+        0,
+        2,
+        3,
+        1,
+        4,
+        5,
+        6
+      ],
+      "width": 9,
+      "inversions": 2,
+      "budget": 2,
+      "status": "exhausted"
+    },
+    {
+      "bits": "ABABAAA",
+      "gap": 0,
+      "pattern": [
+        0,
+        2,
+        4,
+        5,
+        6,
+        1,
+        3
+      ],
+      "width": 9,
+      "inversions": 7,
+      "budget": 3,
+      "status": "exhausted"
+    },
+    {
+      "bits": "ABABAAB",
+      "gap": 1,
+      "pattern": [
+        0,
+        2,
+        4,
+        5,
+        7,
+        1,
+        3,
+        6
+      ],
+      "width": 9,
+      "inversions": 8,
+      "budget": 4,
+      "status": "found",
+      "word": [
+        [
+          3,
+          1
+        ],
+        [
+          2,
+          -1
+        ],
+        [
+          4,
+          1
+        ],
+        [
+          1,
+          -1
+        ]
+      ]
+    },
+    {
+      "bits": "ABABABA",
+      "gap": 2,
+      "pattern": [
+        0,
+        2,
+        4,
+        6,
+        7,
+        8,
+        1,
+        3,
+        5
+      ],
+      "width": 9,
+      "inversions": 12,
+      "budget": 6,
+      "status": "found",
+      "word": [
+        [
+          3,
+          -1
+        ],
+        [
+          5,
+          1
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          5,
+          1
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          1,
+          1
+        ]
+      ]
+    },
+    {
+      "bits": "ABABABB",
+      "gap": 0,
+      "pattern": [
+        0,
+        2,
+        4,
+        1,
+        3,
+        5,
+        6
+      ],
+      "width": 9,
+      "inversions": 3,
+      "budget": 3,
+      "status": "exhausted"
+    },
+    {
+      "bits": "ABABBAA",
+      "gap": 2,
+      "pattern": [
+        0,
+        2,
+        5,
+        6,
+        7,
+        8,
+        1,
+        3,
+        4
+      ],
+      "width": 9,
+      "inversions": 13,
+      "budget": 5,
+      "status": "found",
+      "word": [
+        [
+          5,
+          1
+        ],
+        [
+          4,
+          1
+        ],
+        [
+          1,
+          -1
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          3,
+          1
+        ]
+      ]
+    },
+    {
+      "bits": "ABABBAB",
+      "gap": 0,
+      "pattern": [
+        0,
+        2,
+        5,
+        1,
+        3,
+        4,
+        6
+      ],
+      "width": 9,
+      "inversions": 4,
+      "budget": 2,
+      "status": "exhausted"
+    },
+    {
+      "bits": "ABABBBA",
+      "gap": 0,
+      "pattern": [
+        0,
+        2,
+        6,
+        1,
+        3,
+        4,
+        5
+      ],
+      "width": 9,
+      "inversions": 5,
+      "budget": 3,
+      "status": "exhausted"
+    },
+    {
+      "bits": "ABABBBA",
+      "gap": 2,
+      "pattern": [
+        0,
+        2,
+        6,
+        7,
+        8,
+        1,
+        3,
+        4,
+        5
+      ],
+      "width": 9,
+      "inversions": 13,
+      "budget": 5,
+      "status": "found",
+      "word": [
+        [
+          4,
+          1
+        ],
+        [
+          1,
+          -1
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          5,
+          -1
+        ]
+      ]
+    },
+    {
+      "bits": "ABABBBB",
+      "gap": 0,
+      "pattern": [
+        0,
+        2,
+        1,
+        3,
+        4,
+        5,
+        6
+      ],
+      "width": 9,
+      "inversions": 1,
+      "budget": 1,
+      "status": "exhausted"
+    },
+    {
+      "bits": "ABABBBB",
+      "gap": 1,
+      "pattern": [
+        0,
+        2,
+        7,
+        1,
+        3,
+        4,
+        5,
+        6
+      ],
+      "width": 9,
+      "inversions": 6,
+      "budget": 4,
+      "status": "found",
+      "word": [
+        [
+          2,
+          1
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          4,
+          1
+        ],
+        [
+          1,
+          -1
+        ]
+      ]
+    },
+    {
+      "bits": "ABBABBA",
+      "gap": 2,
+      "pattern": [
+        0,
+        3,
+        6,
+        7,
+        8,
+        1,
+        2,
+        4,
+        5
+      ],
+      "width": 9,
+      "inversions": 14,
+      "budget": 6,
+      "status": "found",
+      "word": [
+        [
+          2,
+          -1
+        ],
+        [
+          3,
+          -1
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          5,
+          1
+        ],
+        [
+          5,
+          1
+        ],
+        [
+          3,
+          1
+        ]
+      ]
+    },
+    {
+      "bits": "ABBABBB",
+      "gap": 0,
+      "pattern": [
+        0,
+        3,
+        1,
+        2,
+        4,
+        5,
+        6
+      ],
+      "width": 9,
+      "inversions": 2,
+      "budget": 2,
+      "status": "exhausted"
+    },
+    {
+      "bits": "BAAAAAA",
+      "gap": 1,
+      "pattern": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        0
+      ],
+      "width": 9,
+      "inversions": 7,
+      "budget": 3,
+      "status": "exhausted"
+    },
+    {
+      "bits": "BAAAAAA",
+      "gap": 2,
+      "pattern": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        0
+      ],
+      "width": 9,
+      "inversions": 8,
+      "budget": 4,
+      "status": "exhausted"
+    },
+    {
+      "bits": "BAAAAAB",
+      "gap": 0,
+      "pattern": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        0,
+        6
+      ],
+      "width": 9,
+      "inversions": 5,
+      "budget": 3,
+      "status": "exhausted"
+    },
+    {
+      "bits": "BAAAAAB",
+      "gap": 2,
+      "pattern": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        7,
+        8,
+        0,
+        6
+      ],
+      "width": 9,
+      "inversions": 9,
+      "budget": 5,
+      "status": "found",
+      "word": [
+        [
+          4,
+          -1
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          0,
+          -1
+        ],
+        [
+          5,
+          -1
+        ],
+        [
+          3,
+          -1
+        ]
+      ]
+    },
+    {
+      "bits": "BAAAABA",
+      "gap": 2,
+      "pattern": [
+        1,
+        2,
+        3,
+        4,
+        6,
+        7,
+        8,
+        0,
+        5
+      ],
+      "width": 9,
+      "inversions": 10,
+      "budget": 4,
+      "status": "exhausted"
+    },
+    {
+      "bits": "BAAAABB",
+      "gap": 0,
+      "pattern": [
+        1,
+        2,
+        3,
+        4,
+        0,
+        5,
+        6
+      ],
+      "width": 9,
+      "inversions": 4,
+      "budget": 2,
+      "status": "exhausted"
+    },
+    {
+      "bits": "BAAABAA",
+      "gap": 2,
+      "pattern": [
+        1,
+        2,
+        3,
+        5,
+        6,
+        7,
+        8,
+        0,
+        4
+      ],
+      "width": 9,
+      "inversions": 11,
+      "budget": 5,
+      "status": "found",
+      "word": [
+        [
+          5,
+          1
+        ],
+        [
+          5,
+          1
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          0,
+          -1
+        ]
+      ]
+    },
+    {
+      "bits": "BAAABAB",
+      "gap": 0,
+      "pattern": [
+        1,
+        2,
+        3,
+        5,
+        0,
+        4,
+        6
+      ],
+      "width": 9,
+      "inversions": 5,
+      "budget": 3,
+      "status": "exhausted"
+    },
+    {
+      "bits": "BAABBBA",
+      "gap": 2,
+      "pattern": [
+        1,
+        2,
+        6,
+        7,
+        8,
+        0,
+        3,
+        4,
+        5
+      ],
+      "width": 9,
+      "inversions": 14,
+      "budget": 6,
+      "status": "found",
+      "word": [
+        [
+          2,
+          -1
+        ],
+        [
+          5,
+          1
+        ],
+        [
+          2,
+          -1
+        ],
+        [
+          0,
+          -1
+        ],
+        [
+          4,
+          1
+        ],
+        [
+          4,
+          1
+        ]
+      ]
+    },
+    {
+      "bits": "BAABBBB",
+      "gap": 0,
+      "pattern": [
+        1,
+        2,
+        0,
+        3,
+        4,
+        5,
+        6
+      ],
+      "width": 9,
+      "inversions": 2,
+      "budget": 2,
+      "status": "exhausted"
+    },
+    {
+      "bits": "BABAAAA",
+      "gap": 2,
+      "pattern": [
+        1,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        0,
+        2
+      ],
+      "width": 9,
+      "inversions": 13,
+      "budget": 5,
+      "status": "exhausted"
+    },
+    {
+      "bits": "BABAAAB",
+      "gap": 0,
+      "pattern": [
+        1,
+        3,
+        4,
+        5,
+        0,
+        2,
+        6
+      ],
+      "width": 9,
+      "inversions": 7,
+      "budget": 3,
+      "status": "exhausted"
+    },
+    {
+      "bits": "BABABBA",
+      "gap": 2,
+      "pattern": [
+        1,
+        3,
+        6,
+        7,
+        8,
+        0,
+        2,
+        4,
+        5
+      ],
+      "width": 9,
+      "inversions": 15,
+      "budget": 7,
+      "status": "found",
+      "word": [
+        [
+          2,
+          -1
+        ],
+        [
+          5,
+          1
+        ],
+        [
+          2,
+          -1
+        ],
+        [
+          0,
+          -1
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          4,
+          1
+        ],
+        [
+          3,
+          1
+        ]
+      ]
+    },
+    {
+      "bits": "BABABBB",
+      "gap": 0,
+      "pattern": [
+        1,
+        3,
+        0,
+        2,
+        4,
+        5,
+        6
+      ],
+      "width": 9,
+      "inversions": 3,
+      "budget": 3,
+      "status": "exhausted"
+    },
+    {
+      "bits": "BABBABA",
+      "gap": 2,
+      "pattern": [
+        1,
+        4,
+        6,
+        7,
+        8,
+        0,
+        2,
+        3,
+        5
+      ],
+      "width": 9,
+      "inversions": 16,
+      "budget": 6,
+      "status": "found",
+      "word": [
+        [
+          4,
+          1
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          0,
+          -1
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          5,
+          -1
+        ]
+      ]
+    },
+    {
+      "bits": "BABBABB",
+      "gap": 0,
+      "pattern": [
+        1,
+        4,
+        0,
+        2,
+        3,
+        5,
+        6
+      ],
+      "width": 9,
+      "inversions": 4,
+      "budget": 2,
+      "status": "exhausted"
+    },
+    {
+      "bits": "BABBBAA",
+      "gap": 2,
+      "pattern": [
+        1,
+        5,
+        6,
+        7,
+        8,
+        0,
+        2,
+        3,
+        4
+      ],
+      "width": 9,
+      "inversions": 17,
+      "budget": 7,
+      "status": "found",
+      "word": [
+        [
+          2,
+          -1
+        ],
+        [
+          5,
+          1
+        ],
+        [
+          4,
+          1
+        ],
+        [
+          1,
+          -1
+        ],
+        [
+          0,
+          -1
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          3,
+          1
+        ]
+      ]
+    },
+    {
+      "bits": "BABBBAB",
+      "gap": 0,
+      "pattern": [
+        1,
+        5,
+        0,
+        2,
+        3,
+        4,
+        6
+      ],
+      "width": 9,
+      "inversions": 5,
+      "budget": 3,
+      "status": "exhausted"
+    },
+    {
+      "bits": "BABBBBA",
+      "gap": 2,
+      "pattern": [
+        1,
+        6,
+        7,
+        8,
+        0,
+        2,
+        3,
+        4,
+        5
+      ],
+      "width": 9,
+      "inversions": 16,
+      "budget": 6,
+      "status": "found",
+      "word": [
+        [
+          3,
+          1
+        ],
+        [
+          0,
+          -1
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          4,
+          -1
+        ],
+        [
+          5,
+          -1
+        ]
+      ]
+    },
+    {
+      "bits": "BABBBBB",
+      "gap": 0,
+      "pattern": [
+        1,
+        0,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "width": 9,
+      "inversions": 1,
+      "budget": 1,
+      "status": "exhausted"
+    },
+    {
+      "bits": "BBABBBA",
+      "gap": 2,
+      "pattern": [
+        2,
+        6,
+        7,
+        8,
+        0,
+        1,
+        3,
+        4,
+        5
+      ],
+      "width": 9,
+      "inversions": 17,
+      "budget": 7,
+      "status": "found",
+      "word": [
+        [
+          1,
+          -1
+        ],
+        [
+          2,
+          -1
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          4,
+          1
+        ],
+        [
+          4,
+          1
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          5,
+          -1
+        ]
+      ]
+    },
+    {
+      "bits": "BBABBBB",
+      "gap": 0,
+      "pattern": [
+        2,
+        0,
+        1,
+        3,
+        4,
+        5,
+        6
+      ],
+      "width": 9,
+      "inversions": 2,
+      "budget": 2,
+      "status": "exhausted"
+    },
+    {
+      "bits": "AABAAAAA",
+      "gap": 0,
+      "pattern": [
+        0,
+        1,
+        3,
+        4,
+        5,
+        6,
+        7,
+        2
+      ],
+      "width": 9,
+      "inversions": 5,
+      "budget": 3,
+      "status": "exhausted"
+    },
+    {
+      "bits": "AABAAAAA",
+      "gap": 2,
+      "pattern": [
+        0,
+        1,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        2
+      ],
+      "width": 10,
+      "inversions": 7,
+      "budget": 5,
+      "status": "found",
+      "word": [
+        [
+          6,
+          -1
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          2,
+          1
+        ]
+      ]
+    },
+    {
+      "bits": "AABAAAAB",
+      "gap": 0,
+      "pattern": [
+        0,
+        1,
+        3,
+        4,
+        5,
+        6,
+        2,
+        7
+      ],
+      "width": 9,
+      "inversions": 4,
+      "budget": 4,
+      "status": "found",
+      "word": [
+        [
+          3,
+          1
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          2,
+          1
+        ]
+      ]
+    },
+    {
+      "bits": "AABAAAAB",
+      "gap": 1,
+      "pattern": [
+        0,
+        1,
+        3,
+        4,
+        5,
+        6,
+        8,
+        2,
+        7
+      ],
+      "width": 9,
+      "inversions": 6,
+      "budget": 4,
+      "status": "found",
+      "word": [
+        [
+          4,
+          1
+        ],
+        [
+          4,
+          1
+        ],
+        [
+          2,
+          -1
+        ],
+        [
+          5,
+          1
+        ]
+      ]
+    },
+    {
+      "bits": "AABAAABA",
+      "gap": 0,
+      "pattern": [
+        0,
+        1,
+        3,
+        4,
+        5,
+        7,
+        2,
+        6
+      ],
+      "width": 9,
+      "inversions": 5,
+      "budget": 3,
+      "status": "exhausted"
+    },
+    {
+      "bits": "AABAAABB",
+      "gap": 1,
+      "pattern": [
+        0,
+        1,
+        3,
+        4,
+        5,
+        8,
+        2,
+        6,
+        7
+      ],
+      "width": 9,
+      "inversions": 6,
+      "budget": 4,
+      "status": "found",
+      "word": [
+        [
+          5,
+          1
+        ],
+        [
+          2,
+          -1
+        ]
+      ]
+    },
+    {
+      "bits": "AABAABBA",
+      "gap": 2,
+      "pattern": [
+        0,
+        1,
+        3,
+        4,
+        7,
+        8,
+        9,
+        2,
+        5,
+        6
+      ],
+      "width": 10,
+      "inversions": 11,
+      "budget": 5,
+      "status": "found",
+      "word": [
+        [
+          6,
+          1
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          2,
+          -1
+        ],
+        [
+          5,
+          1
+        ],
+        [
+          4,
+          1
+        ]
+      ]
+    },
+    {
+      "bits": "AABAABBB",
+      "gap": 0,
+      "pattern": [
+        0,
+        1,
+        3,
+        4,
+        2,
+        5,
+        6,
+        7
+      ],
+      "width": 9,
+      "inversions": 2,
+      "budget": 2,
+      "status": "exhausted"
+    },
+    {
+      "bits": "AABABAAA",
+      "gap": 0,
+      "pattern": [
+        0,
+        1,
+        3,
+        5,
+        6,
+        7,
+        2,
+        4
+      ],
+      "width": 9,
+      "inversions": 7,
+      "budget": 5,
+      "status": "found",
+      "word": [
+        [
+          3,
+          -1
+        ],
+        [
+          1,
+          -1
+        ],
+        [
+          4,
+          -1
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          2,
+          -1
+        ]
+      ]
+    },
+    {
+      "bits": "AABABAAB",
+      "gap": 1,
+      "pattern": [
+        0,
+        1,
+        3,
+        5,
+        6,
+        8,
+        2,
+        4,
+        7
+      ],
+      "width": 9,
+      "inversions": 8,
+      "budget": 4,
+      "status": "found",
+      "word": [
+        [
+          4,
+          1
+        ],
+        [
+          3,
+          -1
+        ],
+        [
+          5,
+          1
+        ],
+        [
+          2,
+          -1
+        ]
+      ]
+    },
+    {
+      "bits": "AABABABA",
+      "gap": 2,
+      "pattern": [
+        0,
+        1,
+        3,
+        5,
+        7,
+        8,
+        9,
+        2,
+        4,
+        6
+      ],
+      "width": 10,
+      "inversions": 12,
+      "budget": 6,
+      "status": "found",
+      "word": [
+        [
+          4,
+          -1
+        ],
+        [
+          6,
+          1
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          6,
+          1
+        ],
+        [
+          4,
+          1
+        ],
+        [
+          2,
+          1
+        ]
+      ]
+    },
+    {
+      "bits": "AABABABB",
+      "gap": 0,
+      "pattern": [
+        0,
+        1,
+        3,
+        5,
+        2,
+        4,
+        6,
+        7
+      ],
+      "width": 9,
+      "inversions": 3,
+      "budget": 3,
+      "status": "exhausted"
+    },
+    {
+      "bits": "AABABBAA",
+      "gap": 2,
+      "pattern": [
+        0,
+        1,
+        3,
+        6,
+        7,
+        8,
+        9,
+        2,
+        4,
+        5
+      ],
+      "width": 10,
+      "inversions": 13,
+      "budget": 7,
+      "status": "found",
+      "word": [
+        [
+          4,
+          -1
+        ],
+        [
+          5,
+          -1
+        ],
+        [
+          6,
+          -1
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          -1
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          0,
+          -1
+        ]
+      ]
+    },
+    {
+      "bits": "AABABBAB",
+      "gap": 0,
+      "pattern": [
+        0,
+        1,
+        3,
+        6,
+        2,
+        4,
+        5,
+        7
+      ],
+      "width": 9,
+      "inversions": 4,
+      "budget": 4,
+      "status": "found",
+      "word": [
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          -1
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          0,
+          -1
+        ]
+      ]
+    },
+    {
+      "bits": "AABABBBA",
+      "gap": 0,
+      "pattern": [
+        0,
+        1,
+        3,
+        7,
+        2,
+        4,
+        5,
+        6
+      ],
+      "width": 9,
+      "inversions": 5,
+      "budget": 3,
+      "status": "exhausted"
+    },
+    {
+      "bits": "AABABBBA",
+      "gap": 2,
+      "pattern": [
+        0,
+        1,
+        3,
+        7,
+        8,
+        9,
+        2,
+        4,
+        5,
+        6
+      ],
+      "width": 10,
+      "inversions": 13,
+      "budget": 7,
+      "status": "found",
+      "word": [
+        [
+          3,
+          -1
+        ],
+        [
+          4,
+          -1
+        ],
+        [
+          6,
+          1
+        ],
+        [
+          6,
+          1
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          4,
+          1
+        ],
+        [
+          2,
+          -1
+        ]
+      ]
+    },
+    {
+      "bits": "AABABBBB",
+      "gap": 0,
+      "pattern": [
+        0,
+        1,
+        3,
+        2,
+        4,
+        5,
+        6,
+        7
+      ],
+      "width": 9,
+      "inversions": 1,
+      "budget": 3,
+      "status": "exhausted"
+    },
+    {
+      "bits": "AABABBBB",
+      "gap": 1,
+      "pattern": [
+        0,
+        1,
+        3,
+        8,
+        2,
+        4,
+        5,
+        6,
+        7
+      ],
+      "width": 9,
+      "inversions": 6,
+      "budget": 4,
+      "status": "found",
+      "word": [
+        [
+          3,
+          1
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          5,
+          1
+        ],
+        [
+          2,
+          -1
+        ]
+      ]
+    },
+    {
+      "bits": "AABBABBA",
+      "gap": 2,
+      "pattern": [
+        0,
+        1,
+        4,
+        7,
+        8,
+        9,
+        2,
+        3,
+        5,
+        6
+      ],
+      "width": 10,
+      "inversions": 14,
+      "budget": 6,
+      "status": "found",
+      "word": [
+        [
+          3,
+          -1
+        ],
+        [
+          4,
+          -1
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          6,
+          1
+        ],
+        [
+          6,
+          1
+        ],
+        [
+          4,
+          1
+        ]
+      ]
+    },
+    {
+      "bits": "AABBABBB",
+      "gap": 0,
+      "pattern": [
+        0,
+        1,
+        4,
+        2,
+        3,
+        5,
+        6,
+        7
+      ],
+      "width": 9,
+      "inversions": 2,
+      "budget": 2,
+      "status": "exhausted"
+    },
+    {
+      "bits": "ABAAAAAA",
+      "gap": 1,
+      "pattern": [
+        0,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        1
+      ],
+      "width": 9,
+      "inversions": 7,
+      "budget": 5,
+      "status": "found",
+      "word": [
+        [
+          5,
+          -1
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          1,
+          1
+        ]
+      ]
+    },
+    {
+      "bits": "ABAAAAAA",
+      "gap": 2,
+      "pattern": [
+        0,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        1
+      ],
+      "width": 10,
+      "inversions": 8,
+      "budget": 4,
+      "status": "exhausted"
+    },
+    {
+      "bits": "ABAAAAAB",
+      "gap": 0,
+      "pattern": [
+        0,
+        2,
+        3,
+        4,
+        5,
+        6,
+        1,
+        7
+      ],
+      "width": 9,
+      "inversions": 5,
+      "budget": 3,
+      "status": "exhausted"
+    },
+    {
+      "bits": "ABAAAAAB",
+      "gap": 2,
+      "pattern": [
+        0,
+        2,
+        3,
+        4,
+        5,
+        6,
+        8,
+        9,
+        1,
+        7
+      ],
+      "width": 10,
+      "inversions": 9,
+      "budget": 5,
+      "status": "found",
+      "word": [
+        [
+          5,
+          -1
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          1,
+          -1
+        ],
+        [
+          6,
+          -1
+        ],
+        [
+          4,
+          -1
+        ]
+      ]
+    },
+    {
+      "bits": "ABAAAABA",
+      "gap": 2,
+      "pattern": [
+        0,
+        2,
+        3,
+        4,
+        5,
+        7,
+        8,
+        9,
+        1,
+        6
+      ],
+      "width": 10,
+      "inversions": 10,
+      "budget": 6,
+      "status": "found",
+      "word": [
+        [
+          5,
+          -1
+        ],
+        [
+          6,
+          -1
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          1,
+          1
+        ]
+      ]
+    },
+    {
+      "bits": "ABAAAABB",
+      "gap": 0,
+      "pattern": [
+        0,
+        2,
+        3,
+        4,
+        5,
+        1,
+        6,
+        7
+      ],
+      "width": 9,
+      "inversions": 4,
+      "budget": 4,
+      "status": "found",
+      "word": [
+        [
+          2,
+          1
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          1,
+          1
+        ]
+      ]
+    },
+    {
+      "bits": "ABAAABAA",
+      "gap": 2,
+      "pattern": [
+        0,
+        2,
+        3,
+        4,
+        6,
+        7,
+        8,
+        9,
+        1,
+        5
+      ],
+      "width": 10,
+      "inversions": 11,
+      "budget": 5,
+      "status": "found",
+      "word": [
+        [
+          6,
+          1
+        ],
+        [
+          6,
+          1
+        ],
+        [
+          4,
+          1
+        ],
+        [
+          4,
+          1
+        ],
+        [
+          1,
+          -1
+        ]
+      ]
+    },
+    {
+      "bits": "ABAAABAB",
+      "gap": 0,
+      "pattern": [
+        0,
+        2,
+        3,
+        4,
+        6,
+        1,
+        5,
+        7
+      ],
+      "width": 9,
+      "inversions": 5,
+      "budget": 3,
+      "status": "exhausted"
+    },
+    {
+      "bits": "ABAABBBA",
+      "gap": 2,
+      "pattern": [
+        0,
+        2,
+        3,
+        7,
+        8,
+        9,
+        1,
+        4,
+        5,
+        6
+      ],
+      "width": 10,
+      "inversions": 14,
+      "budget": 6,
+      "status": "found",
+      "word": [
+        [
+          3,
+          -1
+        ],
+        [
+          6,
+          1
+        ],
+        [
+          3,
+          -1
+        ],
+        [
+          1,
+          -1
+        ],
+        [
+          5,
+          1
+        ],
+        [
+          5,
+          1
+        ]
+      ]
+    },
+    {
+      "bits": "ABAABBBB",
+      "gap": 0,
+      "pattern": [
+        0,
+        2,
+        3,
+        1,
+        4,
+        5,
+        6,
+        7
+      ],
+      "width": 9,
+      "inversions": 2,
+      "budget": 2,
+      "status": "exhausted"
+    },
+    {
+      "bits": "ABABAAAA",
+      "gap": 2,
+      "pattern": [
+        0,
+        2,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        1,
+        3
+      ],
+      "width": 10,
+      "inversions": 13,
+      "budget": 7,
+      "status": "found",
+      "word": [
+        [
+          5,
+          -1
+        ],
+        [
+          2,
+          -1
+        ],
+        [
+          6,
+          -1
+        ],
+        [
+          0,
+          -1
+        ],
+        [
+          3,
+          -1
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          -1
+        ]
+      ]
+    },
+    {
+      "bits": "ABABAAAB",
+      "gap": 0,
+      "pattern": [
+        0,
+        2,
+        4,
+        5,
+        6,
+        1,
+        3,
+        7
+      ],
+      "width": 9,
+      "inversions": 7,
+      "budget": 5,
+      "status": "found",
+      "word": [
+        [
+          2,
+          -1
+        ],
+        [
+          0,
+          -1
+        ],
+        [
+          3,
+          -1
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          -1
+        ]
+      ]
+    },
+    {
+      "bits": "ABABABBA",
+      "gap": 2,
+      "pattern": [
+        0,
+        2,
+        4,
+        7,
+        8,
+        9,
+        1,
+        3,
+        5,
+        6
+      ],
+      "width": 10,
+      "inversions": 15,
+      "budget": 7,
+      "status": "found",
+      "word": [
+        [
+          3,
+          -1
+        ],
+        [
+          6,
+          1
+        ],
+        [
+          3,
+          -1
+        ],
+        [
+          1,
+          -1
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          5,
+          1
+        ],
+        [
+          4,
+          1
+        ]
+      ]
+    },
+    {
+      "bits": "ABABABBB",
+      "gap": 0,
+      "pattern": [
+        0,
+        2,
+        4,
+        1,
+        3,
+        5,
+        6,
+        7
+      ],
+      "width": 9,
+      "inversions": 3,
+      "budget": 3,
+      "status": "exhausted"
+    },
+    {
+      "bits": "ABABBABA",
+      "gap": 2,
+      "pattern": [
+        0,
+        2,
+        5,
+        7,
+        8,
+        9,
+        1,
+        3,
+        4,
+        6
+      ],
+      "width": 10,
+      "inversions": 16,
+      "budget": 8,
+      "status": "found",
+      "word": [
+        [
+          3,
+          -1
+        ],
+        [
+          4,
+          -1
+        ],
+        [
+          5,
+          -1
+        ],
+        [
+          6,
+          -1
+        ],
+        [
+          0,
+          -1
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          0,
+          -1
+        ]
+      ]
+    },
+    {
+      "bits": "ABABBABB",
+      "gap": 0,
+      "pattern": [
+        0,
+        2,
+        5,
+        1,
+        3,
+        4,
+        6,
+        7
+      ],
+      "width": 9,
+      "inversions": 4,
+      "budget": 4,
+      "status": "found",
+      "word": [
+        [
+          0,
+          -1
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          0,
+          -1
+        ]
+      ]
+    },
+    {
+      "bits": "ABABBBAA",
+      "gap": 2,
+      "pattern": [
+        0,
+        2,
+        6,
+        7,
+        8,
+        9,
+        1,
+        3,
+        4,
+        5
+      ],
+      "width": 10,
+      "inversions": 17,
+      "budget": 7,
+      "status": "found",
+      "word": [
+        [
+          3,
+          -1
+        ],
+        [
+          6,
+          1
+        ],
+        [
+          5,
+          1
+        ],
+        [
+          2,
+          -1
+        ],
+        [
+          1,
+          -1
+        ],
+        [
+          4,
+          1
+        ],
+        [
+          4,
+          1
+        ]
+      ]
+    },
+    {
+      "bits": "ABABBBAB",
+      "gap": 0,
+      "pattern": [
+        0,
+        2,
+        6,
+        1,
+        3,
+        4,
+        5,
+        7
+      ],
+      "width": 9,
+      "inversions": 5,
+      "budget": 3,
+      "status": "exhausted"
+    },
+    {
+      "bits": "ABABBBBA",
+      "gap": 2,
+      "pattern": [
+        0,
+        2,
+        7,
+        8,
+        9,
+        1,
+        3,
+        4,
+        5,
+        6
+      ],
+      "width": 10,
+      "inversions": 16,
+      "budget": 8,
+      "status": "found",
+      "word": [
+        [
+          2,
+          -1
+        ],
+        [
+          3,
+          -1
+        ],
+        [
+          4,
+          -1
+        ],
+        [
+          6,
+          1
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          6,
+          1
+        ],
+        [
+          4,
+          1
+        ],
+        [
+          1,
+          -1
+        ]
+      ]
+    },
+    {
+      "bits": "ABABBBBB",
+      "gap": 0,
+      "pattern": [
+        0,
+        2,
+        1,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "width": 9,
+      "inversions": 1,
+      "budget": 3,
+      "status": "exhausted"
+    },
+    {
+      "bits": "ABBABBBA",
+      "gap": 2,
+      "pattern": [
+        0,
+        3,
+        7,
+        8,
+        9,
+        1,
+        2,
+        4,
+        5,
+        6
+      ],
+      "width": 10,
+      "inversions": 17,
+      "budget": 7,
+      "status": "found",
+      "word": [
+        [
+          2,
+          -1
+        ],
+        [
+          3,
+          -1
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          5,
+          1
+        ],
+        [
+          5,
+          1
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          6,
+          -1
+        ]
+      ]
+    },
+    {
+      "bits": "ABBABBBB",
+      "gap": 0,
+      "pattern": [
+        0,
+        3,
+        1,
+        2,
+        4,
+        5,
+        6,
+        7
+      ],
+      "width": 9,
+      "inversions": 2,
+      "budget": 2,
+      "status": "exhausted"
+    },
+    {
+      "bits": "BAAAAAAA",
+      "gap": 0,
+      "pattern": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        0
+      ],
+      "width": 9,
+      "inversions": 7,
+      "budget": 5,
+      "status": "found",
+      "word": [
+        [
+          4,
+          -1
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          0,
+          1
+        ]
+      ]
+    },
+    {
+      "bits": "BAAAAAAA",
+      "gap": 1,
+      "pattern": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        0
+      ],
+      "width": 9,
+      "inversions": 8,
+      "budget": 4,
+      "status": "exhausted"
+    },
+    {
+      "bits": "BAAAAAAB",
+      "gap": 1,
+      "pattern": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        8,
+        0,
+        7
+      ],
+      "width": 9,
+      "inversions": 8,
+      "budget": 4,
+      "status": "exhausted"
+    },
+    {
+      "bits": "BAAAAAAB",
+      "gap": 2,
+      "pattern": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        8,
+        9,
+        0,
+        7
+      ],
+      "width": 10,
+      "inversions": 10,
+      "budget": 6,
+      "status": "found",
+      "word": [
+        [
+          6,
+          1
+        ],
+        [
+          6,
+          1
+        ],
+        [
+          3,
+          -1
+        ],
+        [
+          0,
+          -1
+        ]
+      ]
+    },
+    {
+      "bits": "BAAAAABA",
+      "gap": 2,
+      "pattern": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        7,
+        8,
+        9,
+        0,
+        6
+      ],
+      "width": 10,
+      "inversions": 11,
+      "budget": 5,
+      "status": "found",
+      "word": [
+        [
+          6,
+          1
+        ],
+        [
+          5,
+          1
+        ],
+        [
+          3,
+          -1
+        ],
+        [
+          0,
+          -1
+        ],
+        [
+          6,
+          1
+        ]
+      ]
+    },
+    {
+      "bits": "BAAAAABB",
+      "gap": 0,
+      "pattern": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        0,
+        6,
+        7
+      ],
+      "width": 9,
+      "inversions": 5,
+      "budget": 3,
+      "status": "exhausted"
+    },
+    {
+      "bits": "BAAAABAA",
+      "gap": 1,
+      "pattern": [
+        1,
+        2,
+        3,
+        4,
+        6,
+        7,
+        8,
+        0,
+        5
+      ],
+      "width": 9,
+      "inversions": 10,
+      "budget": 6,
+      "status": "found",
+      "word": [
+        [
+          4,
+          -1
+        ],
+        [
+          5,
+          -1
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          0,
+          1
+        ]
+      ]
+    },
+    {
+      "bits": "BAAAABAB",
+      "gap": 2,
+      "pattern": [
+        1,
+        2,
+        3,
+        4,
+        6,
+        8,
+        9,
+        0,
+        5,
+        7
+      ],
+      "width": 10,
+      "inversions": 12,
+      "budget": 6,
+      "status": "found",
+      "word": [
+        [
+          4,
+          -1
+        ],
+        [
+          5,
+          -1
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          0,
+          -1
+        ],
+        [
+          6,
+          -1
+        ],
+        [
+          4,
+          -1
+        ]
+      ]
+    },
+    {
+      "bits": "BAAAABBA",
+      "gap": 2,
+      "pattern": [
+        1,
+        2,
+        3,
+        4,
+        7,
+        8,
+        9,
+        0,
+        5,
+        6
+      ],
+      "width": 10,
+      "inversions": 13,
+      "budget": 7,
+      "status": "found",
+      "word": [
+        [
+          4,
+          -1
+        ],
+        [
+          5,
+          -1
+        ],
+        [
+          6,
+          -1
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          0,
+          1
+        ]
+      ]
+    },
+    {
+      "bits": "BAAAABBB",
+      "gap": 0,
+      "pattern": [
+        1,
+        2,
+        3,
+        4,
+        0,
+        5,
+        6,
+        7
+      ],
+      "width": 9,
+      "inversions": 4,
+      "budget": 4,
+      "status": "found",
+      "word": [
+        [
+          1,
+          1
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          0,
+          1
+        ]
+      ]
+    },
+    {
+      "bits": "BAAABABA",
+      "gap": 2,
+      "pattern": [
+        1,
+        2,
+        3,
+        5,
+        7,
+        8,
+        9,
+        0,
+        4,
+        6
+      ],
+      "width": 10,
+      "inversions": 14,
+      "budget": 6,
+      "status": "found",
+      "word": [
+        [
+          4,
+          -1
+        ],
+        [
+          6,
+          1
+        ],
+        [
+          6,
+          1
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          0,
+          -1
+        ],
+        [
+          4,
+          1
+        ]
+      ]
+    },
+    {
+      "bits": "BAAABABB",
+      "gap": 0,
+      "pattern": [
+        1,
+        2,
+        3,
+        5,
+        0,
+        4,
+        6,
+        7
+      ],
+      "width": 9,
+      "inversions": 5,
+      "budget": 3,
+      "status": "exhausted"
+    },
+    {
+      "bits": "BAABBBBA",
+      "gap": 2,
+      "pattern": [
+        1,
+        2,
+        7,
+        8,
+        9,
+        0,
+        3,
+        4,
+        5,
+        6
+      ],
+      "width": 10,
+      "inversions": 17,
+      "budget": 7,
+      "status": "found",
+      "word": [
+        [
+          2,
+          -1
+        ],
+        [
+          5,
+          1
+        ],
+        [
+          2,
+          -1
+        ],
+        [
+          0,
+          -1
+        ],
+        [
+          4,
+          1
+        ],
+        [
+          4,
+          1
+        ],
+        [
+          6,
+          -1
+        ]
+      ]
+    },
+    {
+      "bits": "BAABBBBB",
+      "gap": 0,
+      "pattern": [
+        1,
+        2,
+        0,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "width": 9,
+      "inversions": 2,
+      "budget": 2,
+      "status": "exhausted"
+    },
+    {
+      "bits": "BABAAAAA",
+      "gap": 1,
+      "pattern": [
+        1,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        0,
+        2
+      ],
+      "width": 9,
+      "inversions": 13,
+      "budget": 7,
+      "status": "found",
+      "word": [
+        [
+          4,
+          -1
+        ],
+        [
+          1,
+          -1
+        ],
+        [
+          5,
+          -1
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          2,
+          1
+        ]
+      ]
+    },
+    {
+      "bits": "BABAAAAB",
+      "gap": 2,
+      "pattern": [
+        1,
+        3,
+        4,
+        5,
+        6,
+        8,
+        9,
+        0,
+        2,
+        7
+      ],
+      "width": 10,
+      "inversions": 15,
+      "budget": 7,
+      "status": "found",
+      "word": [
+        [
+          4,
+          -1
+        ],
+        [
+          5,
+          -1
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          0,
+          -1
+        ],
+        [
+          6,
+          -1
+        ],
+        [
+          4,
+          -1
+        ],
+        [
+          2,
+          -1
+        ]
+      ]
+    },
+    {
+      "bits": "BABAAABA",
+      "gap": 2,
+      "pattern": [
+        1,
+        3,
+        4,
+        5,
+        7,
+        8,
+        9,
+        0,
+        2,
+        6
+      ],
+      "width": 10,
+      "inversions": 16,
+      "budget": 8,
+      "status": "found",
+      "word": [
+        [
+          4,
+          -1
+        ],
+        [
+          1,
+          -1
+        ],
+        [
+          5,
+          -1
+        ],
+        [
+          6,
+          -1
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          2,
+          1
+        ]
+      ]
+    },
+    {
+      "bits": "BABAAABB",
+      "gap": 0,
+      "pattern": [
+        1,
+        3,
+        4,
+        5,
+        0,
+        2,
+        6,
+        7
+      ],
+      "width": 9,
+      "inversions": 7,
+      "budget": 5,
+      "status": "found",
+      "word": [
+        [
+          1,
+          -1
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          2,
+          1
+        ]
+      ]
+    },
+    {
+      "bits": "BABABBBA",
+      "gap": 2,
+      "pattern": [
+        1,
+        3,
+        7,
+        8,
+        9,
+        0,
+        2,
+        4,
+        5,
+        6
+      ],
+      "width": 10,
+      "inversions": 18,
+      "budget": 8,
+      "status": "found",
+      "word": [
+        [
+          2,
+          -1
+        ],
+        [
+          3,
+          -1
+        ],
+        [
+          6,
+          1
+        ],
+        [
+          3,
+          -1
+        ],
+        [
+          1,
+          -1
+        ],
+        [
+          0,
+          -1
+        ],
+        [
+          5,
+          1
+        ],
+        [
+          5,
+          1
+        ]
+      ]
+    },
+    {
+      "bits": "BABABBBB",
+      "gap": 0,
+      "pattern": [
+        1,
+        3,
+        0,
+        2,
+        4,
+        5,
+        6,
+        7
+      ],
+      "width": 9,
+      "inversions": 3,
+      "budget": 3,
+      "status": "exhausted"
+    },
+    {
+      "bits": "BABBABBA",
+      "gap": 2,
+      "pattern": [
+        1,
+        4,
+        7,
+        8,
+        9,
+        0,
+        2,
+        3,
+        5,
+        6
+      ],
+      "width": 10,
+      "inversions": 19,
+      "budget": 9,
+      "status": "found",
+      "word": [
+        [
+          2,
+          -1
+        ],
+        [
+          3,
+          -1
+        ],
+        [
+          4,
+          -1
+        ],
+        [
+          5,
+          -1
+        ],
+        [
+          6,
+          -1
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          2,
+          -1
+        ]
+      ]
+    },
+    {
+      "bits": "BABBABBB",
+      "gap": 0,
+      "pattern": [
+        1,
+        4,
+        0,
+        2,
+        3,
+        5,
+        6,
+        7
+      ],
+      "width": 9,
+      "inversions": 4,
+      "budget": 4,
+      "status": "found",
+      "word": [
+        [
+          0,
+          1
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          2,
+          -1
+        ]
+      ]
+    },
+    {
+      "bits": "BABBBABA",
+      "gap": 2,
+      "pattern": [
+        1,
+        5,
+        7,
+        8,
+        9,
+        0,
+        2,
+        3,
+        4,
+        6
+      ],
+      "width": 10,
+      "inversions": 20,
+      "budget": 8,
+      "status": "found",
+      "word": [
+        [
+          2,
+          -1
+        ],
+        [
+          5,
+          1
+        ],
+        [
+          4,
+          1
+        ],
+        [
+          1,
+          -1
+        ],
+        [
+          0,
+          -1
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          6,
+          -1
+        ]
+      ]
+    },
+    {
+      "bits": "BABBBABB",
+      "gap": 0,
+      "pattern": [
+        1,
+        5,
+        0,
+        2,
+        3,
+        4,
+        6,
+        7
+      ],
+      "width": 9,
+      "inversions": 5,
+      "budget": 3,
+      "status": "exhausted"
+    },
+    {
+      "bits": "BABBBBBA",
+      "gap": 2,
+      "pattern": [
+        1,
+        7,
+        8,
+        9,
+        0,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "width": 10,
+      "inversions": 19,
+      "budget": 9,
+      "status": "found",
+      "word": [
+        [
+          1,
+          -1
+        ],
+        [
+          2,
+          -1
+        ],
+        [
+          3,
+          -1
+        ],
+        [
+          5,
+          1
+        ],
+        [
+          5,
+          1
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          0,
+          -1
+        ],
+        [
+          6,
+          -1
+        ]
+      ]
+    },
+    {
+      "bits": "BABBBBBB",
+      "gap": 0,
+      "pattern": [
+        1,
+        0,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "width": 9,
+      "inversions": 1,
+      "budget": 3,
+      "status": "exhausted"
+    },
+    {
+      "bits": "BBABBBBA",
+      "gap": 2,
+      "pattern": [
+        2,
+        7,
+        8,
+        9,
+        0,
+        1,
+        3,
+        4,
+        5,
+        6
+      ],
+      "width": 10,
+      "inversions": 20,
+      "budget": 8,
+      "status": "found",
+      "word": [
+        [
+          1,
+          -1
+        ],
+        [
+          2,
+          -1
+        ],
+        [
+          4,
+          1
+        ],
+        [
+          4,
+          1
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          5,
+          -1
+        ],
+        [
+          6,
+          -1
+        ]
+      ]
+    },
+    {
+      "bits": "BBABBBBB",
+      "gap": 0,
+      "pattern": [
+        2,
+        0,
+        1,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "width": 9,
+      "inversions": 2,
+      "budget": 2,
+      "status": "exhausted"
+    },
+    {
+      "bits": "AABAAAAAA",
+      "gap": 2,
+      "pattern": [
+        0,
+        1,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        2
+      ],
+      "width": 11,
+      "inversions": 8,
+      "budget": 4,
+      "status": "exhausted"
+    },
+    {
+      "bits": "AABAAAAAB",
+      "gap": 0,
+      "pattern": [
+        0,
+        1,
+        3,
+        4,
+        5,
+        6,
+        7,
+        2,
+        8
+      ],
+      "width": 9,
+      "inversions": 5,
+      "budget": 3,
+      "status": "exhausted"
+    },
+    {
+      "bits": "AABAAABAA",
+      "gap": 2,
+      "pattern": [
+        0,
+        1,
+        3,
+        4,
+        5,
+        7,
+        8,
+        9,
+        10,
+        2,
+        6
+      ],
+      "width": 11,
+      "inversions": 11,
+      "budget": 5,
+      "status": "found",
+      "word": [
+        [
+          7,
+          1
+        ],
+        [
+          7,
+          1
+        ],
+        [
+          5,
+          1
+        ],
+        [
+          5,
+          1
+        ],
+        [
+          2,
+          -1
+        ]
+      ]
+    },
+    {
+      "bits": "AABAAABAB",
+      "gap": 0,
+      "pattern": [
+        0,
+        1,
+        3,
+        4,
+        5,
+        7,
+        2,
+        6,
+        8
+      ],
+      "width": 9,
+      "inversions": 5,
+      "budget": 3,
+      "status": "exhausted"
+    },
+    {
+      "bits": "AABAABBBA",
+      "gap": 2,
+      "pattern": [
+        0,
+        1,
+        3,
+        4,
+        8,
+        9,
+        10,
+        2,
+        5,
+        6,
+        7
+      ],
+      "width": 11,
+      "inversions": 14,
+      "budget": 6,
+      "status": "found",
+      "word": [
+        [
+          4,
+          -1
+        ],
+        [
+          7,
+          1
+        ],
+        [
+          4,
+          -1
+        ],
+        [
+          2,
+          -1
+        ],
+        [
+          6,
+          1
+        ],
+        [
+          6,
+          1
+        ]
+      ]
+    },
+    {
+      "bits": "AABAABBBB",
+      "gap": 0,
+      "pattern": [
+        0,
+        1,
+        3,
+        4,
+        2,
+        5,
+        6,
+        7,
+        8
+      ],
+      "width": 9,
+      "inversions": 2,
+      "budget": 2,
+      "status": "exhausted"
+    },
+    {
+      "bits": "AABABABBA",
+      "gap": 2,
+      "pattern": [
+        0,
+        1,
+        3,
+        5,
+        8,
+        9,
+        10,
+        2,
+        4,
+        6,
+        7
+      ],
+      "width": 11,
+      "inversions": 15,
+      "budget": 7,
+      "status": "found",
+      "word": [
+        [
+          4,
+          -1
+        ],
+        [
+          7,
+          1
+        ],
+        [
+          4,
+          -1
+        ],
+        [
+          2,
+          -1
+        ],
+        [
+          4,
+          1
+        ],
+        [
+          6,
+          1
+        ],
+        [
+          5,
+          1
+        ]
+      ]
+    },
+    {
+      "bits": "AABABABBB",
+      "gap": 0,
+      "pattern": [
+        0,
+        1,
+        3,
+        5,
+        2,
+        4,
+        6,
+        7,
+        8
+      ],
+      "width": 9,
+      "inversions": 3,
+      "budget": 3,
+      "status": "exhausted"
+    },
+    {
+      "bits": "AABABBBAA",
+      "gap": 2,
+      "pattern": [
+        0,
+        1,
+        3,
+        7,
+        8,
+        9,
+        10,
+        2,
+        4,
+        5,
+        6
+      ],
+      "width": 11,
+      "inversions": 17,
+      "budget": 7,
+      "status": "found",
+      "word": [
+        [
+          4,
+          -1
+        ],
+        [
+          7,
+          1
+        ],
+        [
+          6,
+          1
+        ],
+        [
+          3,
+          -1
+        ],
+        [
+          2,
+          -1
+        ],
+        [
+          5,
+          1
+        ],
+        [
+          5,
+          1
+        ]
+      ]
+    },
+    {
+      "bits": "AABABBBAB",
+      "gap": 0,
+      "pattern": [
+        0,
+        1,
+        3,
+        7,
+        2,
+        4,
+        5,
+        6,
+        8
+      ],
+      "width": 9,
+      "inversions": 5,
+      "budget": 3,
+      "status": "exhausted"
+    },
+    {
+      "bits": "AABABBBBA",
+      "gap": 2,
+      "pattern": [
+        0,
+        1,
+        3,
+        8,
+        9,
+        10,
+        2,
+        4,
+        5,
+        6,
+        7
+      ],
+      "width": 11,
+      "inversions": 16,
+      "budget": 8,
+      "status": "found",
+      "word": [
+        [
+          3,
+          -1
+        ],
+        [
+          4,
+          -1
+        ],
+        [
+          5,
+          -1
+        ],
+        [
+          7,
+          1
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          7,
+          1
+        ],
+        [
+          5,
+          1
+        ],
+        [
+          2,
+          -1
+        ]
+      ]
+    },
+    {
+      "bits": "AABABBBBB",
+      "gap": 0,
+      "pattern": [
+        0,
+        1,
+        3,
+        2,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "width": 9,
+      "inversions": 1,
+      "budget": 3,
+      "status": "exhausted"
+    },
+    {
+      "bits": "AABBABBBA",
+      "gap": 2,
+      "pattern": [
+        0,
+        1,
+        4,
+        8,
+        9,
+        10,
+        2,
+        3,
+        5,
+        6,
+        7
+      ],
+      "width": 11,
+      "inversions": 17,
+      "budget": 7,
+      "status": "found",
+      "word": [
+        [
+          3,
+          -1
+        ],
+        [
+          4,
+          -1
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          6,
+          1
+        ],
+        [
+          6,
+          1
+        ],
+        [
+          4,
+          1
+        ],
+        [
+          7,
+          -1
+        ]
+      ]
+    },
+    {
+      "bits": "AABBABBBB",
+      "gap": 0,
+      "pattern": [
+        0,
+        1,
+        4,
+        2,
+        3,
+        5,
+        6,
+        7,
+        8
+      ],
+      "width": 9,
+      "inversions": 2,
+      "budget": 2,
+      "status": "exhausted"
+    },
+    {
+      "bits": "ABAAAAAAA",
+      "gap": 1,
+      "pattern": [
+        0,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        1
+      ],
+      "width": 10,
+      "inversions": 8,
+      "budget": 4,
+      "status": "exhausted"
+    },
+    {
+      "bits": "ABAAAAAAB",
+      "gap": 2,
+      "pattern": [
+        0,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        9,
+        10,
+        1,
+        8
+      ],
+      "width": 11,
+      "inversions": 10,
+      "budget": 6,
+      "status": "found",
+      "word": [
+        [
+          7,
+          1
+        ],
+        [
+          7,
+          1
+        ],
+        [
+          4,
+          -1
+        ],
+        [
+          1,
+          -1
+        ]
+      ]
+    },
+    {
+      "bits": "ABAAAAABA",
+      "gap": 2,
+      "pattern": [
+        0,
+        2,
+        3,
+        4,
+        5,
+        6,
+        8,
+        9,
+        10,
+        1,
+        7
+      ],
+      "width": 11,
+      "inversions": 11,
+      "budget": 5,
+      "status": "found",
+      "word": [
+        [
+          7,
+          1
+        ],
+        [
+          6,
+          1
+        ],
+        [
+          4,
+          -1
+        ],
+        [
+          1,
+          -1
+        ],
+        [
+          7,
+          1
+        ]
+      ]
+    },
+    {
+      "bits": "ABAAAAABB",
+      "gap": 0,
+      "pattern": [
+        0,
+        2,
+        3,
+        4,
+        5,
+        6,
+        1,
+        7,
+        8
+      ],
+      "width": 9,
+      "inversions": 5,
+      "budget": 3,
+      "status": "exhausted"
+    },
+    {
+      "bits": "ABAAABABA",
+      "gap": 2,
+      "pattern": [
+        0,
+        2,
+        3,
+        4,
+        6,
+        8,
+        9,
+        10,
+        1,
+        5,
+        7
+      ],
+      "width": 11,
+      "inversions": 14,
+      "budget": 6,
+      "status": "found",
+      "word": [
+        [
+          5,
+          -1
+        ],
+        [
+          7,
+          1
+        ],
+        [
+          7,
+          1
+        ],
+        [
+          4,
+          1
+        ],
+        [
+          1,
+          -1
+        ],
+        [
+          5,
+          1
+        ]
+      ]
+    },
+    {
+      "bits": "ABAAABABB",
+      "gap": 0,
+      "pattern": [
+        0,
+        2,
+        3,
+        4,
+        6,
+        1,
+        5,
+        7,
+        8
+      ],
+      "width": 9,
+      "inversions": 5,
+      "budget": 3,
+      "status": "exhausted"
+    },
+    {
+      "bits": "ABAABBBBA",
+      "gap": 2,
+      "pattern": [
+        0,
+        2,
+        3,
+        8,
+        9,
+        10,
+        1,
+        4,
+        5,
+        6,
+        7
+      ],
+      "width": 11,
+      "inversions": 17,
+      "budget": 7,
+      "status": "found",
+      "word": [
+        [
+          3,
+          -1
+        ],
+        [
+          6,
+          1
+        ],
+        [
+          3,
+          -1
+        ],
+        [
+          1,
+          -1
+        ],
+        [
+          5,
+          1
+        ],
+        [
+          5,
+          1
+        ],
+        [
+          7,
+          -1
+        ]
+      ]
+    },
+    {
+      "bits": "ABAABBBBB",
+      "gap": 0,
+      "pattern": [
+        0,
+        2,
+        3,
+        1,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "width": 9,
+      "inversions": 2,
+      "budget": 2,
+      "status": "exhausted"
+    },
+    {
+      "bits": "ABABABBBA",
+      "gap": 2,
+      "pattern": [
+        0,
+        2,
+        4,
+        8,
+        9,
+        10,
+        1,
+        3,
+        5,
+        6,
+        7
+      ],
+      "width": 11,
+      "inversions": 18,
+      "budget": 8,
+      "status": "found",
+      "word": [
+        [
+          3,
+          -1
+        ],
+        [
+          4,
+          -1
+        ],
+        [
+          7,
+          1
+        ],
+        [
+          4,
+          -1
+        ],
+        [
+          2,
+          -1
+        ],
+        [
+          1,
+          -1
+        ],
+        [
+          6,
+          1
+        ],
+        [
+          6,
+          1
+        ]
+      ]
+    },
+    {
+      "bits": "ABABABBBB",
+      "gap": 0,
+      "pattern": [
+        0,
+        2,
+        4,
+        1,
+        3,
+        5,
+        6,
+        7,
+        8
+      ],
+      "width": 9,
+      "inversions": 3,
+      "budget": 3,
+      "status": "exhausted"
+    },
+    {
+      "bits": "ABABBBABA",
+      "gap": 2,
+      "pattern": [
+        0,
+        2,
+        6,
+        8,
+        9,
+        10,
+        1,
+        3,
+        4,
+        5,
+        7
+      ],
+      "width": 11,
+      "inversions": 20,
+      "budget": 8,
+      "status": "found",
+      "word": [
+        [
+          3,
+          -1
+        ],
+        [
+          6,
+          1
+        ],
+        [
+          5,
+          1
+        ],
+        [
+          2,
+          -1
+        ],
+        [
+          1,
+          -1
+        ],
+        [
+          4,
+          1
+        ],
+        [
+          4,
+          1
+        ],
+        [
+          7,
+          -1
+        ]
+      ]
+    },
+    {
+      "bits": "ABABBBABB",
+      "gap": 0,
+      "pattern": [
+        0,
+        2,
+        6,
+        1,
+        3,
+        4,
+        5,
+        7,
+        8
+      ],
+      "width": 9,
+      "inversions": 5,
+      "budget": 3,
+      "status": "exhausted"
+    },
+    {
+      "bits": "ABABBBBBA",
+      "gap": 2,
+      "pattern": [
+        0,
+        2,
+        8,
+        9,
+        10,
+        1,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "width": 11,
+      "inversions": 19,
+      "budget": 9,
+      "status": "found",
+      "word": [
+        [
+          2,
+          -1
+        ],
+        [
+          3,
+          -1
+        ],
+        [
+          4,
+          -1
+        ],
+        [
+          6,
+          1
+        ],
+        [
+          6,
+          1
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          4,
+          1
+        ],
+        [
+          1,
+          -1
+        ],
+        [
+          7,
+          -1
+        ]
+      ]
+    },
+    {
+      "bits": "ABABBBBBB",
+      "gap": 0,
+      "pattern": [
+        0,
+        2,
+        1,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "width": 9,
+      "inversions": 1,
+      "budget": 3,
+      "status": "exhausted"
+    },
+    {
+      "bits": "ABBABBBBA",
+      "gap": 2,
+      "pattern": [
+        0,
+        3,
+        8,
+        9,
+        10,
+        1,
+        2,
+        4,
+        5,
+        6,
+        7
+      ],
+      "width": 11,
+      "inversions": 20,
+      "budget": 8,
+      "status": "found",
+      "word": [
+        [
+          2,
+          -1
+        ],
+        [
+          3,
+          -1
+        ],
+        [
+          5,
+          1
+        ],
+        [
+          5,
+          1
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          6,
+          -1
+        ],
+        [
+          7,
+          -1
+        ]
+      ]
+    },
+    {
+      "bits": "ABBABBBBB",
+      "gap": 0,
+      "pattern": [
+        0,
+        3,
+        1,
+        2,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "width": 9,
+      "inversions": 2,
+      "budget": 2,
+      "status": "exhausted"
+    },
+    {
+      "bits": "BAAAAAAAA",
+      "gap": 0,
+      "pattern": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        0
+      ],
+      "width": 9,
+      "inversions": 8,
+      "budget": 4,
+      "status": "exhausted"
+    },
+    {
+      "bits": "BAAAAAAAB",
+      "gap": 1,
+      "pattern": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        9,
+        0,
+        8
+      ],
+      "width": 10,
+      "inversions": 9,
+      "budget": 5,
+      "status": "found",
+      "word": [
+        [
+          5,
+          -1
+        ],
+        [
+          5,
+          -1
+        ],
+        [
+          3,
+          -1
+        ],
+        [
+          0,
+          -1
+        ],
+        [
+          6,
+          1
+        ]
+      ]
+    },
+    {
+      "bits": "BAAAAAABA",
+      "gap": 0,
+      "pattern": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        8,
+        0,
+        7
+      ],
+      "width": 9,
+      "inversions": 8,
+      "budget": 4,
+      "status": "exhausted"
+    },
+    {
+      "bits": "BAAAAAABB",
+      "gap": 1,
+      "pattern": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        9,
+        0,
+        7,
+        8
+      ],
+      "width": 10,
+      "inversions": 9,
+      "budget": 5,
+      "status": "found",
+      "word": [
+        [
+          6,
+          1
+        ],
+        [
+          3,
+          -1
+        ],
+        [
+          0,
+          -1
+        ]
+      ]
+    },
+    {
+      "bits": "BAAAAABBA",
+      "gap": 2,
+      "pattern": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        8,
+        9,
+        10,
+        0,
+        6,
+        7
+      ],
+      "width": 11,
+      "inversions": 14,
+      "budget": 6,
+      "status": "found",
+      "word": [
+        [
+          7,
+          1
+        ],
+        [
+          5,
+          -1
+        ],
+        [
+          6,
+          1
+        ],
+        [
+          6,
+          1
+        ],
+        [
+          3,
+          -1
+        ],
+        [
+          0,
+          -1
+        ]
+      ]
+    },
+    {
+      "bits": "BAAAAABBB",
+      "gap": 0,
+      "pattern": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        0,
+        6,
+        7,
+        8
+      ],
+      "width": 9,
+      "inversions": 5,
+      "budget": 3,
+      "status": "exhausted"
+    },
+    {
+      "bits": "BAAABABBA",
+      "gap": 2,
+      "pattern": [
+        1,
+        2,
+        3,
+        5,
+        8,
+        9,
+        10,
+        0,
+        4,
+        6,
+        7
+      ],
+      "width": 11,
+      "inversions": 17,
+      "budget": 7,
+      "status": "found",
+      "word": [
+        [
+          4,
+          -1
+        ],
+        [
+          5,
+          -1
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          0,
+          -1
+        ],
+        [
+          7,
+          1
+        ],
+        [
+          7,
+          1
+        ],
+        [
+          5,
+          1
+        ]
+      ]
+    },
+    {
+      "bits": "BAAABABBB",
+      "gap": 0,
+      "pattern": [
+        1,
+        2,
+        3,
+        5,
+        0,
+        4,
+        6,
+        7,
+        8
+      ],
+      "width": 9,
+      "inversions": 5,
+      "budget": 3,
+      "status": "exhausted"
+    },
+    {
+      "bits": "BAABBBBBA",
+      "gap": 2,
+      "pattern": [
+        1,
+        2,
+        8,
+        9,
+        10,
+        0,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "width": 11,
+      "inversions": 20,
+      "budget": 8,
+      "status": "found",
+      "word": [
+        [
+          2,
+          -1
+        ],
+        [
+          5,
+          1
+        ],
+        [
+          2,
+          -1
+        ],
+        [
+          0,
+          -1
+        ],
+        [
+          4,
+          1
+        ],
+        [
+          4,
+          1
+        ],
+        [
+          6,
+          -1
+        ],
+        [
+          7,
+          -1
+        ]
+      ]
+    },
+    {
+      "bits": "BAABBBBBB",
+      "gap": 0,
+      "pattern": [
+        1,
+        2,
+        0,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "width": 9,
+      "inversions": 2,
+      "budget": 2,
+      "status": "exhausted"
+    },
+    {
+      "bits": "BABABBBBA",
+      "gap": 2,
+      "pattern": [
+        1,
+        3,
+        8,
+        9,
+        10,
+        0,
+        2,
+        4,
+        5,
+        6,
+        7
+      ],
+      "width": 11,
+      "inversions": 21,
+      "budget": 9,
+      "status": "found",
+      "word": [
+        [
+          2,
+          -1
+        ],
+        [
+          3,
+          -1
+        ],
+        [
+          6,
+          1
+        ],
+        [
+          3,
+          -1
+        ],
+        [
+          1,
+          -1
+        ],
+        [
+          0,
+          -1
+        ],
+        [
+          5,
+          1
+        ],
+        [
+          5,
+          1
+        ],
+        [
+          7,
+          -1
+        ]
+      ]
+    },
+    {
+      "bits": "BABABBBBB",
+      "gap": 0,
+      "pattern": [
+        1,
+        3,
+        0,
+        2,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "width": 9,
+      "inversions": 3,
+      "budget": 3,
+      "status": "exhausted"
+    },
+    {
+      "bits": "BABBBABBA",
+      "gap": 2,
+      "pattern": [
+        1,
+        5,
+        8,
+        9,
+        10,
+        0,
+        2,
+        3,
+        4,
+        6,
+        7
+      ],
+      "width": 11,
+      "inversions": 23,
+      "budget": 9,
+      "status": "found",
+      "word": [
+        [
+          2,
+          -1
+        ],
+        [
+          5,
+          1
+        ],
+        [
+          4,
+          1
+        ],
+        [
+          1,
+          -1
+        ],
+        [
+          0,
+          -1
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          6,
+          -1
+        ],
+        [
+          7,
+          -1
+        ]
+      ]
+    },
+    {
+      "bits": "BABBBABBB",
+      "gap": 0,
+      "pattern": [
+        1,
+        5,
+        0,
+        2,
+        3,
+        4,
+        6,
+        7,
+        8
+      ],
+      "width": 9,
+      "inversions": 5,
+      "budget": 3,
+      "status": "exhausted"
+    },
+    {
+      "bits": "BABBBBBBA",
+      "gap": 2,
+      "pattern": [
+        1,
+        8,
+        9,
+        10,
+        0,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "width": 11,
+      "inversions": 22,
+      "budget": 10,
+      "status": "found",
+      "word": [
+        [
+          1,
+          -1
+        ],
+        [
+          2,
+          -1
+        ],
+        [
+          3,
+          -1
+        ],
+        [
+          5,
+          -1
+        ],
+        [
+          7,
+          1
+        ],
+        [
+          6,
+          1
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          3,
+          -1
+        ],
+        [
+          1,
+          -1
+        ],
+        [
+          5,
+          1
+        ]
+      ]
+    },
+    {
+      "bits": "BABBBBBBB",
+      "gap": 0,
+      "pattern": [
+        1,
+        0,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "width": 9,
+      "inversions": 1,
+      "budget": 3,
+      "status": "exhausted"
+    },
+    {
+      "bits": "BBABBBBBA",
+      "gap": 2,
+      "pattern": [
+        2,
+        8,
+        9,
+        10,
+        0,
+        1,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "width": 11,
+      "inversions": 23,
+      "budget": 9,
+      "status": "found",
+      "word": [
+        [
+          1,
+          -1
+        ],
+        [
+          2,
+          -1
+        ],
+        [
+          5,
+          1
+        ],
+        [
+          4,
+          1
+        ],
+        [
+          7,
+          1
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          7,
+          1
+        ],
+        [
+          5,
+          1
+        ]
+      ]
+    },
+    {
+      "bits": "BBABBBBBB",
+      "gap": 0,
+      "pattern": [
+        2,
+        0,
+        1,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "width": 9,
+      "inversions": 2,
+      "budget": 2,
+      "status": "exhausted"
+    },
+    {
+      "bits": "AABAAAAAAA",
+      "gap": 1,
+      "pattern": [
+        0,
+        1,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        2
+      ],
+      "width": 11,
+      "inversions": 8,
+      "budget": 6,
+      "status": "found",
+      "word": [
+        [
+          7,
+          -1
+        ],
+        [
+          4,
+          -1
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          0,
+          1
+        ]
+      ]
+    },
+    {
+      "bits": "AABAAAAAAB",
+      "gap": 2,
+      "pattern": [
+        0,
+        1,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        10,
+        11,
+        2,
+        9
+      ],
+      "width": 12,
+      "inversions": 10,
+      "budget": 6,
+      "status": "found",
+      "word": [
+        [
+          8,
+          1
+        ],
+        [
+          8,
+          1
+        ],
+        [
+          5,
+          -1
+        ],
+        [
+          2,
+          -1
+        ]
+      ]
+    },
+    {
+      "bits": "AABAAAAABA",
+      "gap": 2,
+      "pattern": [
+        0,
+        1,
+        3,
+        4,
+        5,
+        6,
+        7,
+        9,
+        10,
+        11,
+        2,
+        8
+      ],
+      "width": 12,
+      "inversions": 11,
+      "budget": 7,
+      "status": "found",
+      "word": [
+        [
+          7,
+          -1
+        ],
+        [
+          4,
+          -1
+        ],
+        [
+          8,
+          -1
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          0,
+          1
+        ]
+      ]
+    },
+    {
+      "bits": "AABAAAAABB",
+      "gap": 0,
+      "pattern": [
+        0,
+        1,
+        3,
+        4,
+        5,
+        6,
+        7,
+        2,
+        8,
+        9
+      ],
+      "width": 10,
+      "inversions": 5,
+      "budget": 5,
+      "status": "found",
+      "word": [
+        [
+          4,
+          -1
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          0,
+          1
+        ]
+      ]
+    },
+    {
+      "bits": "AABAAABABA",
+      "gap": 2,
+      "pattern": [
+        0,
+        1,
+        3,
+        4,
+        5,
+        7,
+        9,
+        10,
+        11,
+        2,
+        6,
+        8
+      ],
+      "width": 12,
+      "inversions": 14,
+      "budget": 8,
+      "status": "found",
+      "word": [
+        [
+          6,
+          -1
+        ],
+        [
+          3,
+          -1
+        ],
+        [
+          7,
+          -1
+        ],
+        [
+          8,
+          -1
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          4,
+          1
+        ]
+      ]
+    },
+    {
+      "bits": "AABAAABABB",
+      "gap": 0,
+      "pattern": [
+        0,
+        1,
+        3,
+        4,
+        5,
+        7,
+        2,
+        6,
+        8,
+        9
+      ],
+      "width": 10,
+      "inversions": 5,
+      "budget": 5,
+      "status": "found",
+      "word": [
+        [
+          3,
+          -1
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          4,
+          1
+        ]
+      ]
+    },
+    {
+      "bits": "AABAABBBBA",
+      "gap": 2,
+      "pattern": [
+        0,
+        1,
+        3,
+        4,
+        9,
+        10,
+        11,
+        2,
+        5,
+        6,
+        7,
+        8
+      ],
+      "width": 12,
+      "inversions": 17,
+      "budget": 9,
+      "status": "found",
+      "word": [
+        [
+          4,
+          -1
+        ],
+        [
+          5,
+          -1
+        ],
+        [
+          6,
+          -1
+        ],
+        [
+          7,
+          -1
+        ],
+        [
+          8,
+          -1
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          0,
+          1
+        ]
+      ]
+    },
+    {
+      "bits": "AABAABBBBB",
+      "gap": 0,
+      "pattern": [
+        0,
+        1,
+        3,
+        4,
+        2,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "width": 10,
+      "inversions": 2,
+      "budget": 4,
+      "status": "found",
+      "word": [
+        [
+          0,
+          1
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          0,
+          1
+        ]
+      ]
+    },
+    {
+      "bits": "AABABABBBA",
+      "gap": 2,
+      "pattern": [
+        0,
+        1,
+        3,
+        5,
+        9,
+        10,
+        11,
+        2,
+        4,
+        6,
+        7,
+        8
+      ],
+      "width": 12,
+      "inversions": 18,
+      "budget": 8,
+      "status": "found",
+      "word": [
+        [
+          4,
+          -1
+        ],
+        [
+          5,
+          -1
+        ],
+        [
+          8,
+          1
+        ],
+        [
+          5,
+          -1
+        ],
+        [
+          3,
+          -1
+        ],
+        [
+          2,
+          -1
+        ],
+        [
+          7,
+          1
+        ],
+        [
+          7,
+          1
+        ]
+      ]
+    },
+    {
+      "bits": "AABABABBBB",
+      "gap": 0,
+      "pattern": [
+        0,
+        1,
+        3,
+        5,
+        2,
+        4,
+        6,
+        7,
+        8,
+        9
+      ],
+      "width": 10,
+      "inversions": 3,
+      "budget": 3,
+      "status": "exhausted"
+    },
+    {
+      "bits": "AABABBBABA",
+      "gap": 2,
+      "pattern": [
+        0,
+        1,
+        3,
+        7,
+        9,
+        10,
+        11,
+        2,
+        4,
+        5,
+        6,
+        8
+      ],
+      "width": 12,
+      "inversions": 20,
+      "budget": 10,
+      "status": "found",
+      "word": [
+        [
+          4,
+          -1
+        ],
+        [
+          5,
+          -1
+        ],
+        [
+          6,
+          -1
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          7,
+          -1
+        ],
+        [
+          8,
+          -1
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          4,
+          1
+        ]
+      ]
+    },
+    {
+      "bits": "AABABBBABB",
+      "gap": 0,
+      "pattern": [
+        0,
+        1,
+        3,
+        7,
+        2,
+        4,
+        5,
+        6,
+        8,
+        9
+      ],
+      "width": 10,
+      "inversions": 5,
+      "budget": 5,
+      "status": "found",
+      "word": [
+        [
+          3,
+          1
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          4,
+          1
+        ]
+      ]
+    },
+    {
+      "bits": "AABABBBBBA",
+      "gap": 2,
+      "pattern": [
+        0,
+        1,
+        3,
+        9,
+        10,
+        11,
+        2,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "width": 12,
+      "inversions": 19,
+      "budget": 9,
+      "status": "found",
+      "word": [
+        [
+          3,
+          -1
+        ],
+        [
+          4,
+          -1
+        ],
+        [
+          5,
+          -1
+        ],
+        [
+          7,
+          1
+        ],
+        [
+          7,
+          1
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          5,
+          1
+        ],
+        [
+          2,
+          -1
+        ],
+        [
+          8,
+          -1
+        ]
+      ]
+    },
+    {
+      "bits": "AABABBBBBB",
+      "gap": 0,
+      "pattern": [
+        0,
+        1,
+        3,
+        2,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "width": 10,
+      "inversions": 1,
+      "budget": 3,
+      "status": "exhausted"
+    },
+    {
+      "bits": "AABBABBBBA",
+      "gap": 2,
+      "pattern": [
+        0,
+        1,
+        4,
+        9,
+        10,
+        11,
+        2,
+        3,
+        5,
+        6,
+        7,
+        8
+      ],
+      "width": 12,
+      "inversions": 20,
+      "budget": 10,
+      "status": "found",
+      "word": [
+        [
+          3,
+          -1
+        ],
+        [
+          4,
+          -1
+        ],
+        [
+          5,
+          -1
+        ],
+        [
+          6,
+          -1
+        ],
+        [
+          7,
+          -1
+        ],
+        [
+          8,
+          -1
+        ],
+        [
+          0,
+          -1
+        ],
+        [
+          1,
+          -1
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          0,
+          1
+        ]
+      ]
+    },
+    {
+      "bits": "AABBABBBBB",
+      "gap": 0,
+      "pattern": [
+        0,
+        1,
+        4,
+        2,
+        3,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "width": 10,
+      "inversions": 2,
+      "budget": 4,
+      "status": "found",
+      "word": [
+        [
+          0,
+          -1
+        ],
+        [
+          1,
+          -1
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          0,
+          1
+        ]
+      ]
+    },
+    {
+      "bits": "ABAAAAAAAA",
+      "gap": 0,
+      "pattern": [
+        0,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        1
+      ],
+      "width": 10,
+      "inversions": 8,
+      "budget": 6,
+      "status": "found",
+      "word": [
+        [
+          6,
+          -1
+        ],
+        [
+          3,
+          -1
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          2,
+          1
+        ]
+      ]
+    },
+    {
+      "bits": "ABAAAAAAAB",
+      "gap": 1,
+      "pattern": [
+        0,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        10,
+        1,
+        9
+      ],
+      "width": 11,
+      "inversions": 9,
+      "budget": 5,
+      "status": "found",
+      "word": [
+        [
+          6,
+          -1
+        ],
+        [
+          6,
+          -1
+        ],
+        [
+          4,
+          -1
+        ],
+        [
+          1,
+          -1
+        ],
+        [
+          7,
+          1
+        ]
+      ]
+    },
+    {
+      "bits": "ABAAAAABBA",
+      "gap": 2,
+      "pattern": [
+        0,
+        2,
+        3,
+        4,
+        5,
+        6,
+        9,
+        10,
+        11,
+        1,
+        7,
+        8
+      ],
+      "width": 12,
+      "inversions": 14,
+      "budget": 8,
+      "status": "found",
+      "word": [
+        [
+          6,
+          -1
+        ],
+        [
+          3,
+          -1
+        ],
+        [
+          7,
+          -1
+        ],
+        [
+          8,
+          -1
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          2,
+          1
+        ]
+      ]
+    },
+    {
+      "bits": "ABAAAAABBB",
+      "gap": 0,
+      "pattern": [
+        0,
+        2,
+        3,
+        4,
+        5,
+        6,
+        1,
+        7,
+        8,
+        9
+      ],
+      "width": 10,
+      "inversions": 5,
+      "budget": 5,
+      "status": "found",
+      "word": [
+        [
+          3,
+          -1
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          2,
+          1
+        ]
+      ]
+    },
+    {
+      "bits": "ABAAABABBA",
+      "gap": 2,
+      "pattern": [
+        0,
+        2,
+        3,
+        4,
+        6,
+        9,
+        10,
+        11,
+        1,
+        5,
+        7,
+        8
+      ],
+      "width": 12,
+      "inversions": 17,
+      "budget": 9,
+      "status": "found",
+      "word": [
+        [
+          5,
+          -1
+        ],
+        [
+          2,
+          -1
+        ],
+        [
+          6,
+          -1
+        ],
+        [
+          7,
+          -1
+        ],
+        [
+          8,
+          -1
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          3,
+          1
+        ]
+      ]
+    },
+    {
+      "bits": "ABAAABABBB",
+      "gap": 0,
+      "pattern": [
+        0,
+        2,
+        3,
+        4,
+        6,
+        1,
+        5,
+        7,
+        8,
+        9
+      ],
+      "width": 10,
+      "inversions": 5,
+      "budget": 5,
+      "status": "found",
+      "word": [
+        [
+          2,
+          -1
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          3,
+          1
+        ]
+      ]
+    },
+    {
+      "bits": "ABAABBBBBA",
+      "gap": 2,
+      "pattern": [
+        0,
+        2,
+        3,
+        9,
+        10,
+        11,
+        1,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "width": 12,
+      "inversions": 20,
+      "budget": 10,
+      "status": "found",
+      "word": [
+        [
+          3,
+          -1
+        ],
+        [
+          4,
+          -1
+        ],
+        [
+          5,
+          -1
+        ],
+        [
+          6,
+          -1
+        ],
+        [
+          7,
+          -1
+        ],
+        [
+          8,
+          -1
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          2,
+          1
+        ]
+      ]
+    },
+    {
+      "bits": "ABAABBBBBB",
+      "gap": 0,
+      "pattern": [
+        0,
+        2,
+        3,
+        1,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "width": 10,
+      "inversions": 2,
+      "budget": 4,
+      "status": "found",
+      "word": [
+        [
+          2,
+          1
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          2,
+          1
+        ]
+      ]
+    },
+    {
+      "bits": "ABABABBBBA",
+      "gap": 2,
+      "pattern": [
+        0,
+        2,
+        4,
+        9,
+        10,
+        11,
+        1,
+        3,
+        5,
+        6,
+        7,
+        8
+      ],
+      "width": 12,
+      "inversions": 21,
+      "budget": 9,
+      "status": "found",
+      "word": [
+        [
+          3,
+          -1
+        ],
+        [
+          4,
+          -1
+        ],
+        [
+          7,
+          1
+        ],
+        [
+          4,
+          -1
+        ],
+        [
+          2,
+          -1
+        ],
+        [
+          1,
+          -1
+        ],
+        [
+          6,
+          1
+        ],
+        [
+          6,
+          1
+        ],
+        [
+          8,
+          -1
+        ]
+      ]
+    },
+    {
+      "bits": "ABABABBBBB",
+      "gap": 0,
+      "pattern": [
+        0,
+        2,
+        4,
+        1,
+        3,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "width": 10,
+      "inversions": 3,
+      "budget": 3,
+      "status": "exhausted"
+    },
+    {
+      "bits": "ABABBBABBA",
+      "gap": 2,
+      "pattern": [
+        0,
+        2,
+        6,
+        9,
+        10,
+        11,
+        1,
+        3,
+        4,
+        5,
+        7,
+        8
+      ],
+      "width": 12,
+      "inversions": 23,
+      "budget": 11,
+      "status": "found",
+      "word": [
+        [
+          3,
+          -1
+        ],
+        [
+          4,
+          -1
+        ],
+        [
+          5,
+          -1
+        ],
+        [
+          6,
+          -1
+        ],
+        [
+          7,
+          -1
+        ],
+        [
+          4,
+          -1
+        ],
+        [
+          8,
+          -1
+        ],
+        [
+          2,
+          -1
+        ],
+        [
+          1,
+          -1
+        ],
+        [
+          4,
+          1
+        ],
+        [
+          4,
+          1
+        ]
+      ]
+    },
+    {
+      "bits": "ABABBBABBB",
+      "gap": 0,
+      "pattern": [
+        0,
+        2,
+        6,
+        1,
+        3,
+        4,
+        5,
+        7,
+        8,
+        9
+      ],
+      "width": 10,
+      "inversions": 5,
+      "budget": 5,
+      "status": "found",
+      "word": [
+        [
+          2,
+          1
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          3,
+          1
+        ]
+      ]
+    },
+    {
+      "bits": "ABABBBBBBA",
+      "gap": 2,
+      "pattern": [
+        0,
+        2,
+        9,
+        10,
+        11,
+        1,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "width": 12,
+      "inversions": 22,
+      "budget": 10,
+      "status": "found",
+      "word": [
+        [
+          2,
+          -1
+        ],
+        [
+          3,
+          -1
+        ],
+        [
+          4,
+          -1
+        ],
+        [
+          6,
+          -1
+        ],
+        [
+          8,
+          1
+        ],
+        [
+          7,
+          1
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          4,
+          -1
+        ],
+        [
+          2,
+          -1
+        ],
+        [
+          6,
+          1
+        ]
+      ]
+    },
+    {
+      "bits": "ABABBBBBBB",
+      "gap": 0,
+      "pattern": [
+        0,
+        2,
+        1,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "width": 10,
+      "inversions": 1,
+      "budget": 3,
+      "status": "exhausted"
+    },
+    {
+      "bits": "ABBABBBBBA",
+      "gap": 2,
+      "pattern": [
+        0,
+        3,
+        9,
+        10,
+        11,
+        1,
+        2,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "width": 12,
+      "inversions": 23,
+      "budget": 11,
+      "status": "found",
+      "word": [
+        [
+          2,
+          -1
+        ],
+        [
+          3,
+          -1
+        ],
+        [
+          4,
+          -1
+        ],
+        [
+          5,
+          -1
+        ],
+        [
+          6,
+          -1
+        ],
+        [
+          7,
+          -1
+        ],
+        [
+          8,
+          -1
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          1,
+          -1
+        ],
+        [
+          2,
+          -1
+        ]
+      ]
+    },
+    {
+      "bits": "ABBABBBBBB",
+      "gap": 0,
+      "pattern": [
+        0,
+        3,
+        1,
+        2,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "width": 10,
+      "inversions": 2,
+      "budget": 4,
+      "status": "found",
+      "word": [
+        [
+          2,
+          1
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          1,
+          -1
+        ],
+        [
+          2,
+          -1
+        ]
+      ]
+    },
+    {
+      "bits": "BAAAAAAAAA",
+      "gap": 2,
+      "pattern": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        0
+      ],
+      "width": 12,
+      "inversions": 11,
+      "budget": 7,
+      "status": "found",
+      "word": [
+        [
+          8,
+          -1
+        ],
+        [
+          5,
+          -1
+        ],
+        [
+          2,
+          -1
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          1,
+          1
+        ]
+      ]
+    },
+    {
+      "bits": "BAAAAAAAAB",
+      "gap": 0,
+      "pattern": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        0,
+        9
+      ],
+      "width": 10,
+      "inversions": 8,
+      "budget": 6,
+      "status": "found",
+      "word": [
+        [
+          5,
+          -1
+        ],
+        [
+          2,
+          -1
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          1,
+          1
+        ]
+      ]
+    },
+    {
+      "bits": "BAAAAAABAA",
+      "gap": 2,
+      "pattern": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        8,
+        9,
+        10,
+        11,
+        0,
+        7
+      ],
+      "width": 12,
+      "inversions": 14,
+      "budget": 8,
+      "status": "found",
+      "word": [
+        [
+          7,
+          -1
+        ],
+        [
+          4,
+          -1
+        ],
+        [
+          8,
+          -1
+        ],
+        [
+          5,
+          -1
+        ],
+        [
+          4,
+          1
+        ],
+        [
+          4,
+          1
+        ],
+        [
+          3,
+          -1
+        ],
+        [
+          0,
+          -1
+        ]
+      ]
+    },
+    {
+      "bits": "BAAAAAABAB",
+      "gap": 0,
+      "pattern": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        8,
+        0,
+        7,
+        9
+      ],
+      "width": 10,
+      "inversions": 8,
+      "budget": 6,
+      "status": "found",
+      "word": [
+        [
+          4,
+          -1
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          0,
+          -1
+        ],
+        [
+          4,
+          -1
+        ],
+        [
+          2,
+          -1
+        ],
+        [
+          5,
+          1
+        ]
+      ]
+    },
+    {
+      "bits": "BAAAAABBBA",
+      "gap": 2,
+      "pattern": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        9,
+        10,
+        11,
+        0,
+        6,
+        7,
+        8
+      ],
+      "width": 12,
+      "inversions": 17,
+      "budget": 9,
+      "status": "found",
+      "word": [
+        [
+          5,
+          -1
+        ],
+        [
+          2,
+          -1
+        ],
+        [
+          6,
+          -1
+        ],
+        [
+          7,
+          -1
+        ],
+        [
+          8,
+          -1
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          1,
+          1
+        ]
+      ]
+    },
+    {
+      "bits": "BAAAAABBBB",
+      "gap": 0,
+      "pattern": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        0,
+        6,
+        7,
+        8,
+        9
+      ],
+      "width": 10,
+      "inversions": 5,
+      "budget": 5,
+      "status": "found",
+      "word": [
+        [
+          2,
+          -1
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          1,
+          1
+        ]
+      ]
+    },
+    {
+      "bits": "BAAABABBBA",
+      "gap": 2,
+      "pattern": [
+        1,
+        2,
+        3,
+        5,
+        9,
+        10,
+        11,
+        0,
+        4,
+        6,
+        7,
+        8
+      ],
+      "width": 12,
+      "inversions": 20,
+      "budget": 10,
+      "status": "found",
+      "word": [
+        [
+          4,
+          -1
+        ],
+        [
+          5,
+          -1
+        ],
+        [
+          6,
+          -1
+        ],
+        [
+          7,
+          -1
+        ],
+        [
+          4,
+          1
+        ],
+        [
+          8,
+          -1
+        ],
+        [
+          1,
+          -1
+        ],
+        [
+          4,
+          -1
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          0,
+          -1
+        ]
+      ]
+    },
+    {
+      "bits": "BAAABABBBB",
+      "gap": 0,
+      "pattern": [
+        1,
+        2,
+        3,
+        5,
+        0,
+        4,
+        6,
+        7,
+        8,
+        9
+      ],
+      "width": 10,
+      "inversions": 5,
+      "budget": 5,
+      "status": "found",
+      "word": [
+        [
+          1,
+          -1
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          2,
+          1
+        ]
+      ]
+    },
+    {
+      "bits": "BAABBBBBBA",
+      "gap": 2,
+      "pattern": [
+        1,
+        2,
+        9,
+        10,
+        11,
+        0,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "width": 12,
+      "inversions": 23,
+      "budget": 11,
+      "status": "found",
+      "word": [
+        [
+          2,
+          -1
+        ],
+        [
+          3,
+          -1
+        ],
+        [
+          4,
+          -1
+        ],
+        [
+          5,
+          -1
+        ],
+        [
+          6,
+          -1
+        ],
+        [
+          7,
+          -1
+        ],
+        [
+          8,
+          -1
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          1,
+          1
+        ]
+      ]
+    },
+    {
+      "bits": "BAABBBBBBB",
+      "gap": 0,
+      "pattern": [
+        1,
+        2,
+        0,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "width": 10,
+      "inversions": 2,
+      "budget": 4,
+      "status": "found",
+      "word": [
+        [
+          1,
+          1
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          1,
+          1
+        ]
+      ]
+    },
+    {
+      "bits": "BABABBBBBA",
+      "gap": 2,
+      "pattern": [
+        1,
+        3,
+        9,
+        10,
+        11,
+        0,
+        2,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "width": 12,
+      "inversions": 24,
+      "budget": 10,
+      "status": "found",
+      "word": [
+        [
+          2,
+          -1
+        ],
+        [
+          3,
+          -1
+        ],
+        [
+          6,
+          1
+        ],
+        [
+          3,
+          -1
+        ],
+        [
+          5,
+          1
+        ],
+        [
+          5,
+          1
+        ],
+        [
+          1,
+          -1
+        ],
+        [
+          0,
+          -1
+        ],
+        [
+          7,
+          -1
+        ],
+        [
+          8,
+          -1
+        ]
+      ]
+    },
+    {
+      "bits": "BABABBBBBB",
+      "gap": 0,
+      "pattern": [
+        1,
+        3,
+        0,
+        2,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "width": 10,
+      "inversions": 3,
+      "budget": 3,
+      "status": "exhausted"
+    },
+    {
+      "bits": "BABBBABBBA",
+      "gap": 2,
+      "pattern": [
+        1,
+        5,
+        9,
+        10,
+        11,
+        0,
+        2,
+        3,
+        4,
+        6,
+        7,
+        8
+      ],
+      "width": 12,
+      "inversions": 26,
+      "budget": 12,
+      "status": "found",
+      "word": [
+        [
+          2,
+          -1
+        ],
+        [
+          3,
+          -1
+        ],
+        [
+          4,
+          -1
+        ],
+        [
+          5,
+          -1
+        ],
+        [
+          6,
+          -1
+        ],
+        [
+          3,
+          -1
+        ],
+        [
+          7,
+          -1
+        ],
+        [
+          8,
+          -1
+        ],
+        [
+          1,
+          -1
+        ],
+        [
+          0,
+          -1
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          3,
+          1
+        ]
+      ]
+    },
+    {
+      "bits": "BABBBABBBB",
+      "gap": 0,
+      "pattern": [
+        1,
+        5,
+        0,
+        2,
+        3,
+        4,
+        6,
+        7,
+        8,
+        9
+      ],
+      "width": 10,
+      "inversions": 5,
+      "budget": 5,
+      "status": "found",
+      "word": [
+        [
+          1,
+          1
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          2,
+          1
+        ]
+      ]
+    },
+    {
+      "bits": "BABBBBBBBA",
+      "gap": 2,
+      "pattern": [
+        1,
+        9,
+        10,
+        11,
+        0,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "width": 12,
+      "inversions": 25,
+      "budget": 11,
+      "status": "found",
+      "word": [
+        [
+          3,
+          1
+        ],
+        [
+          6,
+          1
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          3,
+          -1
+        ],
+        [
+          0,
+          -1
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          5,
+          1
+        ],
+        [
+          5,
+          1
+        ],
+        [
+          7,
+          -1
+        ],
+        [
+          8,
+          -1
+        ]
+      ]
+    },
+    {
+      "bits": "BABBBBBBBB",
+      "gap": 0,
+      "pattern": [
+        1,
+        0,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "width": 10,
+      "inversions": 1,
+      "budget": 3,
+      "status": "exhausted"
+    },
+    {
+      "bits": "BBABBBBBBA",
+      "gap": 2,
+      "pattern": [
+        2,
+        9,
+        10,
+        11,
+        0,
+        1,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "width": 12,
+      "inversions": 26,
+      "budget": 12,
+      "status": "found",
+      "word": [
+        [
+          3,
+          1
+        ],
+        [
+          6,
+          1
+        ],
+        [
+          7,
+          -1
+        ],
+        [
+          5,
+          -1
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          5,
+          1
+        ],
+        [
+          4,
+          1
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          6,
+          -1
+        ],
+        [
+          8,
+          -1
+        ]
+      ]
+    },
+    {
+      "bits": "BBABBBBBBB",
+      "gap": 0,
+      "pattern": [
+        2,
+        0,
+        1,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "width": 10,
+      "inversions": 2,
+      "budget": 4,
+      "status": "found",
+      "word": [
+        [
+          1,
+          1
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          0,
+          -1
+        ],
+        [
+          1,
+          -1
+        ]
+      ]
+    },
+    {
+      "bits": "AABABABBBBA",
+      "gap": 2,
+      "pattern": [
+        0,
+        1,
+        3,
+        5,
+        10,
+        11,
+        12,
+        2,
+        4,
+        6,
+        7,
+        8,
+        9
+      ],
+      "width": 13,
+      "inversions": 21,
+      "budget": 9,
+      "status": "found",
+      "word": [
+        [
+          4,
+          -1
+        ],
+        [
+          5,
+          -1
+        ],
+        [
+          8,
+          1
+        ],
+        [
+          5,
+          -1
+        ],
+        [
+          3,
+          -1
+        ],
+        [
+          2,
+          -1
+        ],
+        [
+          7,
+          1
+        ],
+        [
+          7,
+          1
+        ],
+        [
+          9,
+          -1
+        ]
+      ]
+    },
+    {
+      "bits": "AABABABBBBB",
+      "gap": 0,
+      "pattern": [
+        0,
+        1,
+        3,
+        5,
+        2,
+        4,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "width": 11,
+      "inversions": 3,
+      "budget": 3,
+      "status": "exhausted"
+    },
+    {
+      "bits": "AABABBBBBBA",
+      "gap": 2,
+      "pattern": [
+        0,
+        1,
+        3,
+        10,
+        11,
+        12,
+        2,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "width": 13,
+      "inversions": 22,
+      "budget": 10,
+      "status": "found",
+      "word": [
+        [
+          3,
+          -1
+        ],
+        [
+          4,
+          -1
+        ],
+        [
+          5,
+          -1
+        ],
+        [
+          7,
+          -1
+        ],
+        [
+          9,
+          1
+        ],
+        [
+          8,
+          1
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          5,
+          -1
+        ],
+        [
+          3,
+          -1
+        ],
+        [
+          7,
+          1
+        ]
+      ]
+    },
+    {
+      "bits": "AABABBBBBBB",
+      "gap": 0,
+      "pattern": [
+        0,
+        1,
+        3,
+        2,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "width": 11,
+      "inversions": 1,
+      "budget": 3,
+      "status": "exhausted"
+    },
+    {
+      "bits": "ABABABBBBBA",
+      "gap": 2,
+      "pattern": [
+        0,
+        2,
+        4,
+        10,
+        11,
+        12,
+        1,
+        3,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "width": 13,
+      "inversions": 24,
+      "budget": 10,
+      "status": "found",
+      "word": [
+        [
+          3,
+          -1
+        ],
+        [
+          4,
+          -1
+        ],
+        [
+          7,
+          1
+        ],
+        [
+          4,
+          -1
+        ],
+        [
+          6,
+          1
+        ],
+        [
+          6,
+          1
+        ],
+        [
+          2,
+          -1
+        ],
+        [
+          1,
+          -1
+        ],
+        [
+          8,
+          -1
+        ],
+        [
+          9,
+          -1
+        ]
+      ]
+    },
+    {
+      "bits": "ABABABBBBBB",
+      "gap": 0,
+      "pattern": [
+        0,
+        2,
+        4,
+        1,
+        3,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "width": 11,
+      "inversions": 3,
+      "budget": 3,
+      "status": "exhausted"
+    },
+    {
+      "bits": "ABABBBBBBBA",
+      "gap": 2,
+      "pattern": [
+        0,
+        2,
+        10,
+        11,
+        12,
+        1,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "width": 13,
+      "inversions": 25,
+      "budget": 11,
+      "status": "found",
+      "word": [
+        [
+          4,
+          1
+        ],
+        [
+          7,
+          1
+        ],
+        [
+          4,
+          1
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          4,
+          -1
+        ],
+        [
+          1,
+          -1
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          6,
+          1
+        ],
+        [
+          6,
+          1
+        ],
+        [
+          8,
+          -1
+        ],
+        [
+          9,
+          -1
+        ]
+      ]
+    },
+    {
+      "bits": "ABABBBBBBBB",
+      "gap": 0,
+      "pattern": [
+        0,
+        2,
+        1,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "width": 11,
+      "inversions": 1,
+      "budget": 3,
+      "status": "exhausted"
+    },
+    {
+      "bits": "BABABBBBBBA",
+      "gap": 2,
+      "pattern": [
+        1,
+        3,
+        10,
+        11,
+        12,
+        0,
+        2,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "width": 13,
+      "inversions": 27,
+      "budget": 11,
+      "status": "found",
+      "word": [
+        [
+          4,
+          1
+        ],
+        [
+          1,
+          -1
+        ],
+        [
+          2,
+          -1
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          3,
+          -1
+        ],
+        [
+          5,
+          -1
+        ],
+        [
+          6,
+          -1
+        ],
+        [
+          1,
+          -1
+        ],
+        [
+          7,
+          -1
+        ],
+        [
+          8,
+          -1
+        ],
+        [
+          9,
+          -1
+        ]
+      ]
+    },
+    {
+      "bits": "BABABBBBBBB",
+      "gap": 0,
+      "pattern": [
+        1,
+        3,
+        0,
+        2,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "width": 11,
+      "inversions": 3,
+      "budget": 3,
+      "status": "exhausted"
+    },
+    {
+      "bits": "BABBBBBBBBA",
+      "gap": 2,
+      "pattern": [
+        1,
+        10,
+        11,
+        12,
+        0,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "width": 13,
+      "inversions": 28,
+      "budget": 12,
+      "status": "found",
+      "word": [
+        [
+          1,
+          -1
+        ],
+        [
+          4,
+          1
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          5,
+          -1
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          8,
+          1
+        ],
+        [
+          7,
+          1
+        ],
+        [
+          3,
+          -1
+        ],
+        [
+          1,
+          -1
+        ],
+        [
+          6,
+          1
+        ],
+        [
+          9,
+          -1
+        ]
+      ]
+    },
+    {
+      "bits": "BABBBBBBBBB",
+      "gap": 0,
+      "pattern": [
+        1,
+        0,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "width": 11,
+      "inversions": 1,
+      "budget": 3,
+      "status": "exhausted"
+    },
+    {
+      "bits": "AABABABBBBBA",
+      "gap": 2,
+      "pattern": [
+        0,
+        1,
+        3,
+        5,
+        11,
+        12,
+        13,
+        2,
+        4,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "width": 14,
+      "inversions": 24,
+      "budget": 12,
+      "status": "found",
+      "word": [
+        [
+          4,
+          -1
+        ],
+        [
+          5,
+          -1
+        ],
+        [
+          6,
+          -1
+        ],
+        [
+          7,
+          -1
+        ],
+        [
+          8,
+          -1
+        ],
+        [
+          5,
+          1
+        ],
+        [
+          9,
+          -1
+        ],
+        [
+          10,
+          -1
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          5,
+          -1
+        ],
+        [
+          3,
+          1
+        ]
+      ]
+    },
+    {
+      "bits": "AABABABBBBBB",
+      "gap": 0,
+      "pattern": [
+        0,
+        1,
+        3,
+        5,
+        2,
+        4,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11
+      ],
+      "width": 12,
+      "inversions": 3,
+      "budget": 5,
+      "status": "found",
+      "word": [
+        [
+          3,
+          1
+        ],
+        [
+          0,
+          -1
+        ],
+        [
+          3,
+          -1
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          2,
+          1
+        ]
+      ]
+    },
+    {
+      "bits": "AABABBBBBBBA",
+      "gap": 2,
+      "pattern": [
+        0,
+        1,
+        3,
+        11,
+        12,
+        13,
+        2,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "width": 14,
+      "inversions": 25,
+      "budget": 11,
+      "status": "found",
+      "word": [
+        [
+          5,
+          1
+        ],
+        [
+          8,
+          1
+        ],
+        [
+          5,
+          1
+        ],
+        [
+          4,
+          1
+        ],
+        [
+          5,
+          -1
+        ],
+        [
+          2,
+          -1
+        ],
+        [
+          4,
+          1
+        ],
+        [
+          7,
+          1
+        ],
+        [
+          7,
+          1
+        ],
+        [
+          9,
+          -1
+        ],
+        [
+          10,
+          -1
+        ]
+      ]
+    },
+    {
+      "bits": "AABABBBBBBBB",
+      "gap": 0,
+      "pattern": [
+        0,
+        1,
+        3,
+        2,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11
+      ],
+      "width": 12,
+      "inversions": 1,
+      "budget": 3,
+      "status": "exhausted"
+    },
+    {
+      "bits": "ABABABBBBBBA",
+      "gap": 2,
+      "pattern": [
+        0,
+        2,
+        4,
+        11,
+        12,
+        13,
+        1,
+        3,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "width": 14,
+      "inversions": 27,
+      "budget": 13,
+      "status": "found",
+      "word": [
+        [
+          5,
+          1
+        ],
+        [
+          8,
+          1
+        ],
+        [
+          9,
+          -1
+        ],
+        [
+          7,
+          -1
+        ],
+        [
+          4,
+          1
+        ],
+        [
+          1,
+          -1
+        ],
+        [
+          7,
+          1
+        ],
+        [
+          4,
+          -1
+        ],
+        [
+          3,
+          -1
+        ],
+        [
+          8,
+          -1
+        ],
+        [
+          6,
+          -1
+        ],
+        [
+          7,
+          1
+        ],
+        [
+          10,
+          -1
+        ]
+      ]
+    },
+    {
+      "bits": "ABABABBBBBBB",
+      "gap": 0,
+      "pattern": [
+        0,
+        2,
+        4,
+        1,
+        3,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11
+      ],
+      "width": 12,
+      "inversions": 3,
+      "budget": 5,
+      "status": "found",
+      "word": [
+        [
+          0,
+          -1
+        ],
+        [
+          0,
+          -1
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          -1
+        ]
+      ]
+    },
+    {
+      "bits": "ABABBBBBBBBA",
+      "gap": 2,
+      "pattern": [
+        0,
+        2,
+        11,
+        12,
+        13,
+        1,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "width": 14,
+      "inversions": 28,
+      "budget": 12,
+      "status": "found",
+      "word": [
+        [
+          2,
+          -1
+        ],
+        [
+          5,
+          1
+        ],
+        [
+          4,
+          1
+        ],
+        [
+          6,
+          -1
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          9,
+          1
+        ],
+        [
+          8,
+          1
+        ],
+        [
+          4,
+          -1
+        ],
+        [
+          2,
+          -1
+        ],
+        [
+          7,
+          1
+        ],
+        [
+          10,
+          -1
+        ]
+      ]
+    },
+    {
+      "bits": "ABABBBBBBBBB",
+      "gap": 0,
+      "pattern": [
+        0,
+        2,
+        1,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11
+      ],
+      "width": 12,
+      "inversions": 1,
+      "budget": 3,
+      "status": "exhausted"
+    },
+    {
+      "bits": "BABABBBBBBBA",
+      "gap": 2,
+      "pattern": [
+        1,
+        3,
+        11,
+        12,
+        13,
+        0,
+        2,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "width": 14,
+      "inversions": 30,
+      "budget": 14,
+      "status": "found",
+      "word": [
+        [
+          2,
+          -1
+        ],
+        [
+          5,
+          1
+        ],
+        [
+          8,
+          1
+        ],
+        [
+          9,
+          -1
+        ],
+        [
+          7,
+          -1
+        ],
+        [
+          4,
+          1
+        ],
+        [
+          1,
+          -1
+        ],
+        [
+          7,
+          1
+        ],
+        [
+          4,
+          1
+        ],
+        [
+          5,
+          1
+        ],
+        [
+          0,
+          -1
+        ],
+        [
+          6,
+          1
+        ],
+        [
+          8,
+          -1
+        ],
+        [
+          10,
+          -1
+        ]
+      ]
+    },
+    {
+      "bits": "BABABBBBBBBB",
+      "gap": 0,
+      "pattern": [
+        1,
+        3,
+        0,
+        2,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11
+      ],
+      "width": 12,
+      "inversions": 3,
+      "budget": 5,
+      "status": "found",
+      "word": [
+        [
+          1,
+          1
+        ],
+        [
+          0,
+          -1
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          -1
+        ]
+      ]
+    },
+    {
+      "bits": "BABBBBBBBBBA",
+      "gap": 2,
+      "pattern": [
+        1,
+        11,
+        12,
+        13,
+        0,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "width": 14,
+      "inversions": 31,
+      "budget": 13,
+      "status": "found",
+      "word": [
+        [
+          1,
+          -1
+        ],
+        [
+          2,
+          -1
+        ],
+        [
+          5,
+          1
+        ],
+        [
+          4,
+          1
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          8,
+          1
+        ],
+        [
+          7,
+          1
+        ],
+        [
+          10,
+          1
+        ],
+        [
+          10,
+          1
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          0,
+          -1
+        ],
+        [
+          5,
+          1
+        ],
+        [
+          8,
+          1
+        ]
+      ]
+    },
+    {
+      "bits": "BABBBBBBBBBB",
+      "gap": 0,
+      "pattern": [
+        1,
+        0,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11
+      ],
+      "width": 12,
+      "inversions": 1,
+      "budget": 3,
+      "status": "exhausted"
+    },
+    {
+      "bits": "AABABBBBBBBBA",
+      "gap": 2,
+      "pattern": [
+        0,
+        1,
+        3,
+        12,
+        13,
+        14,
+        2,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11
+      ],
+      "width": 15,
+      "inversions": 28,
+      "budget": 12,
+      "status": "found",
+      "word": [
+        [
+          3,
+          -1
+        ],
+        [
+          6,
+          1
+        ],
+        [
+          5,
+          1
+        ],
+        [
+          7,
+          -1
+        ],
+        [
+          4,
+          1
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          10,
+          1
+        ],
+        [
+          9,
+          1
+        ],
+        [
+          5,
+          -1
+        ],
+        [
+          3,
+          -1
+        ],
+        [
+          8,
+          1
+        ],
+        [
+          11,
+          -1
+        ]
+      ]
+    },
+    {
+      "bits": "AABABBBBBBBBB",
+      "gap": 0,
+      "pattern": [
+        0,
+        1,
+        3,
+        2,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "width": 13,
+      "inversions": 1,
+      "budget": 3,
+      "status": "exhausted"
+    },
+    {
+      "bits": "ABABBBBBBBBBA",
+      "gap": 2,
+      "pattern": [
+        0,
+        2,
+        12,
+        13,
+        14,
+        1,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11
+      ],
+      "width": 15,
+      "inversions": 31,
+      "budget": 13,
+      "status": "found",
+      "word": [
+        [
+          2,
+          -1
+        ],
+        [
+          3,
+          -1
+        ],
+        [
+          6,
+          1
+        ],
+        [
+          5,
+          1
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          9,
+          1
+        ],
+        [
+          8,
+          1
+        ],
+        [
+          11,
+          1
+        ],
+        [
+          11,
+          1
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          1,
+          -1
+        ],
+        [
+          6,
+          1
+        ],
+        [
+          9,
+          1
+        ]
+      ]
+    },
+    {
+      "bits": "ABABBBBBBBBBB",
+      "gap": 0,
+      "pattern": [
+        0,
+        2,
+        1,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "width": 13,
+      "inversions": 1,
+      "budget": 3,
+      "status": "exhausted"
+    },
+    {
+      "bits": "BABBBBBBBBBBA",
+      "gap": 2,
+      "pattern": [
+        1,
+        12,
+        13,
+        14,
+        0,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11
+      ],
+      "width": 15,
+      "inversions": 34,
+      "budget": 14,
+      "status": "found",
+      "word": [
+        [
+          1,
+          -1
+        ],
+        [
+          2,
+          -1
+        ],
+        [
+          3,
+          -1
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          6,
+          1
+        ],
+        [
+          3,
+          -1
+        ],
+        [
+          9,
+          1
+        ],
+        [
+          6,
+          1
+        ],
+        [
+          5,
+          1
+        ],
+        [
+          8,
+          1
+        ],
+        [
+          1,
+          -1
+        ],
+        [
+          8,
+          1
+        ],
+        [
+          10,
+          -1
+        ],
+        [
+          11,
+          -1
+        ]
+      ]
+    },
+    {
+      "bits": "BABBBBBBBBBBB",
+      "gap": 0,
+      "pattern": [
+        1,
+        0,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "width": 13,
+      "inversions": 1,
+      "budget": 3,
+      "status": "exhausted"
+    },
+    {
+      "bits": "AABABBBBBBBBBA",
+      "gap": 2,
+      "pattern": [
+        0,
+        1,
+        3,
+        13,
+        14,
+        15,
+        2,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "width": 16,
+      "inversions": 31,
+      "budget": 15,
+      "status": "found",
+      "word": [
+        [
+          3,
+          -1
+        ],
+        [
+          4,
+          -1
+        ],
+        [
+          7,
+          1
+        ],
+        [
+          10,
+          1
+        ],
+        [
+          7,
+          1
+        ],
+        [
+          6,
+          1
+        ],
+        [
+          9,
+          1
+        ],
+        [
+          6,
+          -1
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          4,
+          1
+        ],
+        [
+          7,
+          1
+        ],
+        [
+          2,
+          -1
+        ],
+        [
+          12,
+          1
+        ],
+        [
+          12,
+          1
+        ],
+        [
+          10,
+          1
+        ]
+      ]
+    },
+    {
+      "bits": "AABABBBBBBBBBB",
+      "gap": 0,
+      "pattern": [
+        0,
+        1,
+        3,
+        2,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13
+      ],
+      "width": 14,
+      "inversions": 1,
+      "budget": 5,
+      "status": "found",
+      "word": [
+        [
+          0,
+          -1
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          0,
+          -1
+        ],
+        [
+          1,
+          -1
+        ]
+      ]
+    },
+    {
+      "bits": "ABABBBBBBBBBBA",
+      "gap": 2,
+      "pattern": [
+        0,
+        2,
+        13,
+        14,
+        15,
+        1,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "width": 16,
+      "inversions": 34,
+      "budget": 16,
+      "status": "found",
+      "word": [
+        [
+          2,
+          -1
+        ],
+        [
+          3,
+          -1
+        ],
+        [
+          4,
+          -1
+        ],
+        [
+          7,
+          1
+        ],
+        [
+          10,
+          1
+        ],
+        [
+          7,
+          1
+        ],
+        [
+          6,
+          1
+        ],
+        [
+          5,
+          1
+        ],
+        [
+          7,
+          -1
+        ],
+        [
+          9,
+          1
+        ],
+        [
+          9,
+          1
+        ],
+        [
+          11,
+          -1
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          4,
+          -1
+        ],
+        [
+          2,
+          -1
+        ],
+        [
+          12,
+          -1
+        ]
+      ]
+    },
+    {
+      "bits": "ABABBBBBBBBBBB",
+      "gap": 0,
+      "pattern": [
+        0,
+        2,
+        1,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13
+      ],
+      "width": 14,
+      "inversions": 1,
+      "budget": 5,
+      "status": "found",
+      "word": [
+        [
+          1,
+          1
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          0,
+          1
+        ]
+      ]
+    },
+    {
+      "bits": "BABBBBBBBBBBBA",
+      "gap": 2,
+      "pattern": [
+        1,
+        13,
+        14,
+        15,
+        0,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "width": 16,
+      "inversions": 37,
+      "budget": 17,
+      "status": "found",
+      "word": [
+        [
+          1,
+          -1
+        ],
+        [
+          2,
+          -1
+        ],
+        [
+          3,
+          -1
+        ],
+        [
+          4,
+          -1
+        ],
+        [
+          7,
+          1
+        ],
+        [
+          6,
+          1
+        ],
+        [
+          5,
+          1
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          8,
+          -1
+        ],
+        [
+          9,
+          -1
+        ],
+        [
+          10,
+          -1
+        ],
+        [
+          11,
+          -1
+        ],
+        [
+          12,
+          -1
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          2,
+          1
+        ]
+      ]
+    },
+    {
+      "bits": "BABBBBBBBBBBBB",
+      "gap": 0,
+      "pattern": [
+        1,
+        0,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13
+      ],
+      "width": 14,
+      "inversions": 1,
+      "budget": 5,
+      "status": "found",
+      "word": [
+        [
+          0,
+          1
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          2,
+          1
+        ]
+      ]
+    }
+  ]
+}

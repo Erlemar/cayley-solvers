@@ -1,5 +1,918 @@
 # Experiment Log — IHES Picture Cube
 
+## 2026-09-19 -- IHES TPU kernel: padding bug, 402M, frames/history/V-consistency
+
+- **Padding bug.** With `mask_invalid=False` (the cube444 parity setting), empty all-zero beam
+  slots are scored by the model in early steps and their children compete for the
+  per-destination quotas. v1b scores the zero state 17.6-19.0; none of pid 75's 324 real
+  layer-2 children (17.7-21.3) beat it, so real states were cut while the beam had room.
+  `mask_invalid=True` fixes it: pid 75 at a 12,288 CPU beam went 27 -> 25. The measured 268M run
+  (23/23) used the old setting. The cube444 256M kernel has the same default; check s3's score
+  for its zero state.
+- **Knobs at the top** (user request): `QV_CONSISTENCY`, `HISTORY_DEPTH`, `FRAMES`,
+  `MASK_PADDING`. Each verified through the real engine on CPU: V-consistency parity vs
+  PyTorch 2.1e-5 and it moves the score trajectory; history proven by tracing a layer-2 state that
+  returns in layer 4 only without it (depth 1 can never match: IHES moves are odd permutations);
+  all 96 frames round-trip. All on at a 12,288 beam: pid 75 forward 25, frame (7, inverse) **23**.
+- **402,653,184 states (3*2^27), padding masked -- MEASURED (kernel version 5):**
+
+  | pid | 1M | 268M unmasked | **402M masked** | best known |
+  |---|---:|---:|---:|---:|
+  | 75 | 25 | 23 | **21** | 21 |
+  | 99 | 23 | 23 | **21** | 21 |
+  | 95 | 23 | -- | **21** | 21 |
+
+  All three at the best known length (ties, so the merged file stays 21,870). Beam prefix 15 +
+  exact tail 6 on each. Compiled program **12.46 GiB/chip** (projected ~13.0); cold compile 826 s,
+  warm 77-91 s; early steps 109-125 s (faster than 268M's 137-140 because masked empty chunks are
+  skipped); mature step **607.6 s** (1.62x for 1.5x width); 89-101 min per pid; 4.66 h for three.
+  Host ancestry 90 GiB of 322. **Confounded**: width AND masking changed vs the 268M run; the CPU
+  evidence puts masking alone at ~2 moves on pid 75 at a small beam.
+- Ceiling: ~7.6 GiB per 268M of width + ~1.06 GiB code puts the 15 GB program check at ~430M
+  (13*2^25 = 436M projects to 13.4 GiB, untested); 2^29 ~16.3 GiB does not fit.
+
+## 2026-09-18 -- IHES 256M TPU kernel (and a 512M path)
+
+**Goal (user).** An IHES inference kernel like the cube444 256M one, for 256M or 512M states.
+
+**Built:** `kaggle_notebooks/tpu_beam_ihes_q_256m/` (30-cell notebook + modules + two CPU
+tests), inputs in `kaggle_datasets/ihes_q_beam_tpu_assets/`. Nothing pushed to Kaggle.
+
+**Why our old IHES TPU kernel could not get there.** It stores raw 72-byte states, so at 2^28
+the four state arrays alone are 13.5 GiB of a 16 GiB chip; no chunk size or alpha fixes that.
+It was also selection-bound (measured 2026-07-12: 28.8 s/step at 32M, 84 s at 64M). The
+cube444 256M engine solves both (packed states, per-(sender,owner) quotas, tiled hashing,
+host-RAM ancestry, program-size ceiling), so the kernel is that engine retargeted.
+
+**The two IHES-specific wins:**
+- **17-byte states, 4.24x.** All 26 piece slots have exactly 24 occupants, so 26 x 5 bits =
+  130 bits. cube444 only reached 3.3x (29 B).
+- **A slot code IS a piece token**, so the beam never decodes stickers, and the model's whole
+  embedding stage collapses to a (26, 24, 256) lookup -- verified bit-exact vs PyTorch.
+
+**Engine port** (`port_engine.py`, 14 documented edits, regenerable): state = 26 codes;
+owner routing rebuilt for codes (a child is NOT a permutation of its parent once codes are
+relabelled, so the cube444 matmul trick does not apply -- we fold the relabelling into a
+per-move table and sum 26 gathers); ancestry bits derived from B_local (25 at 2^28, 26 at
+2^29, 2^30 refused); seed children from the codec.
+
+**Verified on 8 CPU devices** (nothing on a TPU yet):
+
+| check | result |
+|---|---|
+| codec round trip + 18 moves on packed codes | exact; padding sentinel proven illegal |
+| owner routing vs direct child hash | equal, 64 states x 18 moves |
+| model parity vs PyTorch | max abs dQ 1.7e-5, argmin agreement 1.0000 |
+| endgame BFS levels | 18 / 261 / 3,732 -- exact IHES ball sizes |
+| `cpu_smoke.py` | pid 26 solved, replay-verified, **22 moves** (its best known) at beam 131,072 |
+| `notebook_cpu_check.py` | all 17 code cells run; submission.csv written |
+
+**Pushed to Kaggle (user asked, 2026-09-18):** dataset `artgor/ihes-q-beam-tpu-assets` and
+kernel `artgor/cayleypy-ihes-q-beam-on-tpu-256m-states`, both private, TPU v5e-8, running
+pid 75 then 99 at 2^28 (pid 75 is v1b's worst gate gap: 25 moves at 2^20 vs a best known 21).
+
+- **v1 failed in 11 s**: the generated .ipynb had cell source lines without trailing newlines,
+  and Jupyter concatenates that list, so cell 1 was one run-on line. The queue before it was
+  3.5 h. The local checker had rebuilt cells with `"
+".join(...)`, which hides exactly that
+  defect; it now uses `"".join(...)` and the builder asserts newline termination.
+  See [[ipynb-source-lines-need-newlines]].
+- `~/.kaggle/access_token` was UTF-16, which the current kagglesdk cannot read (it dies before
+  falling back to kaggle.json). Converted to UTF-8, original kept as `.utf16.bak`.
+
+**MEASURED on Kaggle v5e-8, version 3, 2026-09-18 (2^28 = 268,435,456 states):**
+
+| | IHES | cube444 at 2^28 |
+|---|---|---|
+| compiled program per chip | **8.89 GiB** (temp 7.12) | 12.17 GB |
+| compile cold / warm | 533 s / 78 s | ~9 min |
+| early steps | 137-140 s | |
+| mature step | **375.6 s** (1.7x faster) | ~643 s |
+| host ancestry at depth 40 | 80 GiB of 322 GiB available | ~110 GiB RSS |
+
+| pid | beam prefix + exact tail | 2^28 | 2^20, same model | best known |
+|---|---|---:|---:|---:|
+| 75 | 17 + 6 | **23** | 25 | 21 |
+| 99 | 17 + 6 | **23** | 23 | 21 |
+
+About 75 min per pid; 2.47 h for the notebook. No record: the merged submission stays 21,870.
+Width bought 2 moves on pid 75 and nothing on 99; neither reached 21.
+
+**512M is not free.** Most of the 7.12 GiB of temporaries scale with B, so 2^29 lands near
+16 GiB per chip -- at or over the chip and over the engine's 15 GB program ceiling. The ancestry
+layout supports 2^29; the device memory would need further work (smaller exchange or chunked
+sort) before it fits.
+
+## 2026-09-17 -- Beam-AVI on v1b: first pass (2^18, 2 rounds) tied; 2^20 x 10-round rerun running
+
+**Goal (user).** Improve v1b by training it on its own beam results, the way Q-training
+works. That is Beam-AVI (`BEAM_AVI_METHOD.md`). **Found path length is the only verdict.**
+The gate is gate-54 at B=2^18: 1 forward frame, bf16, no merge. v1b = **1255** on both the
+A100 and the 4090. Full log: `IHES_TRANSFORMER_PLAN_2026-09-16.md`.
+
+| arm | machine | round 0 | round 1 |
+|---|---|---|---|
+| A: faithful | A100 | 1255 (+0, W2/L2) | 1255 (+0, W3/L3) |
+| B: + gap-margin term (walk k<=12, weight 0.3) | 4090 | 1259 (+4, W2/L4) | 1257 (+2, W3/L4) |
+| R: + frozen-v1b rehearsal on walk states (weight 16) | A100 | 1255 (+0, W1/L1) | 1255 (+0, W1/L1) |
+
+- **Under-powered, not a verdict** (user correction, ~17:45). Generation and gates should be
+  at B=2^20, and the method needs 5-10 rounds; cube444 gained -154 by r005 and -214 by r010.
+  **Rerun A20:** B=2^20, 10 rounds, no early stop, gated on the 4090 at 2^20 against v1b's
+  1243. See `IHES_TRANSFORMER_PLAN_2026-09-16.md`.
+- **First pass:**
+  - Every arm stopped after round 1, having found no shorter total in two rounds.
+  - No gate path beat a best-known pid length (0 wins vs the floor in all six gates).
+  - v1b stays the deliverable unless the rerun beats it.
+- **One round** (`scripts/91_ihes_avi_loop.py`):
+  - Harvest 50 non-gate pids at B=2^18 (`89`): ~12 min on the A100, ~28 min on the 4090.
+  - Train 4000 steps at lr 2e-5 (`90`): 2-5 min.
+  - Gate (`84`): 11-25 min on the A100, ~27 min on the 4090.
+  - Compute: about 2 h of A100 plus 2 h of 4090. The VM `ihes-tf-b` is stopped; its shards
+    stay on its disk.
+- **Proxies, secondary.**
+  - Every AVI checkpoint is flatter than v1b. Deep gap01 fell 0.387 -> 0.237 (A r000) and
+    0.209 (A r001), yet A's path totals tied both times. The level check did not predict
+    path length here.
+  - The flattening comes from the bootstrap fit itself:
+    - A dense-only (unbiased) stream flattens nearly as much as the beam-selected stream.
+    - The fitted model ends flatter than its own targets.
+    - One round erodes v1b's mid-depth ranking on walk states: at walk depth 9-12 the
+      next-minus-undo gap fell 1.78 -> 1.11.
+  - Rehearsal (R) halves that erosion and still only ties.
+- **New tools:**
+  - `89_ihes_gen_harvest.py`
+  - `90_ihes_train_avi.py`, with `--sparse-weight`, `--gap-*` and `--rehearse-*`
+  - `91_ihes_avi_loop.py`
+  - `92_ihes_level_check.py`
+  - `93_ihes_target_sharpness.py`
+  - `94_ihes_gap_by_depth.py`
+
+  Results are in `runs/ihes_avi/{A,B,R,abl}/` (gitignored).
+- Two short rounds at 2^18 tie. That says nothing about 5-10 rounds at 2^20.
+
+## 2026-09-16/17 -- PieceTransformer Q model for 256M+ beams: v1b
+
+**Goal (user).** Train a transformer that reaches the 21,870 lengths when other people run it
+with 256M-or-wider beams. Ties are fine. The full log and decisions are in
+`IHES_TRANSFORMER_PLAN_2026-09-16.md`.
+
+**Deliverable.** `exports/ihes_tf_v1b/` (weights gitignored) contains:
+- a slim `.pt`;
+- an `.npz` in the cube444 256M kernel's key layout with numeric `meta/*`;
+- the layout, README and MANIFEST.
+
+JAX-vs-torch parity: max|dQ| 1.7e-5, argmin agreement 1.0000.
+
+**Watch the activation.** The model uses **SiLU**. The cube444 kernel hard-codes ReLU, so use
+`kaggle_notebooks/tpu_beam_ihes_tf/ihes_jax_q_models.py`, which reads `meta/silu`.
+`exports/ihes_tf_v1a/` is the arm-A model.
+
+**v1b recipe (arm B)**
+- **Model:** PieceTransformerQ with 26 piece tokens + CLS, d256 / 4 layers / 8 heads /
+  ff 1024, SiLU, an 18-way Q head and an AZ value head. 3,508,755 params.
+- **Stage 1**, trained from scratch.
+  - Trainer: `tetraminx/scripts/51_train_sparse_q.py` with `puzzle: ihes`.
+  - Config: `configs/ihes_tf_b.yaml`. Sparse-Q with 48-frame coverage (4 rows), exact d<=5
+    anchors, pivot tilt 0.5, k_max 26.
+  - Batch 2048 x 256 steps at lr 3e-4, on the A100 at 29 s/epoch.
+  - Stopped when the 200-epoch gate trend flattened: best e800, stopped at e1210.
+- **LR step-down:** `--resume-lr 3e-5` from e1200; best e1300.
+- **Q-Bellman** (`scripts/86_train_q_bellman.py`, the 444 s3 recipe): 2000 steps from e1300.
+  Exact d<=6 anchors by exclusion labelling (`scripts/82`); path states with the 108 gate
+  pids held out (`data/ihes_path_bank_h108.pt`).
+
+**Protocol.**
+- `scripts/84_solve_tf.py` (IHES fork of tetraminx `30_solve.py`): 1 forward frame, endgame
+  d6, bf16, no merge.
+- Gate-54 (`data/ihes_gate54.json`, floor 1215) for 200-epoch trends via
+  `scripts/85_watch_eval.py`.
+- Gate-108 (floor 2423, all held out of the Bellman bank) for selection.
+
+**Results** (lower is better):
+
+| model | g54 @2^16 | g108 @2^16 | g54 @2^18 | g108 @2^18 |
+|---|---|---|---|---|
+| E6 V (control) | 1355 | | | |
+| arm A e600 (stage-1 best, Vlad-faithful + AZ) | 1309 | | | |
+| A1 = arm A anneal e1100 | 1299 | 2613 | 1285 | |
+| A2 = A1 + Bellman 2000 = **v1a** | 1299 | 2597 | 1267 | 2537 |
+| B8 = arm B e800 | 1297 | 2595 | 1279 | |
+| B8S = B8 + Bellman 2000 | 1291 | 2585 | 1263 | 2533 |
+| **BAS = arm B anneal e1300 + Bellman 2000 = v1b** | 1283 | **2573** | **1255** | **2511** (65/108 floor ties) |
+
+**v1b width scaling** (gate-54, 1 forward frame, 4090):
+
+| beam | total | vs floor | ties |
+|---|---|---|---|
+| 2^16 | 1283 | +68 | 22 |
+| 2^18 | 1255 | +40 | 35 |
+| 2^20 | 1243 | +28 | 41 |
+
+- At 2^20 all 7 length-24 pids are at the floor.
+- Gains shrink per 4x of width (-28, then -12).
+- The short length-21 pids stay +12 at 2^20 with one frame, so add the inverse frame at wide
+  beams.
+- The 2^20 run took 99 min on the 4090.
+
+**Findings**
+1. **Fast start.** The transformer matched E6 after about 1 h of training (arm A e200 = 1353
+   vs 1355), and stage 1 then reached 1297-1309.
+2. **Arm B beat arm A** (tetraminx recipe vs Vlad-faithful) at every stage.
+3. **Constant LR is noisy.** Checkpoints bounce by +-10-20 on gate-54. A 3e-5 step-down
+   bought -18 on arm A (e1000 1317 -> e1100 1299) and -12 on arm B (e1200 1303 -> e1300 1291).
+4. **Bellman peaks early.** It is best near 2k steps and flat after, as on cube555:
+   - probe from B e200: 1333 -> 1321 (1k) -> 1313 (2k) -> 1315-1319 (3k-6k);
+   - v1b's own curve at 2^18: 1263 / 1263 / 1257 / **1255** / 1259 / 1257 at steps 500-3000.
+   - Rounds 2 and 3 reached 1251 on gate-54 but **2513 vs 2511 on gate-108**: a plateau.
+5. **Bellman's edge grows with width** (A1 vs A2: tied at 2^16 on gate-54, 18 apart at
+   2^18), as on 444. It also generalises: A2's 16-move gain on gate-108 at 2^16 came
+   entirely from the 54 pids held out of its bank.
+6. **Gate-54 is too small for sub-2% calls.** Round 2 looked 4 better on gate-54 and was 6
+   worse on the other half. Select on gate-108.
+7. **Results reproduce across hardware at 2^18.** 4090 and A100 agree exactly on gate-54
+   (1255 / 1267 / 1263). At 2^16, cross-hardware bf16 drift was <= 2.
+8. **A full path bank gives no in-sample gain** (all 1003 pids, BASF: 1257 vs 1255; 2571 vs
+   2573). Path states carry no labels, so there is nothing to memorise.
+9. **v1b alone captures nearly all of the portfolio at 2^18.** The per-pid min over
+   v1a/v1b is 2505 (-6 vs v1b); over A1/A2/B8 at 2^16 it was 2563 (-32 vs best).
+
+**Ops lessons**
+- **One job per GPU.** Time-slicing a trainer, a Bellman run and two evals on one A100 took
+  arm B from 29 to 93 s/epoch. An eval on the 4090 beside training tripled epoch time. Keep
+  evals on an otherwise idle GPU.
+- **`&&` chains before `&`.** A remote `tar && ... && nohup watcher & disown; echo` silently
+  never started the watcher: the `&` backgrounded the failed chain, and `echo` still ran.
+- **Dedup monitor output by content.** A monitor printing the "last N new lines" of
+  concatenated logs mis-reported events; `models/monitor_ihes_vm.sh` now tracks seen lines.
+
+## 2026-09-12 -- Two parent exclusions; wave 29
+
+14:10 UTC: 706 root 3 and 764 root 8 fully exhausted, 262 suffixes each;
+936 root 22 first 128 cases exhausted, still partial. No timeouts/hits.
+Prefix/native/wave audits and replay passed; total 21,870 unchanged. Evidence:
+`data/ihes_pdb/status_20260912_1410.json`. Wave 29 continues 936 root 22 only
+at IDs 128--261 and starts 764 root 15 at IDs 0--127, both confirmed RUNNING.
+Wave 28 and local queue remain active, five CPU notebooks total.
+
+## 2026-09-12 -- Four further parent exclusions; wave 28 and local queue
+
+12:10 UTC: 706 root 5, 810 root 15, 106 root 22 and 592 root 10 fully
+exhausted; 680 root 4 first 128 cases exhausted. No timeouts/hits. Prefix,
+native, wave and replay checks passed; total remains 21,870. Evidence:
+`data/ihes_pdb/status_20260912_1210.json`. These are opening exclusions only.
+
+Wave 28 starts 106 root 23 / 592 root 4 first halves and continues only the
+remaining half of 680 root 4. All three confirmed RUNNING, with existing
+936/764 jobs keeping total remote concurrency at five. Finished local queue
+replaced by 706 roots 3/9 then 810 root 21, one native worker. Current process
+and artifact details are in the campaign document.
+
+## 2026-09-12 -- 706/936 parent exclusions; next 936 opening
+
+10:09 UTC: 706 root 10 and 936 root 19 fully exhausted, 262 suffixes each,
+zero timeouts/hits. Combined-slice native/prefix/wave audit and replay passed;
+total 21,870 unchanged. Evidence: `data/ihes_pdb/status_20260912_1009.json`.
+No whole-puzzle optimality claim. Wave 27 reuses completed slot 4 for 936
+root 22, first 128 suffixes, confirmed RUNNING. Other four remote jobs and
+local queue continue. Current manifests and process details in campaign file.
+
+## 2026-09-12 -- Two local parents finished; three remote half-parent continuations
+
+08:09 UTC: 706 root 7 and 810 root 9 fully exhausted, 262 suffixes each.
+106 root 22, 592 root 10 and 764 root 8 first 128 suffixes exhausted; still
+partial parents. All zero timeouts/hits, native/prefix/wave audits and replay
+passed. Total 21,870 unchanged. Evidence: `data/ihes_pdb/status_20260912_0809.json`.
+
+Wave 26 resumes those three remote parents only at IDs 128--261, confirmed
+RUNNING alongside wave-25 slots 3/4. Finished local queue replaced with
+706 roots 10/5 then 810 root 15, one native worker at a time. Manifest/queue
+provenance and active paths are recorded at the top of the campaign document.
+
+## 2026-09-12 -- 680 first parent complete; 936 continuation
+
+06:07 UTC: 706 root 0 and 680 root 18 fully exhausted, 262 suffixes each,
+zero timeouts/hits. 936 root 19 first 128 cases exhausted, still partial.
+Prefix/native/wave audits and replay passed; total remains 21,870. Evidence:
+`data/ihes_pdb/status_20260912_0607.json`, including explicit coverage scope.
+
+Wave 25 continues 936 root 19 only at suffix IDs 128--261 and starts 680
+root 4 at IDs 0--127. Both confirmed RUNNING; five CPU notebooks overall.
+New parent selection skips the cancelling identity root, since it cannot
+begin a shortest 22-move path. The initially prepared identity package was
+replaced before upload; final package/hash is in the manifest. Local queue
+continues 706 root 7 then 810 root 9; no competing worker launched.
+
+## 2026-09-12 -- Three further parent exclusions; refill local and remote work
+
+04:07 UTC: 810 root 22, 592 root 7 and 764 root 2 each now cover all 262
+suffixes, with no timeouts/hits. Combined-slice identity/native/replay audits
+passed; 21,870 unchanged. Audit: `data/ihes_pdb/status_20260912_0407.json`.
+No whole-puzzle optimality proof follows from these opening exclusions.
+
+Finished local queue replaced by three sequential parents: 706 roots 0/7,
+810 root 9. Wave 24 uses freed slots 2/5 for 592 root 10 and 764 root 8,
+first 128 suffixes each; confirmed RUNNING. Existing wave-23 jobs and 680
+continuation remain active, five remote CPU notebooks total. Current manifests,
+provenance, candidate paths and process IDs are recorded in the campaign file.
+
+## 2026-09-12 -- Four L24 parents completed; next 106/936 openings
+
+02:07 UTC: local 706 root 13 and 810 root 18 completed, and remote 936 root 18
+and 106 root 19 completed across their pilot/continuation slices. All four
+cover exactly 262 suffixes with native exhaustion and no timeouts/hits. Full
+prefix, native completion, wave identity and replay checks passed. Total 21,870;
+these are opening exclusions only. Evidence: `data/ihes_pdb/status_20260912_0207.json`.
+
+Local queue continues its final job, 810 root 22. New wave 23 uses freed slots
+1/4 for 106 root 22 and 936 root 19, first 128 suffixes each, confirmed RUNNING.
+Existing remote 592/680/764 continuations remain active; five CPU notebooks
+total. Same tested search runner and bounds; selection and artifact hashes in
+`data/ihes_pdb/cpu_wave23_manifest.json`. Current process/path details in campaign.
+
+## 2026-09-12 -- Second PID 810 opening exhausted; sequential local queue
+
+00:05 UTC: PID 810/f0.r2 (root 10) exhausted 262 suffixes, zero timeouts/hits,
+3560.8 s native time. Prefix/native audit and replay passed; total 21,870.
+810 roots 7 and 10 are excluded, not the whole puzzle. Evidence:
+`data/ihes_pdb/status_20260912_0005.json`.
+
+All five Kaggle jobs still RUNNING; no remote restarts. Local work now uses a
+bounded three-parent sequential queue: 706 root 13, then 810 roots 18 and 22.
+One 16-thread/8-GiB native worker at a time, 300 s per suffix, 262 suffixes per
+parent. Durable status identifies active child and completed candidates; replay
+checks each result and stops on failure or improvement. This removes idle gaps
+between checks without increasing simultaneous local memory use. Queue stem:
+`data/ihes_pdb/local_queue_20260912_0005`; detailed paths in campaign document.
+
+## 2026-09-11 -- Second L24 opening exhausted; three remote continuations
+
+22:05 UTC: PID 706/f0.d2 exhausted all 262 suffix cases in 3462.07 s, zero
+timeouts/hits. Wave-20 PID 106/-f0.-f1, 680/-f0.f1 and 764/f0.f1 each finished
+their first 64 cases, also zero timeouts/hits. Independent prefix/native/wave
+checks and replay passed. Combined artifact `submissions/ihes_20260911_2205_verified.csv`
+remains 21,870. Evidence: `data/ihes_pdb/status_20260911_2205.json`.
+Full-parent exhaustion is only a partial-puzzle result, not global optimality.
+
+Wave 22 resumes those three parents at suffix IDs 64--261 on slots 1/3/5;
+confirmed RUNNING. Existing remote 592 and 936 continuations remain active,
+total five CPU notebooks. Local search advances to 810/f0.r2 (root 10), all
+262 suffixes, selected by completed depth-19 cost excluding exhausted root 7.
+Startup bounds/cache loads verified; no errors. Paths and provenance are in
+the campaign document. Original baseline remains untouched.
+
+## 2026-09-11 -- One L24 opening exhausted; continue 592 and start 706
+
+20:05 UTC: PID 810/f0.-r0 completed all 262 canonical suffix cases, zero
+timeouts/hits, 3717.5 s native time. This excludes that opening only; no
+whole-puzzle optimality claim. Wave-20 PID 592/f0.-r0 completed suffix IDs
+0--63 in 6202.18 s, also zero timeouts/hits. Independent prefix/native/wave
+audits and 1003-path replay passed; total remains 21,870. Evidence:
+`data/ihes_pdb/status_20260911_2005.json`.
+
+Wave 21 reuses only completed slot 2 for PID 592's remaining suffix IDs
+64--261, confirmed RUNNING (version 15). Four other wave-20 jobs continue.
+Local search now covers all 262 suffixes under PID 706/f0.d2 (root ID 16),
+chosen by completed depth-19 cost. Startup and normal native exhaustion
+verified, errors empty. Current manifests, candidates and process IDs are
+recorded at the top of `IHES_SEARCH_2026-09-06.md`.
+
+## 2026-09-11 -- Split4 pilots verified; extend remaining suffix coverage
+
+18:05 UTC: local 810/f0.-r0 pilot exhausted 16 suffixes in 232.45 s; remote
+936/-f0.f1 pilot exhausted 24 in 2401.55 s. Independent prefix/native audits and
+candidate replays passed, no timeouts or improvements. Both remain partial
+parent coverage, not full-puzzle proofs. Old wave-18 four jobs finished with
+24 timeouts each. All verified candidates total 21,870.
+
+Local continuation reuses the pilot journal and searches only suffix IDs 16--261
+under 810/f0.-r0. Wave 20 uses all five CPU slots: 106/-f0.-f1, 592/f0.-r0,
+680/-f0.f1, 764/f0.f1 each suffix IDs 0--63; 936/-f0.f1 only remaining IDs
+24--261. New parents selected by completed depth-19 cost; source hashes and
+timings in manifest. All five provider states confirmed RUNNING, local resume
+confirms 16 settled records, error logs empty. Builder:
+`scripts/73_prepare_ihes_l24_wave20.py`. Current paths in campaign document.
+
+## 2026-09-11 -- Depth-20 timeouts persist; test four-move partitions
+
+16:05 UTC: all four 1800-second local attempts timed out; remote PID 706's
+24 cases also timed out at 1200 s each. Completed candidates replayed valid at
+unchanged 21,870. No exhaustion or optimality proof from these runs.
+
+Added fixed-parent support to `27_prefix_split_ladder.py`: refine a two-move
+parent with all distinct two-move suffixes, k=4 and residual depth 18. Full
+suffix coverage covers only that parent, not the whole puzzle. Native known-
+solution control passed and replayed 1003 paths; 324-vs-262 partition checks
+passed for three parents, along with all five parser failure regression tests.
+Validation: `scripts/71_test_ihes_fixed_prefix.py`.
+
+Local pilot on PID 810 parent f0.-r0, first 16 suffixes, 300 s each. First eight
+exhausted in about 9--20 s each, no hits: useful partial coverage, no score gain.
+Remote wave 19 tests PID 936 parent -f0.f1, first 24 suffixes, 1200 s each in
+slot 4; confirmed RUNNING. Builder `scripts/72_prepare_ihes_l24_split4.py`
+embeds and hashes the tested runner. Wave 18's four older jobs are finishing;
+collect and verify outputs before reusing slots. Active details in campaign doc.
+
+## 2026-09-11 -- L24 first local round all timeouts; bounded budget escalation
+
+12:05 UTC: local 810/936 round 1 finished, 48/48 cases timed out at depth 20
+after 300 s, zero hits/exhaustions. Candidate replayed 1003/1003 at 21,870.
+All five L24 Kaggle jobs remain RUNNING. Native evidence establishes insufficient
+time budget for these cases, not absence of shorter solutions.
+
+Started a four-case local 1800-second escalation via
+`scripts/70_ihes_l24_local_escalation.py`: 810 prefixes 7/10 and 936 prefixes
+19/18, alternating PIDs. Chosen by the cheapest completed depth-19 cost per PID;
+no claim this predicts solution likelihood. Source hashes and selection are in
+`data/ihes_pdb/local_L24_escalation1_20260911.plan.json`. At most two hours,
+16 threads, 8 GiB, residual depth 20. Native bounds loaded; no startup errors.
+
+## 2026-09-11 -- All compute redirected to length-24 targets
+
+08:05 UTC: old PID 834 wave completed all 262 prefixes; independent full-wave
+audit and candidate replays passed, unchanged 21,870. No new L22 searches.
+Freed slots 1/2/3/5 now run L24 PIDs 106/592/680/764 (wave 18), all confirmed
+RUNNING. Existing slot 4 continues L24 PID 706 (wave 17). Total five CPU jobs.
+Each remote PID initially covers openings 0--23, residual depth 20, 1200 s each.
+
+Local L24 810/936 round 1 continues: 810 has 22 timeouts and no hits/exhaustions
+at snapshot; 936 not started. No proof from timeouts and no score improvement.
+Error logs empty. Current paths, versions and collectors are in the campaign doc.
+
+## 2026-09-11 -- User redirects campaign to the seven length-24 paths
+
+06:05--06:11 UTC: user requested priority on PIDs 106, 592, 680, 706, 764,
+810, 936. Earlier 600-second whole-path depth-22 trials all timed out; no proofs.
+Stopped the task's local L22 native solver while preserving its journal. PID
+122's completed 262-prefix proof was audited (5544.37 s); PID 990 has 72 settled
+prefixes and one intentional interruption, remains unresolved.
+
+Started local L24 PIDs 810 then 936, initial prefixes 0--23 each, residual depth
+20, 300 s each, 16 threads and 8 GiB. Free Kaggle slot 4 now runs L24 PID 706
+(wave 17), same prefix range, 1200 s each, 8 GiB, nine-hour cap; confirmed RUNNING.
+Other four previous-wave slots finish PID 834 then will switch to 106/592/680/764.
+No new L22 target launches. `scripts/69_prepare_ihes_l24.py` creates validated
+L24 notebooks; collector filter now downloads prefix_L24.jsonl. Initial trials
+cover only 24/262 prefixes per PID and timeouts remain unresolved. No score
+improvement yet; best verified total remains 21,870. Active paths in campaign doc.
+
+## 2026-09-11 -- PIDs 772 and 874 optimal; next targets
+
+04:03 UTC: all five PID 772 shards and local PID 874 finished, each PID with
+262 exhausted openings and no hits/timeouts. Independent prefix/native audits
+passed; every candidate replayed 1003/1003 valid. Local 874 took 6020.99 s.
+Final verified min-merge remains 21,870, no improvement. Proofs recorded in
+`data/ihes_pdb/pid772_proof_20260911.json` and `pid874_proof_20260911.json`.
+
+Continued with wave 16 on PID 834: five private CPU shards, 1200 s per prefix,
+8 GiB, nine-hour cap, all confirmed RUNNING. Local search targets 122 then 990,
+16 threads and 120 s per prefix. Native bounds loaded; no errors or overlap.
+
+## 2026-09-11 -- PID 170 optimal; PID 772 four shards exhausted
+
+02:02 UTC: local PID 170 exhausted all 262 openings in 5615.62 s, no hits or
+timeouts; independent native/prefix audit passed. PID 874 continues with 83
+exhausted openings at snapshot. Wave-15 shards 1, 3, 4, 5 completed: 209 assigned
+prefixes exhausted, wave/native coverage and every candidate replay verified.
+Only shard 2 remains RUNNING. No full PID 772 proof yet. Audit snapshot:
+`data/ihes_pdb/status_20260911_0202.json`. Verified total remains 21,870.
+
+## 2026-09-11 -- PID 644 optimal; PID 772 partial completion
+
+00:01 UTC: local 644 exhausted all 262 prefixes in 5726.67 s, no hits/timeouts;
+independent native/prefix audit passed. Completed 614/644 batch replayed
+1003/1003 valid at unchanged 21,870. Wave-15 shard 5 completed all 50 assigned
+PID 772 prefixes; native evidence and candidate replay passed. Other four
+shards remain RUNNING. Audit snapshot: `data/ihes_pdb/status_20260911_0001.json`.
+
+Continued local search on 170 then 874, 16 threads, 8 GiB, 120 s per prefix.
+Native bounds loaded, no startup errors. Remote work continues without restart.
+
+## 2026-09-10 -- PID 614 optimal
+
+22:00 UTC: local PID 614 exhausted all 262 openings in 7331.81 s, no hits or
+timeouts. Independent native/prefix audit passed:
+`data/ihes_pdb/pid614_proof_20260910.json`. Local PID 644 continues, 16 settled
+prefixes at snapshot. All five PID 772 Kaggle shards remain RUNNING, with no
+reported failures. Verified total unchanged at 21,870. No worker restarts.
+
+## 2026-09-10 -- PIDs 996 and 910 optimal; delayed collection recovered
+
+19:51 UTC actual execution of the delayed 11:05 heartbeat: local 996 exhausted
+262 openings in 6245.22 s; independent audit passed. Completed 558/996 batch
+replayed 1003/1003 valid. Wave-14 collector reached its ten-hour deadline before
+fetching completed remote outputs. Reran collection without restarting kernels;
+all five outputs recovered, all 262 PID 910 openings exhausted and independently
+audited, all candidate replays valid. Proofs: `pid996_proof_20260910.json` and
+`pid910_proof_20260910.json` under `data/ihes_pdb`. Merged total remains 21,870.
+The monitoring delay cause was not established; no claim of uninterrupted checks.
+
+Continued local search on PIDs 614 then 644, 16 threads, 8 GiB, 120 s per prefix.
+Launched wave 15 on PID 772 across five private CPU shards, 1200 s per prefix,
+nine-hour cap, all confirmed RUNNING at 19:55 UTC. No startup errors or overlap.
+
+## 2026-09-10 -- PIDs 46 and 558 optimal; next remote target
+
+06:34 UTC: PID 46's final openings 51/52 exhausted in 520.52/308.54 s.
+`scripts/68_audit_ihes_pid46.py` independently checked all six source jobs,
+including the interrupted wave-12 native tail, all 262 prefix identities,
+exhaustion markers, candidate replays and baseline. Full proof recorded in
+`data/ihes_pdb/pid46_proof_20260910.json`. Local 558 also exhausted all 262 in
+3474.34 s; proof recorded separately. No score improvement: 21,870.
+
+Launched wave 14 on unresolved PID 910: five private CPU shards, 1200 s per
+prefix, 8 GiB, nine-hour cap; all confirmed RUNNING. Existing local worker
+continues PID 996 (156 exhausted prefixes at snapshot). No errors or overlap.
+
+## 2026-09-10 -- PIDs 358 and 604 optimal; resume PID 46 wall-cap remainder
+
+04:34 UTC: local 358 and 604 each exhausted all 262 openings, no hits/timeouts;
+independent audits passed (8036.47 / 4944.15 s). Local batch replayed 1003/1003
+valid. All completed candidates min-merged at unchanged 21,870.
+
+Wave-12 PID 46 shard 1 reached the nine-hour cap, return -15, after recording
+51 exhausted openings. Full audit correctly refused an optimality proof.
+Partial audit checked all source candidates/native blocks and established 260
+settled openings, only IDs 51 and 52 unresolved. Prepared/started one wave-13
+CPU notebook restricted to those two, 1200 s each, 8 GiB, confirmed RUNNING.
+No settled work repeated. Evidence and preparation:
+`data/ihes_pdb/wave12_partial_audit_20260910_0434.json`,
+`scripts/67_prepare_ihes_wave13_close46.py`.
+
+Continued local search on PIDs 558 then 996; native bounds loaded, no startup
+errors. Current manifests, journals and process identities are in the campaign doc.
+
+## 2026-09-10 -- PID 46 four shards exhausted
+
+02:32 UTC: wave-12 shards 2--5 completed, all 209 assigned prefixes exhausted,
+no hits/timeouts. Independent native coverage, wave identity and every candidate
+replay passed at 1003/1003 valid and unchanged 21,870. Audit:
+`data/ihes_pdb/wave12_partial_audit_20260910_0232.json`. Shard 1 remains RUNNING;
+PID 46 is not yet proved optimal. Local PID 358 has 235 exhausted prefixes;
+604 is queued. No errors or worker restarts.
+
+## 2026-09-10 -- PIDs 730 and 272 optimal; PID 46 partial completion
+
+00:31 UTC: local PIDs 730 and 272 each exhausted all 262 openings, no hits or
+timeouts; independent native/prefix audits passed. Times: 3031.72 / 4203.24 s.
+Completed local batch replayed 1003/1003 valid at unchanged 21,870. Wave-12
+shards 3 and 5 finished with matching identity, complete native evidence and
+valid candidates: PID 46 has 103/262 prefixes settled, no full proof yet. Other
+three shards continue. Audit snapshot: `data/ihes_pdb/status_20260910_0031.json`.
+
+Continued local search on PIDs 358 then 604, 16 threads, 8 GiB and 120 s per
+prefix. Native bounds loaded, no startup errors. Remote jobs were not restarted.
+
+## 2026-09-09 -- PID 952 optimal; next local targets
+
+22:30 UTC: local PID 952 exhausted all 262 openings in 5605.77 s, no hits or
+timeouts. Independent native/prefix audit: `data/ihes_pdb/pid952_proof_20260909.json`.
+Completed 548/952 batch replayed 1003/1003 valid at unchanged 21,870. Continued
+local search on PIDs 730 then 272, 16 threads, 8 GiB and 120 s per prefix; native
+bounds loaded, no startup errors. All five remote PID 46 shards remain RUNNING
+through fresh provider checks; no remote restart or overlapping work.
+
+## 2026-09-09 -- PID 548 optimal
+
+20:29 UTC: local PID 548 exhausted all 262 openings in 4391.85 s, with no hits
+or timeouts. Independent native/prefix audit passed:
+`data/ihes_pdb/pid548_proof_20260909.json`. PID 952 continues with 127 exhausted
+prefixes at check. All five PID 46 Kaggle shards remain RUNNING, no reported
+failures. No score improvement; verified total remains 21,870.
+
+## 2026-09-09 -- PIDs 510 and 638 optimal; next targets
+
+18:29 UTC: local PID 510 and all five wave-11 PID 638 shards completed, each
+PID with 262 exhausted openings and no hits/timeouts. Independent native/prefix
+audits passed: `data/ihes_pdb/pid510_proof_20260909.json` and
+`pid638_proof_20260909.json`. Every remote candidate and the finished local
+916/510 batch replayed 1003/1003 valid. Verified merged score unchanged: 21,870.
+PID 510 took 5216.56 s.
+
+Continued with five private CPU shards for PID 46 (wave 12, 1200 s per prefix,
+8 GiB cache, nine-hour cap), all confirmed RUNNING. Local search targets PIDs
+548 then 952, 16 threads and 120 s per prefix. Native bounds loaded and no
+startup errors. Current artifacts and process identities are in the campaign doc.
+
+## 2026-09-09 -- PID 916 optimal
+
+16:29 UTC: local PID 916 exhausted all 262 openings in 7092.97 s, no hits or
+timeouts. Independent prefix/native audit passed:
+`data/ihes_pdb/pid916_proof_20260909.json`. Local PID 510 continues (5 settled
+prefixes at check); all five PID 638 Kaggle shards remain RUNNING. No failures
+or new score improvement; verified total remains 21,870.
+
+## 2026-09-09 -- PIDs 244 and 642 optimal; collector recovery; next targets
+
+14:27 UTC: wave-10 PID 244 and local PID 642 each exhausted all 262 openings,
+without hits/timeouts. Independent audits checked prefix/native coverage; every
+remote candidate and the finished local batch replayed 1003/1003 valid. Proofs:
+`data/ihes_pdb/pid244_proof_20260909.json`, `pid642_proof_20260909.json`.
+PID 642 search took 11888.86 s. Final verified min-merge unchanged at 21,870.
+
+At the preceding 12:27 check, the collector failed on a Windows status-file
+rename PermissionError. Bounded rename retries and nonfatal status-snapshot
+preservation were added; three collector-lock regression tests passed. Restarted
+collector recovered all five outputs and finished; no kernel work was repeated.
+
+Continued with five private CPU shards for PID 638 (wave 11, 1200 s per prefix,
+8 GiB cache, nine-hour cap), all provider statuses confirmed RUNNING. Local
+16-thread search targets PIDs 916 then 510 at 120 s per prefix; native bounds
+loaded and no startup errors. Current paths and PIDs are in the campaign document.
+
+## 2026-09-09 -- PID 690 optimal
+
+10:27 UTC: local PID 690 exhausted all 262 prefixes in 4332.85 s, no hits/timeouts.
+Independent proof: `data/ihes_pdb/pid690_proof_20260909.json`. PID 642 continues
+with 57 exhausted prefixes so far. All five PID 244 Kaggle shards remain RUNNING
+without reported failures. No score improvement: verified total 21,870.
+
+## 2026-09-09 -- PIDs 684 and 816 optimal; next ranked targets
+
+08:27 UTC: all five PID 684 shards completed with 262 exhausted prefixes, no hits
+or timeouts; independent split-wave proof in `data/ihes_pdb/pid684_proof_20260909.json`.
+Local PID 816 exhausted all 262 in 5703.99 s; proof recorded separately. Completed
+534/816 candidate replayed 1003/1003 valid at unchanged 21,870.
+
+Continued with five CPU shards for unresolved PID 244 (1200 s per prefix, 8 GiB,
+nine-hour cap) and local PIDs 690 then 642 (16 threads, 120 s per prefix). All five
+remote statuses confirmed RUNNING. No overlap or repeat of proved targets.
+Current artifacts and manifests are at the top of the campaign document.
+
+## 2026-09-09 -- PID 534 optimal; four PID 684 shards exhausted
+
+06:26 UTC: local PID 534 exhausted all 262 prefixes in 5702.28 s, zero hits or
+timeouts. Independent proof: `data/ihes_pdb/pid534_proof_20260909.json`. Local
+PID 816 continues, 55 exhausted prefixes at this check. Remote wave-9 shards
+1--4 completed and all 212 assigned prefixes exhausted; native coverage and
+all candidate replays passed at unchanged 21,870. Shard 5 continues on the final
+50 prefixes. No full proof for PID 684 yet and no score improvement.
+
+## 2026-09-09 -- PIDs 336 and 634 optimal; next unresolved targets
+
+04:25 UTC: PID 634 exhausted all 262 prefixes (7412.82 s); independent proof in
+`data/ihes_pdb/pid634_proof_20260909.json`. Completed 850/634 candidate replayed
+1003/1003 valid at unchanged 21,870. PID 336's final two CPU retries exhausted in
+1096.20 and 1095.72 s. Full multi-wave audit rechecked all 13 source runs, seed
+links, native markers, assigned ranges, 262-prefix coverage and every candidate:
+`data/ihes_pdb/pid336_proof_20260909.json`. Both incumbents are optimal at 22.
+
+Continued on unresolved targets: five private CPU wave-9 shards split PID 684's
+262 openings, 1200 s each, 8 GiB cache, nine-hour cap. All five confirmed RUNNING.
+Local 16-thread search targets PIDs 534 then 816 at 120 s per opening, avoiding
+remote overlap. No score improvement so far. Current manifests and collectors
+are recorded at the top of `IHES_SEARCH_2026-09-06.md`.
+
+## 2026-09-08 -- PID 850 optimal; final two PID 336 retries
+
+19:14 UTC: PID 850 exhausted all 262 prefixes in 11993.12 s, no hits/timeouts.
+Independent audit proves optimality at 22: `data/ihes_pdb/pid850_proof_20260908.json`.
+Local worker is now on PID 634, 107 exhausted prefixes so far. Score remains 21,870.
+
+Wave 6 settled 24 of its 26 retries, leaving only PID 336 prefixes 13 and 16.
+Known complete coverage is 260/262. Launched one bounded wave-8 CPU retry of those
+two cases at 3600 s each, skipping all seeded settled work. A second local worker
+was avoided because Windows reported only 3.05 GiB free RAM. All other remote
+kernels are complete; current references and proof provenance are in the campaign
+document. No optimality claim for PID 336 until both remaining cases are verified.
+
+## 2026-09-08 -- PID 336 tail complete
+
+17:13 UTC: wave-7 shard 3 exhausted all 11 assigned retries, normal exit, no hits.
+Independent seed/assignment/native-block audit and replay passed at 21,870.
+PID 336 now has 236/262 settled prefixes; only wave-6 shard 1 remains active on
+the final 26 cases. Local PID 850 is at 152 exhausted prefixes with zero timeouts
+or hits; PID 634 queued. No optimality proof for PID 336 or score improvement yet.
+
+## 2026-09-08 -- PID 554 optimal; PID 336 nearly covered
+
+15:13 UTC: the four local PID 554 retries exhausted in 474 s, no hits/timeouts.
+Independent original-plus-resume audit establishes all 262 prefixes settled and
+optimality at 22: `data/ihes_pdb/pid554_proof_20260908.json`. Candidate replay is
+1003/1003 valid at unchanged 21,870. Started local PIDs 850 then 634, excluding
+proved cases and remote target 336.
+
+Wave-5 shards 2/5 settled 49 additional retries; wave-7 shard 4 settled eight.
+All native evidence and full candidates checked independently. PID 336 now has
+225/262 settled prefixes. Two workers continue its final 37 cases; three CPU
+slots remain idle pending their results and selection of the next remote batch.
+No score improvement from these completions.
+
+## 2026-09-08 -- PID 40 optimal; final unassigned remote prefixes launched
+
+13:12 UTC: PID 40 completed 262 exhausted prefixes, no hits/timeouts, 6442.99 s.
+Independent proof: `data/ihes_pdb/pid40_proof_20260908.json`. Completed 554/40 batch
+replayed 1003/1003 paths at 21,870. Only PID 554 prefixes 89/92/170/173 remain
+unresolved locally; a seeded 600-second retry skips all settled work.
+
+Wave-5 shards 3/4 settled all 16+17 retried PID 336 prefixes, bringing known
+coverage to 168/262. Native evidence and candidate replays checked independently.
+Their freed slots now run the 19 previously unassigned cases in IDs 28--52,
+split 11/8 with 1200 s per case (wave 7). Three other retry kernels continue;
+five CPU jobs total, no overlapping work. All 262 PID 336 cases are now settled
+or assigned. No score improvement; campaign paths are in `IHES_SEARCH_2026-09-06.md`.
+
+## 2026-09-08 -- Original PID 336 wave complete; final shard retries staged
+
+11:12 UTC: original wave 4 finished with 135 exhausted and 127 timed-out prefixes,
+zero hits. Shard 1 contributed 8 exhausted / 45 timeout, normal native exit.
+Final merged submission independently replayed all 1003 paths at unchanged 21,870.
+Four wave-5 retry kernels remain RUNNING. Reused the freed shard-1 slot for wave 6:
+26 unresolved IDs within 0--27, 1200 s each, nine-hour cap, exact journal seeds.
+The 19 remaining unresolved IDs in 28--52 are explicitly unassigned for later
+resumption. No settled work repeats; total active CPU allocation stays at five.
+Local PID 554's first pass ended 258 exhausted / 4 timeouts; PID 40 is active.
+Neither has a new optimality proof or a shorter path yet.
+
+## 2026-09-08 -- Partial PID 336 coverage; resume only unresolved work
+
+09:11 UTC: wave-4 shards 2--5 completed normally with 127 exhausted prefixes,
+82 timeouts, zero hits. Their 209 prefix identities, native exhaustion evidence,
+wave identities and full candidate CSVs were independently checked; total is
+unchanged 21,870, 1003/1003 valid. Shard 1 is still running on IDs 0--52.
+
+Reused the four finished CPU slots for wave 5: seed the exact completed journals,
+skip all 127 settled prefixes, retry only 28/16/17/21 unresolved prefixes per
+shard at 1200 s each with a nine-hour cap. All four new versions confirmed RUNNING,
+giving five active CPU kernels including the remaining wave-4 shard. No overlap.
+Audit and manifests are linked from `IHES_SEARCH_2026-09-06.md`. Local PID 554 is
+at 135 exhausted / 2 timeout prefixes, with PID 40 queued; no improvement yet.
+
+## 2026-09-08 -- PID 94 optimal; next local targets 554 and 40
+
+07:10 UTC: PID 94's 262 prefixes exhausted, zero timeouts/hits, 10750.96 s total.
+Independent coverage/native-log/baseline audit:
+`data/ihes_pdb/pid94_proof_20260908.json`. Together with PID 918, the completed
+524-case local batch took 21205 s wall and produced a 1003/1003 replay-valid CSV
+at unchanged 21,870. Started the next ranked unresolved local targets, 554 then
+40, with the same 16-thread/8 GiB/120-second prefix configuration. All five
+remote PID 336 shards remain RUNNING without reported failures; no overlap.
+
+## 2026-09-08 -- PID 918 optimal, remaining workers continue
+
+05:09 UTC: local PID 918 completed all 262 two-move prefixes, each exhausting
+through residual depth 18, zero hits and timeouts, 10450.82 s accumulated time.
+Independent prefix/native-block/baseline audit establishes optimality at 22 by
+complete depth-20 coverage and parity. Proof: `data/ihes_pdb/pid918_proof_20260908.json`.
+Score remains 21,870, all 1003 incumbent paths replay-valid. Local PID 94 is next
+and has 111/262 exhausted prefixes so far; all five PID 336 Kaggle shards remain
+RUNNING with no reported failures. No duplicate work launched.
+
+## 2026-09-08 -- PID 296 optimal; longer CPU cutoff validated
+
+01:06 UTC: local PID 296 completed 259 remaining two-move-prefix searches in
+6349 s, all exhausted, zero improvements. Together with three prior local seeds,
+all 262 distinct prefixes are settled through residual depth 18. Independent
+audit matched every prefix to native exhaustion blocks and the unchanged valid
+22-move incumbent: **PID 296 is optimal** (full depth-20 coverage plus parity).
+Proof artifact: `data/ihes_pdb/pid296_proof_20260908.json`. Candidate replay:
+1003/1003 valid, total **21,870**, still no improvement.
+
+The CPU timing control also passed, exhausting known PID 296 opening 0 in
+232.95 s with a 600 s cap. Five new private CPU runs now divide PID 336's 262
+openings into disjoint contiguous shards (53/53/53/53/50), residual depth 18,
+600 s per opening and nine-hour overall limits. All five provider statuses
+confirmed RUNNING. Local 16-thread search proceeds separately on PIDs 918 then
+94. Manifests, collectors and journals are recorded in `IHES_SEARCH_2026-09-06.md`.
+
+## 2026-09-08 -- Prefix CPU timeout calibration
+
+At 23:05 UTC Sep 7, all five wave-3 kernels were COMPLETE: 1,307 new remote
+prefixes timed out, zero improvements, zero new exhausted subproblems. Three
+existing local proofs were seeded into shard 1. All native return codes were 0;
+independent replay verified 1003/1003 paths at unchanged **21,870**. Durable audit:
+`data/ihes_pdb/wave3_audit.json`. Fixed the collector filter to retrieve the new
+`prefix_L22.jsonl` filename, then recovered all five journals.
+
+Native logs show ~4.2M nodes/s remotely versus ~42--53M locally, with the additive
+bound enabled in both. The 120 s remote cutoff was too short for these roughly
+1B-node tasks. Do not repeat it. Local PID 296 now resumes at 16 threads, skipping
+settled prefixes; first resumed opening exhausted in 14.38 s. One CPU timing gate
+repeats known opening 0 with 600 s before scaling that cutoff. It was uploaded as
+version 4 of the existing shard-1 kernel; the other four slots stay idle pending
+the control. Gate and local progress paths are in `IHES_SEARCH_2026-09-06.md`.
+
+## 2026-09-07 -- Second CPU wave complete; durable prefix searches launched
+
+13:18 UTC: wave 2 completed all 120 cases with 120 timeouts, zero hits and zero
+exhaustion proofs. All five return codes were 0. Independent replay validated
+1003/1003 paths at **21,870**, unchanged. Audit: `data/ihes_pdb/wave2_audit.json`.
+
+Cost partition probes in scripts 43--45 added full-center, corner-orientation /
+center-component, and corner-permutation / center-component outer-cost bounds.
+Middle turns are free in these abstractions; the existing middle-permutation
+cost is added separately. There are 128 free-middle center components. The CP
+product has 5,160,960 entries, 2,580,480 reachable, maximum outer distance 10.
+Every abstract edge and all 22,873 incumbent states passed consistency/admissibility
+checks. However it strengthens the existing corner+center-sum bound at only 253
+trajectory states, just 15 with >=11 moves remaining. Maximum increase is 2.
+No native promotion, performance claim or score improvement from these probes.
+
+Continuation changes work granularity: five CPU notebook version-3 runs on PIDs
+296, 918, 336, 94, 554, with 262 deduplicated two-move prefixes each, residual
+depth <=18, 120 s per prefix and nine-hour wall cap. This does not reduce total
+search work; it preserves completed subproblems for future resume. Hardened
+`27_prefix_split_ladder.py` so abort/EOF/wrong-depth exhaustion cannot prove a
+case; five parser tests plus a real encoding control passed. Three actual PID 296
+prefixes completed in ~20--25 s each on 16 local threads, zero hits, and are seeded
+into the remote journal to avoid redoing them. Notebook self-tests precede search.
+All five provider statuses confirmed RUNNING. Full campaign references and paths:
+`IHES_SEARCH_2026-09-06.md`. Baseline remains untouched; two-hour monitor active.
+
+## 2026-09-07 -- First CPU fleet completed; second wave running
+
+11:03 UTC check: the four-case long local batch completed (20086 s wall): PID 468
+proved optimal; 296, 336 and 918 unresolved after 5400 s each; zero improvements.
+Its final CSV independently replay-verified all 1003 paths at 21,870. Verification
+summary: `data/ihes_pdb/local_long_L22_20260907_verified.json`. All five wave-2
+Kaggle kernels and the collector remain healthy and running. No duplicate local
+batch was launched while awaiting the current remote outcomes.
+
+09:01 UTC check: the longer local run proved PID 468 optimal at 22 moves by
+exhausting all depths through 20 (3880.42 s) plus fixed move-count parity. The
+native exhaustion block and journal were matched to the replay-valid incumbent;
+provenance is in `data/ihes_pdb/pid468_proof_20260907.json`. PIDs 296 and 336
+timed out at 5400 s; 918 is active. All five Kaggle wave-2 workers remain RUNNING.
+This is one new exact proof, not a score improvement: total remains 21,870.
+
+All five private CPU kernels completed and all outputs independently replayed:
+**21,870 moves, 1003/1003 valid, zero improvements**. The durable journals contain
+119 timeouts at 1200 s, zero hits and zero exhaustion proofs. The original worker
+built a 16 GiB table, then reached its nine-hour watchdog in the final case; its
+23 completed records were preserved. The four workers using the uploaded 8 GiB
+cache finished 24 cases each. Both local trial batches also ended with no gain.
+
+Following the user's instruction to continue, five version-2 CPU kernels were
+uploaded and confirmed RUNNING on 120 fresh length-22 PIDs, using the verified
+8 GiB cache. This wave shuffles exact opening subtrees and removes the fixed
+minimum depth; all depths through 20 are eligible, with 1200 s per PID and a
+nine-hour cap. A separate local batch gives four high-ranked unresolved PIDs
+90 minutes each, 16 threads, with the same shuffled/all-depth configuration.
+
+Kaggle changed the canonical refs after the title updates; the recorded returned
+refs `artgor/ihes-exact-cpu-wave-2-shard-1` through `-5` are authoritative. No
+additional notebooks were accidentally duplicated (the kernel IDs are unchanged).
+The version-aware collector stages downloads, checks the requested wave ID, then
+merges and replay-verifies into `submissions/ihes_20260907_wave2_verified.csv`.
+Current score remains **21,870**, target not met. Full state is recorded at the
+top of `IHES_SEARCH_2026-09-06.md`.
+
+## 2026-09-06 -- Additive corner / center PDB speeds exact search; no score gain yet
+
+Verified user input `submission_ihes.csv`: 21,870 moves, 1003/1003 valid, SHA-256
+`0073eaa07bd732a88e080d93785ec9f481d09e0d27cbccb5248867158a0d65ab`.
+Local content-based merge (1001 submission-shaped files) and nine fresh public
+candidate CSVs added zero moves. Goal <=21,839 requires at least 32 saved moves
+because each PID's solution-length parity is fixed.
+
+New admissible bound: exact outer-turn distance for all corners and the sum of
+center orientations modulo four, plus exact middle-turn distance for center
+permutation. Middle turns preserve that orientation sum. The table has
+176,359,680 byte entries; the corner-only marginal has 88,179,840. Independent
+checks passed on every incumbent trajectory state (22,873), 12,000 random-walk
+states, 7,200 consistency edges, and all corner marginal entries.
+
+Injected into a separate native twsearch binary with all 18 official move
+transformations checked at startup. Matched PID-30 threshold-18 proof, 16 CPU
+threads and the same 8-GiB QTM hash table: old bound 170.656 s, additive corners
+53.03 s, corners plus center sum 43.10 s. **3.96x faster on this one proof**;
+this is not a score gain. The end-to-end positive control removed exactly two
+inserted neutral moves and replay-verified the full output.
+
+Fixed `scripts/24_twsearch_ladder.py`: a crashed worker used to become a false
+`none` record and a successful process exit. Now explicit exhaustion is required,
+aborts/unfinished output remain unresolved, native failures propagate, and raw
+logs persist. Four targeted regression tests passed. The one failed new pilot
+record is explicitly invalidated as `error`.
+
+The same PDB used as `max(V, lower_bound)` in beam search is **not promoted**:
+matched E6 beam-65k, PIDs 30/296/468/918/336/94, total 140 -> 144, zero floor
+wins. Genuine path changes confirm the hook was wired. A separate model-based
+opening-order hook retains all exact subtrees; its control matched all 3732
+native depth-three subtrees, but has not yet demonstrated a score benefit.
+
+Bounded exact trials on five unresolved length-22 paths completed: PIDs 296,
+468, 918, 336 and 94 all timed out at 600 s with no hit and remain undecided.
+The output replay-verified 1003/1003 at 21,870. After the user
+explicitly approved all Kaggle uploads, private free-CPU notebook version 1
+`artgor/ihes-exact-additive-pdb-search` was uploaded and confirmed RUNNING by
+the API. It has a nine-hour cap. Build/control logs are not available yet.
+No paid compute or competition submission occurred.
+A local collector polls every three minutes and will download paginated results,
+reject invalid/duplicate/missing rows, replay-verify, and save a min merge. Its
+three validation checks passed. A sequential 70-minute local trial started
+on the seven length-24 paths with neural opening order; the known-solution
+rediscovery timing probe was inconclusive and is not evidence of a speed gain.
+The user then authorized up to five simultaneous CPU Kaggle notebooks. Four
+additional disjoint 24-PID shards are packaged (120 unique PIDs across five
+workers). A private 5.225 GB cache upload and a bounded launch controller are
+active. The extra workers are queued until a separate Kaggle cache-hash,
+independent-audit and positive-control preflight passes. They reuse the existing
+8 GiB table, avoiding four fresh builds. Fleet results have a separate collector
+and verified output to avoid concurrent writes by the original collector.
+Full state and commands: `IHES_SEARCH_2026-09-06.md`; live records:
+`data/ihes_pdb/ranked_L22_trial.jsonl`. **Current verified total remains 21,870.**
+
 All experiments run on this project (`C:\Users\and-l\cayley`). Prior classical / Kociemba
 experiments live in `C:\Users\and-l\kaggle_research\cayleypy-ihes-cube\experiment_log.md`
 under that project's numbering (Experiments 1–7 there).
@@ -897,3 +1810,625 @@ Do NOT re-run window rewriting, relation mining, MITM, bridge compression,
 splicing or Knuth-Bendix on this file. Those are all the same local-rewrite
 family, they are now known to be exhausted out to 20-move windows on the region
 they can reach, and the paths there are provably optimal.
+
+## 2026-08-23 -- cube666 path-context ranker: first strict model-selected wins
+
+Primitive/state-only imitation was rejected as the wrong objective for the
+KMCoders 6x6 pipeline.  The decisive counterexample is exact: on the initial
+16-PID gate, nine pairs of different rough words reach the same full 216-sticker
+state with the same rough length, yet the native insertion finisher differs by
+2--6 primitive moves.  The completion objective is therefore non-Markov in cube
+state; the rough word and its cancellation opportunities are part of the state
+for ranking purposes.
+
+`45_build_path_context_oracle.py` recovered 96 unique gate rough words and all
+128 native labels replay-verified.  `47_add_insertion_context_features.py` then
+summarized the best 512 exact reducing 3-cycle insertions for each word.  A first
+91-feature ridge correction appeared to improve the small gate by four moves,
+but **failed** the larger check (100 regret versus 74 for the fixed
+`rough_len + 4.34 * residual` proxy).  Do not reuse that unregularized ablation;
+the small-gate result was noise.
+
+A PID-disjoint corpus was then generated on 32 stratified pids using production
+control plus seed 50002, seed 50003, alpha 2.5, alpha 3.5 and keep-best rough
+searches.  All 192 final labels replayed, all 192 rough words were unique, and
+the per-PID oracle saved **156 moves** versus the 6,257-move incumbent subtotal.
+Alpha 3.5 cost 15m29s for 32 pids versus 5m39s--7m39s for the other variants;
+retain it only when its unique-winner yield justifies that cost.
+
+`50_train_path_context_ranker.py` selects a shrink-regularized correction using
+only four-fold PID-grouped CV on the 32-pid corpus.  The selected model combines
+compact insertion-frontier, path-summary and generator-configuration features:
+
+* corpus OOF: proxy regret 74 -> model regret **48**, pair accuracy 74.9% -> 79.8%;
+* separate 16-PID gate: proxy regret 34 -> model regret **30**, pair accuracy
+  76.8% -> 80.6%.
+
+`51_materialize_path_ranker_selections.py` materialized the OOF choices.  All
+32 selected paths replayed; raw selection saved 108 moves and strict-min merging
+kept 16 wins worth **126 moves**, discarding six regressions.  The final full
+merge `submissions/cube666_path_context_ranker_strictwin_v1.csv` is
+**176,543 moves, 1012/1012 replay-verified**, improving
+`cube666_model_hybrid_strictwin_v1.csv` (176,669) by 126.
+
+This validates model-based *rough-trajectory selection*, not state-value beam
+search.  The next clean test is online: generate several rough candidates on
+fresh pids, rank before wide completion, run the 20k finisher only on the model
+shortlist, and accept replay-verified strict wins.  Keep the fixed proxy as the
+fallback whenever the learned correction lacks candidate-set support.
+
+## 2026-08-23 -- cube666 uniform-label correction and fresh online result
+
+The first online test exposed a hidden label bug in the experiment above.  On
+24 new PIDs, the frozen v1 learned correction lost **8 moves** to the fixed proxy
+on its four disagreements.  Multi-trajectory generation itself still worked:
+strict proxy/model candidate merging improved the full score from 176,669 to
+176,389.  The learned correction, however, had not generalized.
+
+The cause was causal and large, not speculative.  The 32-PID training control
+had been completed at beam 20,000, while all five alternative rough generators
+had been labeled at beam 4,000.  Native `solve_cube_beam` now accepts a full
+`KMC_ROUGH_PATH` override, allowing the exact same insertion finisher to relabel
+arbitrary rough words.  The patched executable hash is
+`406e2fe91455dafb722ac148014660dd54290e5ef8b3d3f94b7678c54a8e0995`.
+All uniform labels below used beam 20,000, cap 1,000 and exact replay.
+
+Uniform relabeling of all 192 training candidates quantified the bias:
+
+| condition | uniform beam20k minus old label, mean | sum |
+|---|---:|---:|
+| control | 0.000 | 0 |
+| alpha 2.5 | -2.625 | -84 |
+| alpha 3.5 | -3.875 | -124 |
+| keep-best | -3.250 | -104 |
+| seed 50002 | -2.625 | -84 |
+| seed 50003 | -3.375 | -108 |
+
+Thus generator identity was a shortcut for label budget.  The corrected v2
+ranker explicitly disallowed every configuration feature.  It selected a
+44-feature compact insertion-frontier ridge correction by four-fold PID-grouped
+CV.  OOF regret improved 52 -> 38.  A separately relabeled 16-PID gate (96/96
+replays) improved proxy regret 30 -> **24** and pairwise accuracy 78.7% ->
+**82.5%**.  On the earlier 24 online PIDs, however, v2 still lost 4 moves to the
+proxy (half v1's regression).  Strictly merging only exact wins produced
+`cube666_path_context_uniform_v2_strictwin_v4.csv`, **176,377**, 1012/1012
+replay-verified.
+
+The uniform corpus was then expanded to all six candidates on those 24 online
+PIDs, reusing 35 already-paid exact completions.  Combining the three disjoint
+sets yielded **432 candidates / 72 PIDs**.  The frozen v3 model remained the
+configuration-blind compact frontier; grouped CV improved proxy regret
+110 -> **98** and pairwise accuracy 77.9% -> **82.9%**.
+
+The decisive online check used 12 entirely new stratified PIDs
+(238, 259, 293, 425, 542, 638, 689, 714, 775, 947, 994, 1010).  Six rough
+trajectories per PID were generated and ranked before any completion label.
+V3 disagreed with the proxy on five PIDs.  Beam-20k completion gave one model
+win (-6), one loss (+4) and three ties; across all 12, the model total was
+**2,290 versus proxy 2,292**, the first honest fresh-PID model win.  All 24
+compared paths replayed exactly.
+
+The raw selector win did not lower the incumbent beyond the proxy strict merge:
+the model's six-move win on PID 994 tied an already-known incumbent path, while
+the proxy's win on PID 714 did improve it.  Consequently the proxy-only strict
+merge and combined proxy+model safety merge both score **176,311**.  The durable
+combined artifact is
+`submissions/cube666_path_context_uniform_v3_hybrid_strictwin_v6.csv`,
+1012/1012 replay-verified.  It is 358 moves better than the 176,669 starting
+incumbent, but the final 66-move step came from fresh trajectory diversity, not
+an incremental model-only submission gain.
+
+Adding exact residual-cluster summary features did not improve grouped-CV
+selection regret (102 versus 98), so that ablation is rejected.  Four-fold
+uncertainty also could not separate the fresh six-move win from the four-move
+loss.  The evidence says the primary historical bottleneck was **incomparable
+labels**, followed now by limited predictive signal/sample size.  A larger
+network is not justified until substantially more uniform, PID-diverse labels
+or a representation of the exact insertion/cancellation process is available.
+
+## 2026-08-23 -- cube666 110k budget and stabilizer-factor capability gate
+
+The new target is 110,000.  The replay-verified incumbent is 176,311 over 1,012
+puzzles: mean 174.22, median 193 and maximum 212.  The gap is **66,311 moves,
+65.52 per PID**.  PIDs 200--1011 average about 195 moves, so neither rough-path
+selection nor a small beam-width gain can plausibly close it.  A qualitatively
+different macro solver is required.
+
+The 27,958-action KMC macro vocabulary was audited as an exact stabilizer
+library.  `58_build_stabilizer_ladder.py` found and replay-verified the
+invariant-aware order **0 -> 4 -> 5 -> 2 -> 3 -> 1**.  The first five projected
+stages retain full A24 reachability; once those are fixed, the last cluster is
+restricted to the exact 10,461,394,944,000-state residual subgroup generated
+by eight remaining macros.  Gate A passed with 112 inverse-closed basis actions
+across the six stages.  The exhaustive reachability evidence is in
+`cube666/reports/stabilizer_reachability_v1.json`; the durable ladder is
+`cube666/artifacts/stabilizer_ladder_v1.json`.
+
+Two important negative controls prevent overstating that algebraic result:
+
+- Exact greedy 3-cycle-cost descent solved **0/10 at every stage**.  This
+  reproduces the known valley problem inside the correct stabilizer graph.
+- A 12M stage-0 network trained on random walks over the minimal 11-action basis
+  solved **0/8** mixed states at beam 4,096.  Algebraically minimal generators
+  give a poor search diameter and random-walk distance remains a weak label.
+
+`62_build_stabilizer_factor_teacher.py` then supplied the missing independent
+deep teacher.  Dense Schreier--Sims factorization generated **1,000/1,000 exact,
+replay-verified arbitrary stage-0 solutions** and 130,977 labelled states.
+These are capability labels, not candidate paths: the constructive factors
+average 130.98 macro steps and 2,711 primitive moves.
+
+A 25M policy/value model learned those factors well at the row level.  On 8,192
+held-out rows split by complete source solution, action recall was **67.00%
+top-1 and 99.89% top-32**.  Nevertheless an autonomous beam 2,048 x 32 failed
+the held-out initial state even with a 350-step horizon and cumulative policy
+likelihood (0/1, 22.8M children).  Value MAE was 24.05 macro steps.  Gate B is
+therefore **not passed**: valid factor labels alone do not yet preserve a full
+unseen solution through search.
+
+The next bounded correction is to keep Schreier strong generators as atomic
+high-level actions.  Their exact factor horizon is about 20--35 rather than
+70--300 expanded macro steps.  Train and gate that short-horizon policy first;
+only after it solves unseen stage states should its strong actions be compiled
+into short primitive/macro words.  Do not scale the current expanded-action
+policy or train the remaining five stages yet.
+
+### Transversal policy passes the capability gate; cost geometry rejects it as the scorer
+
+`64_build_stabilizer_transversal_teacher.py` used the basic Schreier
+transversals rather than expanded strong-generator words.  The inverse-closed
+stage-0 vocabulary has **461 actions** and an exact base length of 22.  It
+factorized and replay-verified **2,000/2,000 arbitrary A24 states**, producing
+39,473 labeled states at mean horizon **19.7365** (maximum 22).
+
+The same 25M policy/value architecture trained for 3,000 updates.  With source
+solutions held out as whole groups, it reached **99.9364% top-1**, 100% top-32,
+and value MAE 0.9163 transversal steps.  Autonomous beam passed twice:
+
+- beam 4,096 / branch 32: **8/8** unseen arbitrary states solved;
+- beam 128 / branch 16: **100/100** unseen arbitrary states solved, in 11--18
+  actions (mean 15.21), roughly 0.12 seconds per state.
+
+This is Gate B passed: the model now solves unseen full projected scrambles on
+its own.  It also finds fewer high-level actions than the canonical teacher.
+
+The score gate is nevertheless a hard rejection.  Raw Schreier expansions
+average 2,328.88 primitive moves per stage-0 state.  Exhaustive one/two-dense-
+macro compilation in `65_compile_transversal_atoms.py` replay-verified all 461
+atoms, improved 170, and reduced the canonical mean to 977.224, but that remains
+orders of magnitude outside the 110k budget.  Applying the compiled atoms to the
+model's own 100 paths gives mean **652.58**, median 337, minimum 110, maximum
+2,460 primitive moves for just one cluster.  Therefore do not train the other
+five stage policies or present the transversal route as a scoring solver.
+
+The positive result is diagnostic: model size/capability and full-scramble
+generalization are no longer the primary blocker.  The blocker is the training
+and search cost geometry.  The next scorer must operate on short primitive/dense
+macros over the full six-cluster residual, with primitive-weighted Bellman/search
+targets and cross-cluster coordination; the exact transversal policy remains a
+fallback and representation/capability control.
+
+The approved marimo upload package was hash-pinned locally, but the supplied
+server returned HTTP 410 `sandbox terminated` before upload began.  No partial
+remote artifact was created.
+
+`66_eval_transversal_value_macro_beam.py` tested the most direct possible
+transfer: the full-path effect model proposed short, multi-cluster macros while
+the exact-factor model summed its value over all six clusters to rank children.
+On hard PID 597 at beam 32 / branch 16 / depth 80, the initial exact residual 65
+fell only to 57.  The matched exact-residual control, with the same proposals and
+search dimensions, reached 47.  Neither solved.  Therefore canonical
+transversal distance is not merely insufficiently scaled; it misorders progress
+in the primitive/multi-cluster geometry.  Do not widen this hybrid.  The direct
+scorer needs Bellman/search labels generated in the short-macro geometry itself.
+
+## 2026-08-23 -- cube666 candidate-local post-processing gate finds a strict win
+
+`67_postprocess_frame_gate.py` tested the Tetraminx-derived post-processing stack
+on the ten longest PIDs whose original three-frame KMC campaign was fully complete
+and which appear in no resume task: **668, 515, 384, 375, 643, 923, 276, 394,
+484 and 938**.  The input subtotal was 1,962 moves.  Identity/incumbent plus
+rot03/rot18/rot35 yielded 31 distinct replay-valid trajectories after exact word
+deduplication and commuting normalization.
+
+The acceptance harness was positive-controlled before the real sweep.  Appending
+the neutral word `f0^4` to PID 668 inflated 199 -> 203; commuting reduction,
+Walton's `optimize_bisearch`, exact radius-4 window rewriting and the union graph
+all independently recovered 199.  Every candidate was replayed on all 216
+stickers after every accepted rewrite, and the final 1,012-row CSV was replayed
+again by the separate `07_merge_verify.py` process.  The original and independently
+rebuilt CSVs have identical SHA-256
+`7facd1c355dcaa9776b2d54fa10ec5820d49ab8d46a2d64570e65a9041981be7`.
+
+Measured results:
+
+* Walton's previously unused polisher shortened PID 276 rot03 **207 -> 205**, but
+  the incumbent there was already 195.
+* Exact radius-4 rewriting shortened PID 923 rot18 **202 -> 200**, but its
+  incumbent was already 196.
+* Exact radius-4 rewriting shortened PID 515 rot18 **198 -> 196**, a strict
+  two-move incumbent win.  The decisive splice replaced the nine-move window at
+  offsets `[10,19)`,
+  `-f1.r4.d1.f1.-r4.-d2.r0.r2.r4`, with the replay-equivalent seven-move word
+  `-d2.-f1.r4.d1.f1.r0.r2`.
+* Exact shared-state loop/crossover found no further gain.  There were no repeated
+  states within any trajectory and only 2--3 shared states per PID across all
+  trajectories (the two endpoints plus at most one internal intersection); this
+  rejects exact crossover as the source of the win.
+
+The gate took 827.2 s: 91.9 s for 31 Walton passes with four CPU workers and
+691.2 s for the sequential GPU radius-4 fixpoint sweeps.  Candidate-local order
+was essential: ordinary per-PID min-merge saw the winning rot18 word only as a
+198-move tie and would have discarded it before rewriting.  The strict merged
+artifact is `submissions/cube666_kmc_postprocess_gate10_v1.csv`, **171,343 moves**
+over 1,012/1,012 replay-verified PIDs, improving the 171,345 incumbent by two.
+The durable report and caches are in
+`cube666/reports/postprocess_gate10_v1/`.
+
+This is a positive scale gate for radius 4, not for crossover.  The next campaign
+should radius-4 rewrite every distinct frame trajectory before min-merge, retaining
+the append-only cache/resume discipline.  Walton is cheap enough to keep in front
+of it, although its only gate hit did not score.  Radius 5 remains gated: radius 4
+already dominates runtime and the next ball rung is roughly a branching-factor
+increase.
+
+## 2026-08-24 -- cube666 three-frame KMC campaign complete: 170,051
+
+All ten Kaggle resume kernels `cayley-666-kmc-w1r-s00` through `s09` completed.
+`kaggle_kmc_campaign/harvest_resume_wave1.py` pulled them into an immutable
+`production_outputs/resume_wave1/slotXX` tree and refused extraction until every
+guard passed.  The harvest verified **10/10 shards and 1,044/1,044 missing tasks**,
+including exact campaign manifest, KMC binary, critical source hashes, per-frame PID
+sets, all four per-PID artifacts and safe ZIP paths.  Combined with the 1,992 original
+tasks, coverage is now exactly **3,036/3,036 = three frames for each of 1,012 PIDs**.
+
+The deterministic merge replayed all 3,036 frame candidates plus the 1,012-path
+171,343 incumbent (and the sample positive fallback) on the full 216-sticker states.
+It produced `submissions/cube666_kmc_wave1_complete_merged_v1.csv` at **170,051**,
+saving **1,292 moves on 200 strict-win PIDs**:
+
+* rot35: 151 strict wins, **940 moves saved**;
+* rot18: 49 strict wins, **352 moves saved**;
+* largest individual wins: PID 300 rot35 and PID 1005 rot18, both **-26**.
+
+The final-only independent replay rebuilt an identical 1,012-row CSV at the same
+170,051 score.  Both files have SHA-256
+`881c84d2a546897156c8f41d920bfbf913384c9b873b4a86a26bfabd430f1620`.
+The harvest provenance is in
+`cube666/kaggle_kmc_campaign/production_outputs/resume_wave1/harvest_report.json`;
+the merge and independent replay reports are
+`wave1_complete_merged_v1_report.json` and
+`wave1_complete_merged_v1_independent_reverify.json` in `production_outputs/`.
+
+This closes the frame-generation campaign.  The next score lever is candidate-local
+Walton + exact radius-4 rewriting over the now-complete three-frame corpus before a
+fresh min-merge; the 10-PID gate already proved why rewriting must precede discarding
+non-winning/tied frame trajectories.
+
+## 2026-08-23 -- cube666 primitive-cost model/search diagnosis and macro retrieval gates
+
+The merged full-path teacher was first repaired and re-audited.  The clean
+artifact in `cube666/training/macro_teacher_fullpath_primmoves_clean_v1/` has
+37,417 rows, 43,530 inverse-closed actions, 844 source PIDs and zero mixed-unit
+cost violations.  Targets are primitive moves (mean 46.49, maximum 244).  The
+action table contains 30,506 effects of cost at most 14, but 6,512 target actions
+are long (16--230 moves) and have 1,471 distinct cycle geometries.  Exact
+one/two-short-macro compilation covered none of those 6,512 long effects.
+
+The decisive primitive audit is local action rank, not scalar value correlation.
+The frozen/base primitive value model chose the correct next primitive top-1 on
+only 11.05% of held-out teacher states; the depth-20 frontier model fell to
+7.15% despite better frontier correlation/MAE.  At remaining distance 161+,
+state-only policy/value top-1 was about 3%.  Local all-neighbour rank training
+raised value top-1 to 16.87% but created severe off-trajectory value basins and
+still failed full residual PID 200.  A 16-action history model raised held-out
+policy top-1/top-8 to 26.03%/59.38% and deep top-1 to 16.36%, but policy-only
+beam 16,384 explored 113.8M children without solving.  Exact long histories
+were nearly unique across PIDs.  These gates reject a larger state/history MLP
+as the missing primitive solver.
+
+An autoregressive decoder over verified short macro words was a real proposer
+improvement: held-out exact-sequence/token accuracy was 12.62%/29.33%, and trie
+recall reached 44.53% at top 128 and 61.33% at top 512 (the old effect proposer
+had only 14.8% at top 512).  High-value top-512 recall was nevertheless just
+21.88%.  On PID 540's known nine-macro, 40-primitive suffix, top-256 recall was
+only 5/9.  A factorized value-initialized autoregressive encoder regressed to
+11.14% exact sequences, 24.82% token accuracy and 3/9 PID-540 top-256 recall.
+Exact primitive-word imitation is rejected: the high-value labels are mostly
+globally singleton words, so model size does not remove the ambiguity.
+
+`92_train_macro_factorized_primitive_value.py` supplied the strongest calibrated
+value representation so far.  Its initial held-out correlation/MAE was
+0.852/9.59.  Parent-local rank fine-tuning improved sampled child ranks but
+destroyed global calibration (MAE 25.93), and an oracle beam still lost the
+known path.  Proposer-hard-negative rank training produced excellent training
+ranks but the same cross-parent failure.  Batched trie decoding in
+`90_eval_macro_autoregressive_beam.py` made the failure measurable: on PID 540,
+the known path was globally ranked 3,096 at layer 3 with beam 512; beam 8,192
+retained it through layer 4, then dropped it at rank 65,400 on layer 5.
+
+The correction is certified return-cost supervision.  For an arbitrary macro
+of cost `c` from a teacher state of remaining cost `V`, undoing it and following
+the teacher suffix is a verified route of cost `V+c`.  Training on 16,384 states
+times 64 proposer-specific children improved held-out correlation/MAE to
+**0.884/8.51 with bias -0.03**, rather than sacrificing calibration.  It moved
+PID 540's layer-3 global teacher rank from 3,096 to 428 at beam 512, but the path
+still fell at rank 3,035 on layer 4; beam 4,096 fell at rank 12,661.  Thus wider
+beam alone remains rejected, while return-cost labels are retained as the right
+off-trajectory value target.
+
+A geometry-aware dual encoder then replaced opaque action IDs/primitive words
+with state and verified macro-effect embeddings.  On 256 PID-held-out states
+over the full 43,530-action library it reached 10.16% top-1, 39.45% top-64 and
+46.48% top-256 teacher recall.  Hard-negative DAgger modestly raised top-1/top-256
+to 12.5%/48.83%.  This does not solve the singleton-label problem: PID 540's
+eight symmetry-related value-40 labels are eight distinct cost-10 actions, each
+occurring exactly once globally, and their ranks remain 8K--38K.
+
+Dense Q distillation removed those arbitrary IDs by supervising
+`macro cost + calibrated child value` over 129 candidates per state.  It moved
+the exhaustive best-Q action's median retrieval rank from 16,669 to 5,331 and
+reduced branch-256 Q regret from 7.52 to 5.06 moves.  A fresh hard-negative,
+temperature-1 pass improved best-Q top-256 overlap only from 14.06% to 18.75%
+and left branch-256 regret at 5.02.  The single global dot-product retriever is
+therefore rejected as the production proposer.  The next model must jointly
+score state/action interactions after a cheap first-stage shortlist; repeating
+ID imitation, a larger monolithic MLP, or wider beam is not justified.
+
+The supplied marimo Pro-6000 endpoint
+`sb-ff6d333efc186440.sb.molab.run` failed connection before session discovery
+from the pairing client, including with approved network access.  All gates in
+this section therefore ran on the local RTX 4090; no partial remote upload was
+made.
+
+## 2026-08-23 -- production completion cost is path-contextual, not state-only
+
+Direct KMC completion labels reject the remaining state-only abstraction.  A
+uniform beam-1,000 / 1M-anneal corpus contains 191 macro frontier states over 11
+PIDs.  A frozen-factorized completion head reduced tuning-selection regret from
+30 to 18 moves, but the honest three-PID holdout improved only 36 -> 30 and one
+PID regressed 10 -> 24.  The older primitive value had essentially zero mean
+within-PID correlation on the eight longest cases and 122 moves of aggregate
+selection regret.  This is a label/representation failure, not evidence for a
+larger state MLP.
+
+The key confound was then isolated.  KMC production solves the original scramble
+with the exact corner/rough prefix supplied in `KMC_CORNER_PATH`; its insertion
+finisher may cancel or insert moves inside that prefix.  Completing the same
+corner-normalized endpoint with an empty prefix loses roughly 28 moves.  Therefore
+the production objective is non-Markov in the 216-sticker state: the rough word
+and its insertion opportunities are part of the search state.  Empty-context
+frontier labels and state-only beam scores must not be used as score-facing
+evidence.
+
+`29_query_kmc_frontiers.py --use-prefix-context` now preserves that production
+contract and replay-verifies the returned complete path from the original
+scramble.  PID 665 is the positive control.  The exact-corner no-op prefix under
+the campaign's frame 03, seed 50001, 40M anneal and beam 20,000 reproduced the
+known raw 214-move trajectory (commuting-reduced incumbent 208).  A four-move
+learned macro prefix, `r3.-f1.-d2.r1`, evaluated under matched frame 35 settings,
+returned a replay-valid **202-move** complete path, unchanged by commuting
+reduction.  The strict merged artifact
+`submissions/cube666_macro_context_pid665_v1.csv` is **171,337**, a six-move
+improvement over the 171,343 incumbent.  This is the first score-facing win from
+the macro-model branch and validates learned *prefix-context proposal*, not a
+state-value solver.
+
+The first hard-PID cascade strengthened that result.  On PID 822, cheap matched
+completion promoted action 714 (`-d1.r3.-r2.r1`) in frame 35 because it beat
+the frame's no-op by 18 moves.  The full production completion returned **187
+moves** versus the 203-move incumbent; a second promoted action in frame 18
+also improved it to 199.  Strict merge plus an independent 1,012/1,012 replay
+verification produced
+`submissions/cube666_macro_context_pid665_pid822_v2_verified.csv`, **171,321
+moves**.  Across the first two wide-promoted PIDs, learned prefix context has
+saved 22 moves.
+
+The next gate is a conservative cascade: generate exact-corner learned prefixes,
+cheap-complete each prefix plus a no-op control in the same symmetry frame, then
+wide-complete only candidates that beat their matched control.  The production
+model should ultimately rank or generate complete rough trajectories using path
+and exact insertion-context features; state-only completion heads are retained
+only as proposal features.
+
+A first recursive context-beam expansion appended 12 model-proposed macros to
+the winning PID 822 action.  At beam 1,000 / 1M anneal, action 200 appeared to
+improve the parent 205 -> 201, while every other child regressed.  Full matched
+completion rejected it: the two-macro prefix produced 197 moves versus its
+187-move parent.  Cheap KMC completion is therefore useful as a root diversity
+gate but is not a sufficiently faithful Bellman target for recursive beam
+search.
+
+`117_train_path_context_transformer.py` tested whether more sequence-model
+capacity repairs the trajectory ranker on the 432 uniformly beam-20,000-labeled
+rough paths from 72 PIDs.  Nested PID splits kept early stopping separate from
+each test fold.  The two-layer transformer consumed the ordered rough word,
+the exact six-cluster endpoint and insertion/configuration descriptors.  It
+improved the fixed proxy's out-of-fold selection regret only **110 -> 104**
+with the same 41/72 winner hits; the regularized compact-feature ridge remains
+better at 98 regret.  This rejects model size as the immediate fix and confirms
+that wide-cost label diversity/fidelity is now the limiting resource.
+
+The first production-context scale pass strict-improved five additional PIDs:
+783 200 -> 192, 653 200 -> 196, 804 199 -> 195, 594 199 -> 185 and 669
+198 -> 194.  The frame-35 beam-1,000 screen itself also found PID 351 at 194
+versus its 198 incumbent.  Together with PIDs 665 and 822, the independently
+replay-verified checkpoint is
+`submissions/cube666_macro_context_plus_pid669_wide_v9_verified.csv`, **171,283
+moves**, 60 below the 171,343 starting point.
+
+During this scale pass, the KMC rough-cache key was found to omit the candidate
+prefix.  It contained PID, solver parameters and frame but not
+`KMC_CORNER_PATH`, so later same-PID candidates could reuse the first candidate's
+rough trajectory.  This explains blocks of identical cheap labels and the fast,
+identical second-wide results.  It does not invalidate the accepted first-wide
+paths: those were cache misses and every final path independently replays.  It
+does invalidate those shared-cache rows as per-action training labels.
+`29_query_kmc_frontiers.py` now appends a SHA-256 digest of the complete prefix
+context to `KMC_CACHE_TAG` and records it in metadata.  All subsequent candidate
+screens must use the corrected key (or a new output directory); do not train on
+the old next24 per-action screen as if its rows were independent.
+
+## 2026-08-24 -- corrected context labels improve score but reject a larger ranker
+
+The first fully candidate-keyed scale screen evaluated 416 root contexts over 32
+PIDs in frame 35 at beam 1,000 / 1M anneal.  It completed in 2,722.6 seconds with
+416/416 independently keyed and replay-valid results.  Wide beam-20,000 / 40M
+completion converted strict wins on PIDs 547, 605, 474, 798, 834, 268, 924, 864,
+953, 913, 861 and 409.  The largest individual paths were PID 605 at 180, PID 924
+at 181, PIDs 798/864 at 183 and PID 409 at 186.  The independently replay-verified
+1,012-row checkpoint is
+`submissions/cube666_macro_context_plus_pid409_wide_v24_verified.csv`, **171,165
+moves**, 178 below the 171,343 pre-context incumbent.
+
+Cheap completion is only a diversity gate.  PID 924's winning 181-move wide path
+had a 203-move cheap label, and PID 605's 180-move path had a 204-move cheap label.
+Conversely, several candidates with strong cheap improvement tied or regressed at
+wide settings.  Do not interpret beam-1,000 completion length as a Bellman value.
+
+`118_build_context_action_dataset.py` materialized the corrected root/child/path
+rows with matched no-op deltas and optional wide overlays.  On all 416 rows (32
+PIDs, 17 wide labels), `119_train_context_action_crossranker.py` tested a joint
+root-state, child-state and ordered-prefix transformer with nested PID folds.  It
+failed decisively: OOF selection regret was **390**, versus 336 for the frozen Q
+proxy and 318 for no-op; winner hits were 3/32.  Larger path-context model capacity
+is rejected again until substantially more faithful wide/search-return labels
+exist.
+
+A deterministic short-cost random-control extension was added to scripts 108/116.
+On the first PID 547 pilot, 12 learned actions had cheap best/mean 206/217.17 while
+12 cost-matched random controls reached 202/216.00.  The best learned action's wide
+path is 192; wide validation of the two best random controls is pending.  This is
+the correct proposer-capability gate: if random controls match the learned actions
+on multiple PIDs, replace the current retriever with explicit diversity/search
+generation rather than merely increasing its parameter count.
+
+## 2026-08-24 -- mixed prefix diversity and certified-return shallow solver
+
+The corrected second 32-PID context screen completed 415/415 replay-valid queries.
+Wide completion added strict wins on PIDs 623, 515, 399, 375, 337, 927, 267, 882,
+810, 794 and 740.  A 96-query cost-matched random-control screen also produced a
+strict PID-877 win (196 -> 192), while its PID-849 candidate regressed.  Learned
+and random proposals are therefore complementary rather than interchangeable.
+The independently replay-verified 1,012-row artifact is
+`submissions/cube666_macro_context_plus_pid740_wide_v42_verified.csv`, **171,025
+moves**.  Every added query path also passed its independent query-time replay.
+
+The global short-macro branch isolated a different bottleneck.  Plain depth-3
+curriculum training improved a fresh shallow gate only to 13/20 at beam 128,
+branch 512.  `121_train_short_macro_trace_returncost.py` now trains exact trace
+prefixes, exact next-prefix values, and certified return costs for the model's
+own high-policy off-trace children.  It improved held-out value correlation/MAE
+from 0.801/3.35 to 0.830/3.02 and the same beam-128 gate to 14/20.  Crucially, all
+six remaining cases solved at beam 1,024 / branch 512, making the combined shallow
+gate **20/20 replay-verified**.  Correct actions were already inside branch 512;
+global beam retention, not proposer recall, was the last depth-3 failure.
+
+A direct jump to a 2M-state depth-6 corpus improved calibration (correlation 0.888,
+MAE 4.51, bias -0.87) but failed the depth-6 beam-1,024 gate and most sampled
+depth-4 cases.  The exact teacher child could still be misvalued by roughly ten
+moves.  This rejects a one-shot horizon jump.  Continue with staged depth-4,
+depth-5 and depth-6 promotion gates using much denser trace-prefix sampling before
+attempting full residuals such as PID 540's known nine-macro suffix.
+
+## 2026-08-24 -- staged short-macro capability, real-window wins and hierarchy rejection
+
+The staged short-horizon branch passed substantially stronger capability gates, but
+also established a sharp score ceiling for imitation-derived search.  Exact trace
+return training plus a factorized value model solved all five fresh depth-4 states.
+A direct 30,506-way action policy was then more robust than scalar value ranking at
+depth 5.  Separate small, 59M-wide and depth-conditioned policies, combined only as
+independent proposal lanes, solved **7/8** fixed depth-5 states autonomously.  The
+reusable exact one-macro endgame was essential.  The one remaining state was not
+rescued by focal loss, raw-logit ensembling, capped policy discrepancies, a larger
+scalar value model, or wider brute force.  This is a real depth-5 capability pass,
+not evidence for a full-residual solver.
+
+The score-facing test extracted exact five-action relative windows from the
+171,025-move incumbent.  Only 123 such windows were fully representable in the
+short-action vocabulary.  A policy-only beam reproduced many of them and found one
+strict replacement on PID 828: four learned macros / eight primitive moves replaced
+five macros / ten moves.  The full 1,012-row merge replayed and scored **171,023**.
+
+Coverage was then expanded without requiring the incumbent pieces themselves to be
+known actions.  Every net effect between nearby corner-fixed/even boundaries was
+deduplicated into 7,477 search queries.  An exhaustive one/two-short-macro join solved
+471 queries and found one strict PID-370 replacement, 8 -> 6 moves.  A beam-128 neural
+scan solved 1,565 total queries across the two batches and found two additional
+2-move candidates; one overlapped the PID-370 rewrite and one was a new PID-714
+replacement, 8 -> 6.  Weighted non-overlap merging and full replay produced
+`submissions/cube666_macro_context_plus_learned_windows_v45_verified.csv`,
+**171,019 moves, 1,012/1,012 replay-verified**.  Thus the model has now beaten the
+classical source on real unseen windows, but the total gain is only six moves.
+
+A trajectory-chunk hierarchy tested whether coverage rather than horizon was the
+remaining limitation.  All incumbent effects between eligible boundaries, plus
+their inverses, expanded the vocabulary to 52,904 actions.  It represented 834 PIDs
+as 11,892 exact trajectories of at most five actions.  A 1024-wide depth-conditioned
+policy trained on all represented PIDs reached median/p90 action rank 1/3 and 100%
+top-128 recall.  Exact one-action fallback plus neural search solved 834/834, but
+cost weights 0.2 and 0.5 found only the already-known PID-714 win.  An exhaustive
+effect-geometry proposal lane found zero additional wins.  Large options therefore
+repair horizon and retrieval but do not create cheaper trajectories; this hierarchy
+is rejected as the missing 110k scorer.
+
+Finally, a first fitted Bellman-policy test generated 100,000 depth-6 backups from
+the frozen depth-5 value model.  It predicted a suspicious mean 8.54-move advantage
+on 90,020 rows and selected the constructive teacher on only 12,067.  Distillation
+moved held-out median Bellman-action rank 69 -> 43, but the actual depth-6 beam gate
+was **0/8 at beam 1,024** (7.84M children per case).  The predicted advantages were
+therefore value underestimation, not verified policy improvement.  Do not train the
+value model on these targets or iterate them: the capability gate correctly blocked
+a fitted-value collapse.
+
+The remaining bottleneck is now narrower than “model size” or “more imitation.”
+Useful next labels must be independently verified cheaper continuations (or exact
+lower/upper-bounded search returns) in the multi-cluster short-macro geometry.  The
+current scalar value cannot be used as its own Bellman teacher.
+
+## 2026-08-24 -- depth-6 frontier returns, inversion symmetry and transition-ranker rejection
+
+The supplied marimo sandbox was recovered briefly, then terminated at the provider.
+Before termination it harvested 512 depth-2 frontiers (four states per root) and ran
+bounded replay-verified completions.  Of 2,048 frontier states, 381 completed and 380
+of 512 roots had at least one completion; every completed path tied the constructive
+teacher.  A frontier-return fine-tune fit training returns almost perfectly but
+regressed held-out MAE and tied the 32-case beam gate.  A macro-step cycle-dual lower
+bound certified zero negatives.  These frontier labels are too sparse and too
+teacher-shaped to justify another return fine-tune.
+
+A matched local beam-4,096 audit with two direct policies and the calibrated v9
+critic solved 9/32 depth-6 rows.  Oracle tracing localized the failure: the known
+first action was proposed on 22/32 rows, 16 known paths survived layer 2, and nine
+reached the exact one-macro finisher.  Equal first-action quotas, layer-2-only quotas,
+and a partial 128-group/four-state portfolio scored 8/32, 8/32 and 9/32 respectively.
+The beam-allocation family is rejected; early proposal recall and accumulated policy
+penalty dominate.
+
+Exact group-inversion augmentation was added to the direct policy trainer.  A mixed
+forward/inverse depth-5/6 fine-tune improved held-out top-512 recall from roughly 85%
+to 90.2%; a reverse specialist reached 91.2%.  This did not rescue bidirectional
+depth-3 meeting: a representative reverse first action improved from rank 12,537 to
+6,821 but remained outside the proposal.  Bidirectional search is implemented and
+replay-safe, but is gated off until a genuinely goal-conditioned or effect-aware
+reverse proposer exists.
+
+`143_train_short_macro_root_transition_ranker.py` tested the recommended two-stage
+state/action interaction without contaminating global calibration.  The factorized
+child-state ranker trains on replay-verifiable forward and inverse transitions and
+hard policy proposals.  On 4,096 held-out local candidate sets it improved top-8
+recall from 54.4% to 72.5%; exhaustive root-Q median rank on the original 32 rows
+improved 2,405 -> 1,141.  Streamed 2,048-to-128/512 parent-local reranking plus a
+larger value prefilter recovered two additional training-split depth-6 paths and
+improved one path 42 -> 40, demonstrating that the implementation can preserve a
+low-policy trajectory without OOM.
+
+The clean acceptance gate rejected generalization.  Eight depth-6 rows with
+`group_id % 10 == 0` were excluded from every training stage.  Control solved 3/8.
+Full transition reranking solved 1/8, root-only transition scoring 2/8, and a
+policy-plus-0.1Q root blend 2/8; every model solve was a subset of control.  The
+apparent mixed-split gain to 11/32 was therefore training-state recovery, not unseen
+capability.  Do not promote or score this lane.  The decisive missing supervision is
+multi-step, independently verified off-policy return quality; local transition
+ranking, more action-head capacity, beam portfolios, and self-bootstrapped values do
+not supply it.

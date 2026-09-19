@@ -1,0 +1,2666 @@
+[
+  {
+    "n": 8,
+    "permutation": [
+      0,
+      3,
+      2,
+      5,
+      4,
+      7,
+      6,
+      1
+    ],
+    "budget": 5,
+    "adjacent_length": 9,
+    "status": "exhausted",
+    "nodes": 17,
+    "seconds": 3.665104899999278
+  },
+  {
+    "n": 8,
+    "permutation": [
+      0,
+      5,
+      7,
+      6,
+      4,
+      3,
+      2,
+      1
+    ],
+    "budget": 5,
+    "adjacent_length": 13,
+    "status": "exhausted",
+    "nodes": 17,
+    "seconds": 4.320000152802095e-05
+  },
+  {
+    "n": 8,
+    "permutation": [
+      0,
+      6,
+      5,
+      7,
+      4,
+      3,
+      2,
+      1
+    ],
+    "budget": 5,
+    "adjacent_length": 13,
+    "status": "exhausted",
+    "nodes": 17,
+    "seconds": 3.730000025825575e-05
+  },
+  {
+    "n": 8,
+    "permutation": [
+      0,
+      6,
+      7,
+      5,
+      4,
+      2,
+      3,
+      1
+    ],
+    "budget": 5,
+    "adjacent_length": 13,
+    "status": "exhausted",
+    "nodes": 17,
+    "seconds": 3.9999998989515007e-05
+  },
+  {
+    "n": 8,
+    "permutation": [
+      0,
+      6,
+      7,
+      5,
+      4,
+      3,
+      1,
+      2
+    ],
+    "budget": 5,
+    "adjacent_length": 11,
+    "status": "exhausted",
+    "nodes": 17,
+    "seconds": 3.989999822806567e-05
+  },
+  {
+    "n": 8,
+    "permutation": [
+      0,
+      7,
+      2,
+      1,
+      4,
+      3,
+      6,
+      5
+    ],
+    "budget": 5,
+    "adjacent_length": 9,
+    "status": "exhausted",
+    "nodes": 17,
+    "seconds": 0.0001229999979841523
+  },
+  {
+    "n": 8,
+    "permutation": [
+      0,
+      7,
+      5,
+      6,
+      4,
+      2,
+      3,
+      1
+    ],
+    "budget": 5,
+    "adjacent_length": 11,
+    "status": "exhausted",
+    "nodes": 17,
+    "seconds": 3.429999924264848e-05
+  },
+  {
+    "n": 8,
+    "permutation": [
+      0,
+      7,
+      5,
+      6,
+      4,
+      3,
+      1,
+      2
+    ],
+    "budget": 5,
+    "adjacent_length": 13,
+    "status": "exhausted",
+    "nodes": 17,
+    "seconds": 3.2800002372823656e-05
+  },
+  {
+    "n": 8,
+    "permutation": [
+      0,
+      7,
+      6,
+      5,
+      4,
+      1,
+      3,
+      2
+    ],
+    "budget": 5,
+    "adjacent_length": 13,
+    "status": "exhausted",
+    "nodes": 17,
+    "seconds": 3.5700002626981586e-05
+  },
+  {
+    "n": 8,
+    "permutation": [
+      0,
+      7,
+      6,
+      5,
+      4,
+      2,
+      1,
+      3
+    ],
+    "budget": 5,
+    "adjacent_length": 13,
+    "status": "exhausted",
+    "nodes": 17,
+    "seconds": 3.4900003811344504e-05
+  },
+  {
+    "n": 8,
+    "permutation": [
+      0,
+      7,
+      6,
+      5,
+      4,
+      3,
+      2,
+      1
+    ],
+    "budget": 5,
+    "adjacent_length": 13,
+    "status": "exhausted",
+    "nodes": 17,
+    "seconds": 3.489999653538689e-05
+  },
+  {
+    "n": 8,
+    "permutation": [
+      1,
+      0,
+      5,
+      6,
+      7,
+      4,
+      3,
+      2
+    ],
+    "budget": 5,
+    "adjacent_length": 13,
+    "status": "exhausted",
+    "nodes": 16,
+    "seconds": 3.60000049113296e-05
+  },
+  {
+    "n": 8,
+    "permutation": [
+      1,
+      0,
+      6,
+      7,
+      5,
+      4,
+      3,
+      2
+    ],
+    "budget": 5,
+    "adjacent_length": 13,
+    "status": "exhausted",
+    "nodes": 15,
+    "seconds": 3.139999898849055e-05
+  },
+  {
+    "n": 8,
+    "permutation": [
+      1,
+      0,
+      7,
+      5,
+      6,
+      4,
+      3,
+      2
+    ],
+    "budget": 5,
+    "adjacent_length": 11,
+    "status": "exhausted",
+    "nodes": 17,
+    "seconds": 3.3399999665562063e-05
+  },
+  {
+    "n": 8,
+    "permutation": [
+      1,
+      0,
+      7,
+      6,
+      5,
+      2,
+      3,
+      4
+    ],
+    "budget": 5,
+    "adjacent_length": 13,
+    "status": "exhausted",
+    "nodes": 16,
+    "seconds": 3.420000575715676e-05
+  },
+  {
+    "n": 8,
+    "permutation": [
+      1,
+      0,
+      7,
+      6,
+      5,
+      3,
+      4,
+      2
+    ],
+    "budget": 5,
+    "adjacent_length": 11,
+    "status": "exhausted",
+    "nodes": 17,
+    "seconds": 3.5400000342633575e-05
+  },
+  {
+    "n": 8,
+    "permutation": [
+      1,
+      0,
+      7,
+      6,
+      5,
+      4,
+      2,
+      3
+    ],
+    "budget": 5,
+    "adjacent_length": 13,
+    "status": "exhausted",
+    "nodes": 15,
+    "seconds": 4.030000127386302e-05
+  },
+  {
+    "n": 8,
+    "permutation": [
+      1,
+      5,
+      6,
+      0,
+      7,
+      4,
+      3,
+      2
+    ],
+    "budget": 5,
+    "adjacent_length": 13,
+    "status": "exhausted",
+    "nodes": 15,
+    "seconds": 4.7900000936351717e-05
+  },
+  {
+    "n": 8,
+    "permutation": [
+      1,
+      5,
+      7,
+      6,
+      0,
+      4,
+      3,
+      2
+    ],
+    "budget": 5,
+    "adjacent_length": 13,
+    "status": "exhausted",
+    "nodes": 15,
+    "seconds": 4.7599998652003706e-05
+  },
+  {
+    "n": 8,
+    "permutation": [
+      1,
+      6,
+      5,
+      7,
+      0,
+      4,
+      3,
+      2
+    ],
+    "budget": 5,
+    "adjacent_length": 13,
+    "status": "exhausted",
+    "nodes": 15,
+    "seconds": 4.389999958220869e-05
+  },
+  {
+    "n": 8,
+    "permutation": [
+      1,
+      6,
+      7,
+      0,
+      5,
+      4,
+      3,
+      2
+    ],
+    "budget": 5,
+    "adjacent_length": 13,
+    "status": "exhausted",
+    "nodes": 16,
+    "seconds": 4.659999831346795e-05
+  },
+  {
+    "n": 8,
+    "permutation": [
+      1,
+      7,
+      0,
+      6,
+      5,
+      4,
+      3,
+      2
+    ],
+    "budget": 5,
+    "adjacent_length": 11,
+    "status": "exhausted",
+    "nodes": 17,
+    "seconds": 3.9999998989515007e-05
+  },
+  {
+    "n": 8,
+    "permutation": [
+      2,
+      0,
+      7,
+      6,
+      5,
+      4,
+      3,
+      1
+    ],
+    "budget": 5,
+    "adjacent_length": 11,
+    "status": "exhausted",
+    "nodes": 17,
+    "seconds": 4.429999535204843e-05
+  },
+  {
+    "n": 8,
+    "permutation": [
+      2,
+      1,
+      0,
+      6,
+      7,
+      5,
+      3,
+      4
+    ],
+    "budget": 5,
+    "adjacent_length": 11,
+    "status": "exhausted",
+    "nodes": 17,
+    "seconds": 3.9699996705166996e-05
+  },
+  {
+    "n": 8,
+    "permutation": [
+      2,
+      1,
+      0,
+      7,
+      6,
+      5,
+      4,
+      3
+    ],
+    "budget": 5,
+    "adjacent_length": 13,
+    "status": "exhausted",
+    "nodes": 17,
+    "seconds": 4.269999772077426e-05
+  },
+  {
+    "n": 8,
+    "permutation": [
+      2,
+      1,
+      4,
+      3,
+      6,
+      5,
+      0,
+      7
+    ],
+    "budget": 5,
+    "adjacent_length": 9,
+    "status": "exhausted",
+    "nodes": 17,
+    "seconds": 4.249999619787559e-05
+  },
+  {
+    "n": 8,
+    "permutation": [
+      2,
+      1,
+      6,
+      0,
+      7,
+      5,
+      4,
+      3
+    ],
+    "budget": 5,
+    "adjacent_length": 13,
+    "status": "exhausted",
+    "nodes": 17,
+    "seconds": 4.0899998566601425e-05
+  },
+  {
+    "n": 8,
+    "permutation": [
+      2,
+      1,
+      7,
+      0,
+      6,
+      5,
+      3,
+      4
+    ],
+    "budget": 5,
+    "adjacent_length": 13,
+    "status": "exhausted",
+    "nodes": 17,
+    "seconds": 4.060000355821103e-05
+  },
+  {
+    "n": 8,
+    "permutation": [
+      2,
+      1,
+      7,
+      6,
+      0,
+      5,
+      4,
+      3
+    ],
+    "budget": 5,
+    "adjacent_length": 13,
+    "status": "exhausted",
+    "nodes": 17,
+    "seconds": 3.789999755099416e-05
+  },
+  {
+    "n": 8,
+    "permutation": [
+      2,
+      3,
+      1,
+      0,
+      7,
+      6,
+      5,
+      4
+    ],
+    "budget": 5,
+    "adjacent_length": 11,
+    "status": "exhausted",
+    "nodes": 17,
+    "seconds": 3.639999340521172e-05
+  },
+  {
+    "n": 8,
+    "permutation": [
+      2,
+      5,
+      4,
+      7,
+      6,
+      1,
+      0,
+      3
+    ],
+    "budget": 5,
+    "adjacent_length": 13,
+    "status": "exhausted",
+    "nodes": 17,
+    "seconds": 3.759999526664615e-05
+  },
+  {
+    "n": 8,
+    "permutation": [
+      2,
+      5,
+      7,
+      6,
+      1,
+      0,
+      4,
+      3
+    ],
+    "budget": 5,
+    "adjacent_length": 13,
+    "status": "exhausted",
+    "nodes": 15,
+    "seconds": 3.399999695830047e-05
+  },
+  {
+    "n": 8,
+    "permutation": [
+      2,
+      6,
+      5,
+      0,
+      7,
+      1,
+      4,
+      3
+    ],
+    "budget": 5,
+    "adjacent_length": 13,
+    "status": "exhausted",
+    "nodes": 15,
+    "seconds": 3.290000313427299e-05
+  },
+  {
+    "n": 8,
+    "permutation": [
+      2,
+      6,
+      5,
+      1,
+      0,
+      7,
+      4,
+      3
+    ],
+    "budget": 5,
+    "adjacent_length": 13,
+    "status": "exhausted",
+    "nodes": 17,
+    "seconds": 3.730000025825575e-05
+  },
+  {
+    "n": 8,
+    "permutation": [
+      2,
+      6,
+      5,
+      7,
+      1,
+      0,
+      4,
+      3
+    ],
+    "budget": 5,
+    "adjacent_length": 13,
+    "status": "exhausted",
+    "nodes": 17,
+    "seconds": 4.1200000850949436e-05
+  },
+  {
+    "n": 8,
+    "permutation": [
+      2,
+      7,
+      6,
+      5,
+      1,
+      0,
+      4,
+      3
+    ],
+    "budget": 5,
+    "adjacent_length": 13,
+    "status": "exhausted",
+    "nodes": 17,
+    "seconds": 4.859999899053946e-05
+  },
+  {
+    "n": 8,
+    "permutation": [
+      3,
+      0,
+      7,
+      6,
+      5,
+      1,
+      2,
+      4
+    ],
+    "budget": 5,
+    "adjacent_length": 13,
+    "status": "exhausted",
+    "nodes": 15,
+    "seconds": 4.84000047435984e-05
+  },
+  {
+    "n": 8,
+    "permutation": [
+      3,
+      0,
+      7,
+      6,
+      5,
+      4,
+      1,
+      2
+    ],
+    "budget": 5,
+    "adjacent_length": 13,
+    "status": "exhausted",
+    "nodes": 16,
+    "seconds": 3.6100005672778934e-05
+  },
+  {
+    "n": 8,
+    "permutation": [
+      3,
+      1,
+      0,
+      6,
+      7,
+      5,
+      4,
+      2
+    ],
+    "budget": 5,
+    "adjacent_length": 13,
+    "status": "exhausted",
+    "nodes": 17,
+    "seconds": 4.4699998397845775e-05
+  },
+  {
+    "n": 8,
+    "permutation": [
+      3,
+      1,
+      0,
+      7,
+      6,
+      5,
+      2,
+      4
+    ],
+    "budget": 5,
+    "adjacent_length": 13,
+    "status": "exhausted",
+    "nodes": 17,
+    "seconds": 4.400000034365803e-05
+  },
+  {
+    "n": 8,
+    "permutation": [
+      3,
+      1,
+      7,
+      0,
+      6,
+      5,
+      4,
+      2
+    ],
+    "budget": 5,
+    "adjacent_length": 11,
+    "status": "exhausted",
+    "nodes": 17,
+    "seconds": 4.02999939979054e-05
+  },
+  {
+    "n": 8,
+    "permutation": [
+      3,
+      2,
+      0,
+      1,
+      7,
+      6,
+      5,
+      4
+    ],
+    "budget": 5,
+    "adjacent_length": 11,
+    "status": "exhausted",
+    "nodes": 17,
+    "seconds": 3.51999988197349e-05
+  },
+  {
+    "n": 8,
+    "permutation": [
+      3,
+      2,
+      1,
+      0,
+      6,
+      7,
+      5,
+      4
+    ],
+    "budget": 5,
+    "adjacent_length": 11,
+    "status": "exhausted",
+    "nodes": 17,
+    "seconds": 3.4199998481199145e-05
+  },
+  {
+    "n": 8,
+    "permutation": [
+      3,
+      2,
+      1,
+      0,
+      7,
+      6,
+      4,
+      5
+    ],
+    "budget": 5,
+    "adjacent_length": 11,
+    "status": "exhausted",
+    "nodes": 17,
+    "seconds": 3.4199998481199145e-05
+  },
+  {
+    "n": 8,
+    "permutation": [
+      3,
+      2,
+      1,
+      6,
+      7,
+      0,
+      5,
+      4
+    ],
+    "budget": 5,
+    "adjacent_length": 13,
+    "status": "exhausted",
+    "nodes": 16,
+    "seconds": 3.169999399688095e-05
+  },
+  {
+    "n": 8,
+    "permutation": [
+      3,
+      2,
+      1,
+      7,
+      0,
+      6,
+      5,
+      4
+    ],
+    "budget": 5,
+    "adjacent_length": 13,
+    "status": "exhausted",
+    "nodes": 15,
+    "seconds": 3.2800002372823656e-05
+  },
+  {
+    "n": 8,
+    "permutation": [
+      3,
+      2,
+      6,
+      0,
+      7,
+      1,
+      5,
+      4
+    ],
+    "budget": 5,
+    "adjacent_length": 13,
+    "status": "exhausted",
+    "nodes": 15,
+    "seconds": 3.619999915827066e-05
+  },
+  {
+    "n": 8,
+    "permutation": [
+      3,
+      2,
+      6,
+      7,
+      1,
+      0,
+      5,
+      4
+    ],
+    "budget": 5,
+    "adjacent_length": 13,
+    "status": "exhausted",
+    "nodes": 15,
+    "seconds": 3.289999585831538e-05
+  },
+  {
+    "n": 8,
+    "permutation": [
+      3,
+      2,
+      7,
+      0,
+      1,
+      6,
+      5,
+      4
+    ],
+    "budget": 5,
+    "adjacent_length": 13,
+    "status": "exhausted",
+    "nodes": 16,
+    "seconds": 3.3399999665562063e-05
+  },
+  {
+    "n": 8,
+    "permutation": [
+      3,
+      2,
+      7,
+      6,
+      0,
+      1,
+      5,
+      4
+    ],
+    "budget": 5,
+    "adjacent_length": 13,
+    "status": "exhausted",
+    "nodes": 15,
+    "seconds": 3.37999954354018e-05
+  },
+  {
+    "n": 8,
+    "permutation": [
+      3,
+      4,
+      1,
+      0,
+      7,
+      6,
+      5,
+      2
+    ],
+    "budget": 5,
+    "adjacent_length": 13,
+    "status": "exhausted",
+    "nodes": 16,
+    "seconds": 3.390000347280875e-05
+  },
+  {
+    "n": 8,
+    "permutation": [
+      3,
+      4,
+      2,
+      0,
+      1,
+      7,
+      6,
+      5
+    ],
+    "budget": 5,
+    "adjacent_length": 11,
+    "status": "exhausted",
+    "nodes": 17,
+    "seconds": 3.37999954354018e-05
+  },
+  {
+    "n": 8,
+    "permutation": [
+      3,
+      4,
+      2,
+      1,
+      7,
+      0,
+      6,
+      5
+    ],
+    "budget": 5,
+    "adjacent_length": 13,
+    "status": "exhausted",
+    "nodes": 17,
+    "seconds": 3.2099997042678297e-05
+  },
+  {
+    "n": 8,
+    "permutation": [
+      3,
+      4,
+      5,
+      2,
+      1,
+      0,
+      7,
+      6
+    ],
+    "budget": 5,
+    "adjacent_length": 13,
+    "status": "exhausted",
+    "nodes": 16,
+    "seconds": 3.779999678954482e-05
+  },
+  {
+    "n": 8,
+    "permutation": [
+      3,
+      5,
+      0,
+      7,
+      6,
+      2,
+      1,
+      4
+    ],
+    "budget": 5,
+    "adjacent_length": 13,
+    "status": "exhausted",
+    "nodes": 15,
+    "seconds": 3.51999988197349e-05
+  },
+  {
+    "n": 8,
+    "permutation": [
+      3,
+      5,
+      1,
+      0,
+      7,
+      6,
+      2,
+      4
+    ],
+    "budget": 5,
+    "adjacent_length": 13,
+    "status": "exhausted",
+    "nodes": 15,
+    "seconds": 3.2800002372823656e-05
+  },
+  {
+    "n": 8,
+    "permutation": [
+      3,
+      5,
+      2,
+      1,
+      0,
+      7,
+      6,
+      4
+    ],
+    "budget": 5,
+    "adjacent_length": 13,
+    "status": "exhausted",
+    "nodes": 17,
+    "seconds": 3.529999958118424e-05
+  },
+  {
+    "n": 8,
+    "permutation": [
+      3,
+      5,
+      6,
+      0,
+      7,
+      2,
+      1,
+      4
+    ],
+    "budget": 5,
+    "adjacent_length": 13,
+    "status": "exhausted",
+    "nodes": 13,
+    "seconds": 3.3700001949910074e-05
+  },
+  {
+    "n": 8,
+    "permutation": [
+      3,
+      5,
+      6,
+      2,
+      1,
+      0,
+      7,
+      4
+    ],
+    "budget": 5,
+    "adjacent_length": 13,
+    "status": "exhausted",
+    "nodes": 15,
+    "seconds": 5.0300004659220576e-05
+  },
+  {
+    "n": 8,
+    "permutation": [
+      3,
+      5,
+      7,
+      6,
+      2,
+      1,
+      0,
+      4
+    ],
+    "budget": 5,
+    "adjacent_length": 13,
+    "status": "exhausted",
+    "nodes": 17,
+    "seconds": 5.539999983739108e-05
+  },
+  {
+    "n": 8,
+    "permutation": [
+      3,
+      6,
+      5,
+      0,
+      7,
+      1,
+      2,
+      4
+    ],
+    "budget": 5,
+    "adjacent_length": 13,
+    "status": "exhausted",
+    "nodes": 13,
+    "seconds": 3.310000465717167e-05
+  },
+  {
+    "n": 8,
+    "permutation": [
+      3,
+      6,
+      5,
+      1,
+      0,
+      7,
+      2,
+      4
+    ],
+    "budget": 5,
+    "adjacent_length": 13,
+    "status": "exhausted",
+    "nodes": 15,
+    "seconds": 7.419999747071415e-05
+  },
+  {
+    "n": 8,
+    "permutation": [
+      3,
+      6,
+      5,
+      7,
+      0,
+      2,
+      1,
+      4
+    ],
+    "budget": 5,
+    "adjacent_length": 13,
+    "status": "exhausted",
+    "nodes": 13,
+    "seconds": 4.3000000005122274e-05
+  },
+  {
+    "n": 8,
+    "permutation": [
+      3,
+      6,
+      5,
+      7,
+      2,
+      1,
+      0,
+      4
+    ],
+    "budget": 5,
+    "adjacent_length": 13,
+    "status": "exhausted",
+    "nodes": 15,
+    "seconds": 5.750000127591193e-05
+  },
+  {
+    "n": 8,
+    "permutation": [
+      3,
+      7,
+      6,
+      5,
+      0,
+      2,
+      1,
+      4
+    ],
+    "budget": 5,
+    "adjacent_length": 13,
+    "status": "exhausted",
+    "nodes": 15,
+    "seconds": 3.619999915827066e-05
+  },
+  {
+    "n": 8,
+    "permutation": [
+      3,
+      7,
+      6,
+      5,
+      1,
+      0,
+      2,
+      4
+    ],
+    "budget": 5,
+    "adjacent_length": 13,
+    "status": "exhausted",
+    "nodes": 17,
+    "seconds": 3.4199998481199145e-05
+  },
+  {
+    "n": 8,
+    "permutation": [
+      3,
+      7,
+      6,
+      5,
+      2,
+      1,
+      0,
+      4
+    ],
+    "budget": 5,
+    "adjacent_length": 13,
+    "status": "exhausted",
+    "nodes": 17,
+    "seconds": 3.579999611247331e-05
+  },
+  {
+    "n": 8,
+    "permutation": [
+      4,
+      0,
+      7,
+      6,
+      5,
+      1,
+      3,
+      2
+    ],
+    "budget": 5,
+    "adjacent_length": 13,
+    "status": "exhausted",
+    "nodes": 15,
+    "seconds": 3.3299998904112726e-05
+  },
+  {
+    "n": 8,
+    "permutation": [
+      4,
+      0,
+      7,
+      6,
+      5,
+      2,
+      1,
+      3
+    ],
+    "budget": 5,
+    "adjacent_length": 13,
+    "status": "exhausted",
+    "nodes": 15,
+    "seconds": 3.2999996619764715e-05
+  },
+  {
+    "n": 8,
+    "permutation": [
+      4,
+      1,
+      0,
+      7,
+      6,
+      5,
+      3,
+      2
+    ],
+    "budget": 5,
+    "adjacent_length": 13,
+    "status": "exhausted",
+    "nodes": 17,
+    "seconds": 3.139999898849055e-05
+  },
+  {
+    "n": 8,
+    "permutation": [
+      4,
+      2,
+      1,
+      0,
+      7,
+      6,
+      5,
+      3
+    ],
+    "budget": 5,
+    "adjacent_length": 13,
+    "status": "exhausted",
+    "nodes": 15,
+    "seconds": 3.239999932702631e-05
+  },
+  {
+    "n": 8,
+    "permutation": [
+      4,
+      3,
+      0,
+      7,
+      6,
+      2,
+      1,
+      5
+    ],
+    "budget": 5,
+    "adjacent_length": 13,
+    "status": "exhausted",
+    "nodes": 17,
+    "seconds": 3.599999763537198e-05
+  },
+  {
+    "n": 8,
+    "permutation": [
+      4,
+      3,
+      2,
+      0,
+      7,
+      1,
+      6,
+      5
+    ],
+    "budget": 5,
+    "adjacent_length": 13,
+    "status": "exhausted",
+    "nodes": 17,
+    "seconds": 3.4500000765547156e-05
+  },
+  {
+    "n": 8,
+    "permutation": [
+      4,
+      3,
+      2,
+      1,
+      0,
+      7,
+      6,
+      5
+    ],
+    "budget": 5,
+    "adjacent_length": 13,
+    "status": "exhausted",
+    "nodes": 17,
+    "seconds": 3.599999763537198e-05
+  },
+  {
+    "n": 8,
+    "permutation": [
+      4,
+      3,
+      2,
+      7,
+      1,
+      0,
+      6,
+      5
+    ],
+    "budget": 5,
+    "adjacent_length": 13,
+    "status": "exhausted",
+    "nodes": 17,
+    "seconds": 3.5099998058285564e-05
+  },
+  {
+    "n": 8,
+    "permutation": [
+      4,
+      3,
+      6,
+      0,
+      7,
+      2,
+      1,
+      5
+    ],
+    "budget": 5,
+    "adjacent_length": 13,
+    "status": "exhausted",
+    "nodes": 15,
+    "seconds": 3.460000152699649e-05
+  },
+  {
+    "n": 8,
+    "permutation": [
+      4,
+      3,
+      6,
+      5,
+      0,
+      7,
+      2,
+      1
+    ],
+    "budget": 5,
+    "adjacent_length": 13,
+    "status": "exhausted",
+    "nodes": 17,
+    "seconds": 3.2500000088475645e-05
+  },
+  {
+    "n": 8,
+    "permutation": [
+      4,
+      3,
+      7,
+      6,
+      0,
+      2,
+      1,
+      5
+    ],
+    "budget": 5,
+    "adjacent_length": 13,
+    "status": "exhausted",
+    "nodes": 17,
+    "seconds": 3.550000110408291e-05
+  },
+  {
+    "n": 8,
+    "permutation": [
+      4,
+      3,
+      7,
+      6,
+      1,
+      0,
+      2,
+      5
+    ],
+    "budget": 5,
+    "adjacent_length": 13,
+    "status": "exhausted",
+    "nodes": 15,
+    "seconds": 3.499999729683623e-05
+  },
+  {
+    "n": 8,
+    "permutation": [
+      4,
+      3,
+      7,
+      6,
+      2,
+      1,
+      0,
+      5
+    ],
+    "budget": 5,
+    "adjacent_length": 13,
+    "status": "exhausted",
+    "nodes": 17,
+    "seconds": 3.319999814266339e-05
+  },
+  {
+    "n": 8,
+    "permutation": [
+      4,
+      5,
+      1,
+      0,
+      7,
+      6,
+      3,
+      2
+    ],
+    "budget": 5,
+    "adjacent_length": 13,
+    "status": "exhausted",
+    "nodes": 15,
+    "seconds": 3.2800002372823656e-05
+  },
+  {
+    "n": 8,
+    "permutation": [
+      4,
+      5,
+      3,
+      2,
+      1,
+      0,
+      7,
+      6
+    ],
+    "budget": 5,
+    "adjacent_length": 13,
+    "status": "exhausted",
+    "nodes": 15,
+    "seconds": 3.2199997804127634e-05
+  },
+  {
+    "n": 8,
+    "permutation": [
+      4,
+      5,
+      7,
+      6,
+      1,
+      0,
+      3,
+      2
+    ],
+    "budget": 5,
+    "adjacent_length": 13,
+    "status": "exhausted",
+    "nodes": 13,
+    "seconds": 3.119999746559188e-05
+  },
+  {
+    "n": 8,
+    "permutation": [
+      4,
+      5,
+      7,
+      6,
+      3,
+      2,
+      1,
+      0
+    ],
+    "budget": 5,
+    "adjacent_length": 13,
+    "status": "exhausted",
+    "nodes": 15,
+    "seconds": 3.300000389572233e-05
+  },
+  {
+    "n": 8,
+    "permutation": [
+      4,
+      6,
+      5,
+      0,
+      7,
+      2,
+      1,
+      3
+    ],
+    "budget": 5,
+    "adjacent_length": 13,
+    "status": "exhausted",
+    "nodes": 13,
+    "seconds": 3.2800002372823656e-05
+  },
+  {
+    "n": 8,
+    "permutation": [
+      4,
+      6,
+      5,
+      0,
+      7,
+      3,
+      2,
+      1
+    ],
+    "budget": 5,
+    "adjacent_length": 13,
+    "status": "exhausted",
+    "nodes": 15,
+    "seconds": 3.1299998227041215e-05
+  },
+  {
+    "n": 8,
+    "permutation": [
+      4,
+      6,
+      5,
+      1,
+      0,
+      7,
+      3,
+      2
+    ],
+    "budget": 5,
+    "adjacent_length": 13,
+    "status": "exhausted",
+    "nodes": 17,
+    "seconds": 3.5400000342633575e-05
+  },
+  {
+    "n": 8,
+    "permutation": [
+      4,
+      6,
+      5,
+      2,
+      1,
+      0,
+      7,
+      3
+    ],
+    "budget": 5,
+    "adjacent_length": 13,
+    "status": "exhausted",
+    "nodes": 15,
+    "seconds": 3.3200005418621004e-05
+  },
+  {
+    "n": 8,
+    "permutation": [
+      4,
+      6,
+      5,
+      3,
+      2,
+      1,
+      0,
+      7
+    ],
+    "budget": 5,
+    "adjacent_length": 13,
+    "status": "exhausted",
+    "nodes": 17,
+    "seconds": 3.5599994589574635e-05
+  },
+  {
+    "n": 8,
+    "permutation": [
+      4,
+      6,
+      5,
+      7,
+      3,
+      2,
+      1,
+      0
+    ],
+    "budget": 5,
+    "adjacent_length": 13,
+    "status": "exhausted",
+    "nodes": 15,
+    "seconds": 7.819999882485718e-05
+  },
+  {
+    "n": 8,
+    "permutation": [
+      4,
+      7,
+      6,
+      1,
+      0,
+      3,
+      2,
+      5
+    ],
+    "budget": 5,
+    "adjacent_length": 13,
+    "status": "exhausted",
+    "nodes": 17,
+    "seconds": 3.640000068116933e-05
+  },
+  {
+    "n": 8,
+    "permutation": [
+      4,
+      7,
+      6,
+      5,
+      1,
+      0,
+      3,
+      2
+    ],
+    "budget": 5,
+    "adjacent_length": 13,
+    "status": "exhausted",
+    "nodes": 15,
+    "seconds": 3.0099996365606785e-05
+  },
+  {
+    "n": 8,
+    "permutation": [
+      5,
+      2,
+      1,
+      0,
+      7,
+      6,
+      3,
+      4
+    ],
+    "budget": 5,
+    "adjacent_length": 13,
+    "status": "exhausted",
+    "nodes": 16,
+    "seconds": 3.1400006264448166e-05
+  },
+  {
+    "n": 8,
+    "permutation": [
+      5,
+      3,
+      2,
+      0,
+      1,
+      7,
+      6,
+      4
+    ],
+    "budget": 5,
+    "adjacent_length": 13,
+    "status": "exhausted",
+    "nodes": 17,
+    "seconds": 3.590000414988026e-05
+  },
+  {
+    "n": 8,
+    "permutation": [
+      5,
+      3,
+      2,
+      1,
+      7,
+      0,
+      6,
+      4
+    ],
+    "budget": 5,
+    "adjacent_length": 11,
+    "status": "exhausted",
+    "nodes": 17,
+    "seconds": 3.5899996873922646e-05
+  },
+  {
+    "n": 8,
+    "permutation": [
+      5,
+      3,
+      4,
+      2,
+      1,
+      0,
+      7,
+      6
+    ],
+    "budget": 5,
+    "adjacent_length": 11,
+    "status": "exhausted",
+    "nodes": 17,
+    "seconds": 3.4000004234258085e-05
+  },
+  {
+    "n": 8,
+    "permutation": [
+      5,
+      4,
+      0,
+      7,
+      6,
+      1,
+      3,
+      2
+    ],
+    "budget": 5,
+    "adjacent_length": 13,
+    "status": "exhausted",
+    "nodes": 15,
+    "seconds": 3.359999391250312e-05
+  },
+  {
+    "n": 8,
+    "permutation": [
+      5,
+      4,
+      0,
+      7,
+      6,
+      2,
+      1,
+      3
+    ],
+    "budget": 5,
+    "adjacent_length": 13,
+    "status": "exhausted",
+    "nodes": 17,
+    "seconds": 3.210000431863591e-05
+  },
+  {
+    "n": 8,
+    "permutation": [
+      5,
+      4,
+      0,
+      7,
+      6,
+      3,
+      2,
+      1
+    ],
+    "budget": 5,
+    "adjacent_length": 13,
+    "status": "exhausted",
+    "nodes": 17,
+    "seconds": 3.070000093430281e-05
+  },
+  {
+    "n": 8,
+    "permutation": [
+      5,
+      4,
+      1,
+      0,
+      7,
+      6,
+      2,
+      3
+    ],
+    "budget": 5,
+    "adjacent_length": 13,
+    "status": "exhausted",
+    "nodes": 15,
+    "seconds": 2.9100003303028643e-05
+  },
+  {
+    "n": 8,
+    "permutation": [
+      5,
+      4,
+      2,
+      1,
+      0,
+      7,
+      6,
+      3
+    ],
+    "budget": 5,
+    "adjacent_length": 13,
+    "status": "exhausted",
+    "nodes": 17,
+    "seconds": 3.499999729683623e-05
+  },
+  {
+    "n": 8,
+    "permutation": [
+      5,
+      4,
+      3,
+      0,
+      1,
+      2,
+      7,
+      6
+    ],
+    "budget": 5,
+    "adjacent_length": 13,
+    "status": "exhausted",
+    "nodes": 16,
+    "seconds": 0.00011309999536024407
+  },
+  {
+    "n": 8,
+    "permutation": [
+      5,
+      4,
+      3,
+      0,
+      7,
+      1,
+      2,
+      6
+    ],
+    "budget": 5,
+    "adjacent_length": 13,
+    "status": "exhausted",
+    "nodes": 15,
+    "seconds": 3.809999907389283e-05
+  },
+  {
+    "n": 8,
+    "permutation": [
+      5,
+      4,
+      3,
+      1,
+      2,
+      0,
+      7,
+      6
+    ],
+    "budget": 5,
+    "adjacent_length": 11,
+    "status": "exhausted",
+    "nodes": 17,
+    "seconds": 9.639999916544184e-05
+  },
+  {
+    "n": 8,
+    "permutation": [
+      5,
+      4,
+      3,
+      2,
+      0,
+      1,
+      7,
+      6
+    ],
+    "budget": 5,
+    "adjacent_length": 13,
+    "status": "exhausted",
+    "nodes": 15,
+    "seconds": 4.020000051241368e-05
+  },
+  {
+    "n": 8,
+    "permutation": [
+      5,
+      4,
+      3,
+      2,
+      1,
+      7,
+      0,
+      6
+    ],
+    "budget": 5,
+    "adjacent_length": 11,
+    "status": "exhausted",
+    "nodes": 17,
+    "seconds": 3.2500000088475645e-05
+  },
+  {
+    "n": 8,
+    "permutation": [
+      5,
+      4,
+      3,
+      2,
+      7,
+      0,
+      1,
+      6
+    ],
+    "budget": 5,
+    "adjacent_length": 13,
+    "status": "exhausted",
+    "nodes": 16,
+    "seconds": 3.380000271135941e-05
+  },
+  {
+    "n": 8,
+    "permutation": [
+      5,
+      4,
+      3,
+      7,
+      0,
+      2,
+      1,
+      6
+    ],
+    "budget": 5,
+    "adjacent_length": 13,
+    "status": "exhausted",
+    "nodes": 15,
+    "seconds": 3.5099998058285564e-05
+  },
+  {
+    "n": 8,
+    "permutation": [
+      5,
+      4,
+      3,
+      7,
+      1,
+      0,
+      2,
+      6
+    ],
+    "budget": 5,
+    "adjacent_length": 13,
+    "status": "exhausted",
+    "nodes": 15,
+    "seconds": 3.239999932702631e-05
+  },
+  {
+    "n": 8,
+    "permutation": [
+      5,
+      4,
+      6,
+      0,
+      7,
+      3,
+      2,
+      1
+    ],
+    "budget": 5,
+    "adjacent_length": 13,
+    "status": "exhausted",
+    "nodes": 17,
+    "seconds": 3.869999636663124e-05
+  },
+  {
+    "n": 8,
+    "permutation": [
+      5,
+      4,
+      6,
+      1,
+      0,
+      7,
+      3,
+      2
+    ],
+    "budget": 5,
+    "adjacent_length": 13,
+    "status": "exhausted",
+    "nodes": 15,
+    "seconds": 3.5400000342633575e-05
+  },
+  {
+    "n": 8,
+    "permutation": [
+      5,
+      4,
+      6,
+      2,
+      1,
+      0,
+      7,
+      3
+    ],
+    "budget": 5,
+    "adjacent_length": 13,
+    "status": "exhausted",
+    "nodes": 15,
+    "seconds": 4.2400002712383866e-05
+  },
+  {
+    "n": 8,
+    "permutation": [
+      5,
+      4,
+      6,
+      3,
+      2,
+      1,
+      0,
+      7
+    ],
+    "budget": 5,
+    "adjacent_length": 13,
+    "status": "exhausted",
+    "nodes": 17,
+    "seconds": 3.51999988197349e-05
+  },
+  {
+    "n": 8,
+    "permutation": [
+      5,
+      4,
+      6,
+      7,
+      1,
+      0,
+      3,
+      2
+    ],
+    "budget": 5,
+    "adjacent_length": 13,
+    "status": "exhausted",
+    "nodes": 13,
+    "seconds": 3.210000431863591e-05
+  },
+  {
+    "n": 8,
+    "permutation": [
+      5,
+      4,
+      6,
+      7,
+      3,
+      2,
+      1,
+      0
+    ],
+    "budget": 5,
+    "adjacent_length": 13,
+    "status": "exhausted",
+    "nodes": 15,
+    "seconds": 3.640000068116933e-05
+  },
+  {
+    "n": 8,
+    "permutation": [
+      5,
+      4,
+      7,
+      6,
+      0,
+      1,
+      3,
+      2
+    ],
+    "budget": 5,
+    "adjacent_length": 13,
+    "status": "exhausted",
+    "nodes": 13,
+    "seconds": 3.2000003557186574e-05
+  },
+  {
+    "n": 8,
+    "permutation": [
+      5,
+      4,
+      7,
+      6,
+      0,
+      3,
+      2,
+      1
+    ],
+    "budget": 5,
+    "adjacent_length": 13,
+    "status": "exhausted",
+    "nodes": 15,
+    "seconds": 3.190000279573724e-05
+  },
+  {
+    "n": 8,
+    "permutation": [
+      5,
+      4,
+      7,
+      6,
+      1,
+      0,
+      2,
+      3
+    ],
+    "budget": 5,
+    "adjacent_length": 13,
+    "status": "exhausted",
+    "nodes": 13,
+    "seconds": 3.3299998904112726e-05
+  },
+  {
+    "n": 8,
+    "permutation": [
+      5,
+      4,
+      7,
+      6,
+      2,
+      1,
+      0,
+      3
+    ],
+    "budget": 5,
+    "adjacent_length": 13,
+    "status": "exhausted",
+    "nodes": 15,
+    "seconds": 3.479999577393755e-05
+  },
+  {
+    "n": 8,
+    "permutation": [
+      5,
+      6,
+      3,
+      2,
+      1,
+      0,
+      7,
+      4
+    ],
+    "budget": 5,
+    "adjacent_length": 13,
+    "status": "exhausted",
+    "nodes": 16,
+    "seconds": 3.310000465717167e-05
+  },
+  {
+    "n": 8,
+    "permutation": [
+      5,
+      6,
+      4,
+      3,
+      1,
+      2,
+      0,
+      7
+    ],
+    "budget": 5,
+    "adjacent_length": 13,
+    "status": "exhausted",
+    "nodes": 17,
+    "seconds": 3.619999915827066e-05
+  },
+  {
+    "n": 8,
+    "permutation": [
+      5,
+      6,
+      4,
+      3,
+      2,
+      0,
+      1,
+      7
+    ],
+    "budget": 5,
+    "adjacent_length": 11,
+    "status": "exhausted",
+    "nodes": 17,
+    "seconds": 3.3899996196851134e-05
+  },
+  {
+    "n": 8,
+    "permutation": [
+      5,
+      6,
+      7,
+      4,
+      3,
+      2,
+      1,
+      0
+    ],
+    "budget": 5,
+    "adjacent_length": 13,
+    "status": "exhausted",
+    "nodes": 16,
+    "seconds": 3.7099998735357076e-05
+  },
+  {
+    "n": 8,
+    "permutation": [
+      6,
+      1,
+      0,
+      3,
+      2,
+      5,
+      4,
+      7
+    ],
+    "budget": 5,
+    "adjacent_length": 9,
+    "status": "exhausted",
+    "nodes": 17,
+    "seconds": 3.840000135824084e-05
+  },
+  {
+    "n": 8,
+    "permutation": [
+      6,
+      4,
+      3,
+      2,
+      1,
+      0,
+      7,
+      5
+    ],
+    "budget": 5,
+    "adjacent_length": 11,
+    "status": "exhausted",
+    "nodes": 17,
+    "seconds": 3.529999958118424e-05
+  },
+  {
+    "n": 8,
+    "permutation": [
+      6,
+      4,
+      5,
+      3,
+      1,
+      2,
+      0,
+      7
+    ],
+    "budget": 5,
+    "adjacent_length": 11,
+    "status": "exhausted",
+    "nodes": 17,
+    "seconds": 3.740000101970509e-05
+  },
+  {
+    "n": 8,
+    "permutation": [
+      6,
+      4,
+      5,
+      3,
+      2,
+      0,
+      1,
+      7
+    ],
+    "budget": 5,
+    "adjacent_length": 13,
+    "status": "exhausted",
+    "nodes": 17,
+    "seconds": 3.3499993151053786e-05
+  },
+  {
+    "n": 8,
+    "permutation": [
+      6,
+      5,
+      0,
+      7,
+      2,
+      1,
+      4,
+      3
+    ],
+    "budget": 5,
+    "adjacent_length": 13,
+    "status": "exhausted",
+    "nodes": 17,
+    "seconds": 3.7699996028095484e-05
+  },
+  {
+    "n": 8,
+    "permutation": [
+      6,
+      5,
+      4,
+      0,
+      7,
+      1,
+      3,
+      2
+    ],
+    "budget": 5,
+    "adjacent_length": 13,
+    "status": "exhausted",
+    "nodes": 17,
+    "seconds": 3.840000135824084e-05
+  },
+  {
+    "n": 8,
+    "permutation": [
+      6,
+      5,
+      4,
+      0,
+      7,
+      2,
+      1,
+      3
+    ],
+    "budget": 5,
+    "adjacent_length": 13,
+    "status": "exhausted",
+    "nodes": 15,
+    "seconds": 3.7699996028095484e-05
+  },
+  {
+    "n": 8,
+    "permutation": [
+      6,
+      5,
+      4,
+      0,
+      7,
+      3,
+      2,
+      1
+    ],
+    "budget": 5,
+    "adjacent_length": 13,
+    "status": "exhausted",
+    "nodes": 17,
+    "seconds": 3.550000110408291e-05
+  },
+  {
+    "n": 8,
+    "permutation": [
+      6,
+      5,
+      4,
+      1,
+      0,
+      7,
+      3,
+      2
+    ],
+    "budget": 5,
+    "adjacent_length": 13,
+    "status": "exhausted",
+    "nodes": 17,
+    "seconds": 3.440000000409782e-05
+  },
+  {
+    "n": 8,
+    "permutation": [
+      6,
+      5,
+      4,
+      3,
+      0,
+      2,
+      1,
+      7
+    ],
+    "budget": 5,
+    "adjacent_length": 13,
+    "status": "exhausted",
+    "nodes": 17,
+    "seconds": 3.429999924264848e-05
+  },
+  {
+    "n": 8,
+    "permutation": [
+      6,
+      5,
+      4,
+      3,
+      1,
+      0,
+      2,
+      7
+    ],
+    "budget": 5,
+    "adjacent_length": 13,
+    "status": "exhausted",
+    "nodes": 17,
+    "seconds": 3.4199998481199145e-05
+  },
+  {
+    "n": 8,
+    "permutation": [
+      6,
+      5,
+      4,
+      3,
+      2,
+      1,
+      0,
+      7
+    ],
+    "budget": 5,
+    "adjacent_length": 13,
+    "status": "exhausted",
+    "nodes": 17,
+    "seconds": 3.860000288113952e-05
+  },
+  {
+    "n": 8,
+    "permutation": [
+      6,
+      5,
+      4,
+      7,
+      1,
+      0,
+      3,
+      2
+    ],
+    "budget": 5,
+    "adjacent_length": 13,
+    "status": "exhausted",
+    "nodes": 15,
+    "seconds": 3.5700002626981586e-05
+  },
+  {
+    "n": 8,
+    "permutation": [
+      6,
+      7,
+      5,
+      4,
+      3,
+      2,
+      1,
+      0
+    ],
+    "budget": 5,
+    "adjacent_length": 11,
+    "status": "exhausted",
+    "nodes": 17,
+    "seconds": 3.360000118846074e-05
+  },
+  {
+    "n": 8,
+    "permutation": [
+      7,
+      4,
+      5,
+      6,
+      3,
+      2,
+      1,
+      0
+    ],
+    "budget": 5,
+    "adjacent_length": 13,
+    "status": "exhausted",
+    "nodes": 16,
+    "seconds": 3.3399999665562063e-05
+  },
+  {
+    "n": 8,
+    "permutation": [
+      7,
+      5,
+      6,
+      4,
+      3,
+      2,
+      1,
+      0
+    ],
+    "budget": 5,
+    "adjacent_length": 13,
+    "status": "exhausted",
+    "nodes": 15,
+    "seconds": 3.18000020342879e-05
+  },
+  {
+    "n": 8,
+    "permutation": [
+      7,
+      6,
+      4,
+      5,
+      3,
+      2,
+      1,
+      0
+    ],
+    "budget": 5,
+    "adjacent_length": 11,
+    "status": "exhausted",
+    "nodes": 17,
+    "seconds": 3.599999763537198e-05
+  },
+  {
+    "n": 8,
+    "permutation": [
+      7,
+      6,
+      5,
+      4,
+      0,
+      1,
+      3,
+      2
+    ],
+    "budget": 5,
+    "adjacent_length": 13,
+    "status": "exhausted",
+    "nodes": 15,
+    "seconds": 3.380000271135941e-05
+  },
+  {
+    "n": 8,
+    "permutation": [
+      7,
+      6,
+      5,
+      4,
+      0,
+      2,
+      1,
+      3
+    ],
+    "budget": 5,
+    "adjacent_length": 13,
+    "status": "exhausted",
+    "nodes": 15,
+    "seconds": 3.399999695830047e-05
+  },
+  {
+    "n": 8,
+    "permutation": [
+      7,
+      6,
+      5,
+      4,
+      1,
+      0,
+      2,
+      3
+    ],
+    "budget": 5,
+    "adjacent_length": 13,
+    "status": "exhausted",
+    "nodes": 15,
+    "seconds": 3.2800002372823656e-05
+  },
+  {
+    "n": 8,
+    "permutation": [
+      7,
+      6,
+      5,
+      4,
+      1,
+      2,
+      3,
+      0
+    ],
+    "budget": 5,
+    "adjacent_length": 13,
+    "status": "exhausted",
+    "nodes": 16,
+    "seconds": 3.440000000409782e-05
+  },
+  {
+    "n": 8,
+    "permutation": [
+      7,
+      6,
+      5,
+      4,
+      2,
+      3,
+      1,
+      0
+    ],
+    "budget": 5,
+    "adjacent_length": 11,
+    "status": "exhausted",
+    "nodes": 17,
+    "seconds": 3.060000017285347e-05
+  },
+  {
+    "n": 8,
+    "permutation": [
+      7,
+      6,
+      5,
+      4,
+      3,
+      0,
+      1,
+      2
+    ],
+    "budget": 5,
+    "adjacent_length": 13,
+    "status": "exhausted",
+    "nodes": 16,
+    "seconds": 3.190000279573724e-05
+  },
+  {
+    "n": 8,
+    "permutation": [
+      7,
+      6,
+      5,
+      4,
+      3,
+      1,
+      2,
+      0
+    ],
+    "budget": 5,
+    "adjacent_length": 13,
+    "status": "exhausted",
+    "nodes": 15,
+    "seconds": 2.890000178012997e-05
+  },
+  {
+    "n": 8,
+    "permutation": [
+      7,
+      6,
+      5,
+      4,
+      3,
+      2,
+      0,
+      1
+    ],
+    "budget": 5,
+    "adjacent_length": 11,
+    "status": "exhausted",
+    "nodes": 17,
+    "seconds": 2.920000406447798e-05
+  }
+]

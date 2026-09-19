@@ -1,0 +1,35 @@
+# Stage 2 -- random-walk MSE pretrain, "mid" trunk (15.0M params).
+#
+# num_classes: 6 -- NOT state_size. The 4x4x4 is a COLOR cube; there are only 6
+# symbols. Every model constructor in this repo defaults num_classes to the
+# state size, so passing it wrong silently builds a 96x96 one-hot.
+#
+# encoding: onehot -> in_dim = 96 * 6 = 576. An Embedding(6, 16) would give
+# 1536 dims for zero extra information, so onehot is both cheaper and lossless.
+#
+# k_max 60: the diameter is ~37-40 (counting bound 36.8) and random walks fully
+# mix by length ~26-30, so 60 covers the whole range with headroom.
+# n_back 1: n_back=40 is a confirmed regression (see cayley EXPERIMENTS.md).
+
+model:
+  state_size: 96
+  num_classes: 6
+  hidden_dims: [4096, 1024]
+  num_res_blocks: 4
+  encoding: onehot
+
+training:
+  n_epochs: 1000
+  samples_per_epoch: 500_000
+  batch_size: 16384
+  k_max: 60
+  lr: 5.0e-4
+  weight_decay: 0.0
+  checkpoint_every_epochs: 100
+  n_back: 1
+  loss: mse
+  amp: true
+  compile_model: true      # ResMLP -- safe. Rule 22 only bans compile for SDPA transformers.
+  fused_optimizer: true
+
+seed: 444

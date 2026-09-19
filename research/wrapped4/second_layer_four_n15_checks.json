@@ -1,0 +1,12 @@
+{
+  "n": 15,
+  "layer": "cyclic_adjacent_length=floor(n^2/4)-2",
+  "expected_states": 7282,
+  "covered_states": 7282,
+  "orbit_representatives": 151,
+  "counts": {
+    "upper_18": 7282
+  },
+  "complete_upper_bound": true,
+  "scope": "Only this auxiliary layer; not a Cayley diameter computation."
+}

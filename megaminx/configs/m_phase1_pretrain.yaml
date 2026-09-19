@@ -1,0 +1,40 @@
+# Phase-1 V for the two-phase (Kociemba-style) solver.
+# Reduce an arbitrary scramble INTO the subgroup H: get every frozen (LL) sticker
+# home, treating the 85 TOP-movable stickers as don't-care (masked to token 120).
+# Full 24-generator random walks from solved; MaskedV wrapper; walk-depth MSE.
+# Exact H/coset anchors are mixed in every epoch: any restricted TOP-only state is
+# already in H, so its Phase-1 target is 0. Vlad used walk length ~30 for Phase 1.
+#
+# The `model` block below is the INNER ResMLP config; num_classes MUST be 121
+# (0..119 real sticker ids + 120 = mask). Trainer wraps it in MaskedV.
+# Trainer: megaminx/scripts/111_train_phase1.py
+
+model:
+  state_size: 120
+  num_classes: 121
+  hidden_dims: [2048, 512]
+  num_res_blocks: 2
+  encoding: embedding
+  embed_dim: 16
+
+training:
+  n_epochs: 1500
+  samples_per_epoch: 1_000_000
+  batch_size: 16384
+  k_max: 30
+  lr: 2.0e-3
+  weight_decay: 0.0
+  checkpoint_every_epochs: 100
+  n_back: 1
+  loss: mse
+  amp: true
+  compile_model: true
+  fused_optimizer: true
+
+anchors:
+  n_h_solved: 4096
+  h_samples_per_epoch: 65536
+  h_k_max: 48
+  h_n_back: 1
+
+seed: 0

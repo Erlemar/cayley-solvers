@@ -1,0 +1,68 @@
+# Residual Generator-ISAB Q scorer.
+#
+# The proven tq0 ResMLP is an exact, frozen base.  A compact relational branch
+# preserves all 50 physical-piece tokens, mixes them through bidirectional induced
+# attention, and emits one correction per exact puzzle generator.  Its final layer
+# starts at zero, so the complete model initially reproduces tq0 bit-for-bit.
+
+model:
+  arch: generator_isab
+  az_head: false
+  state_size: 88
+  num_classes: 88
+  layout_path: tetraminx/data/piece_layout.json
+  hidden_dims: [2048, 512]
+  num_res_blocks: 2
+  embed_dim: 16
+
+  d_model: 128
+  nhead: 4
+  num_latents: 12
+  num_layers: 2
+  ff_dim: 256
+  action_ff_dim: 256
+  activation: silu
+  dropout: 0.0
+
+training:
+  n_epochs: 1500
+  steps_per_epoch: 256
+  batch_size: 2048
+  k_min: 2
+  k_max: 40
+  pivot_tilt: 0.5
+
+  # The base is the already-trained standalone ResMLP.  It remains part of this
+  # single deployable model; no teacher or second model is needed at inference.
+  warmstart_base: tetraminx/models/tq0/epoch_1500.pt
+  freeze_base: true
+
+  lr: 3.0e-4
+  weight_decay: 3.0e-3
+  grad_clip: 1.0
+
+  sym_coverage: true
+  sym_rows: 0
+  verify_symmetry: true
+
+  anchor_batch: 512
+  max_anchor_depth: 5
+  anchor_weight: 1.0
+
+  top1_margin: 1.0
+  top1_margin_weight: 0.0
+
+  # Keep the first run controlled against tq0, mx_tf, and mx_latent_relational.
+  # Frontier/teacher-labelled data is a separate second-stage experiment only if
+  # this architecture-only comparison shows the expected ranking improvement.
+  path_batch: 0
+  path_mse_weight: 0.0
+  path_rank_weight: 0.0
+
+  val_size: 2048
+  checkpoint_every_epochs: 50
+  amp: true
+  compile_model: true
+  fused_optimizer: true
+
+seed: 0

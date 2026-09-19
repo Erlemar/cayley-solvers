@@ -1,0 +1,57 @@
+{
+  "linear_reversals_verified": "every m=6..250",
+  "reflection_words_verified": 485,
+  "reflection_sizes": "12..250 and 503,1000,1001,1012 (shifted starts at 13)",
+  "formula_equals_parity_rounded_lower_bound": "all n=13..10000, both reflections",
+  "random_lift_potential_checks": 13000,
+  "small_exact_bfs": {
+    "5": {
+      "shifted": 4,
+      "full": 4
+    },
+    "6": {
+      "shifted": 4,
+      "full": 5
+    },
+    "7": {
+      "shifted": 5,
+      "full": 5
+    },
+    "8": {
+      "full": 6,
+      "shifted": 7
+    },
+    "9": {
+      "shifted": 8,
+      "full": 8
+    }
+  },
+  "s": [
+    12,
+    1,
+    0,
+    9,
+    4,
+    9,
+    0,
+    1,
+    12,
+    9,
+    16,
+    9
+  ],
+  "r": [
+    0,
+    1,
+    12,
+    9,
+    16,
+    9,
+    12,
+    1,
+    0,
+    9,
+    4,
+    9
+  ]
+}

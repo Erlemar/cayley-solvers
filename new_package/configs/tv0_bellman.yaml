@@ -1,0 +1,45 @@
+# tv0 Stage B -- Bellman refinement on the Stage A checkpoint.
+#
+# Target = clip(1 + min_a V_target(child), 0, walk_depth), bootstrapped against a
+# target net refreshed every 10 epochs, plus two exact-label mixins:
+#   * BFS anchors (10% of every batch) -- exact distances for d <= 6
+#   * V0 / d=1 anchors -- fixes the V(V0)~2 bootstrap bug (see the cube + megaminx
+#     runs; without these the whole landscape sits ~2 too high near solved)
+#
+# warmstart_path is filled in by the launcher once Stage A picks a checkpoint.
+
+model:
+  state_size: 88
+  num_classes: 88
+  hidden_dims: [2048, 512]
+  num_res_blocks: 2
+  encoding: embedding
+  embed_dim: 16
+
+training:
+  n_epochs: 400
+  samples_per_epoch: 500_000   # target-net forward over 24 children dominates; ~25s/ep
+  batch_size: 8192
+  k_max: 32
+  lr: 5.0e-4
+  weight_decay: 0.0
+  checkpoint_every_epochs: 25
+  n_back: 1
+  loss: mse
+  amp: true
+  compile_model: true
+  fused_optimizer: true
+
+bellman:
+  warmstart_path: "tetraminx/models/tv0_pretrain/epoch_0499.pt"
+  target_update_every_epochs: 10
+  target_net_chunk: 8192
+  clip_upper: true
+  clip_lower: true
+  bfs_d6_path: "tetraminx/data/bfs_d6_train.pt"
+  bfs_d6_fraction: 0.10
+  n_anchor_v0: 32
+  n_anchor_d1: 4
+  per_depth_diagnostic: true
+
+seed: 0

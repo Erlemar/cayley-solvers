@@ -1,0 +1,44 @@
+# m_az15_full_bellman — full-pipeline 15M scale-up, stage 2.
+#
+# Warm-starts from m_az15_full_pretrain and applies the accepted anchored
+# Bellman recipe. It intentionally keeps lambda_pdb=0.0 like m_v11, because
+# larger trunks previously looked sensitive to the PDB lower-bound penalty.
+
+model:
+  state_size: 120
+  num_classes: 120
+  hidden_dims: [2048, 1024]
+  num_res_blocks: 4
+  encoding: embedding
+  embed_dim: 16
+
+training:
+  n_epochs: 300
+  samples_per_epoch: 500_000
+  batch_size: 6144
+  k_max: 80
+  lr: 2.0e-4
+  weight_decay: 0.0
+  checkpoint_every_epochs: 25
+  n_back: 1
+  loss: mse
+  amp: true
+  compile_model: true
+  fused_optimizer: true
+
+bellman:
+  warmstart_path: "megaminx/models/m_az15_full_pretrain/epoch_3999.pt"
+  target_update_every_epochs: 10
+  target_net_chunk: 2048
+  clip_upper: true
+  clip_lower: true
+  frontier_path: "megaminx/data/frontier_states.pt"
+  frontier_fraction: 0.25
+  frontier_walk_depth_cap: 200.0
+  bfs_d6_path: "megaminx/data/bfs_d6_train.pt"
+  bfs_d6_fraction: 0.10
+  lambda_pdb: 0.0
+  n_anchor_v0: 32
+  n_anchor_d1: 4
+
+seed: 115

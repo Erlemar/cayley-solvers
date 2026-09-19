@@ -72,5 +72,19 @@
       "PowerShell(& \"C:\\Users\\and-l\\cayley\\.venv\\Scripts\\kaggle.exe\"*)",
       "Bash(tar czf *)"
     ]
+  },
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "f=\"$CLAUDE_TOOL_INPUT_FILE_PATH\"; case \"$f\" in *.sh) bash -n \"$f\" 2>&1 && echo \"bash -n OK: $f\" || echo \"SYNTAX ERROR in $f -- fix before arming/running it\";; esac",
+            "timeout": 15
+          }
+        ]
+      }
+    ]
   }
 }

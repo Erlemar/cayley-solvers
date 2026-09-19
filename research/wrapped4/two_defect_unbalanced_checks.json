@@ -1,0 +1,19 @@
+{
+  "certificate_nodes_checked": 947,
+  "certificate_gaps_at_least_three_checked": 1905,
+  "unbalanced_words_replayed": 1790,
+  "moves_replayed": 257980,
+  "central_refinements_exercised": 59,
+  "one_direction_growth_steps_exercised": 4940,
+  "exceptional_central_anchor_checks": 72,
+  "residue_and_direction_coverage": {
+    "(0, True)": 380,
+    "(1, False)": 320,
+    "(2, False)": 260,
+    "(0, False)": 250,
+    "(1, True)": 320,
+    "(2, True)": 260
+  },
+  "largest_n": 151,
+  "scope": "Implementation audit; all-size proof is TWO_DEFECT_UNBALANCED.md."
+}

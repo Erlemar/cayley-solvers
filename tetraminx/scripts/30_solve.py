@@ -43,6 +43,7 @@ sys.path.insert(0, str(PROJECT / "tetraminx" / "src"))
 from cayley.khoruzhii_search import KhoruzhiiSearchConfig, KhoruzhiiSolver
 from cayley.model import ResMLPDistance
 from tetraminx.puzzle import Tetraminx
+from tetraminx.search_free import GreedyRecoveryConfig, greedy_recovery_solve
 
 
 class EndgameTable:
@@ -164,7 +165,34 @@ def main() -> int:
                          "beam uses 10); 0 = dedup within the current layer only")
     ap.add_argument("--pids", type=str, default="", help="e.g. 0-99 or 3,7,11")
     ap.add_argument("--limit", type=int, default=None)
-    ap.add_argument("--chunk-size", type=int, default=32768)
+    # 4096, NOT the 32768 this defaulted to until 2026-08-26. The PieceTransformer
+    # scores 88 tokens with SDPA under an explicit attn_mask, which falls back to the
+    # math kernel and MATERIALIZES a (chunk, n_heads, 88, 88) score matrix. Peak
+    # transient memory is therefore linear in chunk and independent of beam width:
+    # 8.79 GiB at 32768 against 1.12 GiB at 4096. On a 16 GB Windows card that 8.79 GiB
+    # does not OOM -- WDDM silently spills it to host RAM -- so the only symptom is
+    # wall-clock. Measured on the 4090 at B=65536 with the deployed blend:
+    #
+    #     chunk  4096 -> 1.0 s/step      chunk 32768 -> 9.2 s/step      (9.2x)
+    #
+    # Throughput is flat from 2048 to 8192 (~65k rows/s), so 4096 is the cheap end of
+    # the plateau with the most headroom. The tell that it was the forward and not the
+    # search: transformer-only, the 2-model blend, and blend-without-qv-consistency all
+    # timed 209.8 s on the same pid -- a cost that does not move with the variable is
+    # not caused by that variable (CLAUDE.md 28). Same failure class as rules 27
+    # (SDPA attn_mask memory) and 31 (WDDM spills past physical VRAM).
+    #
+    # Chunking is pure batching -- loop stride for the forward, _apply_move,
+    # _hash_flat_candidates and _state_hash -- so this is a wall-clock fix only and
+    # does not invalidate any banked comparison. VERIFIED, not assumed: the blend's
+    # forward is BIT-identical (max_abs_diff exactly 0) across chunk 1024 / 2048 /
+    # 4096 / 8192 / 16384 on the same 16,384 rows, and _state_hash is stride-invariant.
+    # Nothing in the scoring path reduces across rows -- attention is within a state's
+    # own 88 tokens -- so batch size cannot reach the bits, and a cuBLAS kernel swap
+    # cannot flip a topk tie. Range tested stops at 16384 only because 32768 peaks at
+    # 8.79 GiB and a concurrent run was using the card.
+    ap.add_argument("--chunk-size", type=int, default=4096,
+                    help="solver internal_batch_size; see the comment above before raising it")
     ap.add_argument("--bf16", action="store_true")
     ap.add_argument("--device", default="cuda" if torch.cuda.is_available() else "cpu")
     ap.add_argument("--resume", action="store_true", help="skip pids already in --out")
@@ -181,6 +209,24 @@ def main() -> int:
     ap.add_argument("--qv-consistency", type=float, default=0.0,
                     help="lambda on |Q(s,a) - (V(s)-1)| using V(parent) from the SAME "
                          "trunk pass -- costs no extra forwards")
+    ap.add_argument("--greedy-recovery", action="store_true",
+                    help="replace the global beam with greedy Q rollout plus bounded "
+                         "lookahead only at low-confidence decisions")
+    ap.add_argument("--policy-checkpoint", type=Path, default=None,
+                    help="optional dedicated Q-policy checkpoint for greedy steps; "
+                         "the main checkpoint/blend remains the recovery scorer")
+    ap.add_argument("--confidence-gap", type=float, default=0.25,
+                    help="trigger local recovery when adjusted Q top2-top1 is below this")
+    ap.add_argument("--recovery-beam", type=int, default=256,
+                    help="pooled local beam used only at uncertain greedy decisions; "
+                         "1 disables recovery for a pure-greedy baseline")
+    ap.add_argument("--recovery-depth", type=int, default=4,
+                    help="lookahead depth used by confidence-triggered recovery")
+    ap.add_argument("--recovery-to-goal", action="store_true",
+                    help="on low confidence, hand off to one compact beam that searches "
+                         "to the exact endgame instead of doing local lookahead")
+    ap.add_argument("--max-handoffs", type=int, default=1,
+                    help="maximum failed compact-beam handoffs before continuing greedily")
     ap.add_argument("--no-merge", action="store_true",
                     help="do not seed from the floor -- emit pure beam output "
                          "(floor is still loaded and reported, for benching)")
@@ -281,6 +327,21 @@ def main() -> int:
                              qv_rerank_model=rerank, qv_alpha=args.qv_alpha,
                              qv_band_lo=args.qv_band_lo,
                              qv_consistency_lambda=args.qv_consistency)
+    policy_solver = None
+    if args.policy_checkpoint is not None:
+        policy_model = load_model(
+            args.policy_checkpoint, args.device, args.bf16, args.chunk_size)
+        policy_is_q = int(getattr(policy_model, "output_dim", 1)) == len(puzzle.move_names)
+        if not policy_is_q:
+            raise SystemExit("--policy-checkpoint must have an all-actions Q/policy head")
+        # The dedicated head is trained as an action policy, not as an absolute Q/V
+        # consistency estimator. Keep recovery on the untouched deployed blend.
+        policy_solver = KhoruzhiiSolver(
+            puzzle, policy_model, device=args.device,
+            internal_batch_size=args.chunk_size, use_q_function=True,
+            qv_consistency_lambda=0.0)
+        print(f"greedy policy checkpoint: {args.policy_checkpoint} "
+              "(recovery still uses the main scorer)", flush=True)
     if rerank is not None:
         print(f"rerank: Q shortlist alpha={args.qv_alpha} -> value head", flush=True)
     # history_depth was parsed but never forwarded, so --history-depth was a silent
@@ -291,8 +352,23 @@ def main() -> int:
                                 internal_batch_size=args.chunk_size,
                                 num_attempts=args.num_attempts,
                                 history_depth=args.history_depth)
+    greedy_cfg = GreedyRecoveryConfig(
+        max_steps=args.max_steps,
+        confidence_gap=args.confidence_gap,
+        recovery_beam=args.recovery_beam,
+        recovery_depth=args.recovery_depth,
+        no_backtrack=True,
+        recovery_to_goal=args.recovery_to_goal,
+        max_handoffs=args.max_handoffs,
+    )
     frames = frame_list(args.sym_frames, sym.shape[0])
     print(f"frames: {frames}", flush=True)
+    if args.greedy_recovery:
+        if not is_q:
+            raise SystemExit("--greedy-recovery requires an all-actions Q checkpoint")
+        recovery_kind = "goal handoff" if args.recovery_to_goal else f"H={args.recovery_depth} lookahead"
+        print(f"policy mode: greedy, recovery when gap<{args.confidence_gap:g}, "
+              f"B={args.recovery_beam} {recovery_kind}", flush=True)
 
     goal_fn = None
     if endgame is not None:
@@ -334,7 +410,23 @@ def main() -> int:
             if inverted:
                 t = np.argsort(t)                       # group inverse of the state
             u = sym_inv[k][t[sym[k]]]                   # conj_k(t)
-            found, _, path = solver.solve(u, cfg, goal_check_fn=goal_fn)
+            policy_stats: dict = {}
+            if args.greedy_recovery:
+                found, _, path = greedy_recovery_solve(
+                    u, solver, greedy_cfg,
+                    policy_solver=policy_solver,
+                    goal_depth_fn=endgame.lookup if endgame is not None else None,
+                    stats=policy_stats)
+                print(f"  pid {pid} frame (k={k},inv={int(inverted)}): "
+                      f"greedy_steps={policy_stats.get('greedy_steps', 0)} "
+                      f"recoveries={policy_stats.get('recovery_calls', 0)} "
+                      f"changed={policy_stats.get('recovery_changes', 0)} "
+                      f"handoffs={policy_stats.get('handoff_calls', 0)} "
+                      f"handoff_ok={policy_stats.get('handoff_success', 0)} "
+                      f"mean_gap={policy_stats.get('mean_gap', 0.0):.3f} "
+                      f"found={int(found)}", flush=True)
+            else:
+                found, _, path = solver.solve(u, cfg, goal_check_fn=goal_fn)
             if not found:
                 continue
             if endgame is not None:
@@ -350,7 +442,8 @@ def main() -> int:
                 continue
             if not best or len(q) < len(best):
                 best = q
-                best_src = f"beam(k={k},inv={int(inverted)})"
+                mode = "greedy-recovery" if args.greedy_recovery else "beam"
+                best_src = f"{mode}(k={k},inv={int(inverted)})"
                 n_beat += 1
         if not best:
             print(f"  pid {pid}: NO PATH (no floor, all frames failed)", flush=True)

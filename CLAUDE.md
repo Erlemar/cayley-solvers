@@ -5,7 +5,7 @@ for the router, then the HANDOFF of the puzzle you are working on.
 
 | Puzzle | Best | Standing | Docs |
 |---|---|---|---|
-| **Professor Tetraminx** | **28,308** | **#1 — next is CayleyPy 28,398, +90 (2026-08-05)** | `tetraminx/HANDOFF.md` |
+| **Professor Tetraminx** | **28,094** | **#1 — next is CayleyPy 28,398, +304 (2026-08-09)** | `tetraminx/HANDOFF.md` |
 | cube444 | 48,738 | #2 public LB when submitted | `cube444/HANDOFF.md` |
 | Megaminx | 73,441 floor / 75,200 submitted | — | `megaminx/HANDOFF.md` |
 | IHES Picture Cube | 21,870 on disk / 21,972 submitted | leader Rokicki 21,840; **21,870 is a 3-way community plateau** | `EXPERIMENTS.md`, `IDEAS.md` |
@@ -52,6 +52,13 @@ tried and what worked, and **`IDEAS.md`** for prioritized untried ideas.
    after ~20-60 min (confirmed 3x on 2026-07-12 watching Kaggle TPU kernels).
    For multi-hour watches use `Monitor` with `persistent: true` and a script
    that emits only on state CHANGE and exits on terminal states.
+   **The default is NOT persistent and the failure is silent** — a watch armed
+   with the default `timeout_ms` on a Kaggle kernel simply stops after an hour
+   and the terminal-state notification never arrives, which is indistinguishable
+   from "still running". Confirmed 2026-08-23: five watches this session used the
+   default; the only reason a 2-4 h beam run was not lost is that it was re-armed
+   with `persistent: true` minutes before the cap. Any Kaggle GPU/TPU kernel watch
+   is a multi-hour watch — set `persistent: true` at arm time, not after.
 
 7b. **Use PowerShell `Get-Process` instead of `tasklist /FI` in Bash.** Bash MINGW
    translates `/FI "filter"` to `C:/Program Files/Git/FI` (silent path mangling
@@ -85,6 +92,12 @@ tried and what worked, and **`IDEAS.md`** for prioritized untried ideas.
    current harness DOES persist it — confirmed 2026-06-17, cost ~3 calls when a
    `cd megaminx` leaked into later `python -c` invocations. Either way, absolute
    paths are the safe habit.)
+   **The habit that actually works**: never write `.venv/Scripts/python.exe`
+   relatively — always `/c/Users/and-l/cayley/.venv/Scripts/python.exe` — and when a
+   command genuinely must run inside a directory, wrap it in a SUBSHELL:
+   `( cd "C:/path" && cmd )`. The subshell cannot leak cwd to the next call. Hit 3x
+   again on 2026-08-23 (exit 127 each time) with this rule already written; the
+   `&&`-chain advice above is easy to forget mid-edit, the subshell is not.
 
 7d. **Kaggle CLI on Windows always needs `PYTHONUTF8=1 PYTHONIOENCODING=utf-8`.**
    Without these, the CLI hits `cp932 codec can't decode byte 0x94` errors when
@@ -172,6 +185,19 @@ tried and what worked, and **`IDEAS.md`** for prioritized untried ideas.
    `scripts/25_pull_kernel_versions.py --kernel <owner>/<slug> --file
    submission.csv --out-dir <dir> --max-version 45`, then fold `<dir>` into
    `90_merge_all.py --extra`.
+   **RE-SWEEP: a version sweep is not a one-shot harvest.** The same kernel,
+   swept again 4 days later at 119 versions (v55-v119 new), was worth another
+   **-91 over 72 pids** (28,185 -> 28,094, 2026-08-09). Any kernel still being
+   re-pushed keeps accruing recoverable moves; re-probe the ceiling each time
+   rather than assuming the last sweep drained it. **But version COUNT is a bad
+   proxy for merge value** -- in that same pass
+   `alexandervc/cayleypy-rw-models2-tetraminx` (276 versions) and
+   `markcelliott/frames-saturate-at-two-tpu` (1) both contributed **0**, a
+   genuine null (0 bad-alphabet rows, paths replay-verify) because their
+   `submission.csv` is mostly long fallback: beam-quality pids (<=31 moves)
+   anywhere in history were 320/1000 for ours vs 53 and 37 for theirs. Check
+   that ratio before spending 200+ requests on a kernel. Cheap ceiling probe:
+   binary-search the two 404 sources above (~10 requests, not a blind scan).
 
 7g. **`pgrep -f <pat>` / `pkill -f <pat>` SELF-MATCH the checking command's own
    arg list** — the running `bash -c "... pgrep -f gcp_beam ..."` contains the
@@ -499,6 +525,37 @@ tried and what worked, and **`IDEAS.md`** for prioritized untried ideas.
     run reproduced the hd=0 control exactly. Score against the true standing best
     with `tetraminx/scripts/56_compare_vs_final.py`, not a remembered floor
     (see rule 26).
+
+29. **`--help` is NOT a safe probe — a script without argparse ignores argv and runs
+    its real workload.** Confirmed 2026-08-23: `12_mitm_oracle.py --help` executed a
+    full meet-in-the-middle oracle against the d<=5 ball and blocked a 10-minute Bash
+    call before the harness killed it. The same sweep also mis-reported the script as
+    "hanging" when it was working correctly. **Check first**:
+    `grep -q add_argument <script> || echo "no argparse -- do NOT probe with --help"`.
+    Scripts in this repo that take NO arguments and run on import:
+    `10_derive_symmetry`, `12_mitm_oracle`, `36_phase0_diag`, `42_commute_reduce`,
+    `50_verify` (positional only).
+
+30. **After fixing an allocation-shape bug, fix the PATTERN, not the instance you
+    measured.** Confirmed 2026-08-23 on cube555: an endgame lookup widened states to
+    int64 over the whole candidate shortlist (`(N,150)` int64 = 4.69 GiB) and OOM'd a
+    T4. It was chunked and the run re-pushed — and failed again with the SAME class of
+    error 12.00 GiB, because the identical widening in the table CONSTRUCTION
+    (10,739,017 x 150 x 8) had never been looked at. Two Kaggle sessions for one bug.
+    **Fix**: after any such fix, grep every sibling and size it —
+    `grep -n '\.long()\|to(torch.int64)' <file>` — and record the result. A bug found
+    by measurement tells you the shape of a class, not the location of one defect.
+
+31. **"It fits locally" is not evidence it fits on the target — Windows silently
+    spills CUDA past physical VRAM.** WDDM lets an allocation overflow into host RAM,
+    so a 12 GiB tensor SUCCEEDS on the 16 GB 4090 and hard-fails on Kaggle. Two
+    consequences, both confirmed 2026-08-23: (a) a Kaggle T4 has **14.56 GiB** usable
+    against the 4090's ~15.99 GiB, so even without spilling the margin is ~1.4 GiB;
+    (b) `torch.cuda.max_memory_allocated` can report a figure LARGER than the card —
+    a 25.55 GiB reading on a 16 GB GPU was dismissed as broken instrumentation when it
+    was in fact pointing straight at the offending allocation. **Treat an impossible
+    peak as a signal, not noise**, and size against the target's VRAM. Also reset peak
+    stats BEFORE a task, not after, or the first reading folds in one-time setup.
 
 ## Conventions
 

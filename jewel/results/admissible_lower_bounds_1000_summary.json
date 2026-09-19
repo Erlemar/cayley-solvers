@@ -1,0 +1,49 @@
+{
+  "definition": "max(ring bound, five-edge PDB 0..4, five-edge PDB 5..9), raised to the reachable solution-length parity; exact depth replaces the bound for states in the depth-8 ball",
+  "admissibility": "Each component is a lower bound, every generator flips edge-permutation parity, and an exact-ball distance is exact; their stated combination cannot exceed true distance.",
+  "count": 1000,
+  "exact_ball_states": 10,
+  "states_raised_one_by_parity_outside_ball": 429,
+  "raw_component_max": {
+    "min": 1,
+    "mean": 8.102,
+    "median": 8.0,
+    "p90": 9.0,
+    "p95": 9.0,
+    "p99": 10.0,
+    "max": 11,
+    "sum": 8102
+  },
+  "parity_tightened": {
+    "min": 1,
+    "mean": 8.532,
+    "median": 9.0,
+    "p90": 10.0,
+    "p95": 10.0,
+    "p99": 10.0,
+    "max": 11,
+    "sum": 8532
+  },
+  "certified_admissible_lower_bound": {
+    "min": 1,
+    "mean": 8.532,
+    "median": 9.0,
+    "p90": 10.0,
+    "p95": 10.0,
+    "p99": 10.0,
+    "max": 11,
+    "sum": 8532,
+    "histogram": {
+      "1": 2,
+      "2": 2,
+      "4": 1,
+      "5": 1,
+      "6": 5,
+      "7": 75,
+      "8": 381,
+      "9": 419,
+      "10": 111,
+      "11": 3
+    }
+  }
+}

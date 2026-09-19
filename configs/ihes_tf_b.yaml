@@ -1,0 +1,48 @@
+# IHES PieceTransformer -- arm B: the tetraminx mx_tf_az recipe at IHES size.
+# Plan: IHES_TRANSFORMER_PLAN_2026-09-16.md section 3.3. A deliberate bundle (portfolio arm,
+# decorrelated from arm A), not an ablation:
+#   symmetry coverage (4 of the 14 greedy rows), exact d<=5 anchors, pivot tilt 0.5, k_max 26.
+# Trainer: tetraminx/scripts/51_train_sparse_q.py --config configs/ihes_tf_b.yaml --data-dir data
+# n_epochs is an UPPER BOUND; stop by the 200-epoch beam curve.
+puzzle: ihes
+seed: 1
+model:
+  arch: transformer
+  az_head: true
+  layout_path: data/ihes_piece_layout.json
+  state_size: 72
+  num_classes: 72
+  d_model: 256
+  nhead: 8
+  num_layers: 4
+  ff_dim: 1024
+  dropout: 0.0
+training:
+  n_epochs: 3000
+  steps_per_epoch: 256
+  batch_size: 2048         # 524,288 fresh pivots per epoch, same cadence as arm A
+                           # (512 x 1024 measured 85 ms/step = 87 s/epoch on the 4090;
+                           #  the bigger batch is for A100 throughput, anchor ratio kept)
+  k_min: 2
+  k_max: 26
+  pivot_tilt: 0.5
+  lr: 3.0e-4
+  weight_decay: 3.0e-3
+  grad_clip: 1.0
+  sym_prefix: cube
+  verify_symmetry: true
+  sym_coverage: true
+  sym_rows: 4              # full greedy width is 14 rows = 14x the forward cost
+  anchor_batch: 2048                      # 20% of rows, as 512 was at batch 512 x 4 rows
+  anchor_states: bfs_d5_anchor_states.pt  # the d<=5 slice of bfs_d6_train.pt (58 MB, key "depths")
+  anchor_table: bfs_table_d6_hash.npz     # Zobrist d<=6 table -> anchors at d<=5 (790,588)
+  max_anchor_depth: 5
+  anchor_weight: 1.0
+  value_weight: 1.0
+  top1_margin: 1.0
+  top1_margin_weight: 0.0
+  val_size: 8192
+  checkpoint_every_epochs: 50
+  amp: true
+  compile_model: true
+  fused_optimizer: true

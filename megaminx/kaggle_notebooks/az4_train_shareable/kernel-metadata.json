@@ -1,0 +1,17 @@
+{
+  "id": "artgor/cayleypy-az4-trainer-megaminx",
+  "title": "CayleyPy AZ4 Trainer Megaminx",
+  "code_file": "cayleypy-az4-trainer-megaminx.ipynb",
+  "language": "python",
+  "kernel_type": "notebook",
+  "is_private": false,
+  "enable_gpu": true,
+  "machine_shape": "NvidiaTeslaT4",
+  "enable_tpu": false,
+  "enable_internet": true,
+  "keywords": ["gpu"],
+  "dataset_sources": ["artgor/megaminx-az4-training-assets"],
+  "kernel_sources": ["artgor/cayleypy-az4-trainer-megaminx"],
+  "competition_sources": ["cayley-py-megaminx"],
+  "model_sources": []
+}

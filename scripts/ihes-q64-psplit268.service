@@ -1,0 +1,17 @@
+[Unit]
+Description=IHES ranked q64 k2 prefix-split exact length-22 search
+Wants=network-online.target
+After=network-online.target google-guest-agent.service
+
+[Service]
+Type=simple
+CPUQuota=4800%
+ExecStartPre=/bin/systemctl set-property --runtime google-startup-scripts.service CPUQuota=100%
+ExecStart=/usr/bin/python3 -u /opt/work/scripts/27_prefix_split_ladder.py --baseline /opt/work/data/base_21870.csv --journal /opt/work/ladder/q64_psplit_pid268_k2.jsonl --out /opt/work/ladder/q64_psplit_ranked_L22_k2_applied.csv --k 2 --path-length 22 --target-delta 2 --pid-order-file /opt/work/data/twsearch_rank_L22_20260805.json --skip-pids 26 28 868 --pop-roots data --resume --exe /opt/work/tws/build/bin/twsearch --tws /opt/work/data/picture_cube_pieces_v2_sym.tws --cache-dir /opt/work/cache64q --memory-mib 65536 --threads 48 --start-prune-depth 12 --time-limit 5400 --lookahead 2
+StandardOutput=append:/opt/work/logs/q64_psplit_ranked_L22_k2.log
+StandardError=append:/opt/work/logs/q64_psplit_ranked_L22_k2.log
+Restart=always
+RestartSec=30
+
+[Install]
+WantedBy=multi-user.target

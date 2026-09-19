@@ -39,6 +39,27 @@ CENTERS = (
 CARD = {"CORNERS": 3, "EDGES": 2, "CENTERS": 4}
 N = {"CORNERS": 8, "EDGES": 12, "CENTERS": 6}
 
+# cubing.js notation parses a trailing digit as a move amount, so an IHES move
+# such as ``f0`` becomes the zero-th power of ``f``.  Use single-letter quantum
+# names inside twips and translate back to the official names at the boundary.
+TWIPS_QUANTUM = {
+    "f0": "A", "f1": "B", "f2": "C",
+    "r0": "D", "r1": "E", "r2": "F",
+    "d0": "G", "d1": "H", "d2": "I",
+}
+TWIPS_TWIN = {
+    "f0": "J", "f1": "K", "f2": "L",
+    "r0": "M", "r1": "N", "r2": "O",
+    "d0": "P", "d1": "Q", "d2": "R",
+}
+
+
+def twips_name(move, twin=False):
+    names = TWIPS_TWIN if twin else TWIPS_QUANTUM
+    if move.startswith("-"):
+        return names[move[1:]] + "'"
+    return names[move]
+
 
 def piece_ori(state, slots):
     can_sets = [frozenset(t) for t in slots]
@@ -56,13 +77,73 @@ def piece_ori(state, slots):
 def derive_move(move, puzzle):
     """For this move, return {orbit: (perm, delta)}."""
     new = puzzle.apply_move(puzzle.solved_state, move)
+    return derive_state(new)
+
+
+def derive_state(state):
+    """Return direct orbit transformations for a true 72-facelet state."""
     result = {}
     for name, slots in [("CORNERS", CORNERS), ("EDGES", EDGES), ("CENTERS", CENTERS)]:
-        po = piece_ori(new, slots)
+        po = piece_ori(state, slots)
         perm = [po[i][0] for i in range(len(slots))]
         delta = [po[i][1] for i in range(len(slots))]
         result[name] = (perm, delta)
     return result
+
+
+def derive_path(path, puzzle):
+    state = puzzle.solved_state
+    for move in path:
+        state = puzzle.apply_move(state, move)
+    return derive_state(state)
+
+
+def build_tws(puzzle):
+    """Build a modern twsearch definition with direct transformations.
+
+    Only the nine positive quarter turns are base moves; twsearch generates
+    their primes.  This exactly matches the official 18-generator QTM while
+    avoiding duplicate bases and enables the order-24 rotational symmetry.
+    """
+    lines = [
+        "Name PictureCube3x3Direct",
+        "",
+        "Set CORNER 8 3",
+        "Set EDGE 12 2",
+        "Set CENTER 6 4",
+        "",
+        "StartState",
+        "CORNER",
+        "0 1 2 3 4 5 6 7",
+        "0 0 0 0 0 0 0 0",
+        "EDGE",
+        "0 1 2 3 4 5 6 7 8 9 10 11",
+        "0 0 0 0 0 0 0 0 0 0 0 0",
+        "CENTER",
+        "0 1 2 3 4 5",
+        "0 0 0 0 0 0",
+        "End",
+        "",
+    ]
+
+    def append_transformation(kind, name, transform):
+        lines.append(f"{kind} {name}")
+        for tws_orbit, orbit in (("CORNER", "CORNERS"), ("EDGE", "EDGES"), ("CENTER", "CENTERS")):
+            perm, delta = transform[orbit]
+            lines.extend((tws_orbit, " ".join(map(str, perm)), " ".join(map(str, delta))))
+        lines.extend(("End", ""))
+
+    for move in puzzle.move_names:
+        if not move.startswith("-"):
+            append_transformation("MoveTransformation", move, derive_move(move, puzzle))
+
+    for name, path in (
+        ("x", ("f0", "f1", "f2")),
+        ("y", ("r0", "r1", "r2")),
+        ("z", ("d0", "d1", "d2")),
+    ):
+        append_transformation("MoveTransformation", name, derive_path(path, puzzle))
+    return "\n".join(lines)
 
 
 def build_kpuzzle(puzzle):
@@ -82,12 +163,19 @@ def build_kpuzzle(puzzle):
     }
 
     for move in puzzle.move_names:
-        safe = move[1:] + "'" if move.startswith("-") else move
         mv = derive_move(move, puzzle)
-        out["moves"][safe] = {}
-        for orbit in ("CORNERS", "EDGES", "CENTERS"):
-            perm, delta = mv[orbit]
-            out["moves"][safe][orbit] = {"permutation": perm, "orientationDelta": delta}
+        # A duplicate quantum move makes the QTM search complete: twips' canonical
+        # FSM forbids repeating one move class, while order-4 puzzles need two
+        # consecutive quarter turns.  The canonical ordering permits one primary
+        # followed by one twin, exactly covering the only non-redundant repeat.
+        for safe in (twips_name(move), twips_name(move, twin=True)):
+            out["moves"][safe] = {}
+            for orbit in ("CORNERS", "EDGES", "CENTERS"):
+                perm, delta = mv[orbit]
+                out["moves"][safe][orbit] = {
+                    "permutation": perm,
+                    "orientationDelta": delta,
+                }
     return out
 
 
@@ -110,17 +198,14 @@ def verify_roundtrip(puzzle, kp):
             new[orbit] = {"pieces": np_, "orientation": no}
         return new
 
-    def sanitize(m):
-        return m[1:] + "'" if m.startswith("-") else m
-
     for move in puzzle.move_names:
         if move.startswith("-"):
             continue
         inv = puzzle.inverse_name(move)
         s = {k: {"pieces": list(v["pieces"]), "orientation": list(v["orientation"])}
              for k, v in default.items()}
-        s = apply(s, sanitize(move))
-        s = apply(s, sanitize(inv))
+        s = apply(s, twips_name(move))
+        s = apply(s, twips_name(inv))
         for orbit in ("CORNERS", "EDGES", "CENTERS"):
             assert s[orbit] == default[orbit], \
                 f"{move}.{inv} roundtrip FAIL on {orbit}: {s[orbit]} vs {default[orbit]}"
@@ -146,9 +231,6 @@ def verify_random_sequences(puzzle, kp, n_seqs=100, seq_len=20, seed=0):
             new[orbit] = {"pieces": np_, "orientation": no}
         return new
 
-    def sanitize(m):
-        return m[1:] + "'" if m.startswith("-") else m
-
     def state_to_kp(state):
         return {
             "CORNERS": {"pieces": [p for p, _ in piece_ori(state, CORNERS)],
@@ -172,7 +254,7 @@ def verify_random_sequences(puzzle, kp, n_seqs=100, seq_len=20, seed=0):
                    for k, v in kp["defaultPattern"].items()}
         ks = default
         for m in seq:
-            ks = apply_k(ks, sanitize(m))
+            ks = apply_k(ks, twips_name(m))
 
         for orbit in ("CORNERS", "EDGES", "CENTERS"):
             if ks[orbit] != true_kp[orbit]:
@@ -188,6 +270,7 @@ def verify_random_sequences(puzzle, kp, n_seqs=100, seq_len=20, seed=0):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--out", type=Path, required=True)
+    ap.add_argument("--tws-out", type=Path)
     args = ap.parse_args()
     puzzle = PictureCube.load(PROJECT / "data" / "puzzle_info.json")
     kp = build_kpuzzle(puzzle)
@@ -197,6 +280,9 @@ def main():
         return 1
     args.out.write_text(json.dumps(kp, indent=2))
     print(f"wrote {args.out} ({args.out.stat().st_size:,} bytes), {len(kp['moves'])} moves")
+    if args.tws_out is not None:
+        args.tws_out.write_text(build_tws(puzzle), encoding="utf-8")
+        print(f"wrote {args.tws_out} ({args.tws_out.stat().st_size:,} bytes)")
     return 0
 
 

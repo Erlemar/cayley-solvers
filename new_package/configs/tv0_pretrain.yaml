@@ -1,0 +1,33 @@
+# tv0 Stage A -- random-walk distance regression for the Professor Tetraminx.
+#
+# Sizing rationale: |G| = 1.54e32, counting-bound diameter ~27. Megaminx's
+# 6M-param cluster (2048,512)+2rb at state 120 was the sweet spot there and
+# bigger trunks regressed (CLAUDE.md Rule 14), so we sit in the same band:
+# 88*16=1408 -> 2048 -> 512 + 2 res blocks ~= 5.0M params.
+#
+# k_max=32 is just past the diameter; walk depth is only an UPPER bound on true
+# distance, and Stage B (Bellman) is what removes the overestimate.
+
+model:
+  state_size: 88
+  num_classes: 88
+  hidden_dims: [2048, 512]
+  num_res_blocks: 2
+  encoding: embedding
+  embed_dim: 16
+
+training:
+  n_epochs: 500
+  samples_per_epoch: 1_000_000
+  batch_size: 16384
+  k_max: 32
+  lr: 1.0e-3
+  weight_decay: 0.0
+  checkpoint_every_epochs: 50
+  n_back: 1
+  loss: mse
+  amp: true
+  compile_model: true
+  fused_optimizer: true
+
+seed: 0

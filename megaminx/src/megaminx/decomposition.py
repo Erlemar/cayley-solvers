@@ -6,10 +6,10 @@ Pieces are classified by which faces' stickers they have:
   - LL  (15 pieces, 35 stickers): face_set ⊆ BOTTOM_HALF
   - Equator (20 pieces, 50 stickers): straddle both halves
 
-For a two-stage solver:
-  - Stage 1: drive an arbitrary state to one where F2L stickers are correct (35 conditions).
-    Other 85 stickers may be anything.
-  - Stage 2: from F2L-correct state, drive to V0 using the existing full-state V model.
+For the current two-stage solver:
+  - Stage 1: drive an arbitrary state to one where LL / bottom-only stickers are
+    correct (35 conditions). Other 85 stickers may be anything.
+  - Stage 2: from that frozen-home state, drive to V0 using only TOP-half moves.
 
 For F2L training data: random walks BACKWARD from any F2L-correct state.
 Label = walk depth = "min moves to reach F2L-correct".

@@ -1,0 +1,336 @@
+[
+  {
+    "direction": -1,
+    "mask": 0,
+    "word": [],
+    "missing_adjacent_letters": 3
+  },
+  {
+    "direction": -1,
+    "mask": 1,
+    "word": [
+      [
+        0,
+        -1
+      ],
+      [
+        1,
+        -1
+      ],
+      [
+        1,
+        -1
+      ],
+      [
+        0,
+        -1
+      ],
+      [
+        1,
+        -1
+      ]
+    ],
+    "missing_adjacent_letters": 2
+  },
+  {
+    "direction": -1,
+    "mask": 2,
+    "word": [
+      [
+        0,
+        -1
+      ],
+      [
+        1,
+        -1
+      ],
+      [
+        0,
+        -1
+      ],
+      [
+        0,
+        -1
+      ],
+      [
+        1,
+        -1
+      ]
+    ],
+    "missing_adjacent_letters": 2
+  },
+  {
+    "direction": -1,
+    "mask": 3,
+    "word": [
+      [
+        2,
+        1
+      ],
+      [
+        1,
+        1
+      ],
+      [
+        2,
+        -1
+      ],
+      [
+        2,
+        -1
+      ]
+    ],
+    "missing_adjacent_letters": 1
+  },
+  {
+    "direction": -1,
+    "mask": 4,
+    "word": [
+      [
+        0,
+        -1
+      ],
+      [
+        1,
+        -1
+      ],
+      [
+        0,
+        -1
+      ],
+      [
+        1,
+        -1
+      ],
+      [
+        1,
+        -1
+      ]
+    ],
+    "missing_adjacent_letters": 2
+  },
+  {
+    "direction": -1,
+    "mask": 5,
+    "word": [
+      [
+        1,
+        1
+      ],
+      [
+        2,
+        1
+      ],
+      [
+        0,
+        -1
+      ],
+      [
+        2,
+        -1
+      ]
+    ],
+    "missing_adjacent_letters": 1
+  },
+  {
+    "direction": -1,
+    "mask": 6,
+    "word": [
+      [
+        1,
+        1
+      ],
+      [
+        0,
+        1
+      ],
+      [
+        1,
+        -1
+      ],
+      [
+        1,
+        -1
+      ]
+    ],
+    "missing_adjacent_letters": 1
+  },
+  {
+    "direction": -1,
+    "mask": 7,
+    "word": [
+      [
+        0,
+        -1
+      ]
+    ],
+    "missing_adjacent_letters": 0
+  },
+  {
+    "direction": 1,
+    "mask": 0,
+    "word": [],
+    "missing_adjacent_letters": 3
+  },
+  {
+    "direction": 1,
+    "mask": 1,
+    "word": [
+      [
+        0,
+        -1
+      ],
+      [
+        1,
+        -1
+      ],
+      [
+        0,
+        -1
+      ],
+      [
+        1,
+        -1
+      ],
+      [
+        1,
+        -1
+      ]
+    ],
+    "missing_adjacent_letters": 2
+  },
+  {
+    "direction": 1,
+    "mask": 2,
+    "word": [
+      [
+        0,
+        -1
+      ],
+      [
+        1,
+        -1
+      ],
+      [
+        0,
+        -1
+      ],
+      [
+        0,
+        -1
+      ],
+      [
+        1,
+        -1
+      ]
+    ],
+    "missing_adjacent_letters": 2
+  },
+  {
+    "direction": 1,
+    "mask": 3,
+    "word": [
+      [
+        1,
+        -1
+      ],
+      [
+        1,
+        -1
+      ],
+      [
+        0,
+        -1
+      ],
+      [
+        1,
+        -1
+      ]
+    ],
+    "missing_adjacent_letters": 1
+  },
+  {
+    "direction": 1,
+    "mask": 4,
+    "word": [
+      [
+        0,
+        -1
+      ],
+      [
+        1,
+        -1
+      ],
+      [
+        1,
+        -1
+      ],
+      [
+        0,
+        -1
+      ],
+      [
+        1,
+        -1
+      ]
+    ],
+    "missing_adjacent_letters": 2
+  },
+  {
+    "direction": 1,
+    "mask": 5,
+    "word": [
+      [
+        1,
+        1
+      ],
+      [
+        2,
+        1
+      ],
+      [
+        0,
+        -1
+      ],
+      [
+        2,
+        -1
+      ]
+    ],
+    "missing_adjacent_letters": 1
+  },
+  {
+    "direction": 1,
+    "mask": 6,
+    "word": [
+      [
+        2,
+        -1
+      ],
+      [
+        2,
+        -1
+      ],
+      [
+        1,
+        -1
+      ],
+      [
+        2,
+        -1
+      ]
+    ],
+    "missing_adjacent_letters": 1
+  },
+  {
+    "direction": 1,
+    "mask": 7,
+    "word": [
+      [
+        0,
+        1
+      ]
+    ],
+    "missing_adjacent_letters": 0
+  }
+]

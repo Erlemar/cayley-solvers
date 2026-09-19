@@ -1,0 +1,13 @@
+{
+  "state_len": 150,
+  "num_classes": 150,
+  "hd1": 2048,
+  "hd2": 1024,
+  "nrd": 10,
+  "output_dim": 30,
+  "dtype": "fp16",
+  "normalization": "layernorm",
+  "layout": "row-major input activations times weight_hxk",
+  "embedding": "folded into position-class input table",
+  "source_weights": "q555_2k_BEST_engine.pt"
+}

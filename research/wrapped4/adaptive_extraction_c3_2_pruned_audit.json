@@ -1,0 +1,67 @@
+{
+  "source": "adaptive_extraction_c3_2_pruned.json",
+  "coefficient": "3/2",
+  "complete": false,
+  "verified_cases": 33281,
+  "verified_words": 20157,
+  "frontier_size": 61278,
+  "maximum_selected": 11,
+  "maximum_width": 24,
+  "stages": [
+    {
+      "k": 3,
+      "cases": 162,
+      "verified_words": 91,
+      "next_frontier": 386
+    },
+    {
+      "k": 4,
+      "cases": 386,
+      "verified_words": 280,
+      "next_frontier": 517
+    },
+    {
+      "k": 5,
+      "cases": 517,
+      "verified_words": 269,
+      "next_frontier": 1264
+    },
+    {
+      "k": 6,
+      "cases": 1264,
+      "verified_words": 966,
+      "next_frontier": 1530
+    },
+    {
+      "k": 7,
+      "cases": 1530,
+      "verified_words": 1216,
+      "next_frontier": 1804
+    },
+    {
+      "k": 8,
+      "cases": 1804,
+      "verified_words": 1443,
+      "next_frontier": 2114
+    },
+    {
+      "k": 9,
+      "cases": 2114,
+      "verified_words": 907,
+      "next_frontier": 7439
+    },
+    {
+      "k": 10,
+      "cases": 7439,
+      "verified_words": 4731,
+      "next_frontier": 18065
+    },
+    {
+      "k": 11,
+      "cases": 18065,
+      "verified_words": 10254,
+      "next_frontier": 61278
+    }
+  ],
+  "scope": "Incomplete tree: no improved all-n upper bound follows yet."
+}
