@@ -1,0 +1,4006 @@
+[
+  {
+    "record_index": 5056,
+    "bits": "AABAAAAAABABBBBBBBBAA",
+    "gap": 1,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5057,
+    "bits": "AABAAAAAABABBBBBBBBAB",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5058,
+    "bits": "AABAAAABBBABBBBBBBBAA",
+    "gap": 1,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5059,
+    "bits": "AABAAAABBBABBBBBBBBAB",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5060,
+    "bits": "AABAAAABBBBBBABBBBBAA",
+    "gap": 1,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5061,
+    "bits": "AABAAAABBBBBBABBBBBAB",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5064,
+    "bits": "AABABBBBBBABBBBBBBBAA",
+    "gap": 1,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5065,
+    "bits": "AABABBBBBBABBBBBBBBAB",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5066,
+    "bits": "AABABBBBBBBBBABBBBBAA",
+    "gap": 1,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5067,
+    "bits": "AABABBBBBBBBBABBBBBAB",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5068,
+    "bits": "AABABBBBBBBBBBBBAAAAA",
+    "gap": 1,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5069,
+    "bits": "AABABBBBBBBBBBBBAAAAB",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5070,
+    "bits": "AABABBBBBBBBBBBBAAABA",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5071,
+    "bits": "AABABBBBBBBBBBBBAAABB",
+    "gap": 0,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5072,
+    "bits": "AABABBBBBBBBBBBBBAAAA",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5073,
+    "bits": "AABABBBBBBBBBBBBBAAAB",
+    "gap": 0,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5074,
+    "bits": "AABABBBBBBBBBBBBBAABA",
+    "gap": 0,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5076,
+    "bits": "AABABBBBBBBBBBBBBBAAA",
+    "gap": 0,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5077,
+    "bits": "AABABBBBBBBBBBBBBBAAB",
+    "gap": 1,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5078,
+    "bits": "AABABBBBBBBBBBBBBBBAA",
+    "gap": 1,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5080,
+    "bits": "AABABBBBBBBBBBBBBBBBA",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5082,
+    "bits": "ABAAAAAABABBBBBBBBBAA",
+    "gap": 1,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5083,
+    "bits": "ABAAAAAABABBBBBBBBBAB",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5084,
+    "bits": "ABABABABABBBBBABAAAAA",
+    "gap": 0,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5085,
+    "bits": "ABABABABABBBBBABAAAAB",
+    "gap": 1,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5086,
+    "bits": "ABABABABABBBBBABAAABA",
+    "gap": 1,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5088,
+    "bits": "ABABABABABBBBBABAABAA",
+    "gap": 1,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5089,
+    "bits": "ABABABABABBBBBABAABAB",
+    "gap": 2,
+    "status": "found",
+    "method": "beam"
+  },
+  {
+    "record_index": 5090,
+    "bits": "ABABABABABBBBBABAABBA",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5091,
+    "bits": "ABABABABABBBBBABAABBB",
+    "gap": 0,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5092,
+    "bits": "ABABABABABBBBBABABAAA",
+    "gap": 1,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5093,
+    "bits": "ABABABABABBBBBABABAAB",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5094,
+    "bits": "ABABABABABBBBBABABABA",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5095,
+    "bits": "ABABABABABBBBBABABABB",
+    "gap": 0,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5096,
+    "bits": "ABABABBAABABAABABBABA",
+    "gap": 1,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5097,
+    "bits": "ABABABBAABABAABABBABB",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5098,
+    "bits": "ABABABBAABABAABABBBAA",
+    "gap": 1,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5099,
+    "bits": "ABABABBAABABAABABBBAB",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5100,
+    "bits": "ABABABBBBBBBBBBBBBBBA",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5102,
+    "bits": "ABABBBBBABBBBBBAAAAAA",
+    "gap": 0,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5103,
+    "bits": "ABABBBBBABBBBBBAAAAAB",
+    "gap": 1,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5104,
+    "bits": "ABABBBBBABBBBBBAAAABA",
+    "gap": 1,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5105,
+    "bits": "ABABBBBBABBBBBBAAAABB",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5106,
+    "bits": "ABABBBBBABBBBBBAAABAA",
+    "gap": 1,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5107,
+    "bits": "ABABBBBBABBBBBBAAABAB",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5108,
+    "bits": "ABABBBBBABBBBBBAAABBA",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5109,
+    "bits": "ABABBBBBABBBBBBAAABBB",
+    "gap": 0,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5110,
+    "bits": "ABABBBBBABBBBBBABAAAA",
+    "gap": 1,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5111,
+    "bits": "ABABBBBBABBBBBBABAAAB",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5112,
+    "bits": "ABABBBBBABBBBBBABAABA",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5113,
+    "bits": "ABABBBBBABBBBBBABAABB",
+    "gap": 0,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5114,
+    "bits": "ABABBBBBABBBBBBABABAA",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5115,
+    "bits": "ABABBBBBABBBBBBABABAB",
+    "gap": 0,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5116,
+    "bits": "ABABBBBBABBBBBBABABBA",
+    "gap": 0,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5117,
+    "bits": "ABABBBBBABBBBBBABABBB",
+    "gap": 1,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5118,
+    "bits": "ABABBBBBBABBBBBBBBBAA",
+    "gap": 1,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5119,
+    "bits": "ABABBBBBBABBBBBBBBBAB",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5120,
+    "bits": "ABABBBBBBBBABBBAAAAAA",
+    "gap": 0,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5121,
+    "bits": "ABABBBBBBBBABBBAAAAAB",
+    "gap": 1,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5122,
+    "bits": "ABABBBBBBBBABBBAAAABA",
+    "gap": 1,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5123,
+    "bits": "ABABBBBBBBBABBBAAAABB",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5124,
+    "bits": "ABABBBBBBBBABBBAAABAA",
+    "gap": 1,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5125,
+    "bits": "ABABBBBBBBBABBBAAABAB",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5126,
+    "bits": "ABABBBBBBBBABBBAAABBA",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5127,
+    "bits": "ABABBBBBBBBABBBAAABBB",
+    "gap": 0,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5128,
+    "bits": "ABABBBBBBBBABBBABAAAA",
+    "gap": 1,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5129,
+    "bits": "ABABBBBBBBBABBBABAAAB",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5130,
+    "bits": "ABABBBBBBBBABBBABAABA",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5131,
+    "bits": "ABABBBBBBBBABBBABAABB",
+    "gap": 0,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5132,
+    "bits": "ABABBBBBBBBABBBABABAA",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5133,
+    "bits": "ABABBBBBBBBABBBABABAB",
+    "gap": 0,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5134,
+    "bits": "ABABBBBBBBBABBBABABBA",
+    "gap": 0,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5135,
+    "bits": "ABABBBBBBBBABBBABABBB",
+    "gap": 1,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5136,
+    "bits": "ABABBBBBBBBBABBBBBBAA",
+    "gap": 1,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5137,
+    "bits": "ABABBBBBBBBBABBBBBBAB",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5138,
+    "bits": "ABABBBBBBBBBBBBAAAAAA",
+    "gap": 0,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5139,
+    "bits": "ABABBBBBBBBBBBBAAAAAB",
+    "gap": 1,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5140,
+    "bits": "ABABBBBBBBBBBBBAAAABA",
+    "gap": 1,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5141,
+    "bits": "ABABBBBBBBBBBBBAAAABB",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5142,
+    "bits": "ABABBBBBBBBBBBBAAABAA",
+    "gap": 1,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5143,
+    "bits": "ABABBBBBBBBBBBBAAABAB",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5144,
+    "bits": "ABABBBBBBBBBBBBAAABBA",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5145,
+    "bits": "ABABBBBBBBBBBBBAAABBB",
+    "gap": 0,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5146,
+    "bits": "ABABBBBBBBBBBBBBAAAAA",
+    "gap": 1,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5147,
+    "bits": "ABABBBBBBBBBBBBBAAAAB",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5148,
+    "bits": "ABABBBBBBBBBBBBBAAABA",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5149,
+    "bits": "ABABBBBBBBBBBBBBAAABB",
+    "gap": 0,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5150,
+    "bits": "ABABBBBBBBBBBBBBBAAAA",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5151,
+    "bits": "ABABBBBBBBBBBBBBBAAAB",
+    "gap": 0,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5152,
+    "bits": "ABABBBBBBBBBBBBBBAABA",
+    "gap": 0,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5154,
+    "bits": "ABABBBBBBBBBBBBBBBAAA",
+    "gap": 0,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5155,
+    "bits": "ABABBBBBBBBBBBBBBBAAB",
+    "gap": 1,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5156,
+    "bits": "ABABBBBBBBBBBBBBBBBAA",
+    "gap": 1,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5157,
+    "bits": "ABABBBBBBBBBBBBBBBBAB",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5158,
+    "bits": "ABABBBBBBBBBBBBBBBBBA",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5160,
+    "bits": "BAAAAAABABBBBBBBBBBAA",
+    "gap": 1,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5161,
+    "bits": "BAAAAAABABBBBBBBBBBAB",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5162,
+    "bits": "BAAAABBBBBABBBBAAAAAA",
+    "gap": 0,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5163,
+    "bits": "BAAAABBBBBABBBBAAAAAB",
+    "gap": 1,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5164,
+    "bits": "BAAAABBBBBABBBBAAAABA",
+    "gap": 1,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5165,
+    "bits": "BAAAABBBBBABBBBAAAABB",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5166,
+    "bits": "BAAAABBBBBABBBBAAABAA",
+    "gap": 1,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5167,
+    "bits": "BAAAABBBBBABBBBAAABAB",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5168,
+    "bits": "BAAAABBBBBABBBBAAABBA",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5169,
+    "bits": "BAAAABBBBBABBBBAAABBB",
+    "gap": 0,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5170,
+    "bits": "BAAAABBBBBABBBBABAAAA",
+    "gap": 1,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5171,
+    "bits": "BAAAABBBBBABBBBABAAAB",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5172,
+    "bits": "BAAAABBBBBABBBBABAABA",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5173,
+    "bits": "BAAAABBBBBABBBBABAABB",
+    "gap": 0,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5174,
+    "bits": "BAAAABBBBBABBBBABABAA",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5175,
+    "bits": "BAAAABBBBBABBBBABABAB",
+    "gap": 0,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5176,
+    "bits": "BAAAABBBBBABBBBABABBA",
+    "gap": 0,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5177,
+    "bits": "BAAAABBBBBABBBBABABBB",
+    "gap": 1,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5178,
+    "bits": "BAAAABBBBBBBBBBAAAAAA",
+    "gap": 0,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5179,
+    "bits": "BAAAABBBBBBBBBBAAAAAB",
+    "gap": 1,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5180,
+    "bits": "BAAAABBBBBBBBBBAAAABA",
+    "gap": 1,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5181,
+    "bits": "BAAAABBBBBBBBBBAAAABB",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5182,
+    "bits": "BAAAABBBBBBBBBBAAABAA",
+    "gap": 1,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5183,
+    "bits": "BAAAABBBBBBBBBBAAABAB",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5184,
+    "bits": "BAAAABBBBBBBBBBAAABBA",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5185,
+    "bits": "BAAAABBBBBBBBBBAAABBB",
+    "gap": 0,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5186,
+    "bits": "BAABAABAABABBAABAABAA",
+    "gap": 0,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5187,
+    "bits": "BAABAABAABABBAABAABAB",
+    "gap": 1,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5188,
+    "bits": "BAABAABAABABBAABAABBA",
+    "gap": 1,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5189,
+    "bits": "BAABAABAABABBAABAABBB",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5190,
+    "bits": "BAABAABAABABBAABABABA",
+    "gap": 1,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5191,
+    "bits": "BAABAABAABABBAABABABB",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5192,
+    "bits": "BABAABBBABBBBBBAAAAAA",
+    "gap": 0,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5193,
+    "bits": "BABAABBBABBBBBBAAAAAB",
+    "gap": 1,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5194,
+    "bits": "BABAABBBABBBBBBAAAABA",
+    "gap": 1,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5195,
+    "bits": "BABAABBBABBBBBBAAAABB",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5196,
+    "bits": "BABAABBBABBBBBBAAABAA",
+    "gap": 1,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5197,
+    "bits": "BABAABBBABBBBBBAAABAB",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5198,
+    "bits": "BABAABBBABBBBBBAAABBA",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5199,
+    "bits": "BABAABBBABBBBBBAAABBB",
+    "gap": 0,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5200,
+    "bits": "BABAABBBABBBBBBABAAAA",
+    "gap": 1,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5201,
+    "bits": "BABAABBBABBBBBBABAAAB",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5202,
+    "bits": "BABAABBBABBBBBBABAABA",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5203,
+    "bits": "BABAABBBABBBBBBABAABB",
+    "gap": 0,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5204,
+    "bits": "BABAABBBABBBBBBABABAA",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5205,
+    "bits": "BABAABBBABBBBBBABABAB",
+    "gap": 0,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5206,
+    "bits": "BABAABBBABBBBBBABABBA",
+    "gap": 0,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5207,
+    "bits": "BABAABBBABBBBBBABABBB",
+    "gap": 1,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5208,
+    "bits": "BABABABABAAABBABAAAAA",
+    "gap": 0,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5209,
+    "bits": "BABABABABAAABBABAAAAB",
+    "gap": 1,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5210,
+    "bits": "BABABABABAAABBABAAABA",
+    "gap": 1,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5211,
+    "bits": "BABABABABAAABBABAAABB",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5212,
+    "bits": "BABABABABAAABBABAABAA",
+    "gap": 1,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5213,
+    "bits": "BABABABABAAABBABAABAB",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5214,
+    "bits": "BABABABABAAABBABAABBA",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5215,
+    "bits": "BABABABABAAABBABAABBB",
+    "gap": 0,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5216,
+    "bits": "BABABABABAAABBABABAAA",
+    "gap": 1,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5217,
+    "bits": "BABABABABAAABBABABAAB",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5218,
+    "bits": "BABABABABAAABBABABABA",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5219,
+    "bits": "BABABABABAAABBABABABB",
+    "gap": 0,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5220,
+    "bits": "BABABABABAAABBABABBAA",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5221,
+    "bits": "BABABABABAAABBABABBAB",
+    "gap": 0,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5222,
+    "bits": "BABABABABAAABBABABBBA",
+    "gap": 0,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5223,
+    "bits": "BABABABABAAABBABABBBB",
+    "gap": 1,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5224,
+    "bits": "BABABABABAAABBABBAAAA",
+    "gap": 1,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5225,
+    "bits": "BABABABABAAABBABBAAAB",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5226,
+    "bits": "BABABABABAAABBABBABAA",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5227,
+    "bits": "BABABABABAAABBABBABAB",
+    "gap": 0,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5228,
+    "bits": "BABABABABAAABBABBABBA",
+    "gap": 0,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5230,
+    "bits": "BABABABABBAAABABAAAAA",
+    "gap": 0,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5231,
+    "bits": "BABABABABBAAABABAAAAB",
+    "gap": 1,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5232,
+    "bits": "BABABABABBAAABABAAABA",
+    "gap": 1,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5233,
+    "bits": "BABABABABBAAABABAAABB",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5234,
+    "bits": "BABABABABBAAABABAABAA",
+    "gap": 1,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5235,
+    "bits": "BABABABABBAAABABAABAB",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5236,
+    "bits": "BABABABABBAAABABAABBA",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5237,
+    "bits": "BABABABABBAAABABAABBB",
+    "gap": 0,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5238,
+    "bits": "BABABABABBAAABABABAAA",
+    "gap": 1,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5239,
+    "bits": "BABABABABBAAABABABAAB",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5240,
+    "bits": "BABABABABBAAABABABABA",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5241,
+    "bits": "BABABABABBAAABABABABB",
+    "gap": 0,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5242,
+    "bits": "BABABABABBAAABABABBAA",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5243,
+    "bits": "BABABABABBAAABABABBAB",
+    "gap": 0,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5244,
+    "bits": "BABABABABBAAABABABBBA",
+    "gap": 0,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5245,
+    "bits": "BABABABABBAAABABABBBB",
+    "gap": 1,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5246,
+    "bits": "BABABABABBAAABABBAAAA",
+    "gap": 1,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5247,
+    "bits": "BABABABABBAAABABBAAAB",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5248,
+    "bits": "BABABABABBAAABABBABAA",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5249,
+    "bits": "BABABABABBAAABABBABAB",
+    "gap": 0,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5250,
+    "bits": "BABABABABBAAABABBABBA",
+    "gap": 0,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5252,
+    "bits": "BABABABABBBBBABAAAAAA",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5253,
+    "bits": "BABABABABBBBBABAAAAAB",
+    "gap": 0,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5254,
+    "bits": "BABABABABBBBBABAAAABA",
+    "gap": 0,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5255,
+    "bits": "BABABABABBBBBABAAAABB",
+    "gap": 1,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5256,
+    "bits": "BABABABABBBBBABAAABAA",
+    "gap": 0,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5257,
+    "bits": "BABABABABBBBBABAAABAB",
+    "gap": 1,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5258,
+    "bits": "BABABABABBBBBABAABAAA",
+    "gap": 0,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5259,
+    "bits": "BABABABABBBBBABAABAAB",
+    "gap": 1,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5260,
+    "bits": "BABABABABBBBBABAABABA",
+    "gap": 1,
+    "status": "found",
+    "method": "beam"
+  },
+  {
+    "record_index": 5261,
+    "bits": "BABABABABBBBBABAABABB",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5262,
+    "bits": "BABABABABBBBBABAABBAA",
+    "gap": 1,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5263,
+    "bits": "BABABABABBBBBABAABBAB",
+    "gap": 2,
+    "status": "beam_empty",
+    "method": "beam"
+  },
+  {
+    "record_index": 5264,
+    "bits": "BABABABABBBBBABAABBBA",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5265,
+    "bits": "BABABABABBBBBABAABBBB",
+    "gap": 0,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5266,
+    "bits": "BABABABABBBBBABABAAAA",
+    "gap": 0,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5267,
+    "bits": "BABABABABBBBBABABAAAB",
+    "gap": 1,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5268,
+    "bits": "BABABABABBBBBABABAABA",
+    "gap": 1,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5269,
+    "bits": "BABABABABBBBBABABAABB",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5270,
+    "bits": "BABABABABBBBBABABABAA",
+    "gap": 1,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5271,
+    "bits": "BABABABABBBBBABABABAB",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5272,
+    "bits": "BABABABABBBBBABABABBA",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5273,
+    "bits": "BABABABABBBBBABABABBB",
+    "gap": 0,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5274,
+    "bits": "BABABABABBBBBBABAAAAA",
+    "gap": 0,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5275,
+    "bits": "BABABABABBBBBBABAAAAB",
+    "gap": 1,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5276,
+    "bits": "BABABABABBBBBBABAAABA",
+    "gap": 1,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5278,
+    "bits": "BABABABABBBBBBABAABAA",
+    "gap": 1,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5279,
+    "bits": "BABABABABBBBBBABAABAB",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5280,
+    "bits": "BABABABABBBBBBABAABBA",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5281,
+    "bits": "BABABABABBBBBBABAABBB",
+    "gap": 0,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5282,
+    "bits": "BABABABABBBBBBABABAAA",
+    "gap": 1,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5283,
+    "bits": "BABABABABBBBBBABABAAB",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5284,
+    "bits": "BABABABABBBBBBABABABA",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5285,
+    "bits": "BABABABABBBBBBABABABB",
+    "gap": 0,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5287,
+    "bits": "BABABABBAABABAABAAAAB",
+    "gap": 0,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5288,
+    "bits": "BABABABBAABABAABAAABA",
+    "gap": 0,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5289,
+    "bits": "BABABABBAABABAABAAABB",
+    "gap": 1,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5290,
+    "bits": "BABABABBAABABAABAABAA",
+    "gap": 0,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5291,
+    "bits": "BABABABBAABABAABAABAB",
+    "gap": 1,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5292,
+    "bits": "BABABABBAABABAABABAAA",
+    "gap": 0,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5293,
+    "bits": "BABABABBAABABAABABAAB",
+    "gap": 1,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5294,
+    "bits": "BABABABBAABABAABABABA",
+    "gap": 1,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5295,
+    "bits": "BABABABBAABABAABABABB",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5296,
+    "bits": "BABABABBAABABAABABBBA",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5297,
+    "bits": "BABABABBAABABAABABBBB",
+    "gap": 0,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5298,
+    "bits": "BABABABBAABABAABBAAAA",
+    "gap": 0,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5299,
+    "bits": "BABABABBAABABAABBAAAB",
+    "gap": 1,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5300,
+    "bits": "BABABABBAABABAABBAABA",
+    "gap": 1,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5303,
+    "bits": "BABABABBAABABAABBABBB",
+    "gap": 0,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5304,
+    "bits": "BABABABBAABABBABAAAAA",
+    "gap": 0,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5305,
+    "bits": "BABABABBAABABBABAAAAB",
+    "gap": 1,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5306,
+    "bits": "BABABABBAABABBABAAABA",
+    "gap": 1,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5307,
+    "bits": "BABABABBAABABBABAAABB",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5308,
+    "bits": "BABABABBAABABBABAABAA",
+    "gap": 1,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5309,
+    "bits": "BABABABBAABABBABAABAB",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5310,
+    "bits": "BABABABBAABABBABAABBA",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5311,
+    "bits": "BABABABBAABABBABAABBB",
+    "gap": 0,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5314,
+    "bits": "BABABBAABABAABABBAABA",
+    "gap": 0,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5315,
+    "bits": "BABABBAABABAABABBAABB",
+    "gap": 1,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5316,
+    "bits": "BABABBAABABAABABBABAA",
+    "gap": 0,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5317,
+    "bits": "BABABBAABABAABABBABAB",
+    "gap": 1,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5318,
+    "bits": "BABABBAABABAABABBABBA",
+    "gap": 1,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5319,
+    "bits": "BABABBAABABAABABBABBB",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5320,
+    "bits": "BABABBAABABAABABBBAAA",
+    "gap": 0,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5321,
+    "bits": "BABABBAABABAABABBBAAB",
+    "gap": 1,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5322,
+    "bits": "BABABBAABABAABABBBABA",
+    "gap": 1,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5323,
+    "bits": "BABABBAABABAABABBBABB",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5324,
+    "bits": "BABABBAABABAABABBBBAA",
+    "gap": 1,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5325,
+    "bits": "BABABBAABABAABABBBBAB",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5326,
+    "bits": "BABABBBAABBBBBBAAAAAA",
+    "gap": 0,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5327,
+    "bits": "BABABBBAABBBBBBAAAAAB",
+    "gap": 1,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5328,
+    "bits": "BABABBBAABBBBBBAAAABA",
+    "gap": 1,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5329,
+    "bits": "BABABBBAABBBBBBAAAABB",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5330,
+    "bits": "BABABBBAABBBBBBAAABAA",
+    "gap": 1,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5331,
+    "bits": "BABABBBAABBBBBBAAABAB",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5332,
+    "bits": "BABABBBAABBBBBBAAABBA",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5333,
+    "bits": "BABABBBAABBBBBBAAABBB",
+    "gap": 0,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5334,
+    "bits": "BABABBBAABBBBBBABAAAA",
+    "gap": 1,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5335,
+    "bits": "BABABBBAABBBBBBABAAAB",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5336,
+    "bits": "BABABBBAABBBBBBABAABA",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5337,
+    "bits": "BABABBBAABBBBBBABAABB",
+    "gap": 0,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5338,
+    "bits": "BABABBBAABBBBBBABABAA",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5339,
+    "bits": "BABABBBAABBBBBBABABAB",
+    "gap": 0,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5340,
+    "bits": "BABABBBAABBBBBBABABBA",
+    "gap": 0,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5341,
+    "bits": "BABABBBAABBBBBBABABBB",
+    "gap": 1,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5342,
+    "bits": "BABABBBAABBBBBBABBAAA",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5343,
+    "bits": "BABABBBAABBBBBBABBAAB",
+    "gap": 0,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5344,
+    "bits": "BABABBBAABBBBBBABBABA",
+    "gap": 0,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5345,
+    "bits": "BABABBBAABBBBBBABBABB",
+    "gap": 1,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5346,
+    "bits": "BABABBBAABBBBBBABBBAA",
+    "gap": 0,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5347,
+    "bits": "BABABBBAABBBBBBABBBAB",
+    "gap": 1,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5348,
+    "bits": "BABABBBAABBBBBBABBBBA",
+    "gap": 1,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5349,
+    "bits": "BABABBBAABBBBBBABBBBB",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5350,
+    "bits": "BABABBBBABABBBBAAAAAA",
+    "gap": 0,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5351,
+    "bits": "BABABBBBABABBBBAAAAAB",
+    "gap": 1,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5352,
+    "bits": "BABABBBBABABBBBAAAABA",
+    "gap": 1,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5353,
+    "bits": "BABABBBBABABBBBAAAABB",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5354,
+    "bits": "BABABBBBABABBBBAAABAA",
+    "gap": 1,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5355,
+    "bits": "BABABBBBABABBBBAAABAB",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5356,
+    "bits": "BABABBBBABABBBBAAABBA",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5357,
+    "bits": "BABABBBBABABBBBAAABBB",
+    "gap": 0,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5358,
+    "bits": "BABABBBBABABBBBAABAAA",
+    "gap": 1,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5359,
+    "bits": "BABABBBBABABBBBAABAAB",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5360,
+    "bits": "BABABBBBABABBBBAABABA",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5361,
+    "bits": "BABABBBBABABBBBAABABB",
+    "gap": 0,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5362,
+    "bits": "BABABBBBABABBBBAABBAA",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5363,
+    "bits": "BABABBBBABABBBBAABBAB",
+    "gap": 0,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5364,
+    "bits": "BABABBBBABABBBBAABBBA",
+    "gap": 0,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5365,
+    "bits": "BABABBBBABABBBBAABBBB",
+    "gap": 1,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5366,
+    "bits": "BABABBBBABABBBBABAAAA",
+    "gap": 1,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5367,
+    "bits": "BABABBBBABABBBBABAAAB",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5368,
+    "bits": "BABABBBBABABBBBABAABA",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5369,
+    "bits": "BABABBBBABABBBBABAABB",
+    "gap": 0,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5370,
+    "bits": "BABABBBBABABBBBABABAA",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5371,
+    "bits": "BABABBBBABABBBBABABAB",
+    "gap": 0,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5372,
+    "bits": "BABABBBBABABBBBABABBA",
+    "gap": 0,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5373,
+    "bits": "BABABBBBABABBBBABABBB",
+    "gap": 1,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5374,
+    "bits": "BABABBBBABABBBBABBAAA",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5375,
+    "bits": "BABABBBBABABBBBABBAAB",
+    "gap": 0,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5376,
+    "bits": "BABABBBBABABBBBABBABA",
+    "gap": 0,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5377,
+    "bits": "BABABBBBABABBBBABBABB",
+    "gap": 1,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5378,
+    "bits": "BABABBBBABABBBBABBBAA",
+    "gap": 0,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5379,
+    "bits": "BABABBBBABABBBBABBBAB",
+    "gap": 1,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5380,
+    "bits": "BABABBBBABABBBBABBBBA",
+    "gap": 1,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5381,
+    "bits": "BABABBBBABABBBBABBBBB",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5382,
+    "bits": "BABABBBBBAABAABAABAAA",
+    "gap": 0,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5383,
+    "bits": "BABABBBBBAABAABAABAAB",
+    "gap": 1,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5384,
+    "bits": "BABABBBBBAABAABAABABA",
+    "gap": 1,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5385,
+    "bits": "BABABBBBBAABAABAABABB",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5386,
+    "bits": "BABABBBBBAABAABAABBAA",
+    "gap": 1,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5387,
+    "bits": "BABABBBBBAABAABAABBAB",
+    "gap": 2,
+    "status": "found",
+    "method": "beam"
+  },
+  {
+    "record_index": 5388,
+    "bits": "BABABBBBBAABAABAABBBA",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5389,
+    "bits": "BABABBBBBAABAABAABBBB",
+    "gap": 0,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5390,
+    "bits": "BABABBBBBAABAABABAAAA",
+    "gap": 0,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5391,
+    "bits": "BABABBBBBAABAABABAAAB",
+    "gap": 1,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5392,
+    "bits": "BABABBBBBAABAABABAABA",
+    "gap": 1,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5393,
+    "bits": "BABABBBBBAABAABABAABB",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5394,
+    "bits": "BABABBBBBAABAABABABAA",
+    "gap": 1,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5395,
+    "bits": "BABABBBBBAABAABABABAB",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5396,
+    "bits": "BABABBBBBAABAABABABBA",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5397,
+    "bits": "BABABBBBBAABAABABABBB",
+    "gap": 0,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5398,
+    "bits": "BABABBBBBAABAABABBAAA",
+    "gap": 1,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5399,
+    "bits": "BABABBBBBAABAABABBAAB",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5400,
+    "bits": "BABABBBBBAABAABABBABA",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5401,
+    "bits": "BABABBBBBAABAABABBABB",
+    "gap": 0,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5402,
+    "bits": "BABABBBBBAABAABABBBAA",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5403,
+    "bits": "BABABBBBBAABAABABBBAB",
+    "gap": 0,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5404,
+    "bits": "BABABBBBBAABAABABBBBA",
+    "gap": 0,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5405,
+    "bits": "BABABBBBBAABAABABBBBB",
+    "gap": 1,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5406,
+    "bits": "BABABBBBBBBBBBBBBBBAA",
+    "gap": 1,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5407,
+    "bits": "BABABBBBBBBBBBBBBBBAB",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5408,
+    "bits": "BABABBBBBBBBBBBBBBBBA",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5410,
+    "bits": "BABBABBBBBBBBBBAAAAAA",
+    "gap": 0,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5411,
+    "bits": "BABBABBBBBBBBBBAAAAAB",
+    "gap": 1,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5412,
+    "bits": "BABBABBBBBBBBBBAAAABA",
+    "gap": 1,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5413,
+    "bits": "BABBABBBBBBBBBBAAAABB",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5414,
+    "bits": "BABBABBBBBBBBBBAAABAA",
+    "gap": 1,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5415,
+    "bits": "BABBABBBBBBBBBBAAABAB",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5416,
+    "bits": "BABBABBBBBBBBBBAAABBA",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5417,
+    "bits": "BABBABBBBBBBBBBAAABBB",
+    "gap": 0,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5418,
+    "bits": "BABBBBBABBBBBBBAAAAAA",
+    "gap": 0,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5419,
+    "bits": "BABBBBBABBBBBBBAAAAAB",
+    "gap": 1,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5420,
+    "bits": "BABBBBBABBBBBBBAAAABA",
+    "gap": 1,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5421,
+    "bits": "BABBBBBABBBBBBBAAAABB",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5422,
+    "bits": "BABBBBBABBBBBBBAAABAA",
+    "gap": 1,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5423,
+    "bits": "BABBBBBABBBBBBBAAABAB",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5424,
+    "bits": "BABBBBBABBBBBBBAAABBA",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5425,
+    "bits": "BABBBBBABBBBBBBAAABBB",
+    "gap": 0,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5426,
+    "bits": "BABBBBBABBBBBBBABAAAA",
+    "gap": 1,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5427,
+    "bits": "BABBBBBABBBBBBBABAAAB",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5428,
+    "bits": "BABBBBBABBBBBBBABAABA",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5429,
+    "bits": "BABBBBBABBBBBBBABAABB",
+    "gap": 0,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5430,
+    "bits": "BABBBBBABBBBBBBABABAA",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5431,
+    "bits": "BABBBBBABBBBBBBABABAB",
+    "gap": 0,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5432,
+    "bits": "BABBBBBABBBBBBBABABBA",
+    "gap": 0,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5433,
+    "bits": "BABBBBBABBBBBBBABABBB",
+    "gap": 1,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5434,
+    "bits": "BABBBBBBABBBBBBBBBBAA",
+    "gap": 1,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5435,
+    "bits": "BABBBBBBABBBBBBBBBBAB",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5436,
+    "bits": "BABBBBBBBBABBBBAAAAAA",
+    "gap": 0,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5437,
+    "bits": "BABBBBBBBBABBBBAAAAAB",
+    "gap": 1,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5438,
+    "bits": "BABBBBBBBBABBBBAAAABA",
+    "gap": 1,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5439,
+    "bits": "BABBBBBBBBABBBBAAAABB",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5440,
+    "bits": "BABBBBBBBBABBBBAAABAA",
+    "gap": 1,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5441,
+    "bits": "BABBBBBBBBABBBBAAABAB",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5442,
+    "bits": "BABBBBBBBBABBBBAAABBA",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5443,
+    "bits": "BABBBBBBBBABBBBAAABBB",
+    "gap": 0,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5444,
+    "bits": "BABBBBBBBBABBBBABAAAA",
+    "gap": 1,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5445,
+    "bits": "BABBBBBBBBABBBBABAAAB",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5446,
+    "bits": "BABBBBBBBBABBBBABAABA",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5447,
+    "bits": "BABBBBBBBBABBBBABAABB",
+    "gap": 0,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5448,
+    "bits": "BABBBBBBBBABBBBABABAA",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5449,
+    "bits": "BABBBBBBBBABBBBABABAB",
+    "gap": 0,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5450,
+    "bits": "BABBBBBBBBABBBBABABBA",
+    "gap": 0,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5451,
+    "bits": "BABBBBBBBBABBBBABABBB",
+    "gap": 1,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5452,
+    "bits": "BABBBBBBBBBABBBBBBBAA",
+    "gap": 1,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5453,
+    "bits": "BABBBBBBBBBABBBBBBBAB",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5454,
+    "bits": "BABBBBBBBBBBBBBAAAAAA",
+    "gap": 0,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5455,
+    "bits": "BABBBBBBBBBBBBBAAAAAB",
+    "gap": 1,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5456,
+    "bits": "BABBBBBBBBBBBBBAAAABA",
+    "gap": 1,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5457,
+    "bits": "BABBBBBBBBBBBBBAAAABB",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5458,
+    "bits": "BABBBBBBBBBBBBBAAABAA",
+    "gap": 1,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5459,
+    "bits": "BABBBBBBBBBBBBBAAABAB",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5460,
+    "bits": "BABBBBBBBBBBBBBAAABBA",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5461,
+    "bits": "BABBBBBBBBBBBBBAAABBB",
+    "gap": 0,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5462,
+    "bits": "BABBBBBBBBBBBBBBAAAAA",
+    "gap": 1,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5463,
+    "bits": "BABBBBBBBBBBBBBBAAAAB",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5464,
+    "bits": "BABBBBBBBBBBBBBBAAABA",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5465,
+    "bits": "BABBBBBBBBBBBBBBAAABB",
+    "gap": 0,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5466,
+    "bits": "BABBBBBBBBBBBBBBBAAAA",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5467,
+    "bits": "BABBBBBBBBBBBBBBBAAAB",
+    "gap": 0,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5468,
+    "bits": "BABBBBBBBBBBBBBBBAABA",
+    "gap": 0,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5470,
+    "bits": "BABBBBBBBBBBBBBBBBAAA",
+    "gap": 0,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5471,
+    "bits": "BABBBBBBBBBBBBBBBBAAB",
+    "gap": 1,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5472,
+    "bits": "BABBBBBBBBBBBBBBBBABA",
+    "gap": 1,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5473,
+    "bits": "BABBBBBBBBBBBBBBBBABB",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5474,
+    "bits": "BABBBBBBBBBBBBBBBBBAA",
+    "gap": 1,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5475,
+    "bits": "BABBBBBBBBBBBBBBBBBAB",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5476,
+    "bits": "BABBBBBBBBBBBBBBBBBBA",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5478,
+    "bits": "BBABABABAABAABAAAAABA",
+    "gap": 1,
+    "status": "found",
+    "method": "beam"
+  },
+  {
+    "record_index": 5479,
+    "bits": "BBABABABAABAABAAAAABB",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5480,
+    "bits": "BBABABABAABAABAABAAAA",
+    "gap": 1,
+    "status": "found",
+    "method": "beam"
+  },
+  {
+    "record_index": 5481,
+    "bits": "BBABABABAABAABAABAAAB",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5482,
+    "bits": "BBABABABAABAABAABAABA",
+    "gap": 2,
+    "status": "found",
+    "method": "beam"
+  },
+  {
+    "record_index": 5483,
+    "bits": "BBABABABAABAABAABAABB",
+    "gap": 0,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5484,
+    "bits": "BBABABABAABAABAABABAA",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5485,
+    "bits": "BBABABABAABAABAABABAB",
+    "gap": 0,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5486,
+    "bits": "BBABABABAABAABAABABBA",
+    "gap": 0,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5487,
+    "bits": "BBABABABAABAABAABABBB",
+    "gap": 1,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5488,
+    "bits": "BBABABABAABAABAABBAAA",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5489,
+    "bits": "BBABABABAABAABAABBAAB",
+    "gap": 0,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5490,
+    "bits": "BBABABABAABAABAABBABA",
+    "gap": 0,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5491,
+    "bits": "BBABABABAABAABAABBABB",
+    "gap": 1,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5492,
+    "bits": "BBABABABAABAABAABBBAA",
+    "gap": 0,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5493,
+    "bits": "BBABABABAABAABAABBBAB",
+    "gap": 1,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5494,
+    "bits": "BBABABABAABAABAABBBBA",
+    "gap": 1,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5495,
+    "bits": "BBABABABAABAABAABBBBB",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5496,
+    "bits": "BBABABABAABAABABAABAA",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5497,
+    "bits": "BBABABABAABAABABAABAB",
+    "gap": 0,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5498,
+    "bits": "BBABABABAABAABABAABBA",
+    "gap": 0,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5499,
+    "bits": "BBABABABAABAABABAABBB",
+    "gap": 1,
+    "status": "found",
+    "method": "beam"
+  },
+  {
+    "record_index": 5500,
+    "bits": "BBABABABAABAABABABAAA",
+    "gap": 2,
+    "status": "found",
+    "method": "beam"
+  },
+  {
+    "record_index": 5501,
+    "bits": "BBABABABAABAABABABAAB",
+    "gap": 0,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5502,
+    "bits": "BBABABABAABAABABABABA",
+    "gap": 0,
+    "status": "beam_empty",
+    "method": "beam"
+  },
+  {
+    "record_index": 5503,
+    "bits": "BBABABABAABAABABABABB",
+    "gap": 1,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5504,
+    "bits": "BBABABABAABAABABABBAA",
+    "gap": 0,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5505,
+    "bits": "BBABABABAABAABABABBAB",
+    "gap": 1,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5506,
+    "bits": "BBABABABAABAABABABBBA",
+    "gap": 1,
+    "status": "found",
+    "method": "beam"
+  },
+  {
+    "record_index": 5507,
+    "bits": "BBABABABAABAABABABBBB",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5508,
+    "bits": "BBABABABAABAABABBAABA",
+    "gap": 0,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5509,
+    "bits": "BBABABABAABAABABBAABB",
+    "gap": 1,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5510,
+    "bits": "BBABABABAABAABABBABAA",
+    "gap": 0,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5511,
+    "bits": "BBABABABAABAABABBABAB",
+    "gap": 1,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5512,
+    "bits": "BBABABABAABAABABBABBA",
+    "gap": 1,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5513,
+    "bits": "BBABABABAABAABABBABBB",
+    "gap": 2,
+    "status": "found",
+    "method": "beam"
+  },
+  {
+    "record_index": 5514,
+    "bits": "BBABABABAABAABABBBAAA",
+    "gap": 0,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5515,
+    "bits": "BBABABABAABAABABBBAAB",
+    "gap": 1,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5516,
+    "bits": "BBABABABAABAABABBBABA",
+    "gap": 1,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5517,
+    "bits": "BBABABABAABAABABBBABB",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5518,
+    "bits": "BBABABABAABAABABBBBAA",
+    "gap": 1,
+    "status": "found",
+    "method": "beam"
+  },
+  {
+    "record_index": 5519,
+    "bits": "BBABABABAABAABABBBBAB",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5520,
+    "bits": "BBABBABBAABABAABABABA",
+    "gap": 1,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5521,
+    "bits": "BBABBABBAABABAABABABB",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5522,
+    "bits": "BBABBABBAABABAABABBAA",
+    "gap": 1,
+    "status": "found",
+    "method": "beam"
+  },
+  {
+    "record_index": 5523,
+    "bits": "BBABBABBAABABAABABBAB",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5524,
+    "bits": "BBABBABBAABABAABABBBA",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5525,
+    "bits": "BBABBABBAABABAABABBBB",
+    "gap": 0,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5526,
+    "bits": "BBABBABBAABABAABBAAAA",
+    "gap": 0,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5527,
+    "bits": "BBABBABBAABABAABBAAAB",
+    "gap": 1,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5528,
+    "bits": "BBABBABBAABABAABBAABA",
+    "gap": 1,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5529,
+    "bits": "BBABBABBAABABAABBAABB",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5530,
+    "bits": "BBABBABBAABABAABBABAA",
+    "gap": 1,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5531,
+    "bits": "BBABBABBAABABAABBABAB",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5532,
+    "bits": "BBABBABBAABABAABBABBA",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5533,
+    "bits": "BBABBABBAABABAABBABBB",
+    "gap": 0,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5534,
+    "bits": "BBABBABBAABABBABAAAAA",
+    "gap": 0,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5535,
+    "bits": "BBABBABBAABABBABAAAAB",
+    "gap": 1,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5536,
+    "bits": "BBABBABBAABABBABAAABA",
+    "gap": 1,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5537,
+    "bits": "BBABBABBAABABBABAAABB",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5538,
+    "bits": "BBABBABBAABABBABAABAA",
+    "gap": 1,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5539,
+    "bits": "BBABBABBAABABBABAABAB",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5540,
+    "bits": "BBABBABBAABABBABAABBA",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5541,
+    "bits": "BBABBABBAABABBABAABBB",
+    "gap": 0,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5542,
+    "bits": "BBABBABBAABABBABABAAA",
+    "gap": 1,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5543,
+    "bits": "BBABBABBAABABBABABAAB",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5544,
+    "bits": "BBABBABBAABABBABABABA",
+    "gap": 2,
+    "status": "beam_empty",
+    "method": "beam"
+  },
+  {
+    "record_index": 5545,
+    "bits": "BBABBABBAABABBABABABB",
+    "gap": 0,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5546,
+    "bits": "BBABBABBAABABBABABBAA",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5547,
+    "bits": "BBABBABBAABABBABABBAB",
+    "gap": 0,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5548,
+    "bits": "BBABBABBAABABBABABBBA",
+    "gap": 0,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5549,
+    "bits": "BBABBABBAABABBABABBBB",
+    "gap": 1,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5550,
+    "bits": "BBABBABBAABABBABBAAAA",
+    "gap": 1,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5551,
+    "bits": "BBABBABBAABABBABBAAAB",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5552,
+    "bits": "BBABBABBAABABBABBAABA",
+    "gap": 2,
+    "status": "found",
+    "method": "beam"
+  },
+  {
+    "record_index": 5553,
+    "bits": "BBABBABBAABABBABBAABB",
+    "gap": 0,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5554,
+    "bits": "BBABBABBAABABBABBABAA",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5555,
+    "bits": "BBABBABBAABABBABBABAB",
+    "gap": 0,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5556,
+    "bits": "BBABBABBAABABBABBABBA",
+    "gap": 0,
+    "status": "found",
+    "method": "inverse_dfs"
+  },
+  {
+    "record_index": 5722,
+    "bits": "BABABABABBBBBABAABBABAAAAAAA",
+    "gap": 1,
+    "status": "beam_empty",
+    "method": "beam"
+  },
+  {
+    "record_index": 5725,
+    "bits": "BABABABABBBBBABAABBABAAAAABB",
+    "gap": 0,
+    "status": "beam_empty",
+    "method": "beam"
+  },
+  {
+    "record_index": 5727,
+    "bits": "BABABABABBBBBABAABBABAAAABAB",
+    "gap": 0,
+    "status": "found",
+    "method": "beam"
+  },
+  {
+    "record_index": 5728,
+    "bits": "BABABABABBBBBABAABBABAABBBAA",
+    "gap": 1,
+    "status": "beam_empty",
+    "method": "beam"
+  },
+  {
+    "record_index": 5729,
+    "bits": "BABABABABBBBBABAABBABAABBBAB",
+    "gap": 2,
+    "status": "found",
+    "method": "beam"
+  },
+  {
+    "record_index": 5731,
+    "bits": "BABABABABBBBBABAABBABAABBBBB",
+    "gap": 0,
+    "status": "beam_empty",
+    "method": "beam"
+  },
+  {
+    "record_index": 5734,
+    "bits": "BBABABABAABAABABABABAAAAAAAA",
+    "gap": 2,
+    "status": "beam_empty",
+    "method": "beam"
+  },
+  {
+    "record_index": 5735,
+    "bits": "BBABABABAABAABABABABAAAAAAAB",
+    "gap": 0,
+    "status": "beam_empty",
+    "method": "beam"
+  },
+  {
+    "record_index": 5736,
+    "bits": "BBABABABAABAABABABABAAAAABAA",
+    "gap": 0,
+    "status": "beam_empty",
+    "method": "beam"
+  },
+  {
+    "record_index": 5738,
+    "bits": "BBABABABAABAABABABABAAAAABBA",
+    "gap": 1,
+    "status": "found",
+    "method": "beam"
+  },
+  {
+    "record_index": 5740,
+    "bits": "BBABABABAABAABABABABAAAABAAA",
+    "gap": 0,
+    "status": "beam_empty",
+    "method": "beam"
+  },
+  {
+    "record_index": 5741,
+    "bits": "BBABABABAABAABABABABAAAABAAB",
+    "gap": 1,
+    "status": "found",
+    "method": "beam"
+  },
+  {
+    "record_index": 5742,
+    "bits": "BBABABABAABAABABABABAAAABABA",
+    "gap": 1,
+    "status": "beam_empty",
+    "method": "beam"
+  },
+  {
+    "record_index": 5743,
+    "bits": "BBABABABAABAABABABABAAAABABB",
+    "gap": 2,
+    "status": "beam_empty",
+    "method": "beam"
+  },
+  {
+    "record_index": 5744,
+    "bits": "BBABABABAABAABABABABAAAABBAA",
+    "gap": 1,
+    "status": "beam_empty",
+    "method": "beam"
+  },
+  {
+    "record_index": 5745,
+    "bits": "BBABABABAABAABABABABAAAABBAB",
+    "gap": 2,
+    "status": "beam_empty",
+    "method": "beam"
+  },
+  {
+    "record_index": 5747,
+    "bits": "BBABABABAABAABABABABAAAABBBB",
+    "gap": 0,
+    "status": "beam_empty",
+    "method": "beam"
+  },
+  {
+    "record_index": 5748,
+    "bits": "BBABABABAABAABABABABABAAAAAA",
+    "gap": 0,
+    "status": "beam_empty",
+    "method": "beam"
+  },
+  {
+    "record_index": 5749,
+    "bits": "BBABABABAABAABABABABABAAAAAB",
+    "gap": 1,
+    "status": "found",
+    "method": "beam"
+  },
+  {
+    "record_index": 5750,
+    "bits": "BBABABABAABAABABABABABAAAABA",
+    "gap": 1,
+    "status": "found",
+    "method": "beam"
+  },
+  {
+    "record_index": 5751,
+    "bits": "BBABABABAABAABABABABABAAAABB",
+    "gap": 2,
+    "status": "beam_empty",
+    "method": "beam"
+  },
+  {
+    "record_index": 5752,
+    "bits": "BBABABABAABAABABABABABAAABAA",
+    "gap": 1,
+    "status": "beam_empty",
+    "method": "beam"
+  },
+  {
+    "record_index": 5753,
+    "bits": "BBABABABAABAABABABABABAAABAB",
+    "gap": 2,
+    "status": "beam_empty",
+    "method": "beam"
+  },
+  {
+    "record_index": 5755,
+    "bits": "BBABABABAABAABABABABABAAABBB",
+    "gap": 0,
+    "status": "beam_empty",
+    "method": "beam"
+  },
+  {
+    "record_index": 5756,
+    "bits": "BBABABABAABAABABABABABBAAAAA",
+    "gap": 1,
+    "status": "beam_empty",
+    "method": "beam"
+  },
+  {
+    "record_index": 5757,
+    "bits": "BBABABABAABAABABABABABBAAAAB",
+    "gap": 2,
+    "status": "found",
+    "method": "beam"
+  },
+  {
+    "record_index": 5759,
+    "bits": "BBABABABAABAABABABABABBAAABB",
+    "gap": 0,
+    "status": "found",
+    "method": "beam"
+  },
+  {
+    "record_index": 5760,
+    "bits": "BBABABABAABAABABABABABBBBAAA",
+    "gap": 0,
+    "status": "beam_empty",
+    "method": "beam"
+  },
+  {
+    "record_index": 5762,
+    "bits": "BBABABABAABAABABABABABBBBABA",
+    "gap": 1,
+    "status": "beam_empty",
+    "method": "beam"
+  },
+  {
+    "record_index": 5763,
+    "bits": "BBABABABAABAABABABABABBBBABB",
+    "gap": 2,
+    "status": "beam_empty",
+    "method": "beam"
+  },
+  {
+    "record_index": 5764,
+    "bits": "BBABABABAABAABABABABABBBBBAA",
+    "gap": 1,
+    "status": "beam_empty",
+    "method": "beam"
+  },
+  {
+    "record_index": 5765,
+    "bits": "BBABABABAABAABABABABABBBBBAB",
+    "gap": 2,
+    "status": "beam_empty",
+    "method": "beam"
+  },
+  {
+    "record_index": 5766,
+    "bits": "BBABABABAABAABABABABABBBBBBA",
+    "gap": 2,
+    "status": "beam_empty",
+    "method": "beam"
+  },
+  {
+    "record_index": 5767,
+    "bits": "BBABABABAABAABABABABABBBBBBB",
+    "gap": 0,
+    "status": "beam_empty",
+    "method": "beam"
+  },
+  {
+    "record_index": 5768,
+    "bits": "BBABBABBAABABBABABABAAAAAAAA",
+    "gap": 1,
+    "status": "found",
+    "method": "beam"
+  },
+  {
+    "record_index": 5769,
+    "bits": "BBABBABBAABABBABABABAAAAAAAB",
+    "gap": 2,
+    "status": "beam_empty",
+    "method": "beam"
+  },
+  {
+    "record_index": 5770,
+    "bits": "BBABBABBAABABBABABABAAAAAABA",
+    "gap": 2,
+    "status": "found",
+    "method": "beam"
+  },
+  {
+    "record_index": 5771,
+    "bits": "BBABBABBAABABBABABABAAAAAABB",
+    "gap": 0,
+    "status": "found",
+    "method": "beam"
+  },
+  {
+    "record_index": 5772,
+    "bits": "BBABBABBAABABBABABABAAAAABAA",
+    "gap": 2,
+    "status": "beam_empty",
+    "method": "beam"
+  },
+  {
+    "record_index": 5773,
+    "bits": "BBABBABBAABABBABABABAAAAABAB",
+    "gap": 0,
+    "status": "beam_empty",
+    "method": "beam"
+  },
+  {
+    "record_index": 5774,
+    "bits": "BBABBABBAABABBABABABAAAABAAA",
+    "gap": 2,
+    "status": "found",
+    "method": "beam"
+  },
+  {
+    "record_index": 5775,
+    "bits": "BBABBABBAABABBABABABAAAABAAB",
+    "gap": 0,
+    "status": "found",
+    "method": "beam"
+  },
+  {
+    "record_index": 5776,
+    "bits": "BBABBABBAABABBABABABAAAABABA",
+    "gap": 0,
+    "status": "beam_empty",
+    "method": "beam"
+  },
+  {
+    "record_index": 5778,
+    "bits": "BBABBABBAABABBABABABAAAABBAA",
+    "gap": 0,
+    "status": "beam_empty",
+    "method": "beam"
+  },
+  {
+    "record_index": 5779,
+    "bits": "BBABBABBAABABBABABABAAAABBAB",
+    "gap": 1,
+    "status": "found",
+    "method": "beam"
+  },
+  {
+    "record_index": 5780,
+    "bits": "BBABBABBAABABBABABABAAAABBBA",
+    "gap": 1,
+    "status": "found",
+    "method": "beam"
+  },
+  {
+    "record_index": 5781,
+    "bits": "BBABBABBAABABBABABABAAAABBBB",
+    "gap": 2,
+    "status": "found",
+    "method": "beam"
+  },
+  {
+    "record_index": 5782,
+    "bits": "BBABBABBAABABBABABABAAABAAAA",
+    "gap": 2,
+    "status": "found",
+    "method": "beam"
+  },
+  {
+    "record_index": 5783,
+    "bits": "BBABBABBAABABBABABABAAABAAAB",
+    "gap": 0,
+    "status": "found",
+    "method": "beam"
+  },
+  {
+    "record_index": 5784,
+    "bits": "BBABBABBAABABBABABABAAABAABA",
+    "gap": 0,
+    "status": "beam_empty",
+    "method": "beam"
+  },
+  {
+    "record_index": 5786,
+    "bits": "BBABBABBAABABBABABABAAABABAA",
+    "gap": 0,
+    "status": "beam_empty",
+    "method": "beam"
+  },
+  {
+    "record_index": 5788,
+    "bits": "BBABBABBAABABBABABABAAABABBA",
+    "gap": 1,
+    "status": "beam_empty",
+    "method": "beam"
+  },
+  {
+    "record_index": 5789,
+    "bits": "BBABBABBAABABBABABABAAABABBB",
+    "gap": 2,
+    "status": "found",
+    "method": "beam"
+  },
+  {
+    "record_index": 5790,
+    "bits": "BBABBABBAABABBABABABAAABBBAA",
+    "gap": 1,
+    "status": "found",
+    "method": "beam"
+  },
+  {
+    "record_index": 5791,
+    "bits": "BBABBABBAABABBABABABAAABBBAB",
+    "gap": 2,
+    "status": "found",
+    "method": "beam"
+  },
+  {
+    "record_index": 5792,
+    "bits": "BBABBABBAABABBABABABAAABBBBA",
+    "gap": 2,
+    "status": "found",
+    "method": "beam"
+  },
+  {
+    "record_index": 5793,
+    "bits": "BBABBABBAABABBABABABAAABBBBB",
+    "gap": 0,
+    "status": "found",
+    "method": "beam"
+  },
+  {
+    "record_index": 5722,
+    "bits": "BABABABABBBBBABAABBABAAAAAAA",
+    "gap": 1,
+    "status": "found",
+    "method": "beam"
+  },
+  {
+    "record_index": 5725,
+    "bits": "BABABABABBBBBABAABBABAAAAABB",
+    "gap": 0,
+    "status": "found",
+    "method": "beam"
+  },
+  {
+    "record_index": 5728,
+    "bits": "BABABABABBBBBABAABBABAABBBAA",
+    "gap": 1,
+    "status": "found",
+    "method": "inverse_beam"
+  },
+  {
+    "record_index": 5731,
+    "bits": "BABABABABBBBBABAABBABAABBBBB",
+    "gap": 0,
+    "status": "found",
+    "method": "beam"
+  },
+  {
+    "record_index": 5734,
+    "bits": "BBABABABAABAABABABABAAAAAAAA",
+    "gap": 2,
+    "status": "found",
+    "method": "beam"
+  },
+  {
+    "record_index": 5735,
+    "bits": "BBABABABAABAABABABABAAAAAAAB",
+    "gap": 0,
+    "status": "found",
+    "method": "beam"
+  },
+  {
+    "record_index": 5736,
+    "bits": "BBABABABAABAABABABABAAAAABAA",
+    "gap": 0,
+    "status": "found",
+    "method": "beam"
+  },
+  {
+    "record_index": 5740,
+    "bits": "BBABABABAABAABABABABAAAABAAA",
+    "gap": 0,
+    "status": "found",
+    "method": "inverse_beam"
+  },
+  {
+    "record_index": 5742,
+    "bits": "BBABABABAABAABABABABAAAABABA",
+    "gap": 1,
+    "status": "found",
+    "method": "beam"
+  },
+  {
+    "record_index": 5743,
+    "bits": "BBABABABAABAABABABABAAAABABB",
+    "gap": 2,
+    "status": "found",
+    "method": "beam"
+  },
+  {
+    "record_index": 5744,
+    "bits": "BBABABABAABAABABABABAAAABBAA",
+    "gap": 1,
+    "status": "found",
+    "method": "beam"
+  },
+  {
+    "record_index": 5745,
+    "bits": "BBABABABAABAABABABABAAAABBAB",
+    "gap": 2,
+    "status": "found",
+    "method": "beam"
+  },
+  {
+    "record_index": 5747,
+    "bits": "BBABABABAABAABABABABAAAABBBB",
+    "gap": 0,
+    "status": "found",
+    "method": "beam"
+  },
+  {
+    "record_index": 5748,
+    "bits": "BBABABABAABAABABABABABAAAAAA",
+    "gap": 0,
+    "status": "found",
+    "method": "beam"
+  },
+  {
+    "record_index": 5751,
+    "bits": "BBABABABAABAABABABABABAAAABB",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_beam"
+  },
+  {
+    "record_index": 5752,
+    "bits": "BBABABABAABAABABABABABAAABAA",
+    "gap": 1,
+    "status": "found",
+    "method": "inverse_beam"
+  },
+  {
+    "record_index": 5753,
+    "bits": "BBABABABAABAABABABABABAAABAB",
+    "gap": 2,
+    "status": "found",
+    "method": "beam"
+  },
+  {
+    "record_index": 5755,
+    "bits": "BBABABABAABAABABABABABAAABBB",
+    "gap": 0,
+    "status": "found",
+    "method": "beam"
+  },
+  {
+    "record_index": 5756,
+    "bits": "BBABABABAABAABABABABABBAAAAA",
+    "gap": 1,
+    "status": "found",
+    "method": "beam"
+  },
+  {
+    "record_index": 5760,
+    "bits": "BBABABABAABAABABABABABBBBAAA",
+    "gap": 0,
+    "status": "found",
+    "method": "beam"
+  },
+  {
+    "record_index": 5762,
+    "bits": "BBABABABAABAABABABABABBBBABA",
+    "gap": 1,
+    "status": "found",
+    "method": "beam"
+  },
+  {
+    "record_index": 5763,
+    "bits": "BBABABABAABAABABABABABBBBABB",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_beam"
+  },
+  {
+    "record_index": 5764,
+    "bits": "BBABABABAABAABABABABABBBBBAA",
+    "gap": 1,
+    "status": "found",
+    "method": "beam"
+  },
+  {
+    "record_index": 5765,
+    "bits": "BBABABABAABAABABABABABBBBBAB",
+    "gap": 2,
+    "status": "found",
+    "method": "beam"
+  },
+  {
+    "record_index": 5766,
+    "bits": "BBABABABAABAABABABABABBBBBBA",
+    "gap": 2,
+    "status": "found",
+    "method": "beam"
+  },
+  {
+    "record_index": 5767,
+    "bits": "BBABABABAABAABABABABABBBBBBB",
+    "gap": 0,
+    "status": "found",
+    "method": "beam"
+  },
+  {
+    "record_index": 5769,
+    "bits": "BBABBABBAABABBABABABAAAAAAAB",
+    "gap": 2,
+    "status": "found",
+    "method": "beam"
+  },
+  {
+    "record_index": 5772,
+    "bits": "BBABBABBAABABBABABABAAAAABAA",
+    "gap": 2,
+    "status": "found",
+    "method": "inverse_beam"
+  },
+  {
+    "record_index": 5773,
+    "bits": "BBABBABBAABABBABABABAAAAABAB",
+    "gap": 0,
+    "status": "found",
+    "method": "inverse_beam"
+  },
+  {
+    "record_index": 5776,
+    "bits": "BBABBABBAABABBABABABAAAABABA",
+    "gap": 0,
+    "status": "found",
+    "method": "beam"
+  },
+  {
+    "record_index": 5778,
+    "bits": "BBABBABBAABABBABABABAAAABBAA",
+    "gap": 0,
+    "status": "found",
+    "method": "inverse_beam"
+  },
+  {
+    "record_index": 5784,
+    "bits": "BBABBABBAABABBABABABAAABAABA",
+    "gap": 0,
+    "status": "found",
+    "method": "inverse_beam"
+  },
+  {
+    "record_index": 5786,
+    "bits": "BBABBABBAABABBABABABAAABABAA",
+    "gap": 0,
+    "status": "found",
+    "method": "inverse_beam"
+  },
+  {
+    "record_index": 5788,
+    "bits": "BBABBABBAABABBABABABAAABABBA",
+    "gap": 1,
+    "status": "found",
+    "method": "beam"
+  }
+]

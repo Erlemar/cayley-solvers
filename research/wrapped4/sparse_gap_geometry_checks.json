@@ -1,0 +1,25 @@
+{
+  "deficit_two": {
+    "deficit": 2,
+    "cyclic_core_types": 3,
+    "root_models": 3533,
+    "root_orbits": 942,
+    "orbits_by_size": {
+      "12": 67,
+      "13": 98,
+      "14": 107,
+      "15": 150,
+      "16": 161,
+      "17": 216,
+      "18": 56,
+      "19": 40,
+      "20": 25,
+      "21": 14,
+      "22": 6,
+      "23": 2
+    }
+  },
+  "matches_complete_independent_root_set": true,
+  "deficit_three_sample_orbits": 300,
+  "scope": "Complete d=2 comparison; sampled d=3 geometric identities, not full d=3 coverage."
+}

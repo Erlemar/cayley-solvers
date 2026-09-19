@@ -1,0 +1,211 @@
+{
+  "certificate": {
+    "source": "merge_extraction_c1_2_wide_trim.json",
+    "coefficient": "1/2",
+    "complete": true,
+    "verified_cases": 5794,
+    "verified_words": 2909,
+    "maximum_selected": 28,
+    "maximum_width": 30,
+    "frontier_size": 0,
+    "stages": [
+      {
+        "k": 3,
+        "cases": 24,
+        "verified_words": 11,
+        "next_frontier": 26
+      },
+      {
+        "k": 4,
+        "cases": 26,
+        "verified_words": 6,
+        "next_frontier": 40
+      },
+      {
+        "k": 5,
+        "cases": 40,
+        "verified_words": 4,
+        "next_frontier": 72
+      },
+      {
+        "k": 6,
+        "cases": 72,
+        "verified_words": 13,
+        "next_frontier": 118
+      },
+      {
+        "k": 7,
+        "cases": 118,
+        "verified_words": 18,
+        "next_frontier": 200
+      },
+      {
+        "k": 8,
+        "cases": 200,
+        "verified_words": 91,
+        "next_frontier": 218
+      },
+      {
+        "k": 9,
+        "cases": 218,
+        "verified_words": 62,
+        "next_frontier": 312
+      },
+      {
+        "k": 10,
+        "cases": 312,
+        "verified_words": 84,
+        "next_frontier": 456
+      },
+      {
+        "k": 11,
+        "cases": 456,
+        "verified_words": 123,
+        "next_frontier": 666
+      },
+      {
+        "k": 12,
+        "cases": 666,
+        "verified_words": 484,
+        "next_frontier": 364
+      },
+      {
+        "k": 13,
+        "cases": 364,
+        "verified_words": 152,
+        "next_frontier": 424
+      },
+      {
+        "k": 14,
+        "cases": 424,
+        "verified_words": 168,
+        "next_frontier": 512
+      },
+      {
+        "k": 15,
+        "cases": 512,
+        "verified_words": 201,
+        "next_frontier": 622
+      },
+      {
+        "k": 16,
+        "cases": 622,
+        "verified_words": 538,
+        "next_frontier": 168
+      },
+      {
+        "k": 17,
+        "cases": 168,
+        "verified_words": 63,
+        "next_frontier": 210
+      },
+      {
+        "k": 18,
+        "cases": 210,
+        "verified_words": 85,
+        "next_frontier": 250
+      },
+      {
+        "k": 19,
+        "cases": 250,
+        "verified_words": 63,
+        "next_frontier": 374
+      },
+      {
+        "k": 20,
+        "cases": 374,
+        "verified_words": 123,
+        "next_frontier": 502
+      },
+      {
+        "k": 21,
+        "cases": 502,
+        "verified_words": 492,
+        "next_frontier": 20
+      },
+      {
+        "k": 22,
+        "cases": 20,
+        "verified_words": 9,
+        "next_frontier": 22
+      },
+      {
+        "k": 23,
+        "cases": 22,
+        "verified_words": 10,
+        "next_frontier": 24
+      },
+      {
+        "k": 24,
+        "cases": 24,
+        "verified_words": 13,
+        "next_frontier": 22
+      },
+      {
+        "k": 25,
+        "cases": 22,
+        "verified_words": 8,
+        "next_frontier": 28
+      },
+      {
+        "k": 26,
+        "cases": 28,
+        "verified_words": 6,
+        "next_frontier": 44
+      },
+      {
+        "k": 27,
+        "cases": 44,
+        "verified_words": 6,
+        "next_frontier": 76
+      },
+      {
+        "k": 28,
+        "cases": 76,
+        "verified_words": 76,
+        "next_frontier": 0
+      }
+    ]
+  },
+  "all_small_merges": 8188,
+  "full_words_verified": 1240,
+  "sizes": "30..150;250;500;1000",
+  "last_samples": [
+    {
+      "n": 250,
+      "adjacent_length": 10649,
+      "four_cycle_length": 3669,
+      "first_inversions": 7652,
+      "last_inversions": 2893,
+      "first_cost": 2646,
+      "pivot_cost": 38,
+      "last_cost": 985,
+      "upper_bound": 6203,
+      "refined_upper_bound": 5428
+    },
+    {
+      "n": 500,
+      "adjacent_length": 41258,
+      "four_cycle_length": 14002,
+      "first_inversions": 30244,
+      "last_inversions": 10820,
+      "first_cost": 10288,
+      "pivot_cost": 68,
+      "last_cost": 3646,
+      "upper_bound": 22828,
+      "refined_upper_bound": 21262
+    },
+    {
+      "n": 1000,
+      "adjacent_length": 163029,
+      "four_cycle_length": 54807,
+      "first_inversions": 123310,
+      "last_inversions": 39260,
+      "first_cost": 41502,
+      "pivot_cost": 153,
+      "last_cost": 13152,
+      "upper_bound": 87328,
+      "refined_upper_bound": 84178
+    }
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "finite_base_count": 120,
+  "max_word_length_by_inversion": {
+    "0": 0,
+    "3": 7,
+    "4": 4,
+    "6": 6,
+    "7": 5,
+    "5": 5,
+    "9": 5,
+    "2": 6,
+    "8": 4,
+    "1": 5,
+    "10": 6
+  },
+  "exhaustive_construction_checks": [
+    {
+      "n": 5,
+      "permutations_checked": 120,
+      "max_constructed_length": 7,
+      "seconds": 0.00159420000272803
+    },
+    {
+      "n": 6,
+      "permutations_checked": 720,
+      "max_constructed_length": 17,
+      "seconds": 0.03567969999858178
+    },
+    {
+      "n": 7,
+      "permutations_checked": 5040,
+      "max_constructed_length": 20,
+      "seconds": 0.3142943999991985
+    },
+    {
+      "n": 8,
+      "permutations_checked": 40320,
+      "max_constructed_length": 24,
+      "seconds": 3.0022299000047497
+    }
+  ],
+  "scope": "Constructed lengths are upper bounds, not distances. Finite checks supplement the all-n proof."
+}

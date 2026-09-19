@@ -1,0 +1,185 @@
+{
+  "rotation_words_verified": 1521,
+  "range": "all 2<=a,b<=40",
+  "arithmetic_checked": "13<=n<=10000",
+  "known_diameter_provenance": {
+    "5..12": "independent full BFS in this task",
+    "13..14": "user supplied"
+  },
+  "rows": [
+    {
+      "n": 5,
+      "diameter": 4,
+      "proved_lower_bound": 3,
+      "candidate_exact_value": 3
+    },
+    {
+      "n": 6,
+      "diameter": 5,
+      "proved_lower_bound": 4,
+      "candidate_exact_value": 4
+    },
+    {
+      "n": 7,
+      "diameter": 6,
+      "proved_lower_bound": 5,
+      "candidate_exact_value": 5
+    },
+    {
+      "n": 8,
+      "diameter": 7,
+      "proved_lower_bound": 6,
+      "candidate_exact_value": 6
+    },
+    {
+      "n": 9,
+      "diameter": 8,
+      "proved_lower_bound": 8,
+      "candidate_exact_value": 8
+    },
+    {
+      "n": 10,
+      "diameter": 10,
+      "proved_lower_bound": 9,
+      "candidate_exact_value": 9
+    },
+    {
+      "n": 11,
+      "diameter": 11,
+      "proved_lower_bound": 11,
+      "candidate_exact_value": 11
+    },
+    {
+      "n": 12,
+      "diameter": 13,
+      "proved_lower_bound": 13,
+      "candidate_exact_value": 13
+    },
+    {
+      "n": 13,
+      "diameter": 15,
+      "proved_lower_bound": 15,
+      "candidate_exact_value": 15
+    },
+    {
+      "n": 14,
+      "diameter": 17,
+      "proved_lower_bound": 17,
+      "candidate_exact_value": 17
+    },
+    {
+      "n": 15,
+      "diameter": null,
+      "proved_lower_bound": 20,
+      "candidate_exact_value": 20
+    },
+    {
+      "n": 16,
+      "diameter": null,
+      "proved_lower_bound": 22,
+      "candidate_exact_value": 22
+    },
+    {
+      "n": 17,
+      "diameter": null,
+      "proved_lower_bound": 25,
+      "candidate_exact_value": 25
+    },
+    {
+      "n": 18,
+      "diameter": null,
+      "proved_lower_bound": 28,
+      "candidate_exact_value": 28
+    },
+    {
+      "n": 19,
+      "diameter": null,
+      "proved_lower_bound": 31,
+      "candidate_exact_value": 31
+    },
+    {
+      "n": 20,
+      "diameter": null,
+      "proved_lower_bound": 34,
+      "candidate_exact_value": 34
+    },
+    {
+      "n": 21,
+      "diameter": null,
+      "proved_lower_bound": 38,
+      "candidate_exact_value": 38
+    },
+    {
+      "n": 22,
+      "diameter": null,
+      "proved_lower_bound": 41,
+      "candidate_exact_value": 41
+    },
+    {
+      "n": 23,
+      "diameter": null,
+      "proved_lower_bound": 45,
+      "candidate_exact_value": 45
+    },
+    {
+      "n": 24,
+      "diameter": null,
+      "proved_lower_bound": 49,
+      "candidate_exact_value": 49
+    },
+    {
+      "n": 25,
+      "diameter": null,
+      "proved_lower_bound": 53,
+      "candidate_exact_value": 53
+    },
+    {
+      "n": 26,
+      "diameter": null,
+      "proved_lower_bound": 57,
+      "candidate_exact_value": 57
+    },
+    {
+      "n": 27,
+      "diameter": null,
+      "proved_lower_bound": 62,
+      "candidate_exact_value": 62
+    },
+    {
+      "n": 28,
+      "diameter": null,
+      "proved_lower_bound": 66,
+      "candidate_exact_value": 66
+    },
+    {
+      "n": 29,
+      "diameter": null,
+      "proved_lower_bound": 71,
+      "candidate_exact_value": 71
+    },
+    {
+      "n": 30,
+      "diameter": null,
+      "proved_lower_bound": 76,
+      "candidate_exact_value": 76
+    },
+    {
+      "n": 31,
+      "diameter": null,
+      "proved_lower_bound": 81,
+      "candidate_exact_value": 81
+    },
+    {
+      "n": 32,
+      "diameter": null,
+      "proved_lower_bound": 86,
+      "candidate_exact_value": 86
+    },
+    {
+      "n": 33,
+      "diameter": null,
+      "proved_lower_bound": 92,
+      "candidate_exact_value": 92
+    }
+  ]
+}

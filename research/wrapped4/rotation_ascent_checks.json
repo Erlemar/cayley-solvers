@@ -1,0 +1,35 @@
+{
+  "complete_bfs_states_checked": 46232,
+  "exact_increments_checked": 278350,
+  "larger_paths_checked": 50,
+  "larger_sizes": [
+    9,
+    12,
+    20,
+    40,
+    100
+  ],
+  "next_layers": [
+    {
+      "n": 4,
+      "next_layer_size": 8
+    },
+    {
+      "n": 5,
+      "next_layer_size": 20
+    },
+    {
+      "n": 6,
+      "next_layer_size": 17
+    },
+    {
+      "n": 7,
+      "next_layer_size": 42
+    },
+    {
+      "n": 8,
+      "next_layer_size": 30
+    }
+  ],
+  "scope": "Finite independent checks of the all-n proof in ROTATION_ASCENT_LEMMA.md."
+}

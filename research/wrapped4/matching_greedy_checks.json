@@ -1,0 +1,770 @@
+[
+  {
+    "n": 12,
+    "mode": 0,
+    "residual_adjacent_length": 3,
+    "descents": 7
+  },
+  {
+    "n": 12,
+    "mode": 1,
+    "residual_adjacent_length": 3,
+    "descents": 7
+  },
+  {
+    "n": 12,
+    "mode": 2,
+    "residual_adjacent_length": 6,
+    "descents": 6
+  },
+  {
+    "n": 12,
+    "mode": 3,
+    "residual_adjacent_length": 6,
+    "descents": 6
+  },
+  {
+    "n": 12,
+    "mode": 4,
+    "residual_adjacent_length": 6,
+    "descents": 6
+  },
+  {
+    "n": 12,
+    "mode": 5,
+    "residual_adjacent_length": 6,
+    "descents": 6
+  },
+  {
+    "n": 12,
+    "mode": 6,
+    "residual_adjacent_length": 6,
+    "descents": 6
+  },
+  {
+    "n": 12,
+    "mode": 7,
+    "residual_adjacent_length": 6,
+    "descents": 6
+  },
+  {
+    "n": 12,
+    "mode": 8,
+    "residual_adjacent_length": 6,
+    "descents": 6
+  },
+  {
+    "n": 12,
+    "mode": 9,
+    "residual_adjacent_length": 6,
+    "descents": 6
+  },
+  {
+    "n": 12,
+    "mode": 10,
+    "residual_adjacent_length": 3,
+    "descents": 7
+  },
+  {
+    "n": 12,
+    "mode": 11,
+    "residual_adjacent_length": 3,
+    "descents": 7
+  },
+  {
+    "n": 12,
+    "mode": 12,
+    "residual_adjacent_length": 6,
+    "descents": 6
+  },
+  {
+    "n": 12,
+    "mode": 13,
+    "residual_adjacent_length": 15,
+    "descents": 3
+  },
+  {
+    "n": 12,
+    "mode": 14,
+    "residual_adjacent_length": 6,
+    "descents": 6
+  },
+  {
+    "n": 12,
+    "mode": 15,
+    "residual_adjacent_length": 6,
+    "descents": 6
+  },
+  {
+    "n": 24,
+    "mode": 0,
+    "residual_adjacent_length": 24,
+    "descents": 34
+  },
+  {
+    "n": 24,
+    "mode": 1,
+    "residual_adjacent_length": 24,
+    "descents": 34
+  },
+  {
+    "n": 24,
+    "mode": 2,
+    "residual_adjacent_length": 24,
+    "descents": 34
+  },
+  {
+    "n": 24,
+    "mode": 3,
+    "residual_adjacent_length": 24,
+    "descents": 34
+  },
+  {
+    "n": 24,
+    "mode": 4,
+    "residual_adjacent_length": 18,
+    "descents": 36
+  },
+  {
+    "n": 24,
+    "mode": 5,
+    "residual_adjacent_length": 18,
+    "descents": 36
+  },
+  {
+    "n": 24,
+    "mode": 6,
+    "residual_adjacent_length": 18,
+    "descents": 36
+  },
+  {
+    "n": 24,
+    "mode": 7,
+    "residual_adjacent_length": 18,
+    "descents": 36
+  },
+  {
+    "n": 24,
+    "mode": 8,
+    "residual_adjacent_length": 24,
+    "descents": 34
+  },
+  {
+    "n": 24,
+    "mode": 9,
+    "residual_adjacent_length": 24,
+    "descents": 34
+  },
+  {
+    "n": 24,
+    "mode": 10,
+    "residual_adjacent_length": 24,
+    "descents": 34
+  },
+  {
+    "n": 24,
+    "mode": 11,
+    "residual_adjacent_length": 24,
+    "descents": 34
+  },
+  {
+    "n": 24,
+    "mode": 12,
+    "residual_adjacent_length": 18,
+    "descents": 36
+  },
+  {
+    "n": 24,
+    "mode": 13,
+    "residual_adjacent_length": 27,
+    "descents": 33
+  },
+  {
+    "n": 24,
+    "mode": 14,
+    "residual_adjacent_length": 24,
+    "descents": 34
+  },
+  {
+    "n": 24,
+    "mode": 15,
+    "residual_adjacent_length": 18,
+    "descents": 36
+  },
+  {
+    "n": 36,
+    "mode": 0,
+    "residual_adjacent_length": 36,
+    "descents": 88
+  },
+  {
+    "n": 36,
+    "mode": 1,
+    "residual_adjacent_length": 36,
+    "descents": 88
+  },
+  {
+    "n": 36,
+    "mode": 2,
+    "residual_adjacent_length": 36,
+    "descents": 88
+  },
+  {
+    "n": 36,
+    "mode": 3,
+    "residual_adjacent_length": 36,
+    "descents": 88
+  },
+  {
+    "n": 36,
+    "mode": 4,
+    "residual_adjacent_length": 30,
+    "descents": 90
+  },
+  {
+    "n": 36,
+    "mode": 5,
+    "residual_adjacent_length": 30,
+    "descents": 90
+  },
+  {
+    "n": 36,
+    "mode": 6,
+    "residual_adjacent_length": 30,
+    "descents": 90
+  },
+  {
+    "n": 36,
+    "mode": 7,
+    "residual_adjacent_length": 30,
+    "descents": 90
+  },
+  {
+    "n": 36,
+    "mode": 8,
+    "residual_adjacent_length": 36,
+    "descents": 88
+  },
+  {
+    "n": 36,
+    "mode": 9,
+    "residual_adjacent_length": 36,
+    "descents": 88
+  },
+  {
+    "n": 36,
+    "mode": 10,
+    "residual_adjacent_length": 36,
+    "descents": 88
+  },
+  {
+    "n": 36,
+    "mode": 11,
+    "residual_adjacent_length": 36,
+    "descents": 88
+  },
+  {
+    "n": 36,
+    "mode": 12,
+    "residual_adjacent_length": 30,
+    "descents": 90
+  },
+  {
+    "n": 36,
+    "mode": 13,
+    "residual_adjacent_length": 39,
+    "descents": 87
+  },
+  {
+    "n": 36,
+    "mode": 14,
+    "residual_adjacent_length": 36,
+    "descents": 88
+  },
+  {
+    "n": 36,
+    "mode": 15,
+    "residual_adjacent_length": 30,
+    "descents": 90
+  },
+  {
+    "n": 48,
+    "mode": 0,
+    "residual_adjacent_length": 48,
+    "descents": 166
+  },
+  {
+    "n": 48,
+    "mode": 1,
+    "residual_adjacent_length": 48,
+    "descents": 166
+  },
+  {
+    "n": 48,
+    "mode": 2,
+    "residual_adjacent_length": 48,
+    "descents": 166
+  },
+  {
+    "n": 48,
+    "mode": 3,
+    "residual_adjacent_length": 48,
+    "descents": 166
+  },
+  {
+    "n": 48,
+    "mode": 4,
+    "residual_adjacent_length": 42,
+    "descents": 168
+  },
+  {
+    "n": 48,
+    "mode": 5,
+    "residual_adjacent_length": 42,
+    "descents": 168
+  },
+  {
+    "n": 48,
+    "mode": 6,
+    "residual_adjacent_length": 42,
+    "descents": 168
+  },
+  {
+    "n": 48,
+    "mode": 7,
+    "residual_adjacent_length": 42,
+    "descents": 168
+  },
+  {
+    "n": 48,
+    "mode": 8,
+    "residual_adjacent_length": 48,
+    "descents": 166
+  },
+  {
+    "n": 48,
+    "mode": 9,
+    "residual_adjacent_length": 48,
+    "descents": 166
+  },
+  {
+    "n": 48,
+    "mode": 10,
+    "residual_adjacent_length": 48,
+    "descents": 166
+  },
+  {
+    "n": 48,
+    "mode": 11,
+    "residual_adjacent_length": 48,
+    "descents": 166
+  },
+  {
+    "n": 48,
+    "mode": 12,
+    "residual_adjacent_length": 42,
+    "descents": 168
+  },
+  {
+    "n": 48,
+    "mode": 13,
+    "residual_adjacent_length": 51,
+    "descents": 165
+  },
+  {
+    "n": 48,
+    "mode": 14,
+    "residual_adjacent_length": 48,
+    "descents": 166
+  },
+  {
+    "n": 48,
+    "mode": 15,
+    "residual_adjacent_length": 42,
+    "descents": 168
+  },
+  {
+    "n": 60,
+    "mode": 0,
+    "residual_adjacent_length": 60,
+    "descents": 268
+  },
+  {
+    "n": 60,
+    "mode": 1,
+    "residual_adjacent_length": 60,
+    "descents": 268
+  },
+  {
+    "n": 60,
+    "mode": 2,
+    "residual_adjacent_length": 60,
+    "descents": 268
+  },
+  {
+    "n": 60,
+    "mode": 3,
+    "residual_adjacent_length": 60,
+    "descents": 268
+  },
+  {
+    "n": 60,
+    "mode": 4,
+    "residual_adjacent_length": 54,
+    "descents": 270
+  },
+  {
+    "n": 60,
+    "mode": 5,
+    "residual_adjacent_length": 54,
+    "descents": 270
+  },
+  {
+    "n": 60,
+    "mode": 6,
+    "residual_adjacent_length": 54,
+    "descents": 270
+  },
+  {
+    "n": 60,
+    "mode": 7,
+    "residual_adjacent_length": 54,
+    "descents": 270
+  },
+  {
+    "n": 60,
+    "mode": 8,
+    "residual_adjacent_length": 60,
+    "descents": 268
+  },
+  {
+    "n": 60,
+    "mode": 9,
+    "residual_adjacent_length": 60,
+    "descents": 268
+  },
+  {
+    "n": 60,
+    "mode": 10,
+    "residual_adjacent_length": 60,
+    "descents": 268
+  },
+  {
+    "n": 60,
+    "mode": 11,
+    "residual_adjacent_length": 60,
+    "descents": 268
+  },
+  {
+    "n": 60,
+    "mode": 12,
+    "residual_adjacent_length": 54,
+    "descents": 270
+  },
+  {
+    "n": 60,
+    "mode": 13,
+    "residual_adjacent_length": 63,
+    "descents": 267
+  },
+  {
+    "n": 60,
+    "mode": 14,
+    "residual_adjacent_length": 60,
+    "descents": 268
+  },
+  {
+    "n": 60,
+    "mode": 15,
+    "residual_adjacent_length": 54,
+    "descents": 270
+  },
+  {
+    "n": 72,
+    "mode": 0,
+    "residual_adjacent_length": 72,
+    "descents": 394
+  },
+  {
+    "n": 72,
+    "mode": 1,
+    "residual_adjacent_length": 72,
+    "descents": 394
+  },
+  {
+    "n": 72,
+    "mode": 2,
+    "residual_adjacent_length": 72,
+    "descents": 394
+  },
+  {
+    "n": 72,
+    "mode": 3,
+    "residual_adjacent_length": 72,
+    "descents": 394
+  },
+  {
+    "n": 72,
+    "mode": 4,
+    "residual_adjacent_length": 66,
+    "descents": 396
+  },
+  {
+    "n": 72,
+    "mode": 5,
+    "residual_adjacent_length": 66,
+    "descents": 396
+  },
+  {
+    "n": 72,
+    "mode": 6,
+    "residual_adjacent_length": 66,
+    "descents": 396
+  },
+  {
+    "n": 72,
+    "mode": 7,
+    "residual_adjacent_length": 66,
+    "descents": 396
+  },
+  {
+    "n": 72,
+    "mode": 8,
+    "residual_adjacent_length": 72,
+    "descents": 394
+  },
+  {
+    "n": 72,
+    "mode": 9,
+    "residual_adjacent_length": 72,
+    "descents": 394
+  },
+  {
+    "n": 72,
+    "mode": 10,
+    "residual_adjacent_length": 72,
+    "descents": 394
+  },
+  {
+    "n": 72,
+    "mode": 11,
+    "residual_adjacent_length": 72,
+    "descents": 394
+  },
+  {
+    "n": 72,
+    "mode": 12,
+    "residual_adjacent_length": 66,
+    "descents": 396
+  },
+  {
+    "n": 72,
+    "mode": 13,
+    "residual_adjacent_length": 75,
+    "descents": 393
+  },
+  {
+    "n": 72,
+    "mode": 14,
+    "residual_adjacent_length": 72,
+    "descents": 394
+  },
+  {
+    "n": 72,
+    "mode": 15,
+    "residual_adjacent_length": 66,
+    "descents": 396
+  },
+  {
+    "n": 96,
+    "mode": 0,
+    "residual_adjacent_length": 96,
+    "descents": 718
+  },
+  {
+    "n": 96,
+    "mode": 1,
+    "residual_adjacent_length": 96,
+    "descents": 718
+  },
+  {
+    "n": 96,
+    "mode": 2,
+    "residual_adjacent_length": 96,
+    "descents": 718
+  },
+  {
+    "n": 96,
+    "mode": 3,
+    "residual_adjacent_length": 96,
+    "descents": 718
+  },
+  {
+    "n": 96,
+    "mode": 4,
+    "residual_adjacent_length": 90,
+    "descents": 720
+  },
+  {
+    "n": 96,
+    "mode": 5,
+    "residual_adjacent_length": 90,
+    "descents": 720
+  },
+  {
+    "n": 96,
+    "mode": 6,
+    "residual_adjacent_length": 90,
+    "descents": 720
+  },
+  {
+    "n": 96,
+    "mode": 7,
+    "residual_adjacent_length": 90,
+    "descents": 720
+  },
+  {
+    "n": 96,
+    "mode": 8,
+    "residual_adjacent_length": 96,
+    "descents": 718
+  },
+  {
+    "n": 96,
+    "mode": 9,
+    "residual_adjacent_length": 96,
+    "descents": 718
+  },
+  {
+    "n": 96,
+    "mode": 10,
+    "residual_adjacent_length": 96,
+    "descents": 718
+  },
+  {
+    "n": 96,
+    "mode": 11,
+    "residual_adjacent_length": 96,
+    "descents": 718
+  },
+  {
+    "n": 96,
+    "mode": 12,
+    "residual_adjacent_length": 90,
+    "descents": 720
+  },
+  {
+    "n": 96,
+    "mode": 13,
+    "residual_adjacent_length": 99,
+    "descents": 717
+  },
+  {
+    "n": 96,
+    "mode": 14,
+    "residual_adjacent_length": 96,
+    "descents": 718
+  },
+  {
+    "n": 96,
+    "mode": 15,
+    "residual_adjacent_length": 90,
+    "descents": 720
+  },
+  {
+    "n": 120,
+    "mode": 0,
+    "residual_adjacent_length": 120,
+    "descents": 1138
+  },
+  {
+    "n": 120,
+    "mode": 1,
+    "residual_adjacent_length": 120,
+    "descents": 1138
+  },
+  {
+    "n": 120,
+    "mode": 2,
+    "residual_adjacent_length": 120,
+    "descents": 1138
+  },
+  {
+    "n": 120,
+    "mode": 3,
+    "residual_adjacent_length": 120,
+    "descents": 1138
+  },
+  {
+    "n": 120,
+    "mode": 4,
+    "residual_adjacent_length": 114,
+    "descents": 1140
+  },
+  {
+    "n": 120,
+    "mode": 5,
+    "residual_adjacent_length": 114,
+    "descents": 1140
+  },
+  {
+    "n": 120,
+    "mode": 6,
+    "residual_adjacent_length": 114,
+    "descents": 1140
+  },
+  {
+    "n": 120,
+    "mode": 7,
+    "residual_adjacent_length": 114,
+    "descents": 1140
+  },
+  {
+    "n": 120,
+    "mode": 8,
+    "residual_adjacent_length": 120,
+    "descents": 1138
+  },
+  {
+    "n": 120,
+    "mode": 9,
+    "residual_adjacent_length": 120,
+    "descents": 1138
+  },
+  {
+    "n": 120,
+    "mode": 10,
+    "residual_adjacent_length": 120,
+    "descents": 1138
+  },
+  {
+    "n": 120,
+    "mode": 11,
+    "residual_adjacent_length": 120,
+    "descents": 1138
+  },
+  {
+    "n": 120,
+    "mode": 12,
+    "residual_adjacent_length": 114,
+    "descents": 1140
+  },
+  {
+    "n": 120,
+    "mode": 13,
+    "residual_adjacent_length": 123,
+    "descents": 1137
+  },
+  {
+    "n": 120,
+    "mode": 14,
+    "residual_adjacent_length": 120,
+    "descents": 1138
+  },
+  {
+    "n": 120,
+    "mode": 15,
+    "residual_adjacent_length": 114,
+    "descents": 1140
+  }
+]

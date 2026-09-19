@@ -1,0 +1,1126 @@
+[
+  {
+    "n": 12,
+    "permutation": [
+      3,
+      7,
+      8,
+      0,
+      10,
+      11,
+      9,
+      1,
+      2,
+      6,
+      4,
+      5
+    ],
+    "budget": 12,
+    "covers": [
+      {
+        "required": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "status": "inconclusive",
+        "attempts": []
+      },
+      {
+        "required": [
+          0,
+          1,
+          2
+        ],
+        "status": "inconclusive",
+        "attempts": [
+          {
+            "status": "exhausted_for_this_anchor_assignment",
+            "nodes": 1319,
+            "seconds": 0.015804599999682978
+          },
+          {
+            "status": "exhausted_for_this_anchor_assignment",
+            "nodes": 2611,
+            "seconds": 0.0027071000076830387
+          },
+          {
+            "status": "exhausted_for_this_anchor_assignment",
+            "nodes": 6091,
+            "seconds": 0.005779600003734231
+          },
+          {
+            "status": "exhausted_for_this_anchor_assignment",
+            "nodes": 3690,
+            "seconds": 0.0039443999994546175
+          },
+          {
+            "status": "exhausted_for_this_anchor_assignment",
+            "nodes": 2653,
+            "seconds": 0.002836700004991144
+          },
+          {
+            "status": "exhausted_for_this_anchor_assignment",
+            "nodes": 1490,
+            "seconds": 0.0020395000028656796
+          },
+          {
+            "status": "exhausted_for_this_anchor_assignment",
+            "nodes": 3734,
+            "seconds": 0.003973999992012978
+          },
+          {
+            "status": "exhausted_for_this_anchor_assignment",
+            "nodes": 533,
+            "seconds": 0.0007768000068608671
+          },
+          {
+            "status": "exhausted_for_this_anchor_assignment",
+            "nodes": 1319,
+            "seconds": 0.0014076999941607937
+          },
+          {
+            "status": "exhausted_for_this_anchor_assignment",
+            "nodes": 2611,
+            "seconds": 0.0027542000025277957
+          },
+          {
+            "status": "exhausted_for_this_anchor_assignment",
+            "nodes": 6091,
+            "seconds": 0.006277400010731071
+          },
+          {
+            "status": "exhausted_for_this_anchor_assignment",
+            "nodes": 3690,
+            "seconds": 0.0040428000065730885
+          },
+          {
+            "status": "exhausted_for_this_anchor_assignment",
+            "nodes": 2653,
+            "seconds": 0.002659899997524917
+          },
+          {
+            "status": "exhausted_for_this_anchor_assignment",
+            "nodes": 1490,
+            "seconds": 0.001896000001579523
+          },
+          {
+            "status": "exhausted_for_this_anchor_assignment",
+            "nodes": 3734,
+            "seconds": 0.0038186000019777566
+          },
+          {
+            "status": "exhausted_for_this_anchor_assignment",
+            "nodes": 533,
+            "seconds": 0.0007485000096494332
+          },
+          {
+            "status": "exhausted_for_this_anchor_assignment",
+            "nodes": 1319,
+            "seconds": 0.0013480000052368268
+          },
+          {
+            "status": "exhausted_for_this_anchor_assignment",
+            "nodes": 2611,
+            "seconds": 0.0026916999922832474
+          },
+          {
+            "status": "exhausted_for_this_anchor_assignment",
+            "nodes": 6091,
+            "seconds": 0.005560299992794171
+          },
+          {
+            "status": "exhausted_for_this_anchor_assignment",
+            "nodes": 3690,
+            "seconds": 0.0035838000039802864
+          },
+          {
+            "status": "exhausted_for_this_anchor_assignment",
+            "nodes": 2653,
+            "seconds": 0.0026840000064112246
+          },
+          {
+            "status": "exhausted_for_this_anchor_assignment",
+            "nodes": 1490,
+            "seconds": 0.001749200004269369
+          },
+          {
+            "status": "exhausted_for_this_anchor_assignment",
+            "nodes": 3734,
+            "seconds": 0.0036099999997531995
+          },
+          {
+            "status": "exhausted_for_this_anchor_assignment",
+            "nodes": 533,
+            "seconds": 0.0007025999948382378
+          }
+        ]
+      },
+      {
+        "required": [
+          0,
+          1,
+          3
+        ],
+        "status": "inconclusive",
+        "attempts": [
+          {
+            "status": "exhausted_for_this_anchor_assignment",
+            "nodes": 1406,
+            "seconds": 0.0012564999924506992
+          },
+          {
+            "status": "exhausted_for_this_anchor_assignment",
+            "nodes": 2226,
+            "seconds": 0.0021902000007685274
+          },
+          {
+            "status": "exhausted_for_this_anchor_assignment",
+            "nodes": 4381,
+            "seconds": 0.003862700003082864
+          },
+          {
+            "status": "exhausted_for_this_anchor_assignment",
+            "nodes": 2818,
+            "seconds": 0.002713699999731034
+          },
+          {
+            "status": "exhausted_for_this_anchor_assignment",
+            "nodes": 4644,
+            "seconds": 0.004032700002426282
+          },
+          {
+            "status": "exhausted_for_this_anchor_assignment",
+            "nodes": 2885,
+            "seconds": 0.0026603000005707145
+          },
+          {
+            "status": "exhausted_for_this_anchor_assignment",
+            "nodes": 7564,
+            "seconds": 0.0064178000029642135
+          },
+          {
+            "status": "exhausted_for_this_anchor_assignment",
+            "nodes": 2105,
+            "seconds": 0.0022147999989101663
+          },
+          {
+            "status": "exhausted_for_this_anchor_assignment",
+            "nodes": 1406,
+            "seconds": 0.0012436999968485907
+          },
+          {
+            "status": "exhausted_for_this_anchor_assignment",
+            "nodes": 2226,
+            "seconds": 0.0021007000032113865
+          },
+          {
+            "status": "exhausted_for_this_anchor_assignment",
+            "nodes": 4381,
+            "seconds": 0.003628300008131191
+          },
+          {
+            "status": "exhausted_for_this_anchor_assignment",
+            "nodes": 2818,
+            "seconds": 0.0025286000018240884
+          },
+          {
+            "status": "exhausted_for_this_anchor_assignment",
+            "nodes": 4644,
+            "seconds": 0.003974999999627471
+          },
+          {
+            "status": "exhausted_for_this_anchor_assignment",
+            "nodes": 2885,
+            "seconds": 0.002703499994822778
+          },
+          {
+            "status": "exhausted_for_this_anchor_assignment",
+            "nodes": 7564,
+            "seconds": 0.006844400006229989
+          },
+          {
+            "status": "exhausted_for_this_anchor_assignment",
+            "nodes": 2105,
+            "seconds": 0.0020656999986385927
+          },
+          {
+            "status": "exhausted_for_this_anchor_assignment",
+            "nodes": 1406,
+            "seconds": 0.0012366000009933487
+          },
+          {
+            "status": "exhausted_for_this_anchor_assignment",
+            "nodes": 2226,
+            "seconds": 0.0021523000032175332
+          },
+          {
+            "status": "exhausted_for_this_anchor_assignment",
+            "nodes": 4381,
+            "seconds": 0.003889500003424473
+          },
+          {
+            "status": "exhausted_for_this_anchor_assignment",
+            "nodes": 2818,
+            "seconds": 0.0027575000131037086
+          },
+          {
+            "status": "exhausted_for_this_anchor_assignment",
+            "nodes": 4644,
+            "seconds": 0.004218499991111457
+          },
+          {
+            "status": "exhausted_for_this_anchor_assignment",
+            "nodes": 2885,
+            "seconds": 0.002930000002379529
+          },
+          {
+            "status": "exhausted_for_this_anchor_assignment",
+            "nodes": 7564,
+            "seconds": 0.0072721000033197924
+          },
+          {
+            "status": "exhausted_for_this_anchor_assignment",
+            "nodes": 2105,
+            "seconds": 0.0021714000031352043
+          }
+        ]
+      },
+      {
+        "required": [
+          0,
+          2,
+          3
+        ],
+        "status": "inconclusive",
+        "attempts": [
+          {
+            "status": "exhausted_for_this_anchor_assignment",
+            "nodes": 1188,
+            "seconds": 0.001123499998357147
+          },
+          {
+            "status": "exhausted_for_this_anchor_assignment",
+            "nodes": 2480,
+            "seconds": 0.0023185999889392406
+          },
+          {
+            "status": "exhausted_for_this_anchor_assignment",
+            "nodes": 2562,
+            "seconds": 0.002569499993114732
+          },
+          {
+            "status": "exhausted_for_this_anchor_assignment",
+            "nodes": 1414,
+            "seconds": 0.0016058000037446618
+          },
+          {
+            "status": "exhausted_for_this_anchor_assignment",
+            "nodes": 5940,
+            "seconds": 0.005476599995745346
+          },
+          {
+            "status": "exhausted_for_this_anchor_assignment",
+            "nodes": 3751,
+            "seconds": 0.0036373999901115894
+          },
+          {
+            "status": "exhausted_for_this_anchor_assignment",
+            "nodes": 3483,
+            "seconds": 0.003514500000164844
+          },
+          {
+            "status": "exhausted_for_this_anchor_assignment",
+            "nodes": 489,
+            "seconds": 0.0006212999869603664
+          },
+          {
+            "status": "exhausted_for_this_anchor_assignment",
+            "nodes": 1188,
+            "seconds": 0.001123499998357147
+          },
+          {
+            "status": "exhausted_for_this_anchor_assignment",
+            "nodes": 2480,
+            "seconds": 0.002345400003832765
+          },
+          {
+            "status": "exhausted_for_this_anchor_assignment",
+            "nodes": 2562,
+            "seconds": 0.0024762999964877963
+          },
+          {
+            "status": "exhausted_for_this_anchor_assignment",
+            "nodes": 1414,
+            "seconds": 0.0015840999985812232
+          },
+          {
+            "status": "exhausted_for_this_anchor_assignment",
+            "nodes": 5940,
+            "seconds": 0.005634100001771003
+          },
+          {
+            "status": "exhausted_for_this_anchor_assignment",
+            "nodes": 3751,
+            "seconds": 0.0036094000097364187
+          },
+          {
+            "status": "exhausted_for_this_anchor_assignment",
+            "nodes": 3483,
+            "seconds": 0.0034457000001566485
+          },
+          {
+            "status": "exhausted_for_this_anchor_assignment",
+            "nodes": 489,
+            "seconds": 0.0006216999900061637
+          },
+          {
+            "status": "exhausted_for_this_anchor_assignment",
+            "nodes": 1188,
+            "seconds": 0.00104010000359267
+          },
+          {
+            "status": "exhausted_for_this_anchor_assignment",
+            "nodes": 2480,
+            "seconds": 0.002215899992734194
+          },
+          {
+            "status": "exhausted_for_this_anchor_assignment",
+            "nodes": 2562,
+            "seconds": 0.0023015000042505562
+          },
+          {
+            "status": "exhausted_for_this_anchor_assignment",
+            "nodes": 1414,
+            "seconds": 0.0015217000036500394
+          },
+          {
+            "status": "exhausted_for_this_anchor_assignment",
+            "nodes": 5940,
+            "seconds": 0.005396699998527765
+          },
+          {
+            "status": "exhausted_for_this_anchor_assignment",
+            "nodes": 3751,
+            "seconds": 0.003815999996731989
+          },
+          {
+            "status": "exhausted_for_this_anchor_assignment",
+            "nodes": 3483,
+            "seconds": 0.0034620999940671027
+          },
+          {
+            "status": "exhausted_for_this_anchor_assignment",
+            "nodes": 489,
+            "seconds": 0.0006499000010080636
+          }
+        ]
+      },
+      {
+        "required": [
+          1,
+          2,
+          3
+        ],
+        "status": "inconclusive",
+        "attempts": [
+          {
+            "status": "exhausted_for_this_anchor_assignment",
+            "nodes": 1323,
+            "seconds": 0.0013925999955972657
+          },
+          {
+            "status": "exhausted_for_this_anchor_assignment",
+            "nodes": 4232,
+            "seconds": 0.003870799992000684
+          },
+          {
+            "status": "exhausted_for_this_anchor_assignment",
+            "nodes": 2181,
+            "seconds": 0.0023055000056046993
+          },
+          {
+            "status": "exhausted_for_this_anchor_assignment",
+            "nodes": 2830,
+            "seconds": 0.0027676000026986003
+          },
+          {
+            "status": "exhausted_for_this_anchor_assignment",
+            "nodes": 4474,
+            "seconds": 0.004007199997431599
+          },
+          {
+            "status": "exhausted_for_this_anchor_assignment",
+            "nodes": 7561,
+            "seconds": 0.007108999998308718
+          },
+          {
+            "status": "exhausted_for_this_anchor_assignment",
+            "nodes": 2787,
+            "seconds": 0.0028684999997494742
+          },
+          {
+            "status": "exhausted_for_this_anchor_assignment",
+            "nodes": 1982,
+            "seconds": 0.0021280000073602423
+          },
+          {
+            "status": "exhausted_for_this_anchor_assignment",
+            "nodes": 1323,
+            "seconds": 0.0012953999976161867
+          },
+          {
+            "status": "exhausted_for_this_anchor_assignment",
+            "nodes": 4232,
+            "seconds": 0.004016200007754378
+          },
+          {
+            "status": "exhausted_for_this_anchor_assignment",
+            "nodes": 2181,
+            "seconds": 0.0023390999995172024
+          },
+          {
+            "status": "exhausted_for_this_anchor_assignment",
+            "nodes": 2830,
+            "seconds": 0.0027666999958455563
+          },
+          {
+            "status": "exhausted_for_this_anchor_assignment",
+            "nodes": 4474,
+            "seconds": 0.00399219999962952
+          },
+          {
+            "status": "exhausted_for_this_anchor_assignment",
+            "nodes": 7561,
+            "seconds": 0.00703100000100676
+          },
+          {
+            "status": "exhausted_for_this_anchor_assignment",
+            "nodes": 2787,
+            "seconds": 0.002784099997370504
+          },
+          {
+            "status": "exhausted_for_this_anchor_assignment",
+            "nodes": 1982,
+            "seconds": 0.0019415999995544553
+          },
+          {
+            "status": "exhausted_for_this_anchor_assignment",
+            "nodes": 1323,
+            "seconds": 0.001175800003693439
+          },
+          {
+            "status": "exhausted_for_this_anchor_assignment",
+            "nodes": 4232,
+            "seconds": 0.0035715999983949587
+          },
+          {
+            "status": "exhausted_for_this_anchor_assignment",
+            "nodes": 2181,
+            "seconds": 0.0024527000059606507
+          },
+          {
+            "status": "exhausted_for_this_anchor_assignment",
+            "nodes": 2830,
+            "seconds": 0.002885399997467175
+          },
+          {
+            "status": "exhausted_for_this_anchor_assignment",
+            "nodes": 4474,
+            "seconds": 0.004297999999835156
+          },
+          {
+            "status": "exhausted_for_this_anchor_assignment",
+            "nodes": 7561,
+            "seconds": 0.00708870000380557
+          },
+          {
+            "status": "exhausted_for_this_anchor_assignment",
+            "nodes": 2787,
+            "seconds": 0.002926300003309734
+          },
+          {
+            "status": "exhausted_for_this_anchor_assignment",
+            "nodes": 1982,
+            "seconds": 0.0020520000107353553
+          }
+        ]
+      },
+      {
+        "required": [
+          0,
+          1
+        ],
+        "status": "found",
+        "attempts": [
+          {
+            "status": "found",
+            "nodes": 1631,
+            "seconds": 0.0016906999953789636,
+            "length": 12
+          }
+        ],
+        "word": [
+          [
+            4,
+            1
+          ],
+          [
+            1,
+            1
+          ],
+          [
+            11,
+            1
+          ],
+          [
+            10,
+            1
+          ],
+          [
+            0,
+            -1
+          ],
+          [
+            3,
+            -1
+          ],
+          [
+            5,
+            -1
+          ],
+          [
+            2,
+            -1
+          ],
+          [
+            6,
+            -1
+          ],
+          [
+            8,
+            -1
+          ],
+          [
+            11,
+            1
+          ],
+          [
+            1,
+            -1
+          ]
+        ],
+        "covered": [
+          0,
+          1
+        ]
+      },
+      {
+        "required": [
+          0,
+          2
+        ],
+        "status": "found",
+        "attempts": [
+          {
+            "status": "found",
+            "nodes": 1056,
+            "seconds": 0.0010409999958937988,
+            "length": 12
+          }
+        ],
+        "word": [
+          [
+            1,
+            1
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            11,
+            1
+          ],
+          [
+            2,
+            -1
+          ],
+          [
+            5,
+            -1
+          ],
+          [
+            6,
+            -1
+          ],
+          [
+            8,
+            -1
+          ],
+          [
+            10,
+            -1
+          ],
+          [
+            11,
+            -1
+          ],
+          [
+            1,
+            -1
+          ],
+          [
+            0,
+            -1
+          ],
+          [
+            2,
+            -1
+          ]
+        ],
+        "covered": [
+          0,
+          2
+        ]
+      },
+      {
+        "required": [
+          0,
+          3
+        ],
+        "status": "found",
+        "attempts": [
+          {
+            "status": "found",
+            "nodes": 3510,
+            "seconds": 0.003225899999961257,
+            "length": 12
+          }
+        ],
+        "word": [
+          [
+            1,
+            1
+          ],
+          [
+            5,
+            -1
+          ],
+          [
+            6,
+            1
+          ],
+          [
+            8,
+            -1
+          ],
+          [
+            10,
+            -1
+          ],
+          [
+            7,
+            1
+          ],
+          [
+            6,
+            1
+          ],
+          [
+            4,
+            1
+          ],
+          [
+            1,
+            1
+          ],
+          [
+            11,
+            -1
+          ],
+          [
+            1,
+            1
+          ],
+          [
+            10,
+            1
+          ]
+        ],
+        "covered": [
+          0,
+          3
+        ]
+      },
+      {
+        "required": [
+          1,
+          2
+        ],
+        "status": "found",
+        "attempts": [
+          {
+            "status": "found",
+            "nodes": 1523,
+            "seconds": 0.0015533999976469204,
+            "length": 12
+          }
+        ],
+        "word": [
+          [
+            0,
+            1
+          ],
+          [
+            10,
+            1
+          ],
+          [
+            10,
+            1
+          ],
+          [
+            7,
+            1
+          ],
+          [
+            4,
+            1
+          ],
+          [
+            1,
+            1
+          ],
+          [
+            0,
+            -1
+          ],
+          [
+            3,
+            -1
+          ],
+          [
+            1,
+            1
+          ],
+          [
+            10,
+            1
+          ],
+          [
+            7,
+            1
+          ],
+          [
+            6,
+            1
+          ]
+        ],
+        "covered": [
+          1,
+          2
+        ]
+      },
+      {
+        "required": [
+          1,
+          3
+        ],
+        "status": "found",
+        "attempts": [
+          {
+            "status": "found",
+            "nodes": 263,
+            "seconds": 0.00039140001172199845,
+            "length": 12
+          }
+        ],
+        "word": [
+          [
+            0,
+            1
+          ],
+          [
+            2,
+            -1
+          ],
+          [
+            6,
+            -1
+          ],
+          [
+            10,
+            1
+          ],
+          [
+            1,
+            1
+          ],
+          [
+            9,
+            1
+          ],
+          [
+            6,
+            -1
+          ],
+          [
+            5,
+            1
+          ],
+          [
+            7,
+            -1
+          ],
+          [
+            8,
+            -1
+          ],
+          [
+            11,
+            1
+          ],
+          [
+            11,
+            1
+          ]
+        ],
+        "covered": [
+          1,
+          3
+        ]
+      },
+      {
+        "required": [
+          2,
+          3
+        ],
+        "status": "found",
+        "attempts": [
+          {
+            "status": "found",
+            "nodes": 486,
+            "seconds": 0.0004918000049656257,
+            "length": 12
+          }
+        ],
+        "word": [
+          [
+            0,
+            1
+          ],
+          [
+            5,
+            -1
+          ],
+          [
+            8,
+            -1
+          ],
+          [
+            9,
+            -1
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            2,
+            -1
+          ],
+          [
+            5,
+            -1
+          ],
+          [
+            10,
+            1
+          ],
+          [
+            8,
+            1
+          ],
+          [
+            6,
+            -1
+          ],
+          [
+            8,
+            1
+          ],
+          [
+            7,
+            1
+          ]
+        ],
+        "covered": [
+          2,
+          3
+        ]
+      }
+    ]
+  },
+  {
+    "n": 15,
+    "permutation": [
+      6,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      0,
+      1,
+      3,
+      2,
+      4,
+      5,
+      7
+    ],
+    "budget": 18,
+    "covers": [
+      {
+        "required": [
+          0,
+          2
+        ],
+        "status": "inconclusive",
+        "attempts": []
+      },
+      {
+        "required": [
+          0
+        ],
+        "status": "found",
+        "attempts": [
+          {
+            "status": "found",
+            "nodes": 5439,
+            "seconds": 0.008183199999621138,
+            "length": 18
+          }
+        ],
+        "word": [
+          [
+            0,
+            -1
+          ],
+          [
+            1,
+            -1
+          ],
+          [
+            4,
+            -1
+          ],
+          [
+            5,
+            -1
+          ],
+          [
+            6,
+            -1
+          ],
+          [
+            3,
+            1
+          ],
+          [
+            2,
+            1
+          ],
+          [
+            7,
+            -1
+          ],
+          [
+            13,
+            1
+          ],
+          [
+            1,
+            1
+          ],
+          [
+            4,
+            -1
+          ],
+          [
+            10,
+            -1
+          ],
+          [
+            7,
+            -1
+          ],
+          [
+            13,
+            1
+          ],
+          [
+            1,
+            1
+          ],
+          [
+            10,
+            -1
+          ],
+          [
+            11,
+            -1
+          ],
+          [
+            14,
+            1
+          ]
+        ],
+        "covered": [
+          0
+        ]
+      },
+      {
+        "required": [
+          2
+        ],
+        "status": "inconclusive",
+        "attempts": [
+          {
+            "status": "exhausted_for_this_anchor_assignment",
+            "nodes": 43084,
+            "seconds": 0.06691979999595787
+          },
+          {
+            "status": "exhausted_for_this_anchor_assignment",
+            "nodes": 25193,
+            "seconds": 0.046128999994834885
+          },
+          {
+            "status": "exhausted_for_this_anchor_assignment",
+            "nodes": 43084,
+            "seconds": 0.06824870000127703
+          },
+          {
+            "status": "exhausted_for_this_anchor_assignment",
+            "nodes": 25193,
+            "seconds": 0.04523519999929704
+          },
+          {
+            "status": "exhausted_for_this_anchor_assignment",
+            "nodes": 43084,
+            "seconds": 0.06581939999887254
+          },
+          {
+            "status": "exhausted_for_this_anchor_assignment",
+            "nodes": 25193,
+            "seconds": 0.045487700001103804
+          }
+        ]
+      }
+    ]
+  }
+]

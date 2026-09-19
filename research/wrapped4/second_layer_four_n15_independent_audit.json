@@ -1,0 +1,10 @@
+{
+  "n": 15,
+  "auxiliary_length": 54,
+  "states": 7282,
+  "orbits": 151,
+  "words_replayed_including_symmetries": 9060,
+  "proved_exact_four_cycle_length_of_every_state": 18,
+  "all_layer_states_covered": true,
+  "scope": "Exact for the full layer ell=54 at n=15, not a diameter proof."
+}

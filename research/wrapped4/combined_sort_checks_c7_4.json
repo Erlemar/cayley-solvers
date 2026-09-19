@@ -1,0 +1,360 @@
+{
+  "interval_certificate": {
+    "source": "adaptive_extraction_c7_4_pruned.json",
+    "coefficient": "7/4",
+    "complete": true,
+    "verified_cases": 10815,
+    "verified_words": 9101,
+    "frontier_size": 0,
+    "maximum_selected": 24,
+    "maximum_width": 32,
+    "maximum_helper_charge": 6,
+    "boundary_patterns_checked": 323,
+    "stages": [
+      {
+        "k": 3,
+        "cases": 162,
+        "verified_words": 91,
+        "next_frontier": 386
+      },
+      {
+        "k": 4,
+        "cases": 386,
+        "verified_words": 280,
+        "next_frontier": 517
+      },
+      {
+        "k": 5,
+        "cases": 517,
+        "verified_words": 414,
+        "next_frontier": 466
+      },
+      {
+        "k": 6,
+        "cases": 466,
+        "verified_words": 415,
+        "next_frontier": 232
+      },
+      {
+        "k": 7,
+        "cases": 232,
+        "verified_words": 196,
+        "next_frontier": 175
+      },
+      {
+        "k": 8,
+        "cases": 175,
+        "verified_words": 130,
+        "next_frontier": 256
+      },
+      {
+        "k": 9,
+        "cases": 256,
+        "verified_words": 137,
+        "next_frontier": 703
+      },
+      {
+        "k": 10,
+        "cases": 703,
+        "verified_words": 532,
+        "next_frontier": 1087
+      },
+      {
+        "k": 11,
+        "cases": 1087,
+        "verified_words": 930,
+        "next_frontier": 956
+      },
+      {
+        "k": 12,
+        "cases": 956,
+        "verified_words": 471,
+        "next_frontier": 3671
+      },
+      {
+        "k": 13,
+        "cases": 3671,
+        "verified_words": 3593,
+        "next_frontier": 447
+      },
+      {
+        "k": 14,
+        "cases": 447,
+        "verified_words": 404,
+        "next_frontier": 224
+      },
+      {
+        "k": 15,
+        "cases": 224,
+        "verified_words": 205,
+        "next_frontier": 107
+      },
+      {
+        "k": 16,
+        "cases": 107,
+        "verified_words": 95,
+        "next_frontier": 70
+      },
+      {
+        "k": 17,
+        "cases": 70,
+        "verified_words": 31,
+        "next_frontier": 243
+      },
+      {
+        "k": 18,
+        "cases": 243,
+        "verified_words": 173,
+        "next_frontier": 451
+      },
+      {
+        "k": 19,
+        "cases": 451,
+        "verified_words": 391,
+        "next_frontier": 385
+      },
+      {
+        "k": 20,
+        "cases": 385,
+        "verified_words": 362,
+        "next_frontier": 125
+      },
+      {
+        "k": 21,
+        "cases": 125,
+        "verified_words": 110,
+        "next_frontier": 82
+      },
+      {
+        "k": 22,
+        "cases": 82,
+        "verified_words": 74,
+        "next_frontier": 53
+      },
+      {
+        "k": 23,
+        "cases": 53,
+        "verified_words": 50,
+        "next_frontier": 17
+      },
+      {
+        "k": 24,
+        "cases": 17,
+        "verified_words": 17,
+        "next_frontier": 0
+      }
+    ],
+    "scope": "Complete finite extraction certificate."
+  },
+  "merge_certificate": {
+    "source": "merge_extraction_c1_2_wide_trim.json",
+    "coefficient": "1/2",
+    "complete": true,
+    "verified_cases": 5794,
+    "verified_words": 2909,
+    "maximum_selected": 28,
+    "maximum_width": 30,
+    "frontier_size": 0,
+    "stages": [
+      {
+        "k": 3,
+        "cases": 24,
+        "verified_words": 11,
+        "next_frontier": 26
+      },
+      {
+        "k": 4,
+        "cases": 26,
+        "verified_words": 6,
+        "next_frontier": 40
+      },
+      {
+        "k": 5,
+        "cases": 40,
+        "verified_words": 4,
+        "next_frontier": 72
+      },
+      {
+        "k": 6,
+        "cases": 72,
+        "verified_words": 13,
+        "next_frontier": 118
+      },
+      {
+        "k": 7,
+        "cases": 118,
+        "verified_words": 18,
+        "next_frontier": 200
+      },
+      {
+        "k": 8,
+        "cases": 200,
+        "verified_words": 91,
+        "next_frontier": 218
+      },
+      {
+        "k": 9,
+        "cases": 218,
+        "verified_words": 62,
+        "next_frontier": 312
+      },
+      {
+        "k": 10,
+        "cases": 312,
+        "verified_words": 84,
+        "next_frontier": 456
+      },
+      {
+        "k": 11,
+        "cases": 456,
+        "verified_words": 123,
+        "next_frontier": 666
+      },
+      {
+        "k": 12,
+        "cases": 666,
+        "verified_words": 484,
+        "next_frontier": 364
+      },
+      {
+        "k": 13,
+        "cases": 364,
+        "verified_words": 152,
+        "next_frontier": 424
+      },
+      {
+        "k": 14,
+        "cases": 424,
+        "verified_words": 168,
+        "next_frontier": 512
+      },
+      {
+        "k": 15,
+        "cases": 512,
+        "verified_words": 201,
+        "next_frontier": 622
+      },
+      {
+        "k": 16,
+        "cases": 622,
+        "verified_words": 538,
+        "next_frontier": 168
+      },
+      {
+        "k": 17,
+        "cases": 168,
+        "verified_words": 63,
+        "next_frontier": 210
+      },
+      {
+        "k": 18,
+        "cases": 210,
+        "verified_words": 85,
+        "next_frontier": 250
+      },
+      {
+        "k": 19,
+        "cases": 250,
+        "verified_words": 63,
+        "next_frontier": 374
+      },
+      {
+        "k": 20,
+        "cases": 374,
+        "verified_words": 123,
+        "next_frontier": 502
+      },
+      {
+        "k": 21,
+        "cases": 502,
+        "verified_words": 492,
+        "next_frontier": 20
+      },
+      {
+        "k": 22,
+        "cases": 20,
+        "verified_words": 9,
+        "next_frontier": 22
+      },
+      {
+        "k": 23,
+        "cases": 22,
+        "verified_words": 10,
+        "next_frontier": 24
+      },
+      {
+        "k": 24,
+        "cases": 24,
+        "verified_words": 13,
+        "next_frontier": 22
+      },
+      {
+        "k": 25,
+        "cases": 22,
+        "verified_words": 8,
+        "next_frontier": 28
+      },
+      {
+        "k": 26,
+        "cases": 28,
+        "verified_words": 6,
+        "next_frontier": 44
+      },
+      {
+        "k": 27,
+        "cases": 44,
+        "verified_words": 6,
+        "next_frontier": 76
+      },
+      {
+        "k": 28,
+        "cases": 76,
+        "verified_words": 76,
+        "next_frontier": 0
+      }
+    ]
+  },
+  "helper_boundary_checks": 5912,
+  "full_word_replays": 1220,
+  "sizes": "32..150;250;500;1000",
+  "linear_coefficient": "3/4",
+  "constant": "37/3",
+  "last_samples": [
+    {
+      "n": 250,
+      "adjacent_length": 10636,
+      "four_cycle_length": 3652,
+      "first_inversions": 7697,
+      "last_inversions": 2852,
+      "first_cost": 2655,
+      "pivot_cost": 29,
+      "last_cost": 968,
+      "upper_bound": 6203,
+      "combined_upper_bound": 5408
+    },
+    {
+      "n": 500,
+      "adjacent_length": 41962,
+      "four_cycle_length": 14206,
+      "first_inversions": 30760,
+      "last_inversions": 10994,
+      "first_cost": 10430,
+      "pivot_cost": 72,
+      "last_cost": 3704,
+      "upper_bound": 22828,
+      "combined_upper_bound": 21220
+    },
+    {
+      "n": 1000,
+      "adjacent_length": 168749,
+      "four_cycle_length": 56669,
+      "first_inversions": 125238,
+      "last_inversions": 43044,
+      "first_cost": 42084,
+      "pivot_cost": 159,
+      "last_cost": 14426,
+      "upper_bound": 87328,
+      "combined_upper_bound": 84095
+    }
+  ]
+}

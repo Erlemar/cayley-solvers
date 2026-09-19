@@ -1,0 +1,29 @@
+{
+  "complete": false,
+  "coefficient": "3/2",
+  "cases_checked": 10014,
+  "words_replayed": 3887,
+  "moves_replayed": 33579,
+  "disordered_tail_words": 1401,
+  "maximum_width": 23,
+  "maximum_selected": 10,
+  "uncovered_next_frontier": 35518,
+  "charges_per_selected": {
+    "0": 18,
+    "4/3": 605,
+    "2/3": 52,
+    "3/2": 312,
+    "1/2": 9,
+    "1": 104,
+    "6/5": 435,
+    "4/5": 6,
+    "10/7": 290,
+    "8/7": 73,
+    "6/7": 1,
+    "5/4": 73,
+    "10/9": 53,
+    "8/9": 1,
+    "7/5": 1855
+  },
+  "scope": "Positive extraction identities and full refinement coverage; incomplete trees do not prove an all-n bound."
+}

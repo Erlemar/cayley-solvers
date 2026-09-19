@@ -1,0 +1,42 @@
+{
+  "verified_permutations": 1788,
+  "sizes": "all 5..150;250;500;1000",
+  "finite_base_permutations": 120,
+  "maximum_base_defect": 18,
+  "last_samples": [
+    {
+      "n": 250,
+      "adjacent_length": 10408,
+      "four_cycle_length": 3838,
+      "first_inversions": 7942,
+      "last_inversions": 2352,
+      "first_cost": 2822,
+      "pivot_cost": 38,
+      "last_cost": 978,
+      "upper_bound": 6203
+    },
+    {
+      "n": 500,
+      "adjacent_length": 41049,
+      "four_cycle_length": 14409,
+      "first_inversions": 29694,
+      "last_inversions": 11159,
+      "first_cost": 10226,
+      "pivot_cost": 68,
+      "last_cost": 4115,
+      "upper_bound": 22828
+    },
+    {
+      "n": 1000,
+      "adjacent_length": 163555,
+      "four_cycle_length": 55813,
+      "first_inversions": 122252,
+      "last_inversions": 40808,
+      "first_cost": 41396,
+      "pivot_cost": 165,
+      "last_cost": 14252,
+      "upper_bound": 87328
+    }
+  ],
+  "assertions": "independent full word replay; affine stage inversion decomposition; linear-stage cost bounds; universal upper bound"
+}

@@ -1,0 +1,7 @@
+{
+  "finite_bases": 3,
+  "independently_extended_targets": 432,
+  "block_sizes": "5..40",
+  "largest_word_length": 533,
+  "scope": "Finite checks of two separate all-size strand-inflation identities."
+}

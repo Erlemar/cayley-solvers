@@ -1,0 +1,16 @@
+{
+  "verified_random_permutations": 510,
+  "sizes": "5..100;150..152;300..302",
+  "last_sample": {
+    "n": 302,
+    "B": 36,
+    "classes": 9,
+    "block_count": 101,
+    "adjacent_swaps": 4369,
+    "grouping_adjacent_swaps": 2057,
+    "coarse_swaps": 1548,
+    "four_cycle_length": 26471,
+    "explicit_upper_bound": 63910
+  },
+  "scope": "Tests validate implementation; all-n upper bound requires the accompanying mathematical proof."
+}

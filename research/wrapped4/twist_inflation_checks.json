@@ -1,0 +1,27 @@
+{
+  "complete_exceptional_family_coverage": true,
+  "families": [
+    {
+      "base_n": 8,
+      "separation": 2,
+      "verified_sizes": 41,
+      "largest_size_replayed": 254,
+      "largest_word_length": 5376
+    },
+    {
+      "base_n": 10,
+      "separation": 1,
+      "verified_sizes": 41,
+      "largest_size_replayed": 256,
+      "largest_word_length": 5461
+    },
+    {
+      "base_n": 10,
+      "separation": 2,
+      "verified_sizes": 41,
+      "largest_size_replayed": 256,
+      "largest_word_length": 5461
+    }
+  ],
+  "scope": "Finite replay checks of the strand-inflation induction."
+}

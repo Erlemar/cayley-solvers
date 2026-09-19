@@ -1,0 +1,83 @@
+{
+  "certificate": {
+    "patterns_checked": 682,
+    "stages": [
+      {
+        "k": 3,
+        "patterns": 162,
+        "successful_words": 120
+      },
+      {
+        "k": 4,
+        "patterns": 200,
+        "successful_words": 153
+      },
+      {
+        "k": 5,
+        "patterns": 198,
+        "successful_words": 176
+      },
+      {
+        "k": 6,
+        "patterns": 85,
+        "successful_words": 78
+      },
+      {
+        "k": 7,
+        "patterns": 26,
+        "successful_words": 24
+      },
+      {
+        "k": 8,
+        "patterns": 11,
+        "successful_words": 11
+      }
+    ],
+    "complete": true
+  },
+  "verified_permutations": 1788,
+  "sizes": "5..150;250;500;1000",
+  "last_samples": [
+    {
+      "n": 250,
+      "adjacent_length": 10807,
+      "four_cycle_length": 3769,
+      "first_inversions": 8518,
+      "last_inversions": 2180,
+      "first_cost": 2938,
+      "pivot_cost": 39,
+      "last_cost": 792,
+      "upper_bound": 6203,
+      "adaptive_upper_bound": 5572,
+      "padded_upper_bound": 5552
+    },
+    {
+      "n": 500,
+      "adjacent_length": 41429,
+      "four_cycle_length": 14153,
+      "first_inversions": 30982,
+      "last_inversions": 10207,
+      "first_cost": 10534,
+      "pivot_cost": 80,
+      "last_cost": 3539,
+      "upper_bound": 22828,
+      "adaptive_upper_bound": 21530,
+      "padded_upper_bound": 21510
+    },
+    {
+      "n": 1000,
+      "adjacent_length": 164048,
+      "four_cycle_length": 55324,
+      "first_inversions": 122290,
+      "last_inversions": 41321,
+      "first_cost": 41170,
+      "pivot_cost": 149,
+      "last_cost": 14005,
+      "upper_bound": 87328,
+      "adaptive_upper_bound": 84697,
+      "padded_upper_bound": 84677
+    }
+  ],
+  "upper_bound": "floor((floor(n^2/4)+4n+32)/3) for n>=9; smaller n checked separately",
+  "scope": "Finite exhaustive abstract-case coverage plus all-n induction; random replay checks supplement the proof."
+}

@@ -1,0 +1,130 @@
+[
+  {
+    "counts": [
+      7,
+      8
+    ],
+    "states": 6435,
+    "base_eccentricity": 10,
+    "histogram": [
+      1,
+      10,
+      63,
+      262,
+      726,
+      1352,
+      1704,
+      1428,
+      725,
+      158,
+      6
+    ],
+    "farthest_example": [
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "seconds": 1.0303909999929601,
+    "scope": "Exact quotient eccentricity only; not the diameter of S_n."
+  },
+  {
+    "counts": [
+      5,
+      5,
+      5
+    ],
+    "states": 756756,
+    "base_eccentricity": 13,
+    "histogram": [
+      1,
+      15,
+      135,
+      917,
+      4867,
+      19884,
+      61260,
+      137157,
+      207235,
+      194144,
+      101691,
+      26502,
+      2878,
+      70
+    ],
+    "farthest_example": [
+      1,
+      1,
+      2,
+      0,
+      2,
+      2,
+      2,
+      0,
+      0,
+      0,
+      0,
+      2,
+      1,
+      1,
+      1
+    ],
+    "seconds": 1.1417617999977665,
+    "scope": "Exact quotient eccentricity only; not the diameter of S_n."
+  },
+  {
+    "counts": [
+      4,
+      4,
+      7
+    ],
+    "states": 450450,
+    "base_eccentricity": 13,
+    "histogram": [
+      1,
+      15,
+      136,
+      907,
+      4582,
+      17427,
+      48964,
+      96907,
+      126573,
+      100620,
+      44171,
+      9386,
+      757,
+      4
+    ],
+    "farthest_example": [
+      2,
+      1,
+      2,
+      2,
+      2,
+      2,
+      0,
+      2,
+      0,
+      0,
+      0,
+      2,
+      1,
+      1,
+      1
+    ],
+    "seconds": 0.47332550000282936,
+    "scope": "Exact quotient eccentricity only; not the diameter of S_n."
+  }
+]

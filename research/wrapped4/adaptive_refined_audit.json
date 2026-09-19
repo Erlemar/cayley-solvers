@@ -1,0 +1,145 @@
+{
+  "source": "adaptive_extraction_c7_4_pruned.json",
+  "coefficient": "7/4",
+  "complete": true,
+  "verified_cases": 10815,
+  "verified_words": 9101,
+  "frontier_size": 0,
+  "maximum_selected": 24,
+  "maximum_width": 32,
+  "stages": [
+    {
+      "k": 3,
+      "cases": 162,
+      "verified_words": 91,
+      "next_frontier": 386
+    },
+    {
+      "k": 4,
+      "cases": 386,
+      "verified_words": 280,
+      "next_frontier": 517
+    },
+    {
+      "k": 5,
+      "cases": 517,
+      "verified_words": 414,
+      "next_frontier": 466
+    },
+    {
+      "k": 6,
+      "cases": 466,
+      "verified_words": 415,
+      "next_frontier": 232
+    },
+    {
+      "k": 7,
+      "cases": 232,
+      "verified_words": 196,
+      "next_frontier": 175
+    },
+    {
+      "k": 8,
+      "cases": 175,
+      "verified_words": 130,
+      "next_frontier": 256
+    },
+    {
+      "k": 9,
+      "cases": 256,
+      "verified_words": 137,
+      "next_frontier": 703
+    },
+    {
+      "k": 10,
+      "cases": 703,
+      "verified_words": 532,
+      "next_frontier": 1087
+    },
+    {
+      "k": 11,
+      "cases": 1087,
+      "verified_words": 930,
+      "next_frontier": 956
+    },
+    {
+      "k": 12,
+      "cases": 956,
+      "verified_words": 471,
+      "next_frontier": 3671
+    },
+    {
+      "k": 13,
+      "cases": 3671,
+      "verified_words": 3593,
+      "next_frontier": 447
+    },
+    {
+      "k": 14,
+      "cases": 447,
+      "verified_words": 404,
+      "next_frontier": 224
+    },
+    {
+      "k": 15,
+      "cases": 224,
+      "verified_words": 205,
+      "next_frontier": 107
+    },
+    {
+      "k": 16,
+      "cases": 107,
+      "verified_words": 95,
+      "next_frontier": 70
+    },
+    {
+      "k": 17,
+      "cases": 70,
+      "verified_words": 31,
+      "next_frontier": 243
+    },
+    {
+      "k": 18,
+      "cases": 243,
+      "verified_words": 173,
+      "next_frontier": 451
+    },
+    {
+      "k": 19,
+      "cases": 451,
+      "verified_words": 391,
+      "next_frontier": 385
+    },
+    {
+      "k": 20,
+      "cases": 385,
+      "verified_words": 362,
+      "next_frontier": 125
+    },
+    {
+      "k": 21,
+      "cases": 125,
+      "verified_words": 110,
+      "next_frontier": 82
+    },
+    {
+      "k": 22,
+      "cases": 82,
+      "verified_words": 74,
+      "next_frontier": 53
+    },
+    {
+      "k": 23,
+      "cases": 53,
+      "verified_words": 50,
+      "next_frontier": 17
+    },
+    {
+      "k": 24,
+      "cases": 17,
+      "verified_words": 17,
+      "next_frontier": 0
+    }
+  ],
+  "scope": "Complete finite extraction certificate."
+}

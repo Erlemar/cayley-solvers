@@ -1,0 +1,402 @@
+[
+  {
+    "n": 10,
+    "permutation": [
+      5,
+      4,
+      3,
+      2,
+      0,
+      1,
+      9,
+      8,
+      7,
+      6
+    ],
+    "budget": 8,
+    "adjacent_length": 20,
+    "status": "exhausted",
+    "nodes": 7147,
+    "seconds": 0.01773900000262074
+  },
+  {
+    "n": 10,
+    "permutation": [
+      6,
+      4,
+      3,
+      2,
+      1,
+      0,
+      9,
+      8,
+      7,
+      5
+    ],
+    "budget": 8,
+    "adjacent_length": 20,
+    "status": "exhausted",
+    "nodes": 7168,
+    "seconds": 0.004772800006321631
+  },
+  {
+    "n": 10,
+    "permutation": [
+      3,
+      2,
+      1,
+      0,
+      8,
+      9,
+      7,
+      6,
+      5,
+      4
+    ],
+    "budget": 8,
+    "adjacent_length": 20,
+    "status": "exhausted",
+    "nodes": 7513,
+    "seconds": 0.0049989999970421195
+  },
+  {
+    "n": 10,
+    "permutation": [
+      6,
+      7,
+      5,
+      4,
+      3,
+      2,
+      1,
+      0,
+      9,
+      8
+    ],
+    "budget": 8,
+    "adjacent_length": 20,
+    "status": "exhausted",
+    "nodes": 7137,
+    "seconds": 0.004658599995309487
+  },
+  {
+    "n": 10,
+    "permutation": [
+      1,
+      0,
+      9,
+      7,
+      8,
+      6,
+      5,
+      4,
+      3,
+      2
+    ],
+    "budget": 8,
+    "adjacent_length": 20,
+    "status": "exhausted",
+    "nodes": 7461,
+    "seconds": 0.00491630000033183
+  },
+  {
+    "n": 10,
+    "permutation": [
+      5,
+      4,
+      3,
+      2,
+      1,
+      9,
+      0,
+      8,
+      7,
+      6
+    ],
+    "budget": 8,
+    "adjacent_length": 20,
+    "status": "exhausted",
+    "nodes": 7180,
+    "seconds": 0.004855300001509022
+  },
+  {
+    "n": 10,
+    "permutation": [
+      7,
+      6,
+      5,
+      4,
+      3,
+      1,
+      2,
+      0,
+      9,
+      8
+    ],
+    "budget": 8,
+    "adjacent_length": 20,
+    "status": "exhausted",
+    "nodes": 7132,
+    "seconds": 0.004830499994568527
+  },
+  {
+    "n": 10,
+    "permutation": [
+      9,
+      7,
+      8,
+      6,
+      5,
+      4,
+      3,
+      2,
+      1,
+      0
+    ],
+    "budget": 8,
+    "adjacent_length": 20,
+    "status": "exhausted",
+    "nodes": 7160,
+    "seconds": 0.005074100001365878
+  },
+  {
+    "n": 10,
+    "permutation": [
+      9,
+      8,
+      6,
+      7,
+      5,
+      4,
+      3,
+      2,
+      1,
+      0
+    ],
+    "budget": 8,
+    "adjacent_length": 20,
+    "status": "exhausted",
+    "nodes": 7156,
+    "seconds": 0.004885800000920426
+  },
+  {
+    "n": 10,
+    "permutation": [
+      9,
+      8,
+      7,
+      6,
+      5,
+      4,
+      3,
+      1,
+      2,
+      0
+    ],
+    "budget": 8,
+    "adjacent_length": 20,
+    "status": "exhausted",
+    "nodes": 7154,
+    "seconds": 0.004994800001441035
+  },
+  {
+    "n": 10,
+    "permutation": [
+      7,
+      5,
+      6,
+      4,
+      3,
+      2,
+      1,
+      0,
+      9,
+      8
+    ],
+    "budget": 8,
+    "adjacent_length": 20,
+    "status": "exhausted",
+    "nodes": 7120,
+    "seconds": 0.005110199999762699
+  },
+  {
+    "n": 10,
+    "permutation": [
+      7,
+      6,
+      5,
+      4,
+      3,
+      2,
+      0,
+      1,
+      9,
+      8
+    ],
+    "budget": 8,
+    "adjacent_length": 20,
+    "status": "exhausted",
+    "nodes": 7138,
+    "seconds": 0.004782999996677972
+  },
+  {
+    "n": 10,
+    "permutation": [
+      1,
+      0,
+      8,
+      9,
+      7,
+      6,
+      5,
+      4,
+      3,
+      2
+    ],
+    "budget": 8,
+    "adjacent_length": 20,
+    "status": "exhausted",
+    "nodes": 7549,
+    "seconds": 0.006089100003009662
+  },
+  {
+    "n": 10,
+    "permutation": [
+      3,
+      2,
+      1,
+      9,
+      0,
+      8,
+      7,
+      6,
+      5,
+      4
+    ],
+    "budget": 8,
+    "adjacent_length": 20,
+    "status": "exhausted",
+    "nodes": 7515,
+    "seconds": 0.00532789999851957
+  },
+  {
+    "n": 10,
+    "permutation": [
+      4,
+      5,
+      3,
+      2,
+      1,
+      0,
+      9,
+      8,
+      7,
+      6
+    ],
+    "budget": 8,
+    "adjacent_length": 20,
+    "status": "exhausted",
+    "nodes": 7149,
+    "seconds": 0.004948000001604669
+  },
+  {
+    "n": 10,
+    "permutation": [
+      1,
+      0,
+      9,
+      8,
+      7,
+      6,
+      5,
+      3,
+      4,
+      2
+    ],
+    "budget": 8,
+    "adjacent_length": 20,
+    "status": "exhausted",
+    "nodes": 7525,
+    "seconds": 0.004886299997451715
+  },
+  {
+    "n": 10,
+    "permutation": [
+      4,
+      2,
+      1,
+      0,
+      9,
+      8,
+      7,
+      6,
+      5,
+      3
+    ],
+    "budget": 8,
+    "adjacent_length": 20,
+    "status": "exhausted",
+    "nodes": 7534,
+    "seconds": 0.004958700003044214
+  },
+  {
+    "n": 10,
+    "permutation": [
+      3,
+      2,
+      1,
+      0,
+      9,
+      8,
+      7,
+      6,
+      4,
+      5
+    ],
+    "budget": 8,
+    "adjacent_length": 20,
+    "status": "exhausted",
+    "nodes": 7442,
+    "seconds": 0.0048171999951591715
+  },
+  {
+    "n": 10,
+    "permutation": [
+      1,
+      0,
+      9,
+      8,
+      7,
+      6,
+      5,
+      4,
+      2,
+      3
+    ],
+    "budget": 8,
+    "adjacent_length": 20,
+    "status": "exhausted",
+    "nodes": 7516,
+    "seconds": 0.0048716000019339845
+  },
+  {
+    "n": 10,
+    "permutation": [
+      9,
+      8,
+      7,
+      6,
+      5,
+      4,
+      2,
+      3,
+      1,
+      0
+    ],
+    "budget": 8,
+    "adjacent_length": 20,
+    "status": "exhausted",
+    "nodes": 7175,
+    "seconds": 0.004774299995915499
+  }
+]

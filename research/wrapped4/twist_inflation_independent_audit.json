@@ -1,0 +1,9 @@
+{
+  "finite_bases_replayed": 3,
+  "random_winding_audits": 120,
+  "nonzero_winding_audits": 57,
+  "complete_rotation_transposition_targets_replayed": 13669,
+  "four_cycle_moves_replayed": 1932366,
+  "target_scope": "All 6<=a,b<=32 and every circular transposition separation.",
+  "scope": "Independent checks of the all-n proof in STRAND_INFLATION.md."
+}

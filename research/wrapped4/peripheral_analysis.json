@@ -1,0 +1,268 @@
+[
+  {
+    "n": 5,
+    "diameter": 4,
+    "peripheral_count": 17,
+    "adjacent_length_histogram": {
+      "4": 17
+    },
+    "adjacent_distance_to_nearest_rotation_histogram": {
+      "0": 2,
+      "2": 10,
+      "4": 5
+    },
+    "lowest_adjacent_length_witness": [
+      4,
+      [
+        2,
+        1,
+        4,
+        3,
+        0
+      ]
+    ]
+  },
+  {
+    "n": 6,
+    "diameter": 5,
+    "peripheral_count": 22,
+    "adjacent_length_histogram": {
+      "3": 2,
+      "5": 5,
+      "7": 15
+    },
+    "adjacent_distance_to_nearest_rotation_histogram": {
+      "0": 2,
+      "2": 6,
+      "3": 2,
+      "4": 3,
+      "5": 6,
+      "6": 3
+    },
+    "lowest_adjacent_length_witness": [
+      3,
+      [
+        5,
+        2,
+        1,
+        4,
+        3,
+        0
+      ]
+    ]
+  },
+  {
+    "n": 7,
+    "diameter": 6,
+    "peripheral_count": 189,
+    "adjacent_length_histogram": {
+      "4": 7,
+      "6": 49,
+      "8": 77,
+      "10": 56
+    },
+    "adjacent_distance_to_nearest_rotation_histogram": {
+      "2": 14,
+      "4": 49,
+      "6": 77,
+      "8": 49
+    },
+    "lowest_adjacent_length_witness": [
+      4,
+      [
+        2,
+        1,
+        0,
+        3,
+        5,
+        4,
+        6
+      ]
+    ]
+  },
+  {
+    "n": 8,
+    "diameter": 7,
+    "peripheral_count": 148,
+    "adjacent_length_histogram": {
+      "9": 4,
+      "11": 24,
+      "13": 120
+    },
+    "adjacent_distance_to_nearest_rotation_histogram": {
+      "3": 8,
+      "4": 8,
+      "5": 24,
+      "7": 32,
+      "9": 16,
+      "10": 32,
+      "11": 24,
+      "12": 4
+    },
+    "lowest_adjacent_length_witness": [
+      9,
+      [
+        0,
+        3,
+        2,
+        5,
+        4,
+        7,
+        6,
+        1
+      ]
+    ]
+  },
+  {
+    "n": 9,
+    "diameter": 8,
+    "peripheral_count": 1025,
+    "adjacent_length_histogram": {
+      "12": 18,
+      "14": 198,
+      "16": 675,
+      "18": 132,
+      "20": 2
+    },
+    "adjacent_distance_to_nearest_rotation_histogram": {
+      "0": 2,
+      "2": 18,
+      "4": 36,
+      "6": 96,
+      "8": 180,
+      "10": 162,
+      "12": 387,
+      "14": 135,
+      "16": 9
+    },
+    "lowest_adjacent_length_witness": [
+      12,
+      [
+        6,
+        3,
+        2,
+        1,
+        7,
+        8,
+        0,
+        4,
+        5
+      ]
+    ]
+  },
+  {
+    "n": 10,
+    "diameter": 10,
+    "peripheral_count": 20,
+    "adjacent_length_histogram": {
+      "20": 20
+    },
+    "adjacent_distance_to_nearest_rotation_histogram": {
+      "19": 20
+    },
+    "lowest_adjacent_length_witness": [
+      20,
+      [
+        5,
+        4,
+        3,
+        2,
+        0,
+        1,
+        9,
+        8,
+        7,
+        6
+      ]
+    ]
+  },
+  {
+    "n": 11,
+    "diameter": 11,
+    "peripheral_count": 3520,
+    "adjacent_length_histogram": {
+      "25": 1342,
+      "27": 2068,
+      "29": 110
+    },
+    "adjacent_distance_to_nearest_rotation_histogram": {
+      "1": 22,
+      "3": 374,
+      "5": 594,
+      "7": 792,
+      "9": 946,
+      "11": 451,
+      "13": 99,
+      "15": 22,
+      "17": 99,
+      "19": 33,
+      "21": 66,
+      "23": 11,
+      "25": 11
+    },
+    "lowest_adjacent_length_witness": [
+      25,
+      [
+        4,
+        7,
+        3,
+        2,
+        0,
+        10,
+        9,
+        1,
+        8,
+        6,
+        5
+      ]
+    ]
+  },
+  {
+    "n": 12,
+    "diameter": 13,
+    "peripheral_count": 3504,
+    "adjacent_length_histogram": {
+      "29": 216,
+      "31": 1878,
+      "33": 1342,
+      "35": 68
+    },
+    "adjacent_distance_to_nearest_rotation_histogram": {
+      "0": 2,
+      "1": 12,
+      "3": 292,
+      "5": 972,
+      "7": 984,
+      "9": 564,
+      "10": 6,
+      "11": 264,
+      "12": 66,
+      "13": 132,
+      "14": 78,
+      "15": 12,
+      "16": 36,
+      "18": 24,
+      "19": 24,
+      "21": 24,
+      "24": 6,
+      "30": 6
+    },
+    "lowest_adjacent_length_witness": [
+      29,
+      [
+        4,
+        7,
+        9,
+        8,
+        0,
+        10,
+        11,
+        2,
+        3,
+        1,
+        5,
+        6
+      ]
+    ]
+  }
+]

@@ -1,0 +1,47 @@
+{
+  "checks": [
+    {
+      "n": 5,
+      "tail_size": 5,
+      "permutations": 120,
+      "maximum_word_length": 7,
+      "seconds": 0.0015361000041593798
+    },
+    {
+      "n": 6,
+      "tail_size": 6,
+      "permutations": 720,
+      "maximum_word_length": 17,
+      "seconds": 0.03092379999725381
+    },
+    {
+      "n": 7,
+      "tail_size": 7,
+      "permutations": 5040,
+      "maximum_word_length": 20,
+      "seconds": 0.2459610000005341
+    },
+    {
+      "n": 8,
+      "tail_size": 8,
+      "permutations": 40320,
+      "maximum_word_length": 24,
+      "seconds": 2.19506970000657
+    },
+    {
+      "n": 9,
+      "tail_size": 8,
+      "permutations": 40320,
+      "maximum_word_length": 23,
+      "seconds": 5.807191100000637
+    },
+    {
+      "n": 14,
+      "tail_size": 8,
+      "permutations": 40320,
+      "maximum_word_length": 18,
+      "seconds": 7.83892239999841
+    }
+  ],
+  "scope": "Exhaustive small cases and all eight-entry tails with cyclic helper padding; supplements the finite-case proof."
+}

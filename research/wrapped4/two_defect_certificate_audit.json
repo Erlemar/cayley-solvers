@@ -1,0 +1,13 @@
+{
+  "complete": true,
+  "independent_raw_models_including_both_noncrossing_pairings": 6030,
+  "root_orbits": 942,
+  "certificate_nodes": 947,
+  "anchored_leaves": 945,
+  "refinement_nodes": 2,
+  "refinement_edges": 5,
+  "largest_base_n": 23,
+  "base_word_moves_replayed": 19974,
+  "n12_boundary_words_replayed": 6,
+  "scope": "Complete positive finite certificate for the all-n deficit-two induction; no negative search claim is used."
+}

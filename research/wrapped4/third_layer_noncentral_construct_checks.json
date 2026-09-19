@@ -1,0 +1,11 @@
+{
+  "complete_words_replayed": 1346,
+  "moves_replayed": 245838,
+  "construction_routes": {
+    "finite_boundary": 275,
+    "one_inflation_from_central": 791,
+    "one_transposition_theorem": 280
+  },
+  "largest_n": 151,
+  "scope": "Implementation checks; full finite coverage is audited separately."
+}

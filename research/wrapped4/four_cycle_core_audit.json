@@ -1,0 +1,20 @@
+{
+  "complete": true,
+  "independent_root_models": 14982,
+  "independent_root_orbits": 1705,
+  "nodes_replayed": 1720,
+  "moves_replayed": 37998,
+  "refinement_nodes": 3,
+  "refinement_edges": 15,
+  "anchored_leaves": 1717,
+  "maximum_base_n": 23,
+  "excess_over_lower_bound": {
+    "2": 947,
+    "0": 773
+  },
+  "missing_anchor_gap_sizes": {
+    "2": 8,
+    "3": 1
+  },
+  "scope": "All finite words, anchors, roots, edges, and coverage for central rotation times a 4-cycle."
+}

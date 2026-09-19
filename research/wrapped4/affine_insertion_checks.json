@@ -1,0 +1,67 @@
+{
+  "verified_permutations": 1788,
+  "sizes": "all 5..150;250;500;1000",
+  "last_samples": [
+    {
+      "n": 250,
+      "adjacent_length": 10811,
+      "run_count": 326,
+      "four_cycle_length": 4243,
+      "residual_one": 104,
+      "residual_two": 99
+    },
+    {
+      "n": 500,
+      "adjacent_length": 41150,
+      "run_count": 664,
+      "four_cycle_length": 15184,
+      "residual_one": 234,
+      "residual_two": 232
+    },
+    {
+      "n": 1000,
+      "adjacent_length": 169596,
+      "run_count": 1441,
+      "four_cycle_length": 59434,
+      "residual_one": 482,
+      "residual_two": 467
+    }
+  ],
+  "residual_three_cycle_word": [
+    [
+      1,
+      1
+    ],
+    [
+      1,
+      1
+    ],
+    [
+      0,
+      -1
+    ],
+    [
+      1,
+      -1
+    ]
+  ],
+  "five_cycle_word": [
+    [
+      0,
+      -1
+    ],
+    [
+      1,
+      -1
+    ],
+    [
+      0,
+      -1
+    ],
+    [
+      1,
+      -1
+    ]
+  ],
+  "assertions": "independent replay; potential equals run length; <=floor(n^2/4) adjacent steps; <=n+floor((n-1)/2) runs"
+}

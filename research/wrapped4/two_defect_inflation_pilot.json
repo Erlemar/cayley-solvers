@@ -1,0 +1,6936 @@
+[
+  {
+    "n": 12,
+    "permutation": [
+      0,
+      6,
+      8,
+      9,
+      10,
+      11,
+      7,
+      1,
+      2,
+      3,
+      4,
+      5
+    ],
+    "models": 12,
+    "status": "found",
+    "word": [
+      [
+        11,
+        -1
+      ],
+      [
+        0,
+        -1
+      ],
+      [
+        1,
+        -1
+      ],
+      [
+        10,
+        1
+      ],
+      [
+        7,
+        1
+      ],
+      [
+        5,
+        1
+      ],
+      [
+        10,
+        1
+      ],
+      [
+        0,
+        -1
+      ],
+      [
+        3,
+        -1
+      ],
+      [
+        4,
+        -1
+      ],
+      [
+        1,
+        1
+      ],
+      [
+        8,
+        1
+      ]
+    ],
+    "missing": 0,
+    "anchor_info": {
+      "a": 6,
+      "anchors": [
+        {
+          "gap": 1,
+          "positive_position": 5,
+          "negative_position": 2
+        },
+        {
+          "gap": 2,
+          "positive_position": 11,
+          "negative_position": 8
+        }
+      ],
+      "missing": []
+    },
+    "attempts": [
+      {
+        "n": 12,
+        "budget": 12,
+        "adjacent_length": 34,
+        "status": "found",
+        "nodes": 300,
+        "seconds": 0.014611700011300854,
+        "length": 12
+      },
+      {
+        "n": 12,
+        "budget": 12,
+        "adjacent_length": 34,
+        "status": "found",
+        "nodes": 53,
+        "seconds": 0.00011550000635907054,
+        "length": 12
+      },
+      {
+        "n": 12,
+        "budget": 12,
+        "adjacent_length": 34,
+        "status": "found",
+        "nodes": 9,
+        "seconds": 6.259999645408243e-05,
+        "length": 12
+      },
+      {
+        "n": 12,
+        "budget": 12,
+        "adjacent_length": 34,
+        "status": "found",
+        "nodes": 9,
+        "seconds": 6.199999188538641e-05,
+        "length": 12
+      },
+      {
+        "n": 12,
+        "budget": 12,
+        "adjacent_length": 34,
+        "status": "found",
+        "nodes": 33,
+        "seconds": 8.410000009462237e-05,
+        "length": 12
+      }
+    ],
+    "budget": 12
+  },
+  {
+    "n": 12,
+    "permutation": [
+      2,
+      7,
+      0,
+      9,
+      10,
+      11,
+      8,
+      1,
+      6,
+      3,
+      4,
+      5
+    ],
+    "models": 1,
+    "status": "found",
+    "word": [
+      [
+        10,
+        1
+      ],
+      [
+        1,
+        1
+      ],
+      [
+        11,
+        1
+      ],
+      [
+        9,
+        1
+      ],
+      [
+        0,
+        1
+      ],
+      [
+        5,
+        -1
+      ],
+      [
+        8,
+        1
+      ],
+      [
+        5,
+        -1
+      ],
+      [
+        9,
+        -1
+      ],
+      [
+        7,
+        -1
+      ],
+      [
+        11,
+        -1
+      ],
+      [
+        8,
+        1
+      ]
+    ],
+    "missing": 0,
+    "anchor_info": {
+      "a": 6,
+      "anchors": [
+        {
+          "gap": 1,
+          "positive_position": 5,
+          "negative_position": 4
+        },
+        {
+          "gap": 3,
+          "positive_position": 9,
+          "negative_position": 11
+        }
+      ],
+      "missing": []
+    },
+    "attempts": [
+      {
+        "n": 12,
+        "budget": 12,
+        "adjacent_length": 34,
+        "status": "found",
+        "nodes": 39,
+        "seconds": 9.900001168716699e-05,
+        "length": 12
+      },
+      {
+        "n": 12,
+        "budget": 12,
+        "adjacent_length": 34,
+        "status": "found",
+        "nodes": 184,
+        "seconds": 0.00021189999824855477,
+        "length": 12
+      },
+      {
+        "n": 12,
+        "budget": 12,
+        "adjacent_length": 34,
+        "status": "found",
+        "nodes": 164,
+        "seconds": 0.00021529999503400177,
+        "length": 12
+      },
+      {
+        "n": 12,
+        "budget": 12,
+        "adjacent_length": 34,
+        "status": "found",
+        "nodes": 37,
+        "seconds": 8.190001244656742e-05,
+        "length": 12
+      },
+      {
+        "n": 12,
+        "budget": 12,
+        "adjacent_length": 34,
+        "status": "found",
+        "nodes": 16,
+        "seconds": 5.01000031363219e-05,
+        "length": 12
+      }
+    ],
+    "budget": 12
+  },
+  {
+    "n": 12,
+    "permutation": [
+      4,
+      7,
+      8,
+      9,
+      0,
+      11,
+      10,
+      1,
+      2,
+      3,
+      6,
+      5
+    ],
+    "models": 1,
+    "status": "found",
+    "word": [
+      [
+        5,
+        -1
+      ],
+      [
+        8,
+        -1
+      ],
+      [
+        8,
+        -1
+      ],
+      [
+        11,
+        -1
+      ],
+      [
+        2,
+        1
+      ],
+      [
+        5,
+        -1
+      ],
+      [
+        1,
+        1
+      ],
+      [
+        0,
+        1
+      ],
+      [
+        10,
+        1
+      ],
+      [
+        8,
+        1
+      ],
+      [
+        5,
+        -1
+      ],
+      [
+        8,
+        1
+      ]
+    ],
+    "missing": 0,
+    "anchor_info": {
+      "a": 6,
+      "anchors": [
+        {
+          "gap": 0,
+          "positive_position": 1,
+          "negative_position": 2
+        },
+        {
+          "gap": 2,
+          "positive_position": 7,
+          "negative_position": 8
+        }
+      ],
+      "missing": []
+    },
+    "attempts": [
+      {
+        "n": 12,
+        "budget": 12,
+        "adjacent_length": 34,
+        "status": "found",
+        "nodes": 74,
+        "seconds": 0.00013970000145491213,
+        "length": 12
+      },
+      {
+        "n": 12,
+        "budget": 12,
+        "adjacent_length": 34,
+        "status": "found",
+        "nodes": 49,
+        "seconds": 9.470000804867595e-05,
+        "length": 12
+      }
+    ],
+    "budget": 12
+  },
+  {
+    "n": 13,
+    "permutation": [
+      0,
+      7,
+      8,
+      9,
+      11,
+      10,
+      12,
+      6,
+      1,
+      2,
+      3,
+      4,
+      5
+    ],
+    "models": 4,
+    "status": "found",
+    "word": [
+      [
+        12,
+        1
+      ],
+      [
+        9,
+        1
+      ],
+      [
+        6,
+        -1
+      ],
+      [
+        7,
+        -1
+      ],
+      [
+        10,
+        -1
+      ],
+      [
+        8,
+        1
+      ],
+      [
+        11,
+        -1
+      ],
+      [
+        1,
+        -1
+      ],
+      [
+        3,
+        -1
+      ],
+      [
+        4,
+        -1
+      ],
+      [
+        10,
+        1
+      ],
+      [
+        7,
+        1
+      ],
+      [
+        6,
+        1
+      ],
+      [
+        11,
+        -1
+      ]
+    ],
+    "missing": 0,
+    "anchor_info": {
+      "a": 6,
+      "anchors": [
+        {
+          "gap": 0,
+          "positive_position": 3,
+          "negative_position": 1
+        },
+        {
+          "gap": 3,
+          "positive_position": 9,
+          "negative_position": 10
+        }
+      ],
+      "missing": []
+    },
+    "attempts": [
+      {
+        "n": 13,
+        "budget": 14,
+        "adjacent_length": 40,
+        "status": "found",
+        "nodes": 80,
+        "seconds": 0.00016580001101829112,
+        "length": 14
+      },
+      {
+        "n": 13,
+        "budget": 14,
+        "adjacent_length": 40,
+        "status": "found",
+        "nodes": 96,
+        "seconds": 0.0001740000006975606,
+        "length": 14
+      },
+      {
+        "n": 13,
+        "budget": 14,
+        "adjacent_length": 40,
+        "status": "found",
+        "nodes": 11,
+        "seconds": 6.310000026132911e-05,
+        "length": 14
+      },
+      {
+        "n": 13,
+        "budget": 14,
+        "adjacent_length": 40,
+        "status": "found",
+        "nodes": 23,
+        "seconds": 9.220000356435776e-05,
+        "length": 14
+      },
+      {
+        "n": 13,
+        "budget": 14,
+        "adjacent_length": 40,
+        "status": "found",
+        "nodes": 118,
+        "seconds": 0.0001816000003600493,
+        "length": 14
+      }
+    ],
+    "budget": 14
+  },
+  {
+    "n": 13,
+    "permutation": [
+      1,
+      7,
+      9,
+      10,
+      11,
+      12,
+      0,
+      8,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "models": 3,
+    "status": "found",
+    "word": [
+      [
+        7,
+        -1
+      ],
+      [
+        10,
+        1
+      ],
+      [
+        9,
+        1
+      ],
+      [
+        5,
+        -1
+      ],
+      [
+        7,
+        1
+      ],
+      [
+        6,
+        1
+      ],
+      [
+        5,
+        1
+      ],
+      [
+        1,
+        1
+      ],
+      [
+        4,
+        1
+      ],
+      [
+        0,
+        1
+      ],
+      [
+        12,
+        1
+      ],
+      [
+        11,
+        1
+      ],
+      [
+        10,
+        1
+      ],
+      [
+        9,
+        1
+      ]
+    ],
+    "missing": 0,
+    "anchor_info": {
+      "a": 7,
+      "anchors": [
+        {
+          "gap": 1,
+          "positive_position": 5,
+          "negative_position": 2
+        },
+        {
+          "gap": 2,
+          "positive_position": 8,
+          "negative_position": 11
+        }
+      ],
+      "missing": []
+    },
+    "attempts": [
+      {
+        "n": 13,
+        "budget": 14,
+        "adjacent_length": 40,
+        "status": "found",
+        "nodes": 670,
+        "seconds": 0.0008804999961284921,
+        "length": 14
+      },
+      {
+        "n": 13,
+        "budget": 14,
+        "adjacent_length": 40,
+        "status": "found",
+        "nodes": 11,
+        "seconds": 6.120000034570694e-05,
+        "length": 14
+      }
+    ],
+    "budget": 14
+  },
+  {
+    "n": 13,
+    "permutation": [
+      3,
+      7,
+      8,
+      9,
+      0,
+      11,
+      12,
+      10,
+      1,
+      2,
+      6,
+      4,
+      5
+    ],
+    "models": 2,
+    "status": "found",
+    "word": [
+      [
+        5,
+        1
+      ],
+      [
+        8,
+        1
+      ],
+      [
+        6,
+        1
+      ],
+      [
+        3,
+        1
+      ],
+      [
+        2,
+        1
+      ],
+      [
+        12,
+        -1
+      ],
+      [
+        1,
+        1
+      ],
+      [
+        4,
+        -1
+      ],
+      [
+        7,
+        -1
+      ],
+      [
+        12,
+        -1
+      ],
+      [
+        2,
+        1
+      ],
+      [
+        1,
+        1
+      ],
+      [
+        4,
+        -1
+      ],
+      [
+        6,
+        -1
+      ]
+    ],
+    "missing": 2,
+    "anchor_info": {
+      "a": 6,
+      "anchors": [
+        {
+          "gap": 1,
+          "positive_position": 5,
+          "negative_position": 6
+        },
+        {
+          "gap": 3,
+          "positive_position": 12,
+          "negative_position": 11
+        }
+      ],
+      "missing": [
+        {
+          "gap": 0,
+          "positions": [
+            1,
+            2,
+            3
+          ],
+          "positive": 2,
+          "negative": 0
+        },
+        {
+          "gap": 2,
+          "positions": [
+            8,
+            9
+          ],
+          "positive": 0,
+          "negative": 2
+        }
+      ]
+    },
+    "attempts": [
+      {
+        "n": 13,
+        "budget": 14,
+        "adjacent_length": 40,
+        "status": "found",
+        "nodes": 207,
+        "seconds": 0.0003200999926775694,
+        "length": 14
+      },
+      {
+        "n": 13,
+        "budget": 14,
+        "adjacent_length": 40,
+        "status": "found",
+        "nodes": 12,
+        "seconds": 6.600000779144466e-05,
+        "length": 14
+      },
+      {
+        "n": 13,
+        "budget": 14,
+        "adjacent_length": 40,
+        "status": "found",
+        "nodes": 149,
+        "seconds": 0.000309199996991083,
+        "length": 14
+      },
+      {
+        "n": 13,
+        "budget": 14,
+        "adjacent_length": 40,
+        "status": "found",
+        "nodes": 510,
+        "seconds": 0.0008476000075461343,
+        "length": 14
+      },
+      {
+        "n": 13,
+        "budget": 14,
+        "adjacent_length": 40,
+        "status": "found",
+        "nodes": 259,
+        "seconds": 0.0003218000056222081,
+        "length": 14
+      },
+      {
+        "n": 13,
+        "budget": 14,
+        "adjacent_length": 40,
+        "status": "found",
+        "nodes": 34,
+        "seconds": 8.55999969644472e-05,
+        "length": 14
+      },
+      {
+        "n": 13,
+        "budget": 14,
+        "adjacent_length": 40,
+        "status": "found",
+        "nodes": 463,
+        "seconds": 0.0007588999869767576,
+        "length": 14
+      },
+      {
+        "n": 13,
+        "budget": 14,
+        "adjacent_length": 40,
+        "status": "found",
+        "nodes": 11,
+        "seconds": 8.519999391864985e-05,
+        "length": 14
+      },
+      {
+        "n": 13,
+        "budget": 14,
+        "adjacent_length": 40,
+        "status": "found",
+        "nodes": 161,
+        "seconds": 0.000265800001216121,
+        "length": 14
+      },
+      {
+        "n": 13,
+        "budget": 14,
+        "adjacent_length": 40,
+        "status": "found",
+        "nodes": 26,
+        "seconds": 7.680000271648169e-05,
+        "length": 14
+      },
+      {
+        "n": 13,
+        "budget": 14,
+        "adjacent_length": 40,
+        "status": "found",
+        "nodes": 456,
+        "seconds": 0.0007019000040600076,
+        "length": 14
+      },
+      {
+        "n": 13,
+        "budget": 14,
+        "adjacent_length": 40,
+        "status": "found",
+        "nodes": 11,
+        "seconds": 9.130001126322895e-05,
+        "length": 14
+      }
+    ],
+    "budget": 14
+  },
+  {
+    "n": 13,
+    "permutation": [
+      5,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      0,
+      1,
+      2,
+      4,
+      3,
+      6
+    ],
+    "models": 2,
+    "status": "found",
+    "word": [
+      [
+        0,
+        1
+      ],
+      [
+        3,
+        -1
+      ],
+      [
+        7,
+        -1
+      ],
+      [
+        4,
+        -1
+      ],
+      [
+        9,
+        -1
+      ],
+      [
+        6,
+        -1
+      ],
+      [
+        10,
+        -1
+      ],
+      [
+        0,
+        1
+      ],
+      [
+        7,
+        -1
+      ],
+      [
+        10,
+        -1
+      ],
+      [
+        11,
+        -1
+      ],
+      [
+        8,
+        1
+      ],
+      [
+        8,
+        1
+      ],
+      [
+        12,
+        -1
+      ]
+    ],
+    "missing": 0,
+    "anchor_info": {
+      "a": 6,
+      "anchors": [
+        {
+          "gap": 0,
+          "positive_position": 7,
+          "negative_position": 1
+        }
+      ],
+      "missing": []
+    },
+    "attempts": [
+      {
+        "n": 13,
+        "budget": 14,
+        "adjacent_length": 40,
+        "status": "found",
+        "nodes": 11,
+        "seconds": 7.380000897683203e-05,
+        "length": 14
+      }
+    ],
+    "budget": 14
+  },
+  {
+    "n": 14,
+    "permutation": [
+      1,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      0,
+      4,
+      2,
+      3,
+      7,
+      5,
+      6
+    ],
+    "models": 6,
+    "status": "found",
+    "word": [
+      [
+        13,
+        -1
+      ],
+      [
+        8,
+        -1
+      ],
+      [
+        6,
+        -1
+      ],
+      [
+        0,
+        1
+      ],
+      [
+        12,
+        -1
+      ],
+      [
+        13,
+        1
+      ],
+      [
+        11,
+        1
+      ],
+      [
+        10,
+        1
+      ],
+      [
+        8,
+        1
+      ],
+      [
+        7,
+        1
+      ],
+      [
+        3,
+        1
+      ],
+      [
+        2,
+        1
+      ],
+      [
+        0,
+        1
+      ],
+      [
+        13,
+        1
+      ],
+      [
+        12,
+        1
+      ],
+      [
+        11,
+        1
+      ],
+      [
+        10,
+        1
+      ]
+    ],
+    "missing": 2,
+    "anchor_info": {
+      "a": 7,
+      "anchors": [
+        {
+          "gap": 0,
+          "positive_position": 6,
+          "negative_position": 3
+        }
+      ],
+      "missing": [
+        {
+          "gap": 1,
+          "positions": [
+            9,
+            10
+          ],
+          "positive": 2,
+          "negative": 0
+        },
+        {
+          "gap": 2,
+          "positions": [
+            12,
+            13
+          ],
+          "positive": 2,
+          "negative": 0
+        }
+      ]
+    },
+    "attempts": [
+      {
+        "n": 14,
+        "budget": 17,
+        "adjacent_length": 47,
+        "status": "found",
+        "nodes": 549,
+        "seconds": 0.0005984000017633662,
+        "length": 17
+      },
+      {
+        "n": 14,
+        "budget": 17,
+        "adjacent_length": 47,
+        "status": "found",
+        "nodes": 15,
+        "seconds": 9.049999061971903e-05,
+        "length": 17
+      },
+      {
+        "n": 14,
+        "budget": 17,
+        "adjacent_length": 47,
+        "status": "found",
+        "nodes": 96,
+        "seconds": 0.00023559998953714967,
+        "length": 17
+      },
+      {
+        "n": 14,
+        "budget": 17,
+        "adjacent_length": 47,
+        "status": "found",
+        "nodes": 634,
+        "seconds": 0.0009885999897960573,
+        "length": 17
+      },
+      {
+        "n": 14,
+        "budget": 17,
+        "adjacent_length": 47,
+        "status": "found",
+        "nodes": 549,
+        "seconds": 0.0005812000017613173,
+        "length": 17
+      },
+      {
+        "n": 14,
+        "budget": 17,
+        "adjacent_length": 47,
+        "status": "found",
+        "nodes": 15,
+        "seconds": 9.329999738838524e-05,
+        "length": 17
+      },
+      {
+        "n": 14,
+        "budget": 17,
+        "adjacent_length": 47,
+        "status": "found",
+        "nodes": 96,
+        "seconds": 0.00023400000645779073,
+        "length": 17
+      },
+      {
+        "n": 14,
+        "budget": 17,
+        "adjacent_length": 47,
+        "status": "found",
+        "nodes": 634,
+        "seconds": 0.000982900004601106,
+        "length": 17
+      },
+      {
+        "n": 14,
+        "budget": 17,
+        "adjacent_length": 47,
+        "status": "found",
+        "nodes": 549,
+        "seconds": 0.0005597999988822266,
+        "length": 17
+      },
+      {
+        "n": 14,
+        "budget": 17,
+        "adjacent_length": 47,
+        "status": "found",
+        "nodes": 15,
+        "seconds": 9.159999899566174e-05,
+        "length": 17
+      },
+      {
+        "n": 14,
+        "budget": 17,
+        "adjacent_length": 47,
+        "status": "found",
+        "nodes": 96,
+        "seconds": 0.00022109999554231763,
+        "length": 17
+      },
+      {
+        "n": 14,
+        "budget": 17,
+        "adjacent_length": 47,
+        "status": "found",
+        "nodes": 634,
+        "seconds": 0.0009427000040886924,
+        "length": 17
+      }
+    ],
+    "budget": 17
+  },
+  {
+    "n": 14,
+    "permutation": [
+      2,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      0,
+      1,
+      7,
+      3,
+      6,
+      5,
+      4
+    ],
+    "models": 4,
+    "status": "found",
+    "word": [
+      [
+        0,
+        1
+      ],
+      [
+        3,
+        -1
+      ],
+      [
+        4,
+        -1
+      ],
+      [
+        6,
+        -1
+      ],
+      [
+        8,
+        -1
+      ],
+      [
+        11,
+        -1
+      ],
+      [
+        0,
+        1
+      ],
+      [
+        8,
+        -1
+      ],
+      [
+        6,
+        -1
+      ],
+      [
+        12,
+        1
+      ],
+      [
+        10,
+        -1
+      ],
+      [
+        11,
+        -1
+      ],
+      [
+        8,
+        1
+      ],
+      [
+        13,
+        -1
+      ],
+      [
+        1,
+        1
+      ],
+      [
+        0,
+        -1
+      ],
+      [
+        2,
+        -1
+      ]
+    ],
+    "missing": 0,
+    "anchor_info": {
+      "a": 7,
+      "anchors": [
+        {
+          "gap": 0,
+          "positive_position": 4,
+          "negative_position": 2
+        }
+      ],
+      "missing": []
+    },
+    "attempts": [
+      {
+        "n": 14,
+        "budget": 17,
+        "adjacent_length": 47,
+        "status": "found",
+        "nodes": 1498,
+        "seconds": 0.001772000003256835,
+        "length": 17
+      }
+    ],
+    "budget": 17
+  },
+  {
+    "n": 14,
+    "permutation": [
+      4,
+      8,
+      9,
+      10,
+      11,
+      0,
+      13,
+      12,
+      1,
+      2,
+      3,
+      7,
+      5,
+      6
+    ],
+    "models": 4,
+    "status": "found",
+    "word": [
+      [
+        8,
+        -1
+      ],
+      [
+        0,
+        -1
+      ],
+      [
+        2,
+        -1
+      ],
+      [
+        2,
+        -1
+      ],
+      [
+        8,
+        -1
+      ],
+      [
+        9,
+        -1
+      ],
+      [
+        10,
+        -1
+      ],
+      [
+        7,
+        1
+      ],
+      [
+        6,
+        1
+      ],
+      [
+        5,
+        1
+      ],
+      [
+        4,
+        1
+      ],
+      [
+        1,
+        1
+      ],
+      [
+        13,
+        1
+      ],
+      [
+        12,
+        1
+      ],
+      [
+        10,
+        1
+      ],
+      [
+        7,
+        -1
+      ],
+      [
+        10,
+        1
+      ]
+    ],
+    "missing": 2,
+    "anchor_info": {
+      "a": 7,
+      "anchors": [
+        {
+          "gap": 0,
+          "positive_position": 1,
+          "negative_position": 3
+        }
+      ],
+      "missing": [
+        {
+          "gap": 2,
+          "positions": [
+            8,
+            9,
+            10
+          ],
+          "positive": 2,
+          "negative": 0
+        },
+        {
+          "gap": 3,
+          "positions": [
+            12,
+            13
+          ],
+          "positive": 0,
+          "negative": 2
+        }
+      ]
+    },
+    "attempts": [
+      {
+        "n": 14,
+        "budget": 17,
+        "adjacent_length": 47,
+        "status": "found",
+        "nodes": 15,
+        "seconds": 0.00010719998681452125,
+        "length": 17
+      },
+      {
+        "n": 14,
+        "budget": 17,
+        "adjacent_length": 47,
+        "status": "found",
+        "nodes": 50,
+        "seconds": 0.00010679999832063913,
+        "length": 17
+      },
+      {
+        "n": 14,
+        "budget": 17,
+        "adjacent_length": 47,
+        "status": "found",
+        "nodes": 2826,
+        "seconds": 0.0036751000006916,
+        "length": 17
+      },
+      {
+        "n": 14,
+        "budget": 17,
+        "adjacent_length": 47,
+        "status": "found",
+        "nodes": 139,
+        "seconds": 0.00024280000070575625,
+        "length": 17
+      },
+      {
+        "n": 14,
+        "budget": 17,
+        "adjacent_length": 47,
+        "status": "found",
+        "nodes": 15,
+        "seconds": 8.929999603424221e-05,
+        "length": 17
+      },
+      {
+        "n": 14,
+        "budget": 17,
+        "adjacent_length": 47,
+        "status": "found",
+        "nodes": 50,
+        "seconds": 0.00010200000542681664,
+        "length": 17
+      },
+      {
+        "n": 14,
+        "budget": 17,
+        "adjacent_length": 47,
+        "status": "found",
+        "nodes": 2826,
+        "seconds": 0.0036299000057624653,
+        "length": 17
+      },
+      {
+        "n": 14,
+        "budget": 17,
+        "adjacent_length": 47,
+        "status": "found",
+        "nodes": 139,
+        "seconds": 0.000225800002226606,
+        "length": 17
+      },
+      {
+        "n": 14,
+        "budget": 17,
+        "adjacent_length": 47,
+        "status": "found",
+        "nodes": 15,
+        "seconds": 9.289999434258789e-05,
+        "length": 17
+      },
+      {
+        "n": 14,
+        "budget": 17,
+        "adjacent_length": 47,
+        "status": "found",
+        "nodes": 50,
+        "seconds": 0.00010420000762678683,
+        "length": 17
+      },
+      {
+        "n": 14,
+        "budget": 17,
+        "adjacent_length": 47,
+        "status": "found",
+        "nodes": 2826,
+        "seconds": 0.003508999987388961,
+        "length": 17
+      },
+      {
+        "n": 14,
+        "budget": 17,
+        "adjacent_length": 47,
+        "status": "found",
+        "nodes": 139,
+        "seconds": 0.00022829999215900898,
+        "length": 17
+      }
+    ],
+    "budget": 17
+  },
+  {
+    "n": 14,
+    "permutation": [
+      6,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      0,
+      1,
+      2,
+      4,
+      3,
+      5,
+      7
+    ],
+    "models": 2,
+    "status": "found",
+    "word": [
+      [
+        0,
+        1
+      ],
+      [
+        3,
+        -1
+      ],
+      [
+        4,
+        -1
+      ],
+      [
+        7,
+        -1
+      ],
+      [
+        10,
+        -1
+      ],
+      [
+        11,
+        -1
+      ],
+      [
+        0,
+        1
+      ],
+      [
+        13,
+        1
+      ],
+      [
+        12,
+        1
+      ],
+      [
+        1,
+        -1
+      ],
+      [
+        4,
+        -1
+      ],
+      [
+        7,
+        -1
+      ],
+      [
+        8,
+        -1
+      ],
+      [
+        10,
+        1
+      ],
+      [
+        9,
+        1
+      ],
+      [
+        9,
+        1
+      ],
+      [
+        12,
+        1
+      ]
+    ],
+    "missing": 0,
+    "anchor_info": {
+      "a": 7,
+      "anchors": [
+        {
+          "gap": 0,
+          "positive_position": 9,
+          "negative_position": 1
+        }
+      ],
+      "missing": []
+    },
+    "attempts": [
+      {
+        "n": 14,
+        "budget": 17,
+        "adjacent_length": 47,
+        "status": "found",
+        "nodes": 14,
+        "seconds": 0.00010819999442901462,
+        "length": 17
+      }
+    ],
+    "budget": 17
+  },
+  {
+    "n": 15,
+    "permutation": [
+      0,
+      8,
+      9,
+      13,
+      11,
+      12,
+      10,
+      14,
+      7,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "models": 4,
+    "status": "found",
+    "word": [
+      [
+        1,
+        1
+      ],
+      [
+        4,
+        -1
+      ],
+      [
+        5,
+        -1
+      ],
+      [
+        6,
+        -1
+      ],
+      [
+        7,
+        -1
+      ],
+      [
+        13,
+        -1
+      ],
+      [
+        1,
+        1
+      ],
+      [
+        10,
+        -1
+      ],
+      [
+        14,
+        -1
+      ],
+      [
+        1,
+        1
+      ],
+      [
+        0,
+        1
+      ],
+      [
+        3,
+        -1
+      ],
+      [
+        4,
+        -1
+      ],
+      [
+        13,
+        1
+      ],
+      [
+        1,
+        1
+      ],
+      [
+        12,
+        1
+      ],
+      [
+        0,
+        1
+      ],
+      [
+        9,
+        1
+      ]
+    ],
+    "missing": 0,
+    "anchor_info": {
+      "a": 7,
+      "anchors": [
+        {
+          "gap": 0,
+          "positive_position": 1,
+          "negative_position": 2
+        },
+        {
+          "gap": 1,
+          "positive_position": 5,
+          "negative_position": 4
+        },
+        {
+          "gap": 3,
+          "positive_position": 11,
+          "negative_position": 9
+        }
+      ],
+      "missing": []
+    },
+    "attempts": [
+      {
+        "n": 15,
+        "budget": 18,
+        "adjacent_length": 54,
+        "status": "found",
+        "nodes": 7246,
+        "seconds": 0.009311400004662573,
+        "length": 18
+      },
+      {
+        "n": 15,
+        "budget": 18,
+        "adjacent_length": 54,
+        "status": "found",
+        "nodes": 1752,
+        "seconds": 0.002424799997243099,
+        "length": 18
+      },
+      {
+        "n": 15,
+        "budget": 18,
+        "adjacent_length": 54,
+        "status": "found",
+        "nodes": 2789,
+        "seconds": 0.0043341999989934266,
+        "length": 18
+      },
+      {
+        "n": 15,
+        "budget": 18,
+        "adjacent_length": 54,
+        "status": "found",
+        "nodes": 201,
+        "seconds": 0.0003823000006377697,
+        "length": 18
+      },
+      {
+        "n": 15,
+        "budget": 18,
+        "adjacent_length": 54,
+        "status": "found",
+        "nodes": 253,
+        "seconds": 0.0004014000005554408,
+        "length": 18
+      }
+    ],
+    "budget": 18
+  },
+  {
+    "n": 15,
+    "permutation": [
+      1,
+      8,
+      9,
+      10,
+      13,
+      12,
+      11,
+      14,
+      0,
+      7,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "models": 4,
+    "status": "found",
+    "word": [
+      [
+        2,
+        1
+      ],
+      [
+        5,
+        -1
+      ],
+      [
+        6,
+        -1
+      ],
+      [
+        9,
+        -1
+      ],
+      [
+        10,
+        -1
+      ],
+      [
+        12,
+        -1
+      ],
+      [
+        14,
+        -1
+      ],
+      [
+        0,
+        -1
+      ],
+      [
+        3,
+        1
+      ],
+      [
+        11,
+        -1
+      ],
+      [
+        8,
+        1
+      ],
+      [
+        5,
+        -1
+      ],
+      [
+        6,
+        -1
+      ],
+      [
+        12,
+        -1
+      ],
+      [
+        0,
+        -1
+      ],
+      [
+        3,
+        1
+      ],
+      [
+        12,
+        -1
+      ],
+      [
+        0,
+        -1
+      ]
+    ],
+    "missing": 0,
+    "anchor_info": {
+      "a": 7,
+      "anchors": [
+        {
+          "gap": 0,
+          "positive_position": 1,
+          "negative_position": 3
+        },
+        {
+          "gap": 2,
+          "positive_position": 7,
+          "negative_position": 8
+        },
+        {
+          "gap": 3,
+          "positive_position": 10,
+          "negative_position": 12
+        }
+      ],
+      "missing": []
+    },
+    "attempts": [
+      {
+        "n": 15,
+        "budget": 18,
+        "adjacent_length": 54,
+        "status": "found",
+        "nodes": 360,
+        "seconds": 0.0006993999995756894,
+        "length": 18
+      },
+      {
+        "n": 15,
+        "budget": 18,
+        "adjacent_length": 54,
+        "status": "found",
+        "nodes": 769,
+        "seconds": 0.001262899997527711,
+        "length": 18
+      },
+      {
+        "n": 15,
+        "budget": 18,
+        "adjacent_length": 54,
+        "status": "found",
+        "nodes": 50,
+        "seconds": 0.00015330000314861536,
+        "length": 18
+      },
+      {
+        "n": 15,
+        "budget": 18,
+        "adjacent_length": 54,
+        "status": "found",
+        "nodes": 464,
+        "seconds": 0.0007112999883247539,
+        "length": 18
+      },
+      {
+        "n": 15,
+        "budget": 18,
+        "adjacent_length": 54,
+        "status": "found",
+        "nodes": 367,
+        "seconds": 0.0005667999939760193,
+        "length": 18
+      },
+      {
+        "n": 15,
+        "budget": 18,
+        "adjacent_length": 54,
+        "status": "found",
+        "nodes": 198,
+        "seconds": 0.0003465000045252964,
+        "length": 18
+      },
+      {
+        "n": 15,
+        "budget": 18,
+        "adjacent_length": 54,
+        "status": "found",
+        "nodes": 25,
+        "seconds": 9.030000364873558e-05,
+        "length": 18
+      },
+      {
+        "n": 15,
+        "budget": 18,
+        "adjacent_length": 54,
+        "status": "found",
+        "nodes": 734,
+        "seconds": 0.0011163000017404556,
+        "length": 18
+      },
+      {
+        "n": 15,
+        "budget": 18,
+        "adjacent_length": 54,
+        "status": "found",
+        "nodes": 18182,
+        "seconds": 0.023453699992387556,
+        "length": 18
+      }
+    ],
+    "budget": 18
+  },
+  {
+    "n": 15,
+    "permutation": [
+      2,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      0,
+      1,
+      7,
+      6,
+      4,
+      5,
+      3
+    ],
+    "models": 2,
+    "status": "found",
+    "word": [
+      [
+        9,
+        1
+      ],
+      [
+        13,
+        1
+      ],
+      [
+        12,
+        -1
+      ],
+      [
+        14,
+        -1
+      ],
+      [
+        1,
+        -1
+      ],
+      [
+        7,
+        1
+      ],
+      [
+        6,
+        1
+      ],
+      [
+        8,
+        -1
+      ],
+      [
+        5,
+        1
+      ],
+      [
+        2,
+        -1
+      ],
+      [
+        0,
+        1
+      ],
+      [
+        13,
+        1
+      ],
+      [
+        11,
+        1
+      ],
+      [
+        10,
+        1
+      ],
+      [
+        4,
+        -1
+      ],
+      [
+        6,
+        -1
+      ],
+      [
+        9,
+        1
+      ],
+      [
+        7,
+        1
+      ]
+    ],
+    "missing": 0,
+    "anchor_info": {
+      "a": 7,
+      "anchors": [
+        {
+          "gap": 0,
+          "positive_position": 3,
+          "negative_position": 1
+        },
+        {
+          "gap": 2,
+          "positive_position": 13,
+          "negative_position": 12
+        }
+      ],
+      "missing": []
+    },
+    "attempts": [
+      {
+        "n": 15,
+        "budget": 18,
+        "adjacent_length": 54,
+        "status": "found",
+        "nodes": 1937,
+        "seconds": 0.0025966999965021387,
+        "length": 18
+      },
+      {
+        "n": 15,
+        "budget": 18,
+        "adjacent_length": 54,
+        "status": "found",
+        "nodes": 850,
+        "seconds": 0.0010088999988511205,
+        "length": 18
+      },
+      {
+        "n": 15,
+        "budget": 18,
+        "adjacent_length": 54,
+        "status": "found",
+        "nodes": 3792,
+        "seconds": 0.005956599998171441,
+        "length": 18
+      },
+      {
+        "n": 15,
+        "budget": 18,
+        "adjacent_length": 54,
+        "status": "found",
+        "nodes": 5303,
+        "seconds": 0.00860879999527242,
+        "length": 18
+      },
+      {
+        "n": 15,
+        "budget": 18,
+        "adjacent_length": 54,
+        "status": "found",
+        "nodes": 12815,
+        "seconds": 0.016914500010898337,
+        "length": 18
+      },
+      {
+        "n": 15,
+        "budget": 18,
+        "adjacent_length": 54,
+        "status": "found",
+        "nodes": 360,
+        "seconds": 0.0005725000082748011,
+        "length": 18
+      },
+      {
+        "n": 15,
+        "budget": 18,
+        "adjacent_length": 54,
+        "status": "found",
+        "nodes": 4255,
+        "seconds": 0.0064098000002559274,
+        "length": 18
+      }
+    ],
+    "budget": 18
+  },
+  {
+    "n": 15,
+    "permutation": [
+      3,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      1,
+      0,
+      2,
+      7,
+      4,
+      5,
+      6
+    ],
+    "models": 4,
+    "status": "found",
+    "word": [
+      [
+        12,
+        1
+      ],
+      [
+        9,
+        -1
+      ],
+      [
+        10,
+        -1
+      ],
+      [
+        7,
+        1
+      ],
+      [
+        10,
+        -1
+      ],
+      [
+        1,
+        -1
+      ],
+      [
+        13,
+        -1
+      ],
+      [
+        4,
+        1
+      ],
+      [
+        7,
+        1
+      ],
+      [
+        3,
+        1
+      ],
+      [
+        6,
+        1
+      ],
+      [
+        2,
+        1
+      ],
+      [
+        5,
+        1
+      ],
+      [
+        1,
+        1
+      ],
+      [
+        0,
+        1
+      ],
+      [
+        14,
+        1
+      ],
+      [
+        12,
+        1
+      ],
+      [
+        11,
+        1
+      ]
+    ],
+    "missing": 0,
+    "anchor_info": {
+      "a": 7,
+      "anchors": [
+        {
+          "gap": 0,
+          "positive_position": 1,
+          "negative_position": 4
+        },
+        {
+          "gap": 3,
+          "positive_position": 12,
+          "negative_position": 13
+        }
+      ],
+      "missing": []
+    },
+    "attempts": [
+      {
+        "n": 15,
+        "budget": 18,
+        "adjacent_length": 54,
+        "status": "found",
+        "nodes": 7562,
+        "seconds": 0.010034399994765408,
+        "length": 18
+      },
+      {
+        "n": 15,
+        "budget": 18,
+        "adjacent_length": 54,
+        "status": "found",
+        "nodes": 1961,
+        "seconds": 0.0029356000013649464,
+        "length": 18
+      }
+    ],
+    "budget": 18
+  },
+  {
+    "n": 15,
+    "permutation": [
+      5,
+      8,
+      9,
+      10,
+      11,
+      12,
+      0,
+      14,
+      13,
+      1,
+      2,
+      3,
+      4,
+      7,
+      6
+    ],
+    "models": 2,
+    "status": "found",
+    "word": [
+      [
+        0,
+        1
+      ],
+      [
+        3,
+        -1
+      ],
+      [
+        4,
+        -1
+      ],
+      [
+        6,
+        -1
+      ],
+      [
+        10,
+        -1
+      ],
+      [
+        7,
+        -1
+      ],
+      [
+        12,
+        -1
+      ],
+      [
+        0,
+        1
+      ],
+      [
+        3,
+        1
+      ],
+      [
+        9,
+        -1
+      ],
+      [
+        14,
+        1
+      ],
+      [
+        13,
+        1
+      ],
+      [
+        0,
+        -1
+      ],
+      [
+        2,
+        -1
+      ],
+      [
+        10,
+        -1
+      ],
+      [
+        11,
+        -1
+      ],
+      [
+        8,
+        1
+      ],
+      [
+        14,
+        1
+      ]
+    ],
+    "missing": 0,
+    "anchor_info": {
+      "a": 7,
+      "anchors": [
+        {
+          "gap": 0,
+          "positive_position": 4,
+          "negative_position": 1
+        },
+        {
+          "gap": 2,
+          "positive_position": 10,
+          "negative_position": 9
+        }
+      ],
+      "missing": []
+    },
+    "attempts": [
+      {
+        "n": 15,
+        "budget": 18,
+        "adjacent_length": 54,
+        "status": "found",
+        "nodes": 1160,
+        "seconds": 0.0015222000074572861,
+        "length": 18
+      }
+    ],
+    "budget": 18
+  },
+  {
+    "n": 16,
+    "permutation": [
+      0,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      8,
+      1,
+      2,
+      3,
+      6,
+      5,
+      4,
+      7
+    ],
+    "models": 4,
+    "status": "found",
+    "word": [
+      [
+        13,
+        1
+      ],
+      [
+        15,
+        -1
+      ],
+      [
+        13,
+        1
+      ],
+      [
+        11,
+        1
+      ],
+      [
+        8,
+        1
+      ],
+      [
+        5,
+        1
+      ],
+      [
+        2,
+        -1
+      ],
+      [
+        15,
+        -1
+      ],
+      [
+        1,
+        -1
+      ],
+      [
+        3,
+        -1
+      ],
+      [
+        4,
+        -1
+      ],
+      [
+        7,
+        -1
+      ],
+      [
+        10,
+        1
+      ],
+      [
+        14,
+        1
+      ],
+      [
+        13,
+        -1
+      ],
+      [
+        0,
+        -1
+      ],
+      [
+        14,
+        1
+      ],
+      [
+        1,
+        -1
+      ],
+      [
+        8,
+        -1
+      ],
+      [
+        10,
+        1
+      ],
+      [
+        9,
+        1
+      ],
+      [
+        6,
+        1
+      ]
+    ],
+    "missing": 0,
+    "anchor_info": {
+      "a": 8,
+      "anchors": [
+        {
+          "gap": 0,
+          "positive_position": 1,
+          "negative_position": 2
+        },
+        {
+          "gap": 1,
+          "positive_position": 11,
+          "negative_position": 9
+        }
+      ],
+      "missing": []
+    },
+    "attempts": [
+      {
+        "n": 16,
+        "budget": 22,
+        "adjacent_length": 62,
+        "status": "found",
+        "nodes": 103,
+        "seconds": 0.0002795000036712736,
+        "length": 22
+      },
+      {
+        "n": 16,
+        "budget": 22,
+        "adjacent_length": 62,
+        "status": "found",
+        "nodes": 2540,
+        "seconds": 0.003461300002527423,
+        "length": 22
+      },
+      {
+        "n": 16,
+        "budget": 22,
+        "adjacent_length": 62,
+        "status": "found",
+        "nodes": 518,
+        "seconds": 0.0008644000045023859,
+        "length": 22
+      },
+      {
+        "n": 16,
+        "budget": 22,
+        "adjacent_length": 62,
+        "status": "found",
+        "nodes": 9782,
+        "seconds": 0.014620100002503023,
+        "length": 22
+      },
+      {
+        "n": 16,
+        "budget": 22,
+        "adjacent_length": 62,
+        "status": "found",
+        "nodes": 233,
+        "seconds": 0.00039840000681579113,
+        "length": 22
+      },
+      {
+        "n": 16,
+        "budget": 22,
+        "adjacent_length": 62,
+        "status": "found",
+        "nodes": 196,
+        "seconds": 0.0003370000049471855,
+        "length": 22
+      },
+      {
+        "n": 16,
+        "budget": 22,
+        "adjacent_length": 62,
+        "status": "found",
+        "nodes": 99,
+        "seconds": 0.0002393000031588599,
+        "length": 22
+      }
+    ],
+    "budget": 22
+  },
+  {
+    "n": 16,
+    "permutation": [
+      1,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      0,
+      8,
+      2,
+      6,
+      4,
+      5,
+      3,
+      7
+    ],
+    "models": 2,
+    "status": "found",
+    "word": [
+      [
+        12,
+        1
+      ],
+      [
+        15,
+        1
+      ],
+      [
+        13,
+        1
+      ],
+      [
+        10,
+        1
+      ],
+      [
+        7,
+        1
+      ],
+      [
+        4,
+        -1
+      ],
+      [
+        5,
+        -1
+      ],
+      [
+        6,
+        -1
+      ],
+      [
+        8,
+        -1
+      ],
+      [
+        5,
+        -1
+      ],
+      [
+        9,
+        -1
+      ],
+      [
+        12,
+        -1
+      ],
+      [
+        14,
+        -1
+      ],
+      [
+        0,
+        -1
+      ],
+      [
+        1,
+        -1
+      ],
+      [
+        6,
+        1
+      ],
+      [
+        7,
+        1
+      ],
+      [
+        15,
+        1
+      ],
+      [
+        9,
+        -1
+      ],
+      [
+        11,
+        -1
+      ],
+      [
+        12,
+        -1
+      ],
+      [
+        10,
+        1
+      ]
+    ],
+    "missing": 0,
+    "anchor_info": {
+      "a": 8,
+      "anchors": [
+        {
+          "gap": 0,
+          "positive_position": 6,
+          "negative_position": 1
+        },
+        {
+          "gap": 2,
+          "positive_position": 12,
+          "negative_position": 13
+        }
+      ],
+      "missing": []
+    },
+    "attempts": [
+      {
+        "n": 16,
+        "budget": 22,
+        "adjacent_length": 62,
+        "status": "found",
+        "nodes": 3558,
+        "seconds": 0.004757000002427958,
+        "length": 22
+      },
+      {
+        "n": 16,
+        "budget": 22,
+        "adjacent_length": 62,
+        "status": "found",
+        "nodes": 703,
+        "seconds": 0.0009692000021459535,
+        "length": 22
+      },
+      {
+        "n": 16,
+        "budget": 22,
+        "adjacent_length": 62,
+        "status": "found",
+        "nodes": 1533,
+        "seconds": 0.0021741999953519553,
+        "length": 22
+      },
+      {
+        "n": 16,
+        "budget": 22,
+        "adjacent_length": 62,
+        "status": "found",
+        "nodes": 9168,
+        "seconds": 0.015106399994692765,
+        "length": 22
+      },
+      {
+        "n": 16,
+        "budget": 22,
+        "adjacent_length": 62,
+        "status": "found",
+        "nodes": 21360,
+        "seconds": 0.028175200000987388,
+        "length": 22
+      },
+      {
+        "n": 16,
+        "budget": 22,
+        "adjacent_length": 62,
+        "status": "found",
+        "nodes": 207,
+        "seconds": 0.0004783999902429059,
+        "length": 22
+      },
+      {
+        "n": 16,
+        "budget": 22,
+        "adjacent_length": 62,
+        "status": "found",
+        "nodes": 97,
+        "seconds": 0.0001880999916465953,
+        "length": 22
+      }
+    ],
+    "budget": 22
+  },
+  {
+    "n": 16,
+    "permutation": [
+      2,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      0,
+      1,
+      4,
+      3,
+      8,
+      5,
+      6,
+      7
+    ],
+    "models": 12,
+    "status": "found",
+    "word": [
+      [
+        9,
+        1
+      ],
+      [
+        11,
+        -1
+      ],
+      [
+        12,
+        -1
+      ],
+      [
+        14,
+        -1
+      ],
+      [
+        15,
+        -1
+      ],
+      [
+        0,
+        -1
+      ],
+      [
+        6,
+        -1
+      ],
+      [
+        9,
+        1
+      ],
+      [
+        6,
+        -1
+      ],
+      [
+        12,
+        1
+      ],
+      [
+        9,
+        1
+      ],
+      [
+        8,
+        1
+      ],
+      [
+        5,
+        1
+      ],
+      [
+        4,
+        1
+      ],
+      [
+        2,
+        1
+      ],
+      [
+        11,
+        1
+      ],
+      [
+        11,
+        1
+      ],
+      [
+        13,
+        -1
+      ],
+      [
+        7,
+        1
+      ],
+      [
+        7,
+        1
+      ],
+      [
+        10,
+        1
+      ],
+      [
+        9,
+        1
+      ]
+    ],
+    "missing": 0,
+    "anchor_info": {
+      "a": 8,
+      "anchors": [
+        {
+          "gap": 0,
+          "positive_position": 8,
+          "negative_position": 1
+        },
+        {
+          "gap": 2,
+          "positive_position": 13,
+          "negative_position": 14
+        }
+      ],
+      "missing": []
+    },
+    "attempts": [
+      {
+        "n": 16,
+        "budget": 22,
+        "adjacent_length": 62,
+        "status": "found",
+        "nodes": 19,
+        "seconds": 0.00014150000060908496,
+        "length": 22
+      },
+      {
+        "n": 16,
+        "budget": 22,
+        "adjacent_length": 62,
+        "status": "found",
+        "nodes": 374,
+        "seconds": 0.0005571999936364591,
+        "length": 22
+      },
+      {
+        "n": 16,
+        "budget": 22,
+        "adjacent_length": 62,
+        "status": "found",
+        "nodes": 155,
+        "seconds": 0.00030189999961294234,
+        "length": 22
+      }
+    ],
+    "budget": 22
+  },
+  {
+    "n": 16,
+    "permutation": [
+      3,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      0,
+      1,
+      2,
+      4,
+      8,
+      5,
+      6,
+      7
+    ],
+    "models": 12,
+    "status": "found",
+    "word": [
+      [
+        9,
+        1
+      ],
+      [
+        11,
+        -1
+      ],
+      [
+        12,
+        -1
+      ],
+      [
+        14,
+        -1
+      ],
+      [
+        15,
+        -1
+      ],
+      [
+        0,
+        -1
+      ],
+      [
+        6,
+        -1
+      ],
+      [
+        9,
+        1
+      ],
+      [
+        8,
+        1
+      ],
+      [
+        7,
+        1
+      ],
+      [
+        10,
+        -1
+      ],
+      [
+        11,
+        -1
+      ],
+      [
+        12,
+        -1
+      ],
+      [
+        13,
+        -1
+      ],
+      [
+        0,
+        -1
+      ],
+      [
+        3,
+        -1
+      ],
+      [
+        0,
+        1
+      ],
+      [
+        4,
+        -1
+      ],
+      [
+        7,
+        1
+      ],
+      [
+        6,
+        1
+      ],
+      [
+        10,
+        1
+      ],
+      [
+        9,
+        1
+      ]
+    ],
+    "missing": 0,
+    "anchor_info": {
+      "a": 8,
+      "anchors": [
+        {
+          "gap": 0,
+          "positive_position": 4,
+          "negative_position": 1
+        },
+        {
+          "gap": 2,
+          "positive_position": 13,
+          "negative_position": 14
+        }
+      ],
+      "missing": []
+    },
+    "attempts": [
+      {
+        "n": 16,
+        "budget": 22,
+        "adjacent_length": 62,
+        "status": "found",
+        "nodes": 19,
+        "seconds": 0.00014450000890064985,
+        "length": 22
+      },
+      {
+        "n": 16,
+        "budget": 22,
+        "adjacent_length": 62,
+        "status": "found",
+        "nodes": 20,
+        "seconds": 0.00012680000509135425,
+        "length": 22
+      },
+      {
+        "n": 16,
+        "budget": 22,
+        "adjacent_length": 62,
+        "status": "found",
+        "nodes": 60,
+        "seconds": 0.00018350000027567148,
+        "length": 22
+      }
+    ],
+    "budget": 22
+  },
+  {
+    "n": 16,
+    "permutation": [
+      4,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      0,
+      1,
+      3,
+      2,
+      8,
+      5,
+      6,
+      7
+    ],
+    "models": 4,
+    "status": "found",
+    "word": [
+      [
+        11,
+        1
+      ],
+      [
+        9,
+        1
+      ],
+      [
+        14,
+        -1
+      ],
+      [
+        15,
+        -1
+      ],
+      [
+        12,
+        1
+      ],
+      [
+        10,
+        1
+      ],
+      [
+        7,
+        1
+      ],
+      [
+        10,
+        1
+      ],
+      [
+        7,
+        1
+      ],
+      [
+        5,
+        1
+      ],
+      [
+        4,
+        1
+      ],
+      [
+        2,
+        1
+      ],
+      [
+        10,
+        1
+      ],
+      [
+        15,
+        -1
+      ],
+      [
+        0,
+        -1
+      ],
+      [
+        3,
+        1
+      ],
+      [
+        13,
+        1
+      ],
+      [
+        12,
+        1
+      ],
+      [
+        6,
+        -1
+      ],
+      [
+        8,
+        -1
+      ],
+      [
+        10,
+        1
+      ],
+      [
+        9,
+        1
+      ]
+    ],
+    "missing": 0,
+    "anchor_info": {
+      "a": 8,
+      "anchors": [
+        {
+          "gap": 0,
+          "positive_position": 4,
+          "negative_position": 2
+        },
+        {
+          "gap": 3,
+          "positive_position": 15,
+          "negative_position": 13
+        }
+      ],
+      "missing": []
+    },
+    "attempts": [
+      {
+        "n": 16,
+        "budget": 22,
+        "adjacent_length": 62,
+        "status": "found",
+        "nodes": 859,
+        "seconds": 0.0010151999886147678,
+        "length": 22
+      },
+      {
+        "n": 16,
+        "budget": 22,
+        "adjacent_length": 62,
+        "status": "found",
+        "nodes": 768,
+        "seconds": 0.0009245999972335994,
+        "length": 22
+      },
+      {
+        "n": 16,
+        "budget": 22,
+        "adjacent_length": 62,
+        "status": "found",
+        "nodes": 440,
+        "seconds": 0.0007399000023724511,
+        "length": 22
+      }
+    ],
+    "budget": 22
+  },
+  {
+    "n": 16,
+    "permutation": [
+      6,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      0,
+      15,
+      1,
+      2,
+      3,
+      4,
+      5,
+      8,
+      7
+    ],
+    "models": 4,
+    "status": "found",
+    "word": [
+      [
+        3,
+        -1
+      ],
+      [
+        6,
+        -1
+      ],
+      [
+        6,
+        -1
+      ],
+      [
+        0,
+        -1
+      ],
+      [
+        13,
+        1
+      ],
+      [
+        3,
+        -1
+      ],
+      [
+        4,
+        -1
+      ],
+      [
+        7,
+        -1
+      ],
+      [
+        10,
+        1
+      ],
+      [
+        0,
+        -1
+      ],
+      [
+        13,
+        1
+      ],
+      [
+        9,
+        1
+      ],
+      [
+        8,
+        1
+      ],
+      [
+        6,
+        1
+      ],
+      [
+        5,
+        1
+      ],
+      [
+        3,
+        1
+      ],
+      [
+        2,
+        1
+      ],
+      [
+        1,
+        1
+      ],
+      [
+        4,
+        -1
+      ],
+      [
+        7,
+        -1
+      ],
+      [
+        10,
+        -1
+      ],
+      [
+        7,
+        -1
+      ]
+    ],
+    "missing": 0,
+    "anchor_info": {
+      "a": 8,
+      "anchors": [
+        {
+          "gap": 0,
+          "positive_position": 1,
+          "negative_position": 6
+        },
+        {
+          "gap": 2,
+          "positive_position": 13,
+          "negative_position": 10
+        }
+      ],
+      "missing": []
+    },
+    "attempts": [
+      {
+        "n": 16,
+        "budget": 22,
+        "adjacent_length": 62,
+        "status": "found",
+        "nodes": 22,
+        "seconds": 0.00014390000433195382,
+        "length": 22
+      },
+      {
+        "n": 16,
+        "budget": 22,
+        "adjacent_length": 62,
+        "status": "found",
+        "nodes": 1037,
+        "seconds": 0.001912299994728528,
+        "length": 22
+      },
+      {
+        "n": 16,
+        "budget": 22,
+        "adjacent_length": 62,
+        "status": "found",
+        "nodes": 3722,
+        "seconds": 0.00596120000409428,
+        "length": 22
+      },
+      {
+        "n": 16,
+        "budget": 22,
+        "adjacent_length": 62,
+        "status": "found",
+        "nodes": 880,
+        "seconds": 0.0015407000028062612,
+        "length": 22
+      }
+    ],
+    "budget": 22
+  },
+  {
+    "n": 17,
+    "permutation": [
+      0,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      8,
+      1,
+      2,
+      3,
+      4,
+      5,
+      7,
+      6
+    ],
+    "models": 4,
+    "status": "found",
+    "word": [
+      [
+        8,
+        -1
+      ],
+      [
+        5,
+        1
+      ],
+      [
+        2,
+        -1
+      ],
+      [
+        3,
+        -1
+      ],
+      [
+        13,
+        1
+      ],
+      [
+        16,
+        -1
+      ],
+      [
+        11,
+        1
+      ],
+      [
+        8,
+        -1
+      ],
+      [
+        9,
+        -1
+      ],
+      [
+        12,
+        -1
+      ],
+      [
+        6,
+        1
+      ],
+      [
+        9,
+        -1
+      ],
+      [
+        0,
+        -1
+      ],
+      [
+        3,
+        -1
+      ],
+      [
+        6,
+        1
+      ],
+      [
+        5,
+        1
+      ],
+      [
+        4,
+        1
+      ],
+      [
+        1,
+        1
+      ],
+      [
+        15,
+        1
+      ],
+      [
+        10,
+        -1
+      ],
+      [
+        13,
+        1
+      ],
+      [
+        7,
+        -1
+      ],
+      [
+        10,
+        -1
+      ],
+      [
+        7,
+        -1
+      ]
+    ],
+    "missing": 0,
+    "anchor_info": {
+      "a": 8,
+      "anchors": [
+        {
+          "gap": 0,
+          "positive_position": 1,
+          "negative_position": 6
+        },
+        {
+          "gap": 1,
+          "positive_position": 10,
+          "negative_position": 11
+        }
+      ],
+      "missing": []
+    },
+    "attempts": [
+      {
+        "n": 17,
+        "budget": 24,
+        "adjacent_length": 70,
+        "status": "found",
+        "nodes": 199,
+        "seconds": 0.00041059999784920365,
+        "length": 24
+      },
+      {
+        "n": 17,
+        "budget": 24,
+        "adjacent_length": 70,
+        "status": "found",
+        "nodes": 2527,
+        "seconds": 0.003549500004737638,
+        "length": 24
+      },
+      {
+        "n": 17,
+        "budget": 24,
+        "adjacent_length": 70,
+        "status": "found",
+        "nodes": 99,
+        "seconds": 0.00023920000239741057,
+        "length": 24
+      },
+      {
+        "n": 17,
+        "budget": 24,
+        "adjacent_length": 70,
+        "status": "found",
+        "nodes": 624,
+        "seconds": 0.0010692000068956986,
+        "length": 24
+      }
+    ],
+    "budget": 24
+  },
+  {
+    "n": 17,
+    "permutation": [
+      0,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      9,
+      8,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      1
+    ],
+    "models": 2,
+    "status": "found",
+    "word": [
+      [
+        9,
+        -1
+      ],
+      [
+        12,
+        -1
+      ],
+      [
+        14,
+        -1
+      ],
+      [
+        16,
+        1
+      ],
+      [
+        15,
+        1
+      ],
+      [
+        13,
+        -1
+      ],
+      [
+        7,
+        1
+      ],
+      [
+        9,
+        -1
+      ],
+      [
+        7,
+        1
+      ],
+      [
+        3,
+        1
+      ],
+      [
+        2,
+        1
+      ],
+      [
+        1,
+        1
+      ],
+      [
+        4,
+        -1
+      ],
+      [
+        7,
+        1
+      ],
+      [
+        10,
+        -1
+      ],
+      [
+        13,
+        -1
+      ],
+      [
+        14,
+        -1
+      ],
+      [
+        11,
+        -1
+      ],
+      [
+        14,
+        -1
+      ],
+      [
+        0,
+        1
+      ],
+      [
+        16,
+        1
+      ],
+      [
+        15,
+        1
+      ],
+      [
+        14,
+        1
+      ],
+      [
+        13,
+        1
+      ]
+    ],
+    "missing": 0,
+    "anchor_info": {
+      "a": 9,
+      "anchors": [
+        {
+          "gap": 0,
+          "positive_position": 3,
+          "negative_position": 1
+        },
+        {
+          "gap": 2,
+          "positive_position": 10,
+          "negative_position": 12
+        }
+      ],
+      "missing": []
+    },
+    "attempts": [
+      {
+        "n": 17,
+        "budget": 24,
+        "adjacent_length": 70,
+        "status": "found",
+        "nodes": 28617,
+        "seconds": 0.037548300009802915,
+        "length": 24
+      },
+      {
+        "n": 17,
+        "budget": 24,
+        "adjacent_length": 70,
+        "status": "found",
+        "nodes": 1953,
+        "seconds": 0.003165299989632331,
+        "length": 24
+      }
+    ],
+    "budget": 24
+  },
+  {
+    "n": 17,
+    "permutation": [
+      1,
+      9,
+      10,
+      11,
+      12,
+      14,
+      13,
+      15,
+      16,
+      0,
+      8,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "models": 4,
+    "status": "found",
+    "word": [
+      [
+        12,
+        1
+      ],
+      [
+        9,
+        -1
+      ],
+      [
+        9,
+        -1
+      ],
+      [
+        2,
+        -1
+      ],
+      [
+        5,
+        -1
+      ],
+      [
+        6,
+        -1
+      ],
+      [
+        7,
+        -1
+      ],
+      [
+        10,
+        -1
+      ],
+      [
+        11,
+        -1
+      ],
+      [
+        13,
+        -1
+      ],
+      [
+        16,
+        -1
+      ],
+      [
+        4,
+        1
+      ],
+      [
+        7,
+        -1
+      ],
+      [
+        1,
+        -1
+      ],
+      [
+        4,
+        1
+      ],
+      [
+        3,
+        1
+      ],
+      [
+        0,
+        1
+      ],
+      [
+        14,
+        1
+      ],
+      [
+        12,
+        1
+      ],
+      [
+        10,
+        1
+      ],
+      [
+        9,
+        1
+      ],
+      [
+        8,
+        1
+      ],
+      [
+        7,
+        1
+      ],
+      [
+        6,
+        1
+      ]
+    ],
+    "missing": 1,
+    "anchor_info": {
+      "a": 8,
+      "anchors": [
+        {
+          "gap": 2,
+          "positive_position": 7,
+          "negative_position": 8
+        },
+        {
+          "gap": 3,
+          "positive_position": 12,
+          "negative_position": 14
+        }
+      ],
+      "missing": [
+        {
+          "gap": 0,
+          "positions": [
+            1,
+            2,
+            3,
+            4
+          ],
+          "positive": 4,
+          "negative": 0
+        }
+      ]
+    },
+    "attempts": [
+      {
+        "n": 17,
+        "budget": 24,
+        "adjacent_length": 70,
+        "status": "found",
+        "nodes": 77,
+        "seconds": 0.00021970001398585737,
+        "length": 24
+      },
+      {
+        "n": 17,
+        "budget": 24,
+        "adjacent_length": 70,
+        "status": "found",
+        "nodes": 519,
+        "seconds": 0.0007915000023785979,
+        "length": 24
+      },
+      {
+        "n": 17,
+        "budget": 24,
+        "adjacent_length": 70,
+        "status": "found",
+        "nodes": 4244,
+        "seconds": 0.0064067000057548285,
+        "length": 24
+      },
+      {
+        "n": 17,
+        "budget": 24,
+        "adjacent_length": 70,
+        "status": "found",
+        "nodes": 634,
+        "seconds": 0.0012055999977746978,
+        "length": 24
+      },
+      {
+        "n": 17,
+        "budget": 24,
+        "adjacent_length": 70,
+        "status": "node_limit",
+        "nodes": 30001,
+        "seconds": 0.04597739999007899
+      },
+      {
+        "n": 17,
+        "budget": 24,
+        "adjacent_length": 70,
+        "status": "found",
+        "nodes": 7740,
+        "seconds": 0.01029720000224188,
+        "length": 24
+      },
+      {
+        "n": 17,
+        "budget": 24,
+        "adjacent_length": 70,
+        "status": "found",
+        "nodes": 1925,
+        "seconds": 0.002882500004488975,
+        "length": 24
+      },
+      {
+        "n": 17,
+        "budget": 24,
+        "adjacent_length": 70,
+        "status": "found",
+        "nodes": 2234,
+        "seconds": 0.0030298999918159097,
+        "length": 24
+      },
+      {
+        "n": 17,
+        "budget": 24,
+        "adjacent_length": 70,
+        "status": "found",
+        "nodes": 29184,
+        "seconds": 0.042112199997063726,
+        "length": 24
+      },
+      {
+        "n": 17,
+        "budget": 24,
+        "adjacent_length": 70,
+        "status": "found",
+        "nodes": 22,
+        "seconds": 0.0002199000009568408,
+        "length": 24
+      },
+      {
+        "n": 17,
+        "budget": 24,
+        "adjacent_length": 70,
+        "status": "node_limit",
+        "nodes": 30001,
+        "seconds": 0.04092459999083076
+      },
+      {
+        "n": 17,
+        "budget": 24,
+        "adjacent_length": 70,
+        "status": "found",
+        "nodes": 400,
+        "seconds": 0.00064820000261534,
+        "length": 24
+      }
+    ],
+    "budget": 24
+  },
+  {
+    "n": 17,
+    "permutation": [
+      2,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      0,
+      16,
+      1,
+      8,
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "models": 4,
+    "status": "found",
+    "word": [
+      [
+        11,
+        1
+      ],
+      [
+        9,
+        -1
+      ],
+      [
+        10,
+        -1
+      ],
+      [
+        4,
+        1
+      ],
+      [
+        11,
+        -1
+      ],
+      [
+        14,
+        -1
+      ],
+      [
+        7,
+        1
+      ],
+      [
+        0,
+        -1
+      ],
+      [
+        14,
+        -1
+      ],
+      [
+        3,
+        1
+      ],
+      [
+        6,
+        1
+      ],
+      [
+        0,
+        -1
+      ],
+      [
+        1,
+        -1
+      ],
+      [
+        4,
+        1
+      ],
+      [
+        3,
+        1
+      ],
+      [
+        2,
+        1
+      ],
+      [
+        5,
+        -1
+      ],
+      [
+        8,
+        -1
+      ],
+      [
+        11,
+        -1
+      ],
+      [
+        14,
+        -1
+      ],
+      [
+        0,
+        1
+      ],
+      [
+        16,
+        1
+      ],
+      [
+        15,
+        1
+      ],
+      [
+        13,
+        1
+      ]
+    ],
+    "missing": 0,
+    "anchor_info": {
+      "a": 8,
+      "anchors": [
+        {
+          "gap": 0,
+          "positive_position": 1,
+          "negative_position": 3
+        },
+        {
+          "gap": 3,
+          "positive_position": 15,
+          "negative_position": 13
+        }
+      ],
+      "missing": []
+    },
+    "attempts": [
+      {
+        "n": 17,
+        "budget": 24,
+        "adjacent_length": 70,
+        "status": "found",
+        "nodes": 465,
+        "seconds": 0.0007418000022880733,
+        "length": 24
+      },
+      {
+        "n": 17,
+        "budget": 24,
+        "adjacent_length": 70,
+        "status": "found",
+        "nodes": 200,
+        "seconds": 0.0003910999948857352,
+        "length": 24
+      }
+    ],
+    "budget": 24
+  },
+  {
+    "n": 17,
+    "permutation": [
+      3,
+      9,
+      10,
+      11,
+      0,
+      13,
+      14,
+      15,
+      16,
+      12,
+      1,
+      2,
+      8,
+      4,
+      5,
+      6,
+      7
+    ],
+    "models": 2,
+    "status": "found",
+    "word": [
+      [
+        11,
+        1
+      ],
+      [
+        0,
+        -1
+      ],
+      [
+        2,
+        -1
+      ],
+      [
+        2,
+        -1
+      ],
+      [
+        14,
+        -1
+      ],
+      [
+        10,
+        1
+      ],
+      [
+        8,
+        -1
+      ],
+      [
+        9,
+        1
+      ],
+      [
+        5,
+        1
+      ],
+      [
+        8,
+        -1
+      ],
+      [
+        4,
+        1
+      ],
+      [
+        0,
+        1
+      ],
+      [
+        16,
+        1
+      ],
+      [
+        3,
+        1
+      ],
+      [
+        2,
+        1
+      ],
+      [
+        5,
+        -1
+      ],
+      [
+        8,
+        -1
+      ],
+      [
+        11,
+        -1
+      ],
+      [
+        14,
+        -1
+      ],
+      [
+        0,
+        1
+      ],
+      [
+        16,
+        1
+      ],
+      [
+        15,
+        1
+      ],
+      [
+        14,
+        1
+      ],
+      [
+        13,
+        1
+      ]
+    ],
+    "missing": 1,
+    "anchor_info": {
+      "a": 8,
+      "anchors": [
+        {
+          "gap": 0,
+          "positive_position": 1,
+          "negative_position": 3
+        },
+        {
+          "gap": 1,
+          "positive_position": 8,
+          "negative_position": 6
+        },
+        {
+          "gap": 3,
+          "positive_position": 15,
+          "negative_position": 13
+        }
+      ],
+      "missing": [
+        {
+          "gap": 2,
+          "positions": [
+            10,
+            11
+          ],
+          "positive": 2,
+          "negative": 0
+        }
+      ]
+    },
+    "attempts": [
+      {
+        "n": 17,
+        "budget": 24,
+        "adjacent_length": 70,
+        "status": "found",
+        "nodes": 38,
+        "seconds": 0.0001753999968059361,
+        "length": 24
+      },
+      {
+        "n": 17,
+        "budget": 24,
+        "adjacent_length": 70,
+        "status": "found",
+        "nodes": 2359,
+        "seconds": 0.0031879999878583476,
+        "length": 24
+      },
+      {
+        "n": 17,
+        "budget": 24,
+        "adjacent_length": 70,
+        "status": "node_limit",
+        "nodes": 30001,
+        "seconds": 0.04416220000712201
+      },
+      {
+        "n": 17,
+        "budget": 24,
+        "adjacent_length": 70,
+        "status": "found",
+        "nodes": 757,
+        "seconds": 0.0012570999970193952,
+        "length": 24
+      },
+      {
+        "n": 17,
+        "budget": 24,
+        "adjacent_length": 70,
+        "status": "found",
+        "nodes": 21,
+        "seconds": 0.000155999994603917,
+        "length": 24
+      },
+      {
+        "n": 17,
+        "budget": 24,
+        "adjacent_length": 70,
+        "status": "found",
+        "nodes": 1355,
+        "seconds": 0.0021914999961154535,
+        "length": 24
+      },
+      {
+        "n": 17,
+        "budget": 24,
+        "adjacent_length": 70,
+        "status": "found",
+        "nodes": 412,
+        "seconds": 0.0006270000012591481,
+        "length": 24
+      },
+      {
+        "n": 17,
+        "budget": 24,
+        "adjacent_length": 70,
+        "status": "found",
+        "nodes": 565,
+        "seconds": 0.0008184000034816563,
+        "length": 24
+      },
+      {
+        "n": 17,
+        "budget": 24,
+        "adjacent_length": 70,
+        "status": "found",
+        "nodes": 11532,
+        "seconds": 0.017630299989832565,
+        "length": 24
+      },
+      {
+        "n": 17,
+        "budget": 24,
+        "adjacent_length": 70,
+        "status": "found",
+        "nodes": 953,
+        "seconds": 0.0019251000048825517,
+        "length": 24
+      },
+      {
+        "n": 17,
+        "budget": 24,
+        "adjacent_length": 70,
+        "status": "found",
+        "nodes": 2091,
+        "seconds": 0.0028827999922214076,
+        "length": 24
+      },
+      {
+        "n": 17,
+        "budget": 24,
+        "adjacent_length": 70,
+        "status": "found",
+        "nodes": 15738,
+        "seconds": 0.02041270000336226,
+        "length": 24
+      }
+    ],
+    "budget": 24
+  },
+  {
+    "n": 17,
+    "permutation": [
+      3,
+      9,
+      10,
+      11,
+      16,
+      13,
+      14,
+      15,
+      12,
+      0,
+      1,
+      2,
+      8,
+      4,
+      5,
+      6,
+      7
+    ],
+    "models": 2,
+    "status": "found",
+    "word": [
+      [
+        13,
+        1
+      ],
+      [
+        16,
+        1
+      ],
+      [
+        2,
+        -1
+      ],
+      [
+        16,
+        1
+      ],
+      [
+        2,
+        -1
+      ],
+      [
+        9,
+        -1
+      ],
+      [
+        6,
+        -1
+      ],
+      [
+        10,
+        -1
+      ],
+      [
+        13,
+        1
+      ],
+      [
+        12,
+        1
+      ],
+      [
+        11,
+        1
+      ],
+      [
+        8,
+        1
+      ],
+      [
+        7,
+        1
+      ],
+      [
+        5,
+        -1
+      ],
+      [
+        6,
+        -1
+      ],
+      [
+        10,
+        -1
+      ],
+      [
+        14,
+        -1
+      ],
+      [
+        15,
+        -1
+      ],
+      [
+        12,
+        1
+      ],
+      [
+        16,
+        -1
+      ],
+      [
+        11,
+        1
+      ],
+      [
+        9,
+        1
+      ],
+      [
+        7,
+        -1
+      ],
+      [
+        8,
+        1
+      ]
+    ],
+    "missing": 1,
+    "anchor_info": {
+      "a": 8,
+      "anchors": [
+        {
+          "gap": 0,
+          "positive_position": 3,
+          "negative_position": 2
+        },
+        {
+          "gap": 1,
+          "positive_position": 6,
+          "negative_position": 5
+        },
+        {
+          "gap": 3,
+          "positive_position": 13,
+          "negative_position": 14
+        }
+      ],
+      "missing": [
+        {
+          "gap": 2,
+          "positions": [
+            9,
+            10,
+            11
+          ],
+          "positive": 3,
+          "negative": 0
+        }
+      ]
+    },
+    "attempts": [
+      {
+        "n": 17,
+        "budget": 24,
+        "adjacent_length": 70,
+        "status": "found",
+        "nodes": 4951,
+        "seconds": 0.006408400004147552,
+        "length": 24
+      },
+      {
+        "n": 17,
+        "budget": 24,
+        "adjacent_length": 70,
+        "status": "found",
+        "nodes": 1027,
+        "seconds": 0.0013440000038826838,
+        "length": 24
+      },
+      {
+        "n": 17,
+        "budget": 24,
+        "adjacent_length": 70,
+        "status": "found",
+        "nodes": 29384,
+        "seconds": 0.044367800001055,
+        "length": 24
+      },
+      {
+        "n": 17,
+        "budget": 24,
+        "adjacent_length": 70,
+        "status": "found",
+        "nodes": 4922,
+        "seconds": 0.008455900009721518,
+        "length": 24
+      },
+      {
+        "n": 17,
+        "budget": 24,
+        "adjacent_length": 70,
+        "status": "found",
+        "nodes": 437,
+        "seconds": 0.0007696999964537099,
+        "length": 24
+      },
+      {
+        "n": 17,
+        "budget": 24,
+        "adjacent_length": 70,
+        "status": "found",
+        "nodes": 9648,
+        "seconds": 0.013489499993738718,
+        "length": 24
+      },
+      {
+        "n": 17,
+        "budget": 24,
+        "adjacent_length": 70,
+        "status": "found",
+        "nodes": 3082,
+        "seconds": 0.003771399991819635,
+        "length": 24
+      },
+      {
+        "n": 17,
+        "budget": 24,
+        "adjacent_length": 70,
+        "status": "found",
+        "nodes": 265,
+        "seconds": 0.00045849999878555536,
+        "length": 24
+      },
+      {
+        "n": 17,
+        "budget": 24,
+        "adjacent_length": 70,
+        "status": "found",
+        "nodes": 5610,
+        "seconds": 0.010135200005606748,
+        "length": 24
+      },
+      {
+        "n": 17,
+        "budget": 24,
+        "adjacent_length": 70,
+        "status": "found",
+        "nodes": 163,
+        "seconds": 0.0003865000035148114,
+        "length": 24
+      },
+      {
+        "n": 17,
+        "budget": 24,
+        "adjacent_length": 70,
+        "status": "found",
+        "nodes": 5496,
+        "seconds": 0.007051799999317154,
+        "length": 24
+      },
+      {
+        "n": 17,
+        "budget": 24,
+        "adjacent_length": 70,
+        "status": "found",
+        "nodes": 15738,
+        "seconds": 0.02004740000120364,
+        "length": 24
+      }
+    ],
+    "budget": 24
+  },
+  {
+    "n": 17,
+    "permutation": [
+      4,
+      9,
+      10,
+      11,
+      12,
+      13,
+      16,
+      15,
+      14,
+      0,
+      1,
+      2,
+      3,
+      8,
+      5,
+      6,
+      7
+    ],
+    "models": 4,
+    "status": "found",
+    "word": [
+      [
+        10,
+        1
+      ],
+      [
+        12,
+        -1
+      ],
+      [
+        13,
+        -1
+      ],
+      [
+        15,
+        -1
+      ],
+      [
+        16,
+        -1
+      ],
+      [
+        0,
+        -1
+      ],
+      [
+        3,
+        -1
+      ],
+      [
+        10,
+        1
+      ],
+      [
+        7,
+        -1
+      ],
+      [
+        4,
+        -1
+      ],
+      [
+        2,
+        1
+      ],
+      [
+        8,
+        -1
+      ],
+      [
+        9,
+        -1
+      ],
+      [
+        11,
+        -1
+      ],
+      [
+        12,
+        -1
+      ],
+      [
+        10,
+        1
+      ],
+      [
+        15,
+        1
+      ],
+      [
+        12,
+        -1
+      ],
+      [
+        13,
+        -1
+      ],
+      [
+        16,
+        -1
+      ],
+      [
+        7,
+        1
+      ],
+      [
+        6,
+        1
+      ],
+      [
+        10,
+        1
+      ],
+      [
+        9,
+        1
+      ]
+    ],
+    "missing": 0,
+    "anchor_info": {
+      "a": 8,
+      "anchors": [
+        {
+          "gap": 0,
+          "positive_position": 4,
+          "negative_position": 1
+        },
+        {
+          "gap": 2,
+          "positive_position": 9,
+          "negative_position": 12
+        },
+        {
+          "gap": 3,
+          "positive_position": 14,
+          "negative_position": 15
+        }
+      ],
+      "missing": []
+    },
+    "attempts": [
+      {
+        "n": 17,
+        "budget": 24,
+        "adjacent_length": 70,
+        "status": "found",
+        "nodes": 21,
+        "seconds": 0.00016830000095069408,
+        "length": 24
+      },
+      {
+        "n": 17,
+        "budget": 24,
+        "adjacent_length": 70,
+        "status": "found",
+        "nodes": 6733,
+        "seconds": 0.010004099996876903,
+        "length": 24
+      },
+      {
+        "n": 17,
+        "budget": 24,
+        "adjacent_length": 70,
+        "status": "found",
+        "nodes": 1484,
+        "seconds": 0.002391200003330596,
+        "length": 24
+      }
+    ],
+    "budget": 24
+  },
+  {
+    "n": 17,
+    "permutation": [
+      6,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      1,
+      0,
+      16,
+      2,
+      3,
+      4,
+      5,
+      8,
+      7
+    ],
+    "models": 2,
+    "status": "found",
+    "word": [
+      [
+        3,
+        1
+      ],
+      [
+        6,
+        1
+      ],
+      [
+        9,
+        -1
+      ],
+      [
+        12,
+        -1
+      ],
+      [
+        15,
+        -1
+      ],
+      [
+        0,
+        -1
+      ],
+      [
+        1,
+        -1
+      ],
+      [
+        3,
+        -1
+      ],
+      [
+        6,
+        1
+      ],
+      [
+        4,
+        -1
+      ],
+      [
+        9,
+        -1
+      ],
+      [
+        6,
+        1
+      ],
+      [
+        12,
+        -1
+      ],
+      [
+        9,
+        -1
+      ],
+      [
+        14,
+        -1
+      ],
+      [
+        15,
+        -1
+      ],
+      [
+        0,
+        -1
+      ],
+      [
+        1,
+        -1
+      ],
+      [
+        4,
+        1
+      ],
+      [
+        2,
+        -1
+      ],
+      [
+        3,
+        -1
+      ],
+      [
+        16,
+        1
+      ],
+      [
+        13,
+        1
+      ],
+      [
+        11,
+        1
+      ]
+    ],
+    "missing": 0,
+    "anchor_info": {
+      "a": 8,
+      "anchors": [
+        {
+          "gap": 0,
+          "positive_position": 2,
+          "negative_position": 1
+        },
+        {
+          "gap": 2,
+          "positive_position": 11,
+          "negative_position": 12
+        }
+      ],
+      "missing": []
+    },
+    "attempts": [
+      {
+        "n": 17,
+        "budget": 24,
+        "adjacent_length": 70,
+        "status": "found",
+        "nodes": 21,
+        "seconds": 0.0001564999984111637,
+        "length": 24
+      },
+      {
+        "n": 17,
+        "budget": 24,
+        "adjacent_length": 70,
+        "status": "found",
+        "nodes": 1471,
+        "seconds": 0.0027643000066746026,
+        "length": 24
+      },
+      {
+        "n": 17,
+        "budget": 24,
+        "adjacent_length": 70,
+        "status": "found",
+        "nodes": 8593,
+        "seconds": 0.013754899991909042,
+        "length": 24
+      },
+      {
+        "n": 17,
+        "budget": 24,
+        "adjacent_length": 70,
+        "status": "found",
+        "nodes": 62,
+        "seconds": 0.00028879998717457056,
+        "length": 24
+      },
+      {
+        "n": 17,
+        "budget": 24,
+        "adjacent_length": 70,
+        "status": "found",
+        "nodes": 5810,
+        "seconds": 0.009733800005051307,
+        "length": 24
+      }
+    ],
+    "budget": 24
+  },
+  {
+    "n": 18,
+    "permutation": [
+      1,
+      10,
+      11,
+      12,
+      16,
+      14,
+      15,
+      13,
+      17,
+      0,
+      9,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8
+    ],
+    "models": 4,
+    "status": "found",
+    "word": [
+      [
+        8,
+        1
+      ],
+      [
+        11,
+        1
+      ],
+      [
+        9,
+        1
+      ],
+      [
+        14,
+        -1
+      ],
+      [
+        16,
+        -1
+      ],
+      [
+        1,
+        -1
+      ],
+      [
+        5,
+        -1
+      ],
+      [
+        8,
+        1
+      ],
+      [
+        7,
+        1
+      ],
+      [
+        10,
+        1
+      ],
+      [
+        9,
+        -1
+      ],
+      [
+        6,
+        1
+      ],
+      [
+        4,
+        1
+      ],
+      [
+        3,
+        1
+      ],
+      [
+        11,
+        -1
+      ],
+      [
+        9,
+        1
+      ],
+      [
+        7,
+        1
+      ],
+      [
+        10,
+        -1
+      ],
+      [
+        13,
+        -1
+      ],
+      [
+        16,
+        -1
+      ],
+      [
+        0,
+        -1
+      ],
+      [
+        2,
+        1
+      ],
+      [
+        1,
+        1
+      ],
+      [
+        4,
+        -1
+      ],
+      [
+        7,
+        1
+      ],
+      [
+        4,
+        -1
+      ],
+      [
+        10,
+        -1
+      ]
+    ],
+    "missing": 1,
+    "anchor_info": {
+      "a": 9,
+      "anchors": [
+        {
+          "gap": 0,
+          "positive_position": 2,
+          "negative_position": 1
+        },
+        {
+          "gap": 2,
+          "positive_position": 8,
+          "negative_position": 9
+        },
+        {
+          "gap": 3,
+          "positive_position": 15,
+          "negative_position": 11
+        }
+      ],
+      "missing": [
+        {
+          "gap": 1,
+          "positions": [
+            5,
+            6
+          ],
+          "positive": 2,
+          "negative": 0
+        }
+      ]
+    },
+    "attempts": [
+      {
+        "n": 18,
+        "budget": 27,
+        "adjacent_length": 79,
+        "status": "found",
+        "nodes": 3909,
+        "seconds": 0.005895800000871532,
+        "length": 27
+      },
+      {
+        "n": 18,
+        "budget": 27,
+        "adjacent_length": 79,
+        "status": "found",
+        "nodes": 25,
+        "seconds": 0.0001627000019652769,
+        "length": 27
+      },
+      {
+        "n": 18,
+        "budget": 27,
+        "adjacent_length": 79,
+        "status": "node_limit",
+        "nodes": 30001,
+        "seconds": 0.0434328999981517
+      },
+      {
+        "n": 18,
+        "budget": 27,
+        "adjacent_length": 79,
+        "status": "found",
+        "nodes": 2532,
+        "seconds": 0.004563200011034496,
+        "length": 27
+      },
+      {
+        "n": 18,
+        "budget": 27,
+        "adjacent_length": 79,
+        "status": "found",
+        "nodes": 4609,
+        "seconds": 0.007454999999026768,
+        "length": 27
+      },
+      {
+        "n": 18,
+        "budget": 27,
+        "adjacent_length": 79,
+        "status": "found",
+        "nodes": 24065,
+        "seconds": 0.05047280000871979,
+        "length": 27
+      },
+      {
+        "n": 18,
+        "budget": 27,
+        "adjacent_length": 79,
+        "status": "found",
+        "nodes": 26,
+        "seconds": 0.0005517999961739406,
+        "length": 27
+      },
+      {
+        "n": 18,
+        "budget": 27,
+        "adjacent_length": 79,
+        "status": "found",
+        "nodes": 63,
+        "seconds": 0.0003676999913295731,
+        "length": 27
+      },
+      {
+        "n": 18,
+        "budget": 27,
+        "adjacent_length": 79,
+        "status": "found",
+        "nodes": 3629,
+        "seconds": 0.011660200005280785,
+        "length": 27
+      },
+      {
+        "n": 18,
+        "budget": 27,
+        "adjacent_length": 79,
+        "status": "found",
+        "nodes": 79,
+        "seconds": 0.0005456000071717426,
+        "length": 27
+      },
+      {
+        "n": 18,
+        "budget": 27,
+        "adjacent_length": 79,
+        "status": "found",
+        "nodes": 3360,
+        "seconds": 0.009822099993471056,
+        "length": 27
+      },
+      {
+        "n": 18,
+        "budget": 27,
+        "adjacent_length": 79,
+        "status": "found",
+        "nodes": 19269,
+        "seconds": 0.06636559999606106,
+        "length": 27
+      }
+    ],
+    "budget": 27
+  },
+  {
+    "n": 18,
+    "permutation": [
+      4,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      2,
+      17,
+      0,
+      1,
+      16,
+      3,
+      9,
+      5,
+      6,
+      7,
+      8
+    ],
+    "models": 4,
+    "status": "found",
+    "word": [
+      [
+        10,
+        -1
+      ],
+      [
+        11,
+        -1
+      ],
+      [
+        13,
+        -1
+      ],
+      [
+        14,
+        -1
+      ],
+      [
+        17,
+        -1
+      ],
+      [
+        2,
+        -1
+      ],
+      [
+        5,
+        1
+      ],
+      [
+        8,
+        -1
+      ],
+      [
+        3,
+        -1
+      ],
+      [
+        5,
+        1
+      ],
+      [
+        8,
+        -1
+      ],
+      [
+        10,
+        -1
+      ],
+      [
+        11,
+        -1
+      ],
+      [
+        14,
+        -1
+      ],
+      [
+        17,
+        -1
+      ],
+      [
+        2,
+        -1
+      ],
+      [
+        5,
+        1
+      ],
+      [
+        7,
+        -1
+      ],
+      [
+        8,
+        -1
+      ],
+      [
+        11,
+        -1
+      ],
+      [
+        14,
+        -1
+      ],
+      [
+        17,
+        -1
+      ],
+      [
+        1,
+        -1
+      ],
+      [
+        3,
+        1
+      ],
+      [
+        1,
+        -1
+      ],
+      [
+        16,
+        1
+      ],
+      [
+        15,
+        1
+      ]
+    ],
+    "missing": 0,
+    "anchor_info": {
+      "a": 9,
+      "anchors": [
+        {
+          "gap": 0,
+          "positive_position": 1,
+          "negative_position": 2
+        },
+        {
+          "gap": 1,
+          "positive_position": 9,
+          "negative_position": 8
+        },
+        {
+          "gap": 3,
+          "positive_position": 15,
+          "negative_position": 14
+        }
+      ],
+      "missing": []
+    },
+    "attempts": [
+      {
+        "n": 18,
+        "budget": 27,
+        "adjacent_length": 79,
+        "status": "node_limit",
+        "nodes": 30001,
+        "seconds": 0.10312089999206364
+      },
+      {
+        "n": 18,
+        "budget": 27,
+        "adjacent_length": 79,
+        "status": "found",
+        "nodes": 142,
+        "seconds": 0.0006198999908519909,
+        "length": 27
+      },
+      {
+        "n": 18,
+        "budget": 27,
+        "adjacent_length": 79,
+        "status": "found",
+        "nodes": 4408,
+        "seconds": 0.012180499994428828,
+        "length": 27
+      },
+      {
+        "n": 18,
+        "budget": 27,
+        "adjacent_length": 79,
+        "status": "found",
+        "nodes": 406,
+        "seconds": 0.0013907999964430928,
+        "length": 27
+      },
+      {
+        "n": 18,
+        "budget": 27,
+        "adjacent_length": 79,
+        "status": "node_limit",
+        "nodes": 30001,
+        "seconds": 0.09917760000098497
+      },
+      {
+        "n": 18,
+        "budget": 27,
+        "adjacent_length": 79,
+        "status": "found",
+        "nodes": 8039,
+        "seconds": 0.02852510000229813,
+        "length": 27
+      },
+      {
+        "n": 18,
+        "budget": 27,
+        "adjacent_length": 79,
+        "status": "found",
+        "nodes": 14725,
+        "seconds": 0.04185239999787882,
+        "length": 27
+      },
+      {
+        "n": 18,
+        "budget": 27,
+        "adjacent_length": 79,
+        "status": "found",
+        "nodes": 488,
+        "seconds": 0.004316199992899783,
+        "length": 27
+      },
+      {
+        "n": 18,
+        "budget": 27,
+        "adjacent_length": 79,
+        "status": "found",
+        "nodes": 1703,
+        "seconds": 0.013463299997965805,
+        "length": 27
+      },
+      {
+        "n": 18,
+        "budget": 27,
+        "adjacent_length": 79,
+        "status": "found",
+        "nodes": 27,
+        "seconds": 0.0006219000060809776,
+        "length": 27
+      },
+      {
+        "n": 18,
+        "budget": 27,
+        "adjacent_length": 79,
+        "status": "node_limit",
+        "nodes": 30001,
+        "seconds": 0.1477562000072794
+      },
+      {
+        "n": 18,
+        "budget": 27,
+        "adjacent_length": 79,
+        "status": "found",
+        "nodes": 5298,
+        "seconds": 0.04941030000918545,
+        "length": 27
+      }
+    ],
+    "budget": 27
+  },
+  {
+    "n": 19,
+    "permutation": [
+      1,
+      10,
+      11,
+      12,
+      16,
+      14,
+      15,
+      13,
+      17,
+      18,
+      0,
+      9,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8
+    ],
+    "models": 2,
+    "status": "found",
+    "word": [
+      [
+        17,
+        1
+      ],
+      [
+        14,
+        -1
+      ],
+      [
+        16,
+        -1
+      ],
+      [
+        11,
+        -1
+      ],
+      [
+        13,
+        -1
+      ],
+      [
+        10,
+        1
+      ],
+      [
+        9,
+        1
+      ],
+      [
+        1,
+        1
+      ],
+      [
+        18,
+        1
+      ],
+      [
+        17,
+        1
+      ],
+      [
+        15,
+        -1
+      ],
+      [
+        16,
+        -1
+      ],
+      [
+        12,
+        -1
+      ],
+      [
+        13,
+        -1
+      ],
+      [
+        7,
+        1
+      ],
+      [
+        10,
+        1
+      ],
+      [
+        4,
+        1
+      ],
+      [
+        0,
+        -1
+      ],
+      [
+        3,
+        1
+      ],
+      [
+        2,
+        1
+      ],
+      [
+        0,
+        1
+      ],
+      [
+        17,
+        -1
+      ],
+      [
+        14,
+        -1
+      ],
+      [
+        17,
+        -1
+      ],
+      [
+        1,
+        1
+      ],
+      [
+        0,
+        1
+      ],
+      [
+        18,
+        1
+      ],
+      [
+        17,
+        1
+      ],
+      [
+        16,
+        1
+      ],
+      [
+        15,
+        1
+      ]
+    ],
+    "missing": 2,
+    "anchor_info": {
+      "a": 9,
+      "anchors": [
+        {
+          "gap": 2,
+          "positive_position": 9,
+          "negative_position": 8
+        },
+        {
+          "gap": 3,
+          "positive_position": 12,
+          "negative_position": 18
+        }
+      ],
+      "missing": [
+        {
+          "gap": 0,
+          "positions": [
+            1,
+            2,
+            3
+          ],
+          "positive": 0,
+          "negative": 3
+        },
+        {
+          "gap": 1,
+          "positions": [
+            5,
+            6
+          ],
+          "positive": 0,
+          "negative": 2
+        }
+      ]
+    },
+    "attempts": [
+      {
+        "n": 19,
+        "budget": 30,
+        "adjacent_length": 88,
+        "status": "found",
+        "nodes": 115,
+        "seconds": 0.0006378999969456345,
+        "length": 30
+      },
+      {
+        "n": 19,
+        "budget": 30,
+        "adjacent_length": 88,
+        "status": "found",
+        "nodes": 271,
+        "seconds": 0.0010774000111268833,
+        "length": 30
+      },
+      {
+        "n": 19,
+        "budget": 30,
+        "adjacent_length": 88,
+        "status": "found",
+        "nodes": 6663,
+        "seconds": 0.0228960999957053,
+        "length": 30
+      },
+      {
+        "n": 19,
+        "budget": 30,
+        "adjacent_length": 88,
+        "status": "found",
+        "nodes": 5818,
+        "seconds": 0.020504699990851805,
+        "length": 30
+      },
+      {
+        "n": 19,
+        "budget": 30,
+        "adjacent_length": 88,
+        "status": "found",
+        "nodes": 3172,
+        "seconds": 0.009945799989509396,
+        "length": 30
+      },
+      {
+        "n": 19,
+        "budget": 30,
+        "adjacent_length": 88,
+        "status": "found",
+        "nodes": 18878,
+        "seconds": 0.05958229998941533,
+        "length": 30
+      },
+      {
+        "n": 19,
+        "budget": 30,
+        "adjacent_length": 88,
+        "status": "found",
+        "nodes": 27,
+        "seconds": 0.00040970000554807484,
+        "length": 30
+      },
+      {
+        "n": 19,
+        "budget": 30,
+        "adjacent_length": 88,
+        "status": "node_limit",
+        "nodes": 30001,
+        "seconds": 0.10732160000770818
+      },
+      {
+        "n": 19,
+        "budget": 30,
+        "adjacent_length": 88,
+        "status": "found",
+        "nodes": 2173,
+        "seconds": 0.011702799994964153,
+        "length": 30
+      },
+      {
+        "n": 19,
+        "budget": 30,
+        "adjacent_length": 88,
+        "status": "found",
+        "nodes": 28180,
+        "seconds": 0.19565639999927953,
+        "length": 30
+      },
+      {
+        "n": 19,
+        "budget": 30,
+        "adjacent_length": 88,
+        "status": "found",
+        "nodes": 19126,
+        "seconds": 0.1947729000094114,
+        "length": 30
+      },
+      {
+        "n": 19,
+        "budget": 30,
+        "adjacent_length": 88,
+        "status": "found",
+        "nodes": 241,
+        "seconds": 0.0029731999966315925,
+        "length": 30
+      }
+    ],
+    "budget": 30
+  },
+  {
+    "n": 19,
+    "permutation": [
+      4,
+      10,
+      11,
+      12,
+      13,
+      18,
+      15,
+      16,
+      17,
+      14,
+      0,
+      1,
+      2,
+      3,
+      9,
+      5,
+      6,
+      7,
+      8
+    ],
+    "models": 2,
+    "status": "found",
+    "word": [
+      [
+        5,
+        1
+      ],
+      [
+        9,
+        1
+      ],
+      [
+        12,
+        -1
+      ],
+      [
+        16,
+        -1
+      ],
+      [
+        18,
+        -1
+      ],
+      [
+        2,
+        -1
+      ],
+      [
+        5,
+        1
+      ],
+      [
+        9,
+        1
+      ],
+      [
+        8,
+        1
+      ],
+      [
+        12,
+        -1
+      ],
+      [
+        15,
+        -1
+      ],
+      [
+        18,
+        -1
+      ],
+      [
+        2,
+        -1
+      ],
+      [
+        5,
+        1
+      ],
+      [
+        4,
+        1
+      ],
+      [
+        3,
+        1
+      ],
+      [
+        1,
+        1
+      ],
+      [
+        0,
+        1
+      ],
+      [
+        6,
+        -1
+      ],
+      [
+        7,
+        -1
+      ],
+      [
+        4,
+        1
+      ],
+      [
+        9,
+        -1
+      ],
+      [
+        17,
+        1
+      ],
+      [
+        16,
+        1
+      ],
+      [
+        13,
+        1
+      ],
+      [
+        11,
+        -1
+      ],
+      [
+        3,
+        1
+      ],
+      [
+        1,
+        1
+      ],
+      [
+        0,
+        1
+      ],
+      [
+        16,
+        1
+      ]
+    ],
+    "missing": 1,
+    "anchor_info": {
+      "a": 9,
+      "anchors": [
+        {
+          "gap": 0,
+          "positive_position": 1,
+          "negative_position": 2
+        },
+        {
+          "gap": 2,
+          "positive_position": 13,
+          "negative_position": 11
+        },
+        {
+          "gap": 3,
+          "positive_position": 16,
+          "negative_position": 15
+        }
+      ],
+      "missing": [
+        {
+          "gap": 1,
+          "positions": [
+            6,
+            7,
+            8
+          ],
+          "positive": 0,
+          "negative": 3
+        }
+      ]
+    },
+    "attempts": [
+      {
+        "n": 19,
+        "budget": 30,
+        "adjacent_length": 88,
+        "status": "found",
+        "nodes": 2536,
+        "seconds": 0.02334510000946466,
+        "length": 30
+      },
+      {
+        "n": 19,
+        "budget": 30,
+        "adjacent_length": 88,
+        "status": "found",
+        "nodes": 8951,
+        "seconds": 0.048420299994177185,
+        "length": 30
+      },
+      {
+        "n": 19,
+        "budget": 30,
+        "adjacent_length": 88,
+        "status": "found",
+        "nodes": 28707,
+        "seconds": 0.12568200001260266,
+        "length": 30
+      },
+      {
+        "n": 19,
+        "budget": 30,
+        "adjacent_length": 88,
+        "status": "node_limit",
+        "nodes": 30001,
+        "seconds": 0.11410579999210313
+      },
+      {
+        "n": 19,
+        "budget": 30,
+        "adjacent_length": 88,
+        "status": "found",
+        "nodes": 55,
+        "seconds": 0.00047139999514911324,
+        "length": 30
+      },
+      {
+        "n": 19,
+        "budget": 30,
+        "adjacent_length": 88,
+        "status": "found",
+        "nodes": 26012,
+        "seconds": 0.09205379999184515,
+        "length": 30
+      },
+      {
+        "n": 19,
+        "budget": 30,
+        "adjacent_length": 88,
+        "status": "found",
+        "nodes": 1766,
+        "seconds": 0.005365499993786216,
+        "length": 30
+      },
+      {
+        "n": 19,
+        "budget": 30,
+        "adjacent_length": 88,
+        "status": "found",
+        "nodes": 3716,
+        "seconds": 0.013528600000427105,
+        "length": 30
+      },
+      {
+        "n": 19,
+        "budget": 30,
+        "adjacent_length": 88,
+        "status": "found",
+        "nodes": 4923,
+        "seconds": 0.014982900000177324,
+        "length": 30
+      },
+      {
+        "n": 19,
+        "budget": 30,
+        "adjacent_length": 88,
+        "status": "found",
+        "nodes": 604,
+        "seconds": 0.002395200004684739,
+        "length": 30
+      },
+      {
+        "n": 19,
+        "budget": 30,
+        "adjacent_length": 88,
+        "status": "found",
+        "nodes": 10071,
+        "seconds": 0.02952749999531079,
+        "length": 30
+      },
+      {
+        "n": 19,
+        "budget": 30,
+        "adjacent_length": 88,
+        "status": "found",
+        "nodes": 6267,
+        "seconds": 0.019770200000493787,
+        "length": 30
+      }
+    ],
+    "budget": 30
+  },
+  {
+    "n": 20,
+    "permutation": [
+      5,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      1,
+      19,
+      0,
+      18,
+      2,
+      3,
+      4,
+      10,
+      6,
+      7,
+      8,
+      9
+    ],
+    "models": 4,
+    "status": "found",
+    "word": [
+      [
+        13,
+        1
+      ],
+      [
+        16,
+        1
+      ],
+      [
+        14,
+        1
+      ],
+      [
+        19,
+        -1
+      ],
+      [
+        0,
+        -1
+      ],
+      [
+        1,
+        -1
+      ],
+      [
+        5,
+        -1
+      ],
+      [
+        2,
+        -1
+      ],
+      [
+        10,
+        -1
+      ],
+      [
+        13,
+        1
+      ],
+      [
+        16,
+        1
+      ],
+      [
+        14,
+        -1
+      ],
+      [
+        11,
+        1
+      ],
+      [
+        14,
+        1
+      ],
+      [
+        11,
+        1
+      ],
+      [
+        9,
+        1
+      ],
+      [
+        8,
+        1
+      ],
+      [
+        7,
+        1
+      ],
+      [
+        4,
+        -1
+      ],
+      [
+        12,
+        1
+      ],
+      [
+        9,
+        -1
+      ],
+      [
+        7,
+        1
+      ],
+      [
+        6,
+        1
+      ],
+      [
+        11,
+        -1
+      ],
+      [
+        13,
+        -1
+      ],
+      [
+        15,
+        -1
+      ],
+      [
+        19,
+        1
+      ],
+      [
+        16,
+        -1
+      ],
+      [
+        17,
+        -1
+      ],
+      [
+        14,
+        1
+      ],
+      [
+        8,
+        -1
+      ],
+      [
+        10,
+        -1
+      ],
+      [
+        13,
+        1
+      ],
+      [
+        12,
+        1
+      ]
+    ],
+    "missing": 2,
+    "anchor_info": {
+      "a": 10,
+      "anchors": [
+        {
+          "gap": 0,
+          "positive_position": 1,
+          "negative_position": 2
+        },
+        {
+          "gap": 2,
+          "positive_position": 12,
+          "negative_position": 14
+        }
+      ],
+      "missing": [
+        {
+          "gap": 1,
+          "positions": [
+            9,
+            10
+          ],
+          "positive": 2,
+          "negative": 0
+        },
+        {
+          "gap": 3,
+          "positions": [
+            16,
+            17,
+            18,
+            19
+          ],
+          "positive": 0,
+          "negative": 1
+        }
+      ]
+    },
+    "attempts": [
+      {
+        "n": 20,
+        "budget": 34,
+        "adjacent_length": 98,
+        "status": "found",
+        "nodes": 1703,
+        "seconds": 0.006783399992855266,
+        "length": 34
+      },
+      {
+        "n": 20,
+        "budget": 34,
+        "adjacent_length": 98,
+        "status": "node_limit",
+        "nodes": 30001,
+        "seconds": 0.10667430001194589
+      },
+      {
+        "n": 20,
+        "budget": 34,
+        "adjacent_length": 98,
+        "status": "found",
+        "nodes": 7132,
+        "seconds": 0.027436900010798126,
+        "length": 34
+      },
+      {
+        "n": 20,
+        "budget": 34,
+        "adjacent_length": 98,
+        "status": "node_limit",
+        "nodes": 30001,
+        "seconds": 0.15565169999899808
+      },
+      {
+        "n": 20,
+        "budget": 34,
+        "adjacent_length": 98,
+        "status": "node_limit",
+        "nodes": 30001,
+        "seconds": 0.11681490000046324
+      },
+      {
+        "n": 20,
+        "budget": 34,
+        "adjacent_length": 98,
+        "status": "found",
+        "nodes": 15631,
+        "seconds": 0.06189070000255015,
+        "length": 34
+      },
+      {
+        "n": 20,
+        "budget": 34,
+        "adjacent_length": 98,
+        "status": "found",
+        "nodes": 31,
+        "seconds": 0.0004364000051282346,
+        "length": 34
+      },
+      {
+        "n": 20,
+        "budget": 34,
+        "adjacent_length": 98,
+        "status": "node_limit",
+        "nodes": 30001,
+        "seconds": 0.12119609999353997
+      },
+      {
+        "n": 20,
+        "budget": 34,
+        "adjacent_length": 98,
+        "status": "node_limit",
+        "nodes": 30001,
+        "seconds": 0.1207869999925606
+      },
+      {
+        "n": 20,
+        "budget": 34,
+        "adjacent_length": 98,
+        "status": "found",
+        "nodes": 3625,
+        "seconds": 0.015269800001988187,
+        "length": 34
+      },
+      {
+        "n": 20,
+        "budget": 34,
+        "adjacent_length": 98,
+        "status": "node_limit",
+        "nodes": 30001,
+        "seconds": 0.133656100006192
+      },
+      {
+        "n": 20,
+        "budget": 34,
+        "adjacent_length": 98,
+        "status": "node_limit",
+        "nodes": 30001,
+        "seconds": 0.17902190001041163
+      }
+    ],
+    "budget": 34
+  },
+  {
+    "n": 23,
+    "permutation": [
+      6,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      1,
+      20,
+      21,
+      22,
+      0,
+      19,
+      2,
+      3,
+      4,
+      5,
+      11,
+      7,
+      8,
+      9,
+      10
+    ],
+    "models": 2,
+    "status": "found",
+    "word": [
+      [
+        11,
+        1
+      ],
+      [
+        14,
+        1
+      ],
+      [
+        12,
+        1
+      ],
+      [
+        17,
+        1
+      ],
+      [
+        15,
+        1
+      ],
+      [
+        21,
+        1
+      ],
+      [
+        18,
+        -1
+      ],
+      [
+        20,
+        1
+      ],
+      [
+        0,
+        -1
+      ],
+      [
+        5,
+        -1
+      ],
+      [
+        2,
+        -1
+      ],
+      [
+        8,
+        -1
+      ],
+      [
+        11,
+        1
+      ],
+      [
+        10,
+        1
+      ],
+      [
+        9,
+        1
+      ],
+      [
+        7,
+        1
+      ],
+      [
+        4,
+        -1
+      ],
+      [
+        12,
+        -1
+      ],
+      [
+        13,
+        -1
+      ],
+      [
+        10,
+        1
+      ],
+      [
+        7,
+        1
+      ],
+      [
+        6,
+        1
+      ],
+      [
+        5,
+        1
+      ],
+      [
+        3,
+        1
+      ],
+      [
+        16,
+        1
+      ],
+      [
+        13,
+        -1
+      ],
+      [
+        14,
+        -1
+      ],
+      [
+        19,
+        -1
+      ],
+      [
+        20,
+        -1
+      ],
+      [
+        0,
+        -1
+      ],
+      [
+        2,
+        1
+      ],
+      [
+        1,
+        1
+      ],
+      [
+        4,
+        -1
+      ],
+      [
+        8,
+        -1
+      ],
+      [
+        5,
+        -1
+      ],
+      [
+        10,
+        -1
+      ],
+      [
+        11,
+        -1
+      ],
+      [
+        17,
+        1
+      ],
+      [
+        15,
+        -1
+      ],
+      [
+        16,
+        -1
+      ],
+      [
+        7,
+        -1
+      ],
+      [
+        13,
+        1
+      ],
+      [
+        12,
+        1
+      ],
+      [
+        10,
+        1
+      ]
+    ],
+    "missing": 1,
+    "anchor_info": {
+      "a": 11,
+      "anchors": [
+        {
+          "gap": 0,
+          "positive_position": 2,
+          "negative_position": 1
+        },
+        {
+          "gap": 1,
+          "positive_position": 9,
+          "negative_position": 12
+        },
+        {
+          "gap": 3,
+          "positive_position": 21,
+          "negative_position": 19
+        }
+      ],
+      "missing": [
+        {
+          "gap": 2,
+          "positions": [
+            14,
+            15,
+            16,
+            17
+          ],
+          "positive": 0,
+          "negative": 4
+        }
+      ]
+    },
+    "attempts": [
+      {
+        "n": 23,
+        "budget": 44,
+        "adjacent_length": 130,
+        "status": "node_limit",
+        "nodes": 30001,
+        "seconds": 0.291673500003526
+      },
+      {
+        "n": 23,
+        "budget": 44,
+        "adjacent_length": 130,
+        "status": "node_limit",
+        "nodes": 30001,
+        "seconds": 0.2217268999957014
+      },
+      {
+        "n": 23,
+        "budget": 44,
+        "adjacent_length": 130,
+        "status": "node_limit",
+        "nodes": 30001,
+        "seconds": 0.21619799999461975
+      },
+      {
+        "n": 23,
+        "budget": 44,
+        "adjacent_length": 130,
+        "status": "found",
+        "nodes": 1345,
+        "seconds": 0.011958300005062483,
+        "length": 44
+      },
+      {
+        "n": 23,
+        "budget": 44,
+        "adjacent_length": 130,
+        "status": "node_limit",
+        "nodes": 30001,
+        "seconds": 0.31103080000320915
+      },
+      {
+        "n": 23,
+        "budget": 44,
+        "adjacent_length": 130,
+        "status": "node_limit",
+        "nodes": 30001,
+        "seconds": 0.3709070999902906
+      },
+      {
+        "n": 23,
+        "budget": 44,
+        "adjacent_length": 130,
+        "status": "node_limit",
+        "nodes": 30001,
+        "seconds": 0.4418008000066038
+      },
+      {
+        "n": 23,
+        "budget": 44,
+        "adjacent_length": 130,
+        "status": "found",
+        "nodes": 20906,
+        "seconds": 0.18845750000036787,
+        "length": 44
+      },
+      {
+        "n": 23,
+        "budget": 44,
+        "adjacent_length": 130,
+        "status": "node_limit",
+        "nodes": 30001,
+        "seconds": 0.29139490000670776
+      },
+      {
+        "n": 23,
+        "budget": 44,
+        "adjacent_length": 130,
+        "status": "node_limit",
+        "nodes": 30001,
+        "seconds": 0.2256481999938842
+      },
+      {
+        "n": 23,
+        "budget": 44,
+        "adjacent_length": 130,
+        "status": "found",
+        "nodes": 9034,
+        "seconds": 0.10948889999417588,
+        "length": 44
+      },
+      {
+        "n": 23,
+        "budget": 44,
+        "adjacent_length": 130,
+        "status": "node_limit",
+        "nodes": 30001,
+        "seconds": 0.32692460001271684
+      }
+    ],
+    "budget": 44
+  }
+]

@@ -1,0 +1,45 @@
+{
+  "summaries": [
+    {
+      "n": 15,
+      "instances": 2000,
+      "distinct_permutations": 1886,
+      "candidate_bound": 20,
+      "solution_length_histogram": {
+        "11": 1,
+        "12": 6,
+        "13": 12,
+        "14": 15,
+        "15": 23,
+        "16": 30,
+        "17": 82,
+        "18": 63,
+        "19": 1132,
+        "20": 636
+      },
+      "unresolved": 0,
+      "counterexamples": 0
+    },
+    {
+      "n": 16,
+      "instances": 2000,
+      "distinct_permutations": 1877,
+      "candidate_bound": 22,
+      "solution_length_histogram": {
+        "13": 2,
+        "14": 1,
+        "15": 10,
+        "16": 11,
+        "17": 19,
+        "18": 33,
+        "19": 45,
+        "20": 43,
+        "21": 1165,
+        "22": 671
+      },
+      "unresolved": 0,
+      "counterexamples": 0
+    }
+  ],
+  "scope": "Verified sample upper bounds only; no exhaustive diameter assertion."
+}
